@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ebg_1 $_448136 ebg/ebg_1.pl ebg/ebg_1.metta)
+;                                           (convert-to-metta-file  ebg_1 $_123276 ebg/ebg_1.pl ebg/ebg_1.metta)
 
   (= (depressed  john)  True)
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  kb $_166284 miles/kb.pl miles/kb.metta)
+;                                           (convert-to-metta-file  kb $_428608 miles/kb.pl miles/kb.metta)
 ;
 ; MODULE kb EXPORTS
 
@@ -211,15 +211,15 @@
 
 
   (= (gen-id $New)  
-    ( (remove-is-symbol  &self 
-        (id_count  $Old)) 
+    ( (remove-atom  &self 
+        (id-count  $Old)) 
       (is $New 
         (+ $Old 1)) 
-      (add-is-symbol  &self 
-        (id_count  $New))))
+      (add-atom  &self 
+        (id-count  $New))))
   (= (gen-id 1)  
-    (add-is-symbol  &self 
-      (id_count  1)))
+    (add-atom  &self 
+      (id-count  1)))
 
 
 ;
@@ -340,14 +340,11 @@
     (init-kb $Filename usr))
 
   (= (init-kb $Filename $Origin)  
-    (open $Filename read $S)
-    (repeat)
-    (read $S $Term)
-    (store-term $Term $Origin)
-    (close $S)
-    (set-det)
-    (eval-examples)
-    (verify-types))
+    ( (open $Filename read $S) repeat 
+      (read $S $Term) 
+      (store-term $Term $Origin) 
+      (close $S) 
+      (set-det) eval-examples verify-types))
 
 
 ;
@@ -387,7 +384,7 @@
 
 
   (= (consult-kb $Filename)  
-    ( (clear-kb) $Filename))
+    (clear-kb $Filename))
 
 
 ;
@@ -473,7 +470,7 @@
 ; ***********************************************************************
 
 
-  (= (clear-kb)  
+  (= clear-kb  
     ( (remove-all-atoms  &self 
         (known  $_ $_ $_ $_ $_ $_)) 
       (remove-all-atoms  &self 
@@ -481,9 +478,9 @@
       (remove-all-atoms  &self 
         (prooftrees  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (id_count  $_)) 
+        (id-count  $_)) 
       (remove-all-atoms  &self 
-        (type_restriction  $_ $_)) 
+        (type-restriction  $_ $_)) 
       (remove-all-atoms  &self 
         (evaluated  $_))))
 ; ;nl,yesno('Delete all knowledge and examples (y/n) '),
@@ -534,34 +531,30 @@
     (set-det))
   (= (store-term (ex $F $C) $_)  
     ( (gen-id $ID) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (ex  $ID $F $C)) 
-      (set-det) 
-      (fail)))
+      (set-det) fail))
   (= (store-term (= $H  $B) $O)  
     ( (body2list $B $L) 
       (gen-id $ID) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (known  $ID $H $B 
-          (Cons  
+          ([|]  
             (:  $H p) $L) $O 
           (evaluation  0 0 () 0 () 0 () 0 ()))) 
-      (set-det) 
-      (fail)))
+      (set-det) fail))
   (= (store-term (type-restriction $M $A) $_)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (:  argument_types 
-          (type_restriction  $M $A))) 
-      (set-det) 
-      (fail)))
+          (type-restriction  $M $A))) 
+      (set-det) fail))
   (= (store-term $H $O)  
     ( (gen-id $ID) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (known  $ID $H true 
           ( (:  $H p)) $O 
           (evaluation  0 0 () 0 () 0 () 0 ()))) 
-      (set-det) 
-      (fail)))
+      (set-det) fail))
 
 
 ;
@@ -614,16 +607,14 @@
           (known $ID $_ $_ $_ $_ $_) 
           (ex $ID $_ $_))) 
       (, 
-        (set-det) 
-        (fail)) 
+        (set-det) fail) 
       (det-if-then-else 
         (, 
           (var $A) 
           (var $B)) 
         (, 
-          (set-det) 
-          (fail)) fail)))
-  (= (store-clause (= $H  $B) (Cons  (with_self  $H (p)) $L) $Label $ID)  
+          (set-det) fail) fail)))
+  (= (store-clause (= $H  $B) (Cons  (with-self  $H p) $L) $Label $ID)  
     ( (body2list $B $L) 
       (det-if-then-else 
         (var $ID) 
@@ -634,14 +625,14 @@
       (det-if-then-else 
         (var $Label) 
         (= $Label usr) True) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (known  $ID $H $B 
-          (Cons  
+          ([|]  
             (:  $H p) $L) $Label 
           (evaluation  0 0 () 0 () 0 () 0 ()))) 
       (set-det) 
       (change-evaluated no)))
-  (= (store-clause $H (:: (with_self  $H (p))) $Label $ID)  
+  (= (store-clause $H (:: (with-self  $H p)) $Label $ID)  
     ( (det-if-then-else 
         (var $ID) 
         (gen-id $ID) 
@@ -651,7 +642,7 @@
       (det-if-then-else 
         (var $Label) 
         (= $Label usr) True) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (known  $ID $H true 
           ( (:  $H p)) $Label 
           (evaluation  0 0 () 0 () 0 () 0 ()))) 
@@ -696,7 +687,7 @@
 ; ***********************************************************************
 
 
-  (= (store_clauses  () $_)  True)
+  (= (store-clauses  () $_)  True)
   (= (store-clauses (Cons  $C $R) $Label)  
     (store-clause $C $_ $Label $_)
     (store-clauses $R $Label))
@@ -739,7 +730,7 @@
 ;
 ; ***********************************************************************
 
-  (= (store_clauses  () $_ ())  True)
+  (= (store-clauses  () $_ ())  True)
   (= (store-clauses (Cons  $C $R) $Label (Cons  $ID $R1))  
     (store-clause $C $_ $Label $ID)
     (store-clauses $R $Label $R1))
@@ -799,13 +790,11 @@
           (ex $ID $_ $_) 
           (known $ID $_ $_ $_ $_ $_))) 
       (, 
-        (set-det) 
-        (fail)) 
+        (set-det) fail) 
       (det-if-then-else 
         (var $F) 
         (, 
-          (set-det) 
-          (fail)) fail)))
+          (set-det) fail) fail)))
   (= (store-ex $Fact $Class $ID)  
     ( (det-if-then-else 
         (var $ID) 
@@ -813,7 +802,7 @@
         (, 
           (id-count $Top) 
           (=< $ID $Top))) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (ex  $ID $Fact $Class)) 
       (set-det) 
       (change-evaluated no)))
@@ -920,11 +909,11 @@
 
 
   (= (delete-clause $ID)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (known  $ID $_ $_ $_ $_ $_)) (change-evaluated no)))
 
   (= (delete-example $ID)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (ex  $ID $_ $_)) (change-evaluated no)))
 
 
@@ -1023,7 +1012,7 @@
 
   (= (assertallz  ())  True)
   (= (assertallz (Cons  $X $R))  
-    ( (add-is-symbol  &self $X) (assertallz $R)))
+    ( (add-atom  &self $X) (assertallz $R)))
 
 
 ;
@@ -1117,7 +1106,7 @@
 
   (= (rename-clause Nil Nil $_ $_)  
     (set-det))
-  (= (rename-clause (Cons  (with_self  $Lit $X) $Rest) (Cons  (with_self  $NewLit $X) $NewRest) $Old $New)  
+  (= (rename-clause (Cons  (with-self  $Lit $X) $Rest) (Cons  (with-self  $NewLit $X) $NewRest) $Old $New)  
     (det-if-then-else 
       (=.. $Lit 
         (Cons  $Old $Args)) 
@@ -1227,7 +1216,7 @@
   (= (two-random-uncovered-ex $ID1 $ID2)  
     (findall $ID 
       (, 
-        (with_self  
+        (with-self  
           (kb *) 
           (prooftrees $ID fail $_)) 
         (get-example $ID $_ +)) $Uncovered)
@@ -1324,18 +1313,18 @@
 ; ***********************************************************************
 
 
-  (= (shortest-clause (with_self  $ID1 $C1))  
+  (= (shortest-clause (with-self  $ID1 $C1))  
     (shortest-clause $_ 
-      (with_self  $ID1 $C1))) 
+      (with-self  $ID1 $C1))) 
         
-  (= (shortest-clause $Label (with_self  $ID1 $C1))  
+  (= (shortest-clause $Label (with-self  $ID1 $C1))  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
         (get-clause $ID $_ $_ $Clause $Label) 
         (complexity $Clause $C)) $Bag)
     (shortest $Bag 
-      (with_self  $ID1 $C1) $_))
+      (with-self  $ID1 $C1) $_))
        
 
 ;
@@ -1374,20 +1363,20 @@
 ; ***********************************************************************
 
 
-  (= (two-shortest-clauses (with_self  $ID1 $C1) (with_self  $ID2 $C2))  
+  (= (two-shortest-clauses (with-self  $ID1 $C1) (with-self  $ID2 $C2))  
     (two-shortest-clauses $_ 
-      (with_self  $ID1 $C1) 
-      (with_self  $ID2 $C2)))
+      (with-self  $ID1 $C1) 
+      (with-self  $ID2 $C2)))
 
-  (= (two-shortest-clauses $Label (with_self  $ID1 $C1) (with_self  $ID2 $C2))  
+  (= (two-shortest-clauses $Label (with-self  $ID1 $C1) (with-self  $ID2 $C2))  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
         (get-clause $ID $_ $_ $Clause $Label) 
         (complexity $Clause $C)) $Bag)
     (two-shortest $Bag 
-      (with_self  $ID1 $C1) 
-      (with_self  $ID2 $C2)))
+      (with-self  $ID1 $C1) 
+      (with-self  $ID2 $C2)))
 
 
 
@@ -1427,14 +1416,14 @@
 ; ***********************************************************************
 
 
-  (= (shortest-ex (with_self  $ID1 $C1))  
+  (= (shortest-ex (with-self  $ID1 $C1))  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
         (get-example $ID $Ex +) 
         (complexity $Ex $C)) $Bag)
     (shortest $Bag 
-      (with_self  $ID1 $C1) $_))
+      (with-self  $ID1 $C1) $_))
        
 
 ;
@@ -1473,15 +1462,15 @@
 ; ***********************************************************************
 
 
-  (= (two-shortest-ex (with_self  $ID1 $C1) (with_self  $ID2 $C2))  
+  (= (two-shortest-ex (with-self  $ID1 $C1) (with-self  $ID2 $C2))  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
         (get-example $ID $Ex +) 
         (complexity $Ex $C)) $Bag)
     (two-shortest $Bag 
-      (with_self  $ID1 $C1) 
-      (with_self  $ID2 $C2)))
+      (with-self  $ID1 $C1) 
+      (with-self  $ID2 $C2)))
 
 
 ;
@@ -1522,15 +1511,15 @@
 
   (= (shortest-uncovered-ex $ID1)  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
-        (with_self  
+        (with-self  
           (kb *) 
           (prooftrees $ID fail $_)) 
         (get-example $ID $Ex +) 
         (complexity $Ex $C)) $Uncovered)
     (shortest $Uncovered 
-      (with_self  $ID1 $_) $Residue))
+      (with-self  $ID1 $_) $Residue))
 
 
 ;
@@ -1571,7 +1560,7 @@
   (= (shortest-uncovered-ex $Uncovered $ID1)  
     (add-complexities $Uncovered $Bag)
     (shortest $Bag 
-      (with_self  $ID1 $_) $Residue))
+      (with-self  $ID1 $_) $Residue))
 
 
 ;
@@ -1612,16 +1601,16 @@
 
   (= (two-shortest-uncovered-ex $ID1 $ID2)  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
-        (with_self  
+        (with-self  
           (kb *) 
           (prooftrees $ID fail $_)) 
         (get-example $ID $Ex +) 
         (complexity $Ex $C)) $Uncovered)
     (two-shortest $Uncovered 
-      (with_self  $ID1 $_) 
-      (with_self  $ID2 $_)))
+      (with-self  $ID1 $_) 
+      (with-self  $ID2 $_)))
 
 
 ;
@@ -1661,7 +1650,7 @@
 
 
   (= (all-shortest-ex $Bag)  
-    (shortest-ex (with_self  $_ $C1))
+    (shortest-ex (with-self  $_ $C1))
     (findall $ID 
       (, 
         (get-example $ID $Ex +) 
@@ -1706,18 +1695,18 @@
 
   (= (all-shortest-uncovered-ex $Bag)  
     (findall 
-      (with_self  $ID $C) 
+      (with-self  $ID $C) 
       (, 
-        (with_self  
+        (with-self  
           (kb *) 
           (prooftrees $ID fail $_)) 
         (get-example $ID $Ex +) 
         (complexity $Ex $C)) $Uncovered)
     (shortest $Uncovered 
-      (with_self  $_ $C1) $_)
+      (with-self  $_ $C1) $_)
     (findall $ID2 
       (member 
-        (with_self  $ID2 $C1) $Uncovered) $Bag))
+        (with-self  $ID2 $C1) $Uncovered) $Bag))
 
 
 ;
@@ -1758,11 +1747,11 @@
 ; ***********************************************************************
 
 
-  (= (two-shortest $Bag (with_self  $ID1 $C1) (with_self  $ID2 $C2))  
+  (= (two-shortest $Bag (with-self  $ID1 $C1) (with-self  $ID2 $C2))  
     (shortest $Bag 
-      (with_self  $ID1 $C1) $Residue)
+      (with-self  $ID1 $C1) $Residue)
     (shortest $Residue 
-      (with_self  $ID2 $C2) $_)
+      (with-self  $ID2 $C2) $_)
     (set-det))
 
 
@@ -1805,9 +1794,9 @@
 
 
   (= (shortest  ((:  $ID $C)) (:  $ID $C) ())  True)
-  (= (shortest (Cons  (with_self  $ID1 $C1) $Rest) (with_self  $ID $C) $Residue)  
+  (= (shortest (Cons  (with-self  $ID1 $C1) $Rest) (with-self  $ID $C) $Residue)  
     (shortest $Rest 
-      (with_self  $ID2 $C2) $Residue2)
+      (with-self  $ID2 $C2) $Residue2)
     (| 
       (det-if-then 
         (< $C1 $C2) 
@@ -1821,7 +1810,7 @@
           (= $C $C2) 
           (= $Residue 
             (Cons  
-              (with_self  $ID1 $C1) $Residue2)))))
+              (with-self  $ID1 $C1) $Residue2)))))
     (set-det))
 
 
@@ -1863,9 +1852,9 @@
 ; ***********************************************************************
 
 
-  (= (add_complexities  () ())  True)
+  (= (add-complexities  () ())  True)
 
-  (= (add-complexities (Cons  (with_self  $ID $Ex) $More) (Cons  (with_self  $ID $C) $MorePairs))  
+  (= (add-complexities (Cons  (with-self  $ID $Ex) $More) (Cons  (with-self  $ID $C) $MorePairs))  
     (complexity $Ex $C)
     (add-complexities $More $MorePairs))
 
@@ -1908,19 +1897,19 @@
 ; ***********************************************************************
 
 
-  (= (no-rules)  
+  (= no-rules  
     (not (get-clause $_ $_ $_ $_ $_)))
 
 
-  (= (no-pos-examples)  
+  (= no-pos-examples  
     (not (get-example $_ $_ +)))
 
 
-  (= (no-neg-examples)  
+  (= no-neg-examples  
     (not (get-example $_ $_ -)))
 
 
-  (= (no-examples)  
+  (= no-examples  
     (not (get-example $_ $_ $_)))
 
 
@@ -1960,13 +1949,13 @@
 ; ***********************************************************************
 
 
-  (= (delete-covered-examples)  
+  (= delete-covered-examples  
     (findall $I 
       (, 
         (get-evaluation $I $Eval) 
         (arg 3 $Eval $CoveredEx) 
         (member 
-          (with_self  $ID $_) $CoveredEx) 
+          (with-self  $ID $_) $CoveredEx) 
         (delete-example $ID)) $_)
     (set-det))
                      
@@ -2007,7 +1996,7 @@
 ; ***********************************************************************
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1086 19 32347))
 
 
@@ -2047,7 +2036,7 @@
 ; ***********************************************************************
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1108 19 32926))
 
 
@@ -2088,7 +2077,7 @@
 ; ***********************************************************************
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1133 19 33588))
 
 
@@ -2136,9 +2125,9 @@
 ; ***********************************************************************
 
 
-  (= (store_flat_clauses  ())  True)
+  (= (store-flat-clauses  ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1159 23 34514))
 
 
@@ -2187,13 +2176,13 @@
 ; ***********************************************************************
 
 
-  (= (store_unflat_clauses  ())  True)
+  (= (store-unflat-clauses  ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1188 27 35402))
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/kb.pl 1191 25 35490))
 
 
@@ -2240,7 +2229,7 @@
 
   (= (get-predlist $Predlist)  
     (mysetof 
-      (with_self  $P $N) 
+      (with-self  $P $N) 
       (^ $I 
         (^ $H 
           (^ $B 
@@ -2254,8 +2243,8 @@
 ; ; mysetof(P:PVars, ; Vars^( type_restriction(P,Vars), ; adapt_v(Vars,PVars)), Predlist).
 
 
-  (= (get_pred  () ())  True)
-  (= (get-pred (Cons  (with_self  $Pred $N) $R) (Cons  (with_self  $P $PVars) $R1))  
+  (= (get-pred  () ())  True)
+  (= (get-pred (Cons  (with-self  $Pred $N) $R) (Cons  (with-self  $P $PVars) $R1))  
     (get-pred $R $R1)
     (functor $P $Pred $N)
     (det-if-then-else 
@@ -2306,15 +2295,15 @@
 ; ***********************************************************************
 
 
-  (= (adapt_v  () ())  True)
-  (= (adapt-v (Cons  $T $R) (Cons  (with_self  $X $Tx) $R1))  
+  (= (adapt-v  () ())  True)
+  (= (adapt-v (Cons  $T $R) (Cons  (with-self  $X $Tx) $R1))  
     (adapt-v $R $R1)
     (=.. $T 
       (:: $Tx $X)))
 
 
-  (= (adapt_v1  () ())  True)
-  (= (adapt-v1 (Cons  $X $R) (Cons  (with_self  $X (all)) $R1))  
+  (= (adapt-v1  () ())  True)
+  (= (adapt-v1 (Cons  $X $R) (Cons  (with-self  $X all) $R1))  
     (adapt-v1 $R $R1))
 
 

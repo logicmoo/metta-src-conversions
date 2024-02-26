@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  mobility $_50336 metagame/play/mobility.pl metagame/play/mobility.metta)
+;                                           (convert-to-metta-file  mobility $_466180 metagame/play/mobility.pl metagame/play/mobility.metta)
 ;
 ; ============================================================
 ;
@@ -85,7 +85,7 @@
   (= (collect-init (Cons  (- $V $M) $Rest) (Cons  (- $V $M) $BestFew))  
     (collect-init $Rest $V $BestFew))
 
-  (= (collect_init  () $V1 ())  True)
+  (= (collect-init  () $V1 ())  True)
   (= (collect-init (Cons  (- $V2 $_) $_) $V1 Nil)  
     (< $V1 $V2)
     (set-det))
@@ -203,7 +203,7 @@
 
 
 
-  (= (initialize-weights)  
+  (= initialize-weights  
     (default-alpha-weights $W)
     (add-parameter weights $W))
 
@@ -215,8 +215,8 @@
 ;
 ; General function, preferring mobility and material.
 
-  (= (default_weight  material 4)  True)
-  (= (default_weight  mobility 1)  True)
+  (= (default-weight  material 4)  True)
+  (= (default-weight  mobility 1)  True)
 
 ;
 ; Anti-material function, perferring mobility but not material.
@@ -236,9 +236,9 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (material_weight  (weights  $Mat $Mob) $Mat)  True)
+  (= (material-weight  (weights  $Mat $Mob) $Mat)  True)
 
-  (= (mobility_weight  (weights  $Mat $Mob) $Mob)  True)
+  (= (mobility-weight  (weights  $Mat $Mob) $Mob)  True)
 
 
   (= (set-player-weights $Player $Mat $Mob)  
@@ -252,7 +252,7 @@
 
 
 
-  (= (show-player-weights)  
+  (= show-player-weights  
     (show-player-weights player)
     (show-player-weights opponent))
 
@@ -290,15 +290,13 @@
   (= (show-com $_ $_ $_ weights $Player)  
     (show-player-weights $Player))
 
-  (= (show-com $_ $_ $_ weights)  
-    (show-player-weights))
+  (= (show-com $_ $_ $_ weights)  show-player-weights)
 
 
   (= (show-top weights $Player)  
     (show-player-weights $Player))
 
-  (= (show-top weights)  
-    (show-player-weights))
+  (= (show-top weights)  show-player-weights)
 
 ;
 ; toggle player ==> sets default weights to be those of player.

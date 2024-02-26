@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex2 $_81266 miles/examples/ex2.pl miles/examples/ex2.metta)
+;                                           (convert-to-metta-file  ex2 $_184890 miles/examples/ex2.pl miles/examples/ex2.metta)
 ;
 ; ;; clauses 1-4 define Rouveirols bg knowledge
 

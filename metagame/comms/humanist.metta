@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  humanist $_141280 metagame/comms/humanist.pl metagame/comms/humanist.metta)
+;                                           (convert-to-metta-file  humanist $_98840 metagame/comms/humanist.pl metagame/comms/humanist.metta)
 ;
 ; ============================================================
 ;

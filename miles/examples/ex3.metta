@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex3 $_203698 miles/examples/ex3.pl miles/examples/ex3.metta)
+;                                           (convert-to-metta-file  ex3 $_308750 miles/examples/ex3.pl miles/examples/ex3.metta)
 ;
 ; grammar rules
 

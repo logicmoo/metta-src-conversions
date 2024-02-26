@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  filter $_456074 miles/filter.pl miles/filter.metta)
+;                                           (convert-to-metta-file  filter $_24130 miles/filter.pl miles/filter.metta)
 ;
 ; MODULE filter EXPORTS
 
@@ -174,8 +174,7 @@
 
 
   (= (already-in 0 $_ $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (already-in $N $P $Y)  
     (arg $N $P $Pn)
     (det-if-then-else 
@@ -228,7 +227,7 @@
 ; ***********************************************************************
 
 
-  (= (select_var_sharing_lits  () ())  True)
+  (= (select-var-sharing-lits  () ())  True)
   (= (select-var-sharing-lits (Cons  $C $R) $R2)  
     (select-var-sharing-lits $R $R1)
     (det-if-then-else 
@@ -325,11 +324,11 @@
 ; ***********************************************************************
 
 
-  (= (noduplicate-atom $P (, $A $B))  
+  (= (noduplicate-symbol $P (, $A $B))  
     (set-det)
     (\== $P $A)
-    (noduplicate-atom $P $B))
-  (= (noduplicate-atom $P $A)  
+    (noduplicate-symbol $P $B))
+  (= (noduplicate-symbol $P $A)  
     (\== $P $A))
 
 
@@ -367,15 +366,15 @@
 ; ***********************************************************************
 
 
-  (= (noduplicate-atoms (= $A  $B))  
+  (= (noduplicate-symbols (= $A  $B))  
     (set-det)
-    (noduplicate-atom $A $B)
-    (noduplicate-atoms $B))
-  (= (noduplicate-atoms (, $A $B))  
+    (noduplicate-symbol $A $B)
+    (noduplicate-symbols $B))
+  (= (noduplicate-symbols (, $A $B))  
     (set-det)
-    (noduplicate-atom $A $B)
-    (noduplicate-atoms $B))
-  (= (noduplicate_symbols  $_)  True)
+    (noduplicate-symbol $A $B)
+    (noduplicate-symbols $B))
+  (= (noduplicate-symbols  $_)  True)
    
 
 ;
@@ -424,12 +423,12 @@
 ; ***********************************************************************
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/filter.pl 242 29 6845))
 
 
 
-  (= (connected-skolems (Cons  (with_self  $Head (p)) $Body) $Connected $Unconnected)  
+  (= (connected-skolems (Cons  (with-self  $Head p) $Body) $Connected $Unconnected)  
     (skolems $Head $Con)
     (= $Uncon Nil)
     (find-connected-skolems-in-body $Body $Con $Connected $Uncon $Unconnected_tupels)
@@ -480,7 +479,7 @@
 ; ***********************************************************************
 
 
-  (= (find-connected-skolems-in-body (Cons  (with_self  $L $_) $Rest) $C1 $C2 $U1 $U2)  
+  (= (find-connected-skolems-in-body (Cons  (with-self  $L $_) $Rest) $C1 $C2 $U1 $U2)  
     (skolems $L $V1)
     (det-if-then-else 
       (, 
@@ -494,7 +493,7 @@
         (= $U3 
           (Cons  $V1 $U1))))
     (find-connected-skolems-in-body $Rest $C3 $C2 $U3 $U2))
-  (= (find_connected_skolems_in_body  () $C $C $U $U)  True)
+  (= (find-connected-skolems-in-body  () $C $C $U $U)  True)
 
 
   (= (connect  $V $C $C () ())  True)
@@ -546,7 +545,7 @@
 ; ***********************************************************************
 
 
-  (= (is-weakly-generative (Cons  (with_self  $H (p)) $B))  
+  (= (is-weakly-generative (Cons  (with-self  $H p) $B))  
     (vars $H $Vars)
     (contains-vars $Vars $B))
 
@@ -685,7 +684,7 @@
     (not (is-unflat $Clause)))
 
 
-  (= (is-unflat (Cons  (with_self  $L $_) $Rest))  
+  (= (is-unflat (Cons  (with-self  $L $_) $Rest))  
     (is-unflat-literal $L))
   (= (is-unflat (Cons  $_ $Rest))  
     (is-unflat $Rest))                  
@@ -811,11 +810,11 @@
     (do-truncate-r $C $ClauseOut))
 
 
-  (= (do_truncate_r  () ())  True)
-  (= (do-truncate-r (Cons  (with_self  $L (r)) $Rest) $Rest1)  
+  (= (do-truncate-r  () ())  True)
+  (= (do-truncate-r (Cons  (with-self  $L r) $Rest) $Rest1)  
     (set-det)
     (do-truncate-r $Rest $Rest1))
-  (= (do-truncate-r (Cons  (with_self  $L $S) $Rest) (Cons  (with_self  $L $S) $Rest1))  
+  (= (do-truncate-r (Cons  (with-self  $L $S) $Rest) (Cons  (with-self  $L $S) $Rest1))  
     (set-det)
     (do-truncate-r $Rest $Rest1))
 
@@ -873,15 +872,15 @@
     (do-truncate-flat-r $C $ClauseOut))
 
 
-  (= (do_truncate_flat_r  () ())  True)
-  (= (do-truncate-flat-r (Cons  (with_self  $L (r)) $Rest) $Rest1)  
+  (= (do-truncate-flat-r  () ())  True)
+  (= (do-truncate-flat-r (Cons  (with-self  $L r) $Rest) $Rest1)  
     (functor $L $F $N)
     (functor $LC $F $N)
     (get-clause $_ $LC $_ $_ usr)
     (set-det)
     (do-truncate-flat-r $Rest $Rest1))
 ; ; L is bg predicate
-  (= (do-truncate-flat-r (Cons  (with_self  $L $S) $Rest) (Cons  (with_self  $L $S) $Rest1))  
+  (= (do-truncate-flat-r (Cons  (with-self  $L $S) $Rest) (Cons  (with-self  $L $S) $Rest1))  
     (set-det)
     (do-truncate-flat-r $Rest $Rest1))
 
@@ -944,22 +943,20 @@
     (connected-skolems $ClauseInS $Con $Uncon)
     (= $ClauseInS 
       (Cons  
-        (with_self  $Head 
-          (p)) $Body))
+        (with-self  $Head p) $Body))
     (truncate-unconnected1 $Body $Uncon $BodyOut)
     (= $ClauseOutS 
       (Cons  
-        (with_self  $Head 
-          (p)) $BodyOut))
+        (with-self  $Head p) $BodyOut))
     (deskolemize $ClauseOutS $S $ClauseOut))
 
 
-  (= (truncate_unconnected1  () $_ ())  True)  ;
+  (= (truncate-unconnected1  () $_ ())  True)  ;
 ; no literals to drop
   (= (truncate-unconnected1 $B Nil $B)  
     (set-det))   ;
 ; all vars connected
-  (= (truncate-unconnected1 (Cons  (with_self  $L $_) $More) $Uncon $BodyOut)  
+  (= (truncate-unconnected1 (Cons  (with-self  $L $_) $More) $Uncon $BodyOut)  
     (det-if-then-else 
       (, 
         (skolems $L $SKs) 
@@ -970,7 +967,7 @@
     (set-det))
 ; ; either all or no vars in L are connected
 ; ; local cut
-  (= (truncate-unconnected1 (Cons  (with_self  $L $S) $More) $Uncon (Cons  (with_self  $L $S) $BodyOut))  
+  (= (truncate-unconnected1 (Cons  (with-self  $L $S) $More) $Uncon (Cons  (with-self  $L $S) $BodyOut))  
     (truncate-unconnected1 $More $Uncon $BodyOut)
     (set-det))
 
@@ -1035,14 +1032,12 @@
   (= (truncate-unconnecting $ClauseIn $ClauseOut)  
     (copy-term $ClauseIn 
       (Cons  
-        (with_self  $H 
-          (p)) $Body))
+        (with-self  $H p) $Body))
     (subseq $Body 
       (:: $L) $BodyOut)
     (= $ClauseOut1 
       (Cons  
-        (with_self  $H 
-          (p)) $BodyOut))
+        (with-self  $H p) $BodyOut))
     (connected-vars $ClauseOut1 $ClauseOut $Con Nil)
     (is-weakly-generative $ClauseOut))
 ; ; no unconnected vars
@@ -1098,14 +1093,12 @@
   (= (truncate-strongly-generative $ClauseIn $ClauseOut)  
     (copy-term $ClauseIn 
       (Cons  
-        (with_self  $H 
-          (p)) $Body))
+        (with-self  $H p) $Body))
     (subseq $Body 
       (:: $L) $BodyOut)
     (= $ClauseOut 
       (Cons  
-        (with_self  $H 
-          (p)) $BodyOut))
+        (with-self  $H p) $BodyOut))
     (is-strongly-generative $ClauseOut))
 
 
@@ -1154,19 +1147,17 @@
 
 
   (= (truncate-neg-based $ID)  
-    (or 
-      (get-clause $ID $_ $_ $C $Label) 
-      (, 
-        (store-clause $_ $C $Label $ID) 
-        (fail)))
-    (delete-clause $ID)
-    (once (truncate-unconnected $C $D))
-    (store-clause $_ $D trc $ID)
-    (correct-chk)
-    (= $D 
-      (Cons  $H $Body))
-    (length $Body $N)
-    (truncate-neg-based1 $N $ID $H $Body)) 
+    ( (or 
+        (get-clause $ID $_ $_ $C $Label) 
+        (, 
+          (store-clause $_ $C $Label $ID) fail)) 
+      (delete-clause $ID) 
+      (once (truncate-unconnected $C $D)) 
+      (store-clause $_ $D trc $ID) correct-chk 
+      (= $D 
+        (Cons  $H $Body)) 
+      (length $Body $N) 
+      (truncate-neg-based1 $N $ID $H $Body))) 
 
 
   (= (truncate-neg-based1 0 $_ $_ $_)  
@@ -1181,8 +1172,7 @@
       (- $N 1))
     (det-if-then-else 
       (, 
-        (is-weakly-generative (Cons  $H $NewBody)) 
-        (correct-chk)) 
+        (is-weakly-generative (Cons  $H $NewBody)) correct-chk) 
       (truncate-neg-based1 $M $ID $H $NewBody) 
       (, 
         (delete-clause $ID) 
@@ -1257,13 +1247,12 @@
         (store-clause $_ $C $Label $ID))))
 
   (= (truncate-flat-neg-based $ID $H $Nec Nil)  
-    (delete-clause $ID)
-    (truncate-unconnected 
-      (Cons  $H $Nec) $D)
-    (unflatten-clause $D $E)
-    (store-clause $_ $E trc $ID)
-    (set-det)
-    (correct-chk))
+    ( (delete-clause $ID) 
+      (truncate-unconnected 
+        (Cons  $H $Nec) $D) 
+      (unflatten-clause $D $E) 
+      (store-clause $_ $E trc $ID) 
+      (set-det) correct-chk))
 
 
   (= (truncate-flat-neg-based $ID $H $Nec (Cons  $L $Maybe))  
@@ -1327,8 +1316,8 @@
       (Cons  $H $BodyOut) trc $ID))
 
 
-  (= (truncate_facts1  () ())  True)
-  (= (truncate-facts1 (Cons  (with_self  $L $S) $Rest) $BodyOut)  
+  (= (truncate-facts1  () ())  True)
+  (= (truncate-facts1 (Cons  (with-self  $L $S) $Rest) $BodyOut)  
     (truncate-facts1 $Rest $Rest1)
     (det-if-then-else 
       (, 
@@ -1337,7 +1326,7 @@
       (= $BodyOut $Rest1) 
       (= $BodyOut 
         (Cons  
-          (with_self  $L $S) $Rest1))))
+          (with-self  $L $S) $Rest1))))
 
 
 ;
@@ -1390,14 +1379,12 @@
     (get-clause $ID $_ $_ $C $_)
     (skolemize $C $S 
       (Cons  
-        (with_self  $Head 
-          (p)) $BodyIn))
+        (with-self  $Head p) $BodyIn))
     (skolems $Head $Vars)
     (do-truncate-j $J $Vars $BodyIn $BodyOutS)
     (deskolemize 
       (Cons  
-        (with_self  $Head 
-          (p)) $BodyOutS) $S $D)
+        (with-self  $Head p) $BodyOutS) $S $D)
     (truncate-unconnected $D $E)
     (delete-clause $ID)
     (store-clause $_ $E trc-j $ID))

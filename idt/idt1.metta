@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  idt1 $_348688 idt/idt1.pl idt/idt1.metta)
+;                                           (convert-to-metta-file  idt1 $_41182 idt/idt1.pl idt/idt1.metta)
 
   !(dynamic (/ node 3))
 ; /******************************************************************/
@@ -46,7 +46,7 @@
   !(dynamic (/ classes 1))
   !(dynamic (/ current-node 1))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  idt/idt1.pl 69 17 3862))
 
   !(dynamic (/ found 1))
@@ -59,19 +59,13 @@
       (log $X)))
 
 
-  (= (idt)  
-    (repeat)
-    (nl)
-    (write 'Which file to use ? ')
-    (read $FileName)
-    (nl)
-    (initialize-kb)
-    (readfile $FileName)
-    (build-decision-tree)
-    (show-decision-tree)
-    (nl)
-    (write 'Quit (y/n) ? ')
-    (read y))
+  (= idt  
+    (repeat nl 
+      (write 'Which file to use ? ') 
+      (read $FileName) nl initialize-kb 
+      (readfile $FileName) build-decision-tree show-decision-tree nl 
+      (write 'Quit (y/n) ? ') 
+      (read y)))
 ; /******************************************************************/
 ; /* Quintus-MeTTa specific declaration. */
 ; /******************************************************************/
@@ -93,7 +87,7 @@
 ; /******************************************************************/
 
 
-  (= (initialize-kb)  
+  (= initialize-kb  
     (abolish node 3)
     (abolish decision-tree 1)
     (abolish example 3)
@@ -104,21 +98,18 @@
 
 
   (= (readfile $FileName)  
-    (concat $FileName .pl $File)
-    (see $File)
-    (repeat)
-    (read $Term)
-    (det-if-then-else 
-      (= $Term end-of-file) 
-      (, 
-        (set-det) 
-        (seen)) 
-      (, 
-        (add-is-symbol  &self $Term) 
-        (fail))))
+    ( (concat $FileName .pl $File) 
+      (see $File) repeat 
+      (read $Term) 
+      (det-if-then-else 
+        (= $Term end-of-file) 
+        (, 
+          (set-det) seen) 
+        (, 
+          (add-atom  &self $Term) fail))))
 
 
-  (= (build-decision-tree)  
+  (= build-decision-tree  
     ( (generate-node-id $_) 
       (==  
         (= 
@@ -130,26 +121,26 @@
             (example  $Ex $_ $_) true) 
           (get-atoms  &self)) $Exs) 
       (idt $Exs $Attributes $Node) 
-      (add-is-symbol  &self 
-        (decision_tree  $Node)) 
+      (add-atom  &self 
+        (decision-tree  $Node)) 
       (set-det)))
 
 
   (= (generate-node-id $Y)  
     ( (==  
         (= 
-          (current_node  $X) true) 
+          (current-node  $X) true) 
         (get-atoms  &self)) 
       (set-det) 
-      (remove-is-symbol  &self 
-        (current_node  $X)) 
+      (remove-atom  &self 
+        (current-node  $X)) 
       (is $Y 
         (+ $X 1)) 
-      (add-is-symbol  &self 
-        (current_node  $Y))))
+      (add-atom  &self 
+        (current-node  $Y))))
   (= (generate-node-id 0)  
-    (add-is-symbol  &self 
-      (current_node  0)))
+    (add-atom  &self 
+      (current-node  0)))
 
 
   (= (idt  () $_ ())  True)
@@ -182,7 +173,7 @@
       (delete $BestAttribute $Attributes $NewAttributes) 
       (generate-subtrees $DividedValues $NewAttributes $SubtreeIDs) 
       (generate-node-id $ID) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (node  $ID $BestAttribute $SubtreeIDs))))
 
 
@@ -195,7 +186,7 @@
       (all-in-same-class $Exs $Class)))
 
 
-  (= (all_in_same_class  () $_)  True)
+  (= (all-in-same-class  () $_)  True)
   (= (all-in-same-class (Cons  $Ex $Exs) $C)  
     ( (==  
         (= 
@@ -224,13 +215,13 @@
       (construct-contingency-tables $Attributes $Exs)))
 
 
-  (= (initialize_contingency_tables  () $_)  True)
+  (= (initialize-contingency-tables  () $_)  True)
   (= (initialize-contingency-tables (Cons  $A $As) $List)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (table  $A () $List)) (initialize-contingency-tables $As $List)))
 
 
-  (= (create_list_of_zeros  0 ())  True)
+  (= (create-list-of-zeros  0 ())  True)
   (= (create-list-of-zeros $N (Cons  0 $R))  
     (> $N 0)
     (is $N1 
@@ -238,14 +229,14 @@
     (create-list-of-zeros $N1 $R))
 
 
-  (= (construct_contingency_tables  () $_)  True)
+  (= (construct-contingency-tables  () $_)  True)
   (= (construct-contingency-tables (Cons  $Attribute $Attributes) $ExampleList)  
     (contingency-table $Attribute $ExampleList)
     (set-det)
     (construct-contingency-tables $Attributes $ExampleList))
 
 
-  (= (contingency_table  $_ ())  True)
+  (= (contingency-table  $_ ())  True)
   (= (contingency-table $Attribute (Cons  $Ex $Exs))  
     (value $Attribute $Ex $V)
     (position-of-class $Ex $Pc)
@@ -280,7 +271,7 @@
   (= (position $X $L $P)  
     (position $X 1 $L $P))
 
-  (= (position  $X $P (Cons  $X $_) $P)  True)
+  (= (position  $X $P ([|]  $X $_) $P)  True)
   (= (position $X $N (Cons  $_ $R) $P)  
     (is $N1 
       (+ $N 1))
@@ -288,11 +279,11 @@
 
 
   (= (update-table $Attribute $V $Pc)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (table  $Attribute $TabLines $TotClass)) 
       (modify-table $TabLines $V $Pc $NewLines) 
       (increment-position-list 1 $Pc $TotClass $NewTotal) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (table  $Attribute $NewLines $NewTotal))))
 
 
@@ -346,7 +337,7 @@
     (common-calculations $Xjs $NAc1 $NAc2 $MC $N))
 
 
-  (= (calculate_parameter_classification  () $_ $_ ())  True)
+  (= (calculate-parameter-classification  () $_ $_ ())  True)
   (= (calculate-parameter-classification (Cons  $A $As) $MC $N (Cons  $V $Vs))  
     (gain-ratio $A $MC $N $V)
     (calculate-parameter-classification $As $MC $N $Vs))
@@ -389,7 +380,7 @@
     (calculate-factors-B-and-IV $Rest $N $NAc1 $NAc2 $B $IV))
 
 
-  (= (sum_of_lines  () $X $X)  True)
+  (= (sum-of-lines  () $X $X)  True)
   (= (sum-of-lines (Cons  0 $Ns) $Ac $Tot)  
     (sum-of-lines $Ns $Ac $Tot))
   (= (sum-of-lines (Cons  $N $Ns) $Ac $Tot)  
@@ -405,7 +396,7 @@
       (, $A $V) $Result))
 
 
-  (= (best_value  () () (,  $A $_) $A)  True)
+  (= (best-value  () () (,  $A $_) $A)  True)
   (= (best-value (Cons  $A $As) (Cons  $V $Vs) (, $_ $TV) $Result)  
     (> $V $TV)
     (best-value $As $Vs 
@@ -428,7 +419,7 @@
     (remove-duplicates $Vs $Vals))
 
 
-  (= (split_examples  $_ ($V) $Exs ((,  $V $Exs)))  True)
+  (= (split-examples  $_ ($V) $Exs ((,  $V $Exs)))  True)
   (= (split-examples $A (Cons  $V $Vs) $Exs (Cons  (, $V $VExs) $Rest))  
     (findbag $Ex 
       (, 
@@ -438,18 +429,18 @@
     (split-examples $A $Vs $RestEx $Rest))
 
 
-  (= (generate_subtrees  () $_ ())  True)
+  (= (generate-subtrees  () $_ ())  True)
   (= (generate-subtrees (Cons  (, $Value $Exs) $Rest1) $Attributes (Cons  (, $Value $Id) $Rest2))  
     (idt $Exs $Attributes $Id)
     (set-det)
     (generate-subtrees $Rest1 $Attributes $Rest2))
 
 
-  (= (show-decision-tree)  
-    ( (nl) 
+  (= show-decision-tree  
+    (nl 
       (==  
         (= 
-          (decision_tree  $Node) true) 
+          (decision-tree  $Node) true) 
         (get-atoms  &self)) 
       (show-subtree $Node 0) 
       (set-det)))
@@ -475,16 +466,14 @@
         (get-atoms  &self)) (show-subtrees $SubtreeList $Attribute $Indent)))
 	
 
-  (= (show-subtrees Nil $_ $_)  
-    (nl))
+  (= (show-subtrees Nil $_ $_)  nl)
   (= (show-subtrees (Cons  (, $Value (leaf $X)) $Brothers) $Attribute $Indent)  
-    (write (= $Attribute $Value))
-    (write ' ')
-    (write  ==> )
-    (write (= class $X))
-    (nl)
-    (space $Indent)
-    (show-subtrees $Brothers $Attribute $Indent))	
+    ( (write (= $Attribute $Value)) 
+      (write ' ') 
+      (write  ==> ) 
+      (write (= class $X)) nl 
+      (space $Indent) 
+      (show-subtrees $Brothers $Attribute $Indent)))	
   (= (show-subtrees (Cons  (, $Value $NodeNo) $Brothers) $Attribute $Indent)  
     (name $Attribute $List1)
     (length $List1 $N1)
@@ -514,7 +503,7 @@
     (space $N1))
 
 
-  (= (remove_duplicates  () ())  True)
+  (= (remove-duplicates  () ())  True)
   (= (remove-duplicates (Cons  $X $Xs) $Ys)  
     (member $X $Xs)
     (remove-duplicates $Xs $Ys))
@@ -531,7 +520,7 @@
 ; N is N1 + 1.
 
 
-  (= (delete  $X (Cons  $X $Xs) $Xs)  True)
+  (= (delete  $X ([|]  $X $Xs) $Xs)  True)
   (= (delete $X (Cons  $Y $Ys) (Cons  $Y $Zs))  
     (delete $X $Ys $Zs))
 
@@ -544,12 +533,11 @@
 
 
   (= (findbag $X $G $_)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (found  mark)) 
       (call $G) 
-      (add-is-symbol  &self 
-        (found  $X)) 
-      (fail)))                            
+      (add-atom  &self 
+        (found  $X)) fail))                            
   (= (findbag $_ $_ $L)  
     (collect-found Nil $L))                                     
                                                               
@@ -558,19 +546,18 @@
     (getnext $X)
     (collect-found 
       (Cons  $X $L) $L1))                      
-  (= (collect_found  $L $L)  True)                                        
+  (= (collect-found  $L $L)  True)                                        
                                                               
 
   (= (getnext $X)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (found  $X)) 
       (set-det) 
       (not (== $X mark))))                
 
 
-  (= (help)  
-    (write 'Start IDT with command: idt.')
-    (nl))
+  (= help  
+    ( (write 'Start IDT with command: idt.') nl))
 
 
   !(help *)

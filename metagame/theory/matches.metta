@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  matches $_432756 metagame/theory/matches.pl metagame/theory/matches.metta)
+;                                           (convert-to-metta-file  matches $_27296 metagame/theory/matches.pl metagame/theory/matches.metta)
 ;
 ; ============================================================
 ;
@@ -36,8 +36,8 @@
 
   (= (matches-player any-player $Player)  
     (player-role $Player))
-  (= (matches_player  player player)  True)
-  (= (matches_player  opponent opponent)  True)
+  (= (matches-player  player player)  True)
+  (= (matches-player  opponent opponent)  True)
 
 ;
 ; Note a type must be either any_piece or a LIST, not singletons.

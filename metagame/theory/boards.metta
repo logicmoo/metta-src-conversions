@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  boards $_299632 metagame/theory/boards.pl metagame/theory/boards.metta)
+;                                           (convert-to-metta-file  boards $_318114 metagame/theory/boards.pl metagame/theory/boards.metta)
 ;
 ; ============================================================
 ;
@@ -61,20 +61,19 @@
 ; variable reminds us of this!
 
 
-  (= (start-game)  
+  (= start-game  
     (start-game $Game))
 
   (= (start-game $Game)  
-    (initialize-state-properties)
-    (create-board-and-setup $Game))
+    (initialize-state-properties (create-board-and-setup $Game)))
 
 
 
-  (= (default_init_move_count  0)  True)
+  (= (default-init-move-count  0)  True)
 
-  (= (default_init_stage  assign)  True)
+  (= (default-init-stage  assign)  True)
 
-  (= (default_init_control  player)  True)
+  (= (default-init-control  player)  True)
 
 ;
 ; initialize_state_properties :-
@@ -86,7 +85,7 @@
 ; set_initial_move_count.
 
 
-  (= (initialize-state-properties)  
+  (= initialize-state-properties  
     (default-init-stage $Stage)
     (default-init-control $Player)
     (default-init-move-count $Count)
@@ -122,18 +121,17 @@
 ; relation between them.
 
 
-  (= (initialize-board $Game)  
-    (make-empty-board))
+  (= (initialize-board $Game)  make-empty-board)
 
 
-  (= (make-empty-board)  
+  (= make-empty-board  
     (current-board $B)
     (board-size $B $X $Y)
     (array-squares $X $Y $Squares)
     (make-empty $Squares))
 
 
-  (= (make_empty  ())  True)
+  (= (make-empty  ())  True)
   (= (make-empty (Cons  $Sq $Rest))  
     (set-empty $Sq)
     (make-empty $Rest))
@@ -184,8 +182,8 @@
 
   (= (make-assignable-squares $Player $Squares)  
     ( (det-if-then-else 
-        (remove-is-symbol  &self 
-          (assignable_squares  $Player $_)) True True) (add-is-symbol  &self (assignable_squares  $Player $Squares))))
+        (remove-atom  &self 
+          (assignable-squares  $Player $_)) True True) (add-atom  &self (assignable-squares  $Player $Squares))))
 
 	
 
@@ -204,7 +202,7 @@
 ;
 ; (Actually, we don't use this at all yet).
 
-  (= (arbitrary_assignment  (Cons  $_ $_))  True)
+  (= (arbitrary-assignment  ([|]  $_ $_))  True)
 ;
 ; arbitrary_assignment(assign(A1,A2)).
 
@@ -220,7 +218,7 @@
     (place-pieces-on-squares $IAs opponent))
 ; ; from generator/gen.pl
 
-  (= (place_pieces_on_squares  () $_)  True)
+  (= (place-pieces-on-squares  () $_)  True)
   (= (place-pieces-on-squares (Cons  $A $As) $Player)  
     (assign-piece-to-square $A $Player)
     (place-pieces-on-squares $As $Player))
@@ -239,7 +237,7 @@
 ; Hand will assign them.
 
 
-  (= (place_pieces_in_hand  () $Player $Hand)  True)
+  (= (place-pieces-in-hand  () $Player $Hand)  True)
   (= (place-pieces-in-hand (Cons  $P $Ps) $Player $Hand)  
     (place-piece-in-hand $P $Player $Hand)
     (place-pieces-in-hand $Ps $Player $Hand))
@@ -448,7 +446,7 @@
   (= (valid-min $N $N)  
     (number $N)
     (set-det))
-  (= (valid_min  $_ 1)  True)
+  (= (valid-min  $_ 1)  True)
 
 
 ;

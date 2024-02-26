@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  lamarckian $_440142 sre_dna/lamarckian.pl sre_dna/lamarckian.metta)
+;                                           (convert-to-metta-file  lamarckian $_112098 sre_dna/lamarckian.pl sre_dna/lamarckian.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -41,8 +41,8 @@
       (population-size-P $_ $PopSize) 
       (num-list $PopSize $IDs) 
       (lamarck-loop $IDs 0 $FitImpr 0 $MaxImpr 0 $NumGain $K) 
-      (add-is-symbol  &self 
-        (gp_stats  $Gen $_ $_ $_ $_ $_ $_ 
+      (add-atom  &self 
+        (gp-stats  $Gen $_ $_ $_ $_ $_ $_ 
           (lamarck  $FitImpr $MaxImpr $NumGain))) 
       (set-det)))
   (= (lamarckian-evolution $Gen)  
@@ -54,8 +54,8 @@
       (writel (:: nl 'Lamarckian evolution...' nl)) 
       (get-unique-IDs $Select $N $PopSize Nil $IDs) 
       (lamarck-loop $IDs 0 $FitImpr 0 $MaxImpr 0 $NumGain $K) 
-      (add-is-symbol  &self 
-        (gp_stats  $Gen $_ $_ $_ $_ $_ $_ 
+      (add-atom  &self 
+        (gp-stats  $Gen $_ $_ $_ $_ $_ $_ 
           (lamarck  $FitImpr $MaxImpr $NumGain))) 
       (set-det)))
 
@@ -68,17 +68,17 @@
   (= (get-unique-IDs $_ 0 $_ $IDs $IDs)  
     (set-det))
   (= (get-unique-IDs $Type $N $PopSize $SoFar $IDs)  
-    (repeat)
-    (det-if-then-else 
-      (= $Type random) 
-      (my-random $PopSize $ID) 
-      (tournament-select $Type $PopSize $ID $_))
-    (not (member $ID $SoFar))
-    (is $M 
-      (- $N 1))
-    (get-unique-IDs $Type $M $PopSize 
-      (Cons  $ID $SoFar) $IDs)
-    (set-det))
+    (repeat 
+      (det-if-then-else 
+        (= $Type random) 
+        (my-random $PopSize $ID) 
+        (tournament-select $Type $PopSize $ID $_)) 
+      (not (member $ID $SoFar)) 
+      (is $M 
+        (- $N 1)) 
+      (get-unique-IDs $Type $M $PopSize 
+        (Cons  $ID $SoFar) $IDs) 
+      (set-det)))
 ; ; in case number is repeated (member below)
 
 ;
@@ -122,9 +122,9 @@
           (, $NewFitImpr $NewMaxImpr $NumSoFar2) 
           (, $ImprSoFar $MaxSoFar $NumSoFar))) 
       (, 
-        (remove-is-symbol  &self 
+        (remove-atom  &self 
           (individual  $ID $_ $_)) 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (individual  $ID $NewFit $NewExpr)) 
         (is $NewFitImpr 
           (- 
@@ -206,7 +206,7 @@
   (= (select-best (, $F1 $E1) (, $F2 $_) (, $F1 $E1))  
     (=< $F1 $F2)
     (set-det))
-  (= (select_best  $_ $X $X)  True)
+  (= (select-best  $_ $X $X)  True)
 
 
 

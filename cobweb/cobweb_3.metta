@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  cobweb_3 $_300858 cobweb/cobweb_3.pl cobweb/cobweb_3.metta)
+;                                           (convert-to-metta-file  cobweb_3 $_442766 cobweb/cobweb_3.pl cobweb/cobweb_3.metta)
 
   (= (features  ((nominal bodycover) (nominal heartchamber) (nominal bodytemp) (nominal fertilization)))  True)
 ; /********************************************************************/

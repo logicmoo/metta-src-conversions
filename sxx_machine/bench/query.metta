@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  query $_295570 sxx_machine/bench/query.pl sxx_machine/bench/query.metta)
+;                                           (convert-to-metta-file  query $_31048 sxx_machine/bench/query.pl sxx_machine/bench/query.metta)
 ;
 ; generated: 17 November 1989
 ;
@@ -19,13 +19,11 @@
 ; tries of approximately equal population density
 
 
-  (= (top)  
-    (query))
+  (= top  query)
 
 
-  (= (query)  
-    (query $_)
-    (fail))
+  (= query  
+    ( (query $_) fail))
   (= query  True)
 
   (= (query (:: $C1 $D1 $C2 $D2))  

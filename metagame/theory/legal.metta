@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  legal $_267288 metagame/theory/legal.pl metagame/theory/legal.metta)
+;                                           (convert-to-metta-file  legal $_297096 metagame/theory/legal.pl metagame/theory/legal.metta)
 ;
 ; ============================================================
 ;
@@ -117,9 +117,9 @@
 ; stage in the state representation.
 
   (= (legal-move $M $Stage $Player)  
-    (increment-move-count)
-    (legal-move $M $Stage $Player $StageOut $_)
-    (transfer-stage $Stage $StageOut))
+    (increment-move-count 
+      (legal-move $M $Stage $Player $StageOut $_) 
+      (transfer-stage $Stage $StageOut)))
 
 
 
@@ -142,12 +142,12 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (player_role  player)  True)
-  (= (player_role  opponent)  True)
+  (= (player-role  player)  True)
+  (= (player-role  opponent)  True)
 
 
-  (= (opposite_role  player opponent)  True)
-  (= (opposite_role  opponent player)  True)
+  (= (opposite-role  player opponent)  True)
+  (= (opposite-role  opponent player)  True)
 
 
 
@@ -179,12 +179,12 @@
 ;
 ; Kill these later, to use pieces from Gen?
 
-  (= (piece_struct_name  (piece  $Name $Owner) $Name)  True)
+  (= (piece-struct-name  (piece  $Name $Owner) $Name)  True)
 
-  (= (piece_struct_owner  (piece  $Name $Owner) $Owner)  True)
+  (= (piece-struct-owner  (piece  $Name $Owner) $Owner)  True)
 
 
-  (= (piece_struct  (piece  $Name $Owner) $Name $Owner)  True)
+  (= (piece-struct  (piece  $Name $Owner) $Name $Owner)  True)
 
 
   (= (owns $Piece $Owner)  
@@ -335,7 +335,7 @@
 
 
 
-  (= (increment-move-count)  
+  (= increment-move-count  
     (move-count $M)
     (is $M1 
       (+ $M 1))
@@ -356,7 +356,7 @@
 ;
 ; still assigning pieces in the initial stage.
 
-  (= (still-assigning)  
+  (= still-assigning  
     (stage assign)
     (in-hand $Piece $Player))
 
@@ -397,8 +397,7 @@
   (= (pseudo-op assign (assign $Piece $Player $Square) $Player assign $Opponent)  
     (assign $Piece $Player $Square)
     (transfer-control $Player $Opponent))
-  (= (pseudo-op assign end-assign $Player move $Player)  
-    (end-assign))
+  (= (pseudo-op assign end-assign $Player move $Player)  end-assign)
 	
 
 ;
@@ -596,7 +595,7 @@
     (place-piece-from-hand $Piece $Player $Square))
 
 
-  (= (end-assign)  
+  (= end-assign  
     (not (in-hand $Piece $Player)))
 
 
@@ -924,8 +923,8 @@
 
   (= (comparative-interval geq $N $Dir $N $MaxLeaps)  
     (valid-max $_ $Dir $MaxLeaps))
-  (= (comparative_interval  eq $N $_ $N $N)  True)
-  (= (comparative_interval  leq $N $_ 0 $N)  True)
+  (= (comparative-interval  eq $N $_ $N $N)  True)
+  (= (comparative-interval  leq $N $_ 0 $N)  True)
 
 ;
 ; ================================================================================
@@ -1256,9 +1255,8 @@
 
 
   (= (longest-moving-ride $SqF $Dir $Min $Max $SqT)  
-    (> $Min $Max)
-    (set-det)
-    (fail))
+    ( (> $Min $Max) 
+      (set-det) fail))
   (= (longest-moving-ride $SqF $Dir $Min $Max $SqT)  
     (open-line $SqF $Dir $Max $Max empty $Squares $SqT)
     (empty $SqT)
@@ -1274,9 +1272,8 @@
 
 
   (= (longest-capturing-ride $SqF $Dir $Min $Max $SqT $Capture $_)  
-    (> $Min $Max)
-    (set-det)
-    (fail))
+    ( (> $Min $Max) 
+      (set-det) fail))
   (= (longest-capturing-ride $SqF $Dir $Min $Max $SqT $Capture $Captured)  
     (open-line $SqF $Dir $Max $Max empty $Squares $SqT)
     (captured-pieces $SqF $SqT $Capture $Dir Nil $Captured)
@@ -1322,7 +1319,7 @@
 ;
 ; Something will be captured if the capture list is not empty.
 
-  (= (something_captured  (Cons  $_ $_))  True)
+  (= (something-captured  ([|]  $_ $_))  True)
 
 ;
 ; A square will be empty if it is already empty, or if it will be captured.
@@ -1365,7 +1362,7 @@
 ;
 ; Each elt of matchers is of the form: Piece@Square.
 
-  (= (matchers_on_squares  () $_ ())  True)
+  (= (matchers-on-squares  () $_ ())  True)
   (= (matchers-on-squares (Cons  $H $Hs) $Type $Caps)  
     (on $P $H)
     (det-if-then-else 
@@ -1407,7 +1404,7 @@
 
 
 
-  (= (effect_captures  () $_)  True)
+  (= (effect-captures  () $_)  True)
   (= (effect-captures (Cons  $Cap $Caps) $Effect)  
     (effect-capture $Effect $Cap)
     (effect-captures $Caps $Effect))
@@ -1585,7 +1582,7 @@
 ;
 ; If opponent does, then add this fact, and end the move.
 
-  (= (promote_role  $Player $Player $_ $_ promote_select $Player)  True)
+  (= (promote-role  $Player $Player $_ $_ promote_select $Player)  True)
   (= (promote-role $Opponent $Player $OldPiece $Sq $Stage $Player2)  
     (opposite-role $Player $Opponent)
     (add (opponent-promotes $OldPiece $Sq))

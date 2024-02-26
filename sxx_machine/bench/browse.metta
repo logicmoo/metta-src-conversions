@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  browse $_46824 sxx_machine/bench/browse.pl sxx_machine/bench/browse.metta)
+;                                           (convert-to-metta-file  browse $_228902 sxx_machine/bench/browse.pl sxx_machine/bench/browse.metta)
 ;
 ; generated: 19 June 1990
 ;
@@ -17,7 +17,7 @@
 ; (modified January 1987 by Herve' Touati)
 
 
-  (= (top)  
+  (= top  
     (init 100 10 4 
       (:: 
         (:: a a a b b b b a a a a a b b a a a) 
@@ -134,18 +134,17 @@
     (property $RProps $P $Val))
 
 
-  (= (p_investigate  () $_)  True)
+  (= (p-investigate  () $_)  True)
   (= (p-investigate (Cons  $D $Data) $Patterns)  
     (p-match $Patterns $D)
     (p-investigate $Data $Patterns))
 
 
-  (= (p_match  () $_)  True)
+  (= (p-match  () $_)  True)
   (= (p-match (Cons  $P $Patterns) $D)  
     (or 
       (, 
-        (match $D $P) 
-        (fail)) True)
+        (match $D $P) fail) True)
     (p-match $Patterns $D))
 
 
@@ -161,7 +160,7 @@
     (= $Y 
       (star $X))
     (set-det)
-    ($concat $X $SRest $List)
+    (%concat $X $SRest $List)
     (match $SRest $Rest))
   (= (match (Cons  $X $PRest) (Cons  $Y $SRest))  
     (det-if-then-else 
@@ -172,6 +171,6 @@
 
 
   (= (%concat  () $L $L)  True)
-  (= ($concat (Cons  $X $L1) $L2 (Cons  $X $L3))  
-    ($concat $L1 $L2 $L3))
+  (= (%concat (Cons  $X $L1) $L2 (Cons  $X $L3))  
+    (%concat $L1 $L2 $L3))
 

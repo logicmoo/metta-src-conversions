@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  poly_10 $_365044 sxx_machine/bench/poly_10.pl sxx_machine/bench/poly_10.metta)
+;                                           (convert-to-metta-file  poly_10 $_98096 sxx_machine/bench/poly_10.pl sxx_machine/bench/poly_10.metta)
 ;
 ; generated: 8 March 1990
 ;
@@ -22,11 +22,10 @@
   !(op 700 xfx less-than)
 
 
-  (= (top)  
-    (poly-10))
+  (= top  poly-10)
 
 
-  (= (poly-10)  
+  (= poly-10  
     (test-poly $P)
     (poly-exp 10 $P $_))
 
@@ -50,9 +49,9 @@
 ; 'less_than'/2 for x, y, z
 
 
-  (= (less_than  x y)  True)
-  (= (less_than  y z)  True)
-  (= (less_than  x z)  True)
+  (= (less-than  x y)  True)
+  (= (less-than  y z)  True)
+  (= (less-than  x z)  True)
 
 ;
 ; polynomial addition
@@ -101,7 +100,7 @@
   (= (add-to-order-zero-term (Cons  (term 0 $C1) $Terms) $C2 (Cons  (term 0 $C) $Terms))  
     (set-det)
     (poly-add $C1 $C2 $C))
-  (= (add_to_order_zero_term  $Terms $C (Cons  (term  0 $C) $Terms))  True)
+  (= (add-to-order-zero-term  $Terms $C ([|]  (term  0 $C) $Terms))  True)
 
 ;
 ; polynomial exponentiation

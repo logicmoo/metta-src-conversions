@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  prover $_504364 sxx_machine/bench/prover.pl sxx_machine/bench/prover.metta)
+;                                           (convert-to-metta-file  prover $_239688 sxx_machine/bench/prover.pl sxx_machine/bench/prover.metta)
 ;
 ; generated: 30 October 1989
 ;
@@ -24,8 +24,7 @@
 ; op/3 directives
 
 
-  (= (top)  
-    (prover))
+  (= top  prover)
 
 
 
@@ -39,10 +38,9 @@
 ; denial
 
 
-  (= (prover)  
-    (problem $_ $P $C)
-    (implies $P $C)
-    (fail))
+  (= prover  
+    ( (problem $_ $P $C) 
+      (implies $P $C) fail))
   (= prover  True)
 
 ;
@@ -142,7 +140,7 @@
   (= (extend $Exp $Pos $_ $Pos $Set $Set)  
     (includes $Pos $Exp)
     (set-det))
-  (= (extend  $Exp $Pos $_ (Cons  $Exp $Pos) $Set $Set)  True)
+  (= (extend  $Exp $Pos $_ ([|]  $Exp $Pos) $Set $Set)  True)
 
 
   (= (refute refuted)  

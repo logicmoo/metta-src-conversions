@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  nars $_188462 nars_lp/nars/nars.pl nars_lp/nars/nars.metta)
+;                                           (convert-to-metta-file  nars $_321362 nars_lp/nars/nars.pl nars_lp/nars/nars.metta)
 ;
 ; nal.pl
 ;
@@ -42,37 +42,29 @@
 
 
 
-  (= (do-nars-example-tests)  
-    (run-nars-example-tests))
+  (= do-nars-example-tests  run-nars-example-tests)
 
 
-  (= (run-nars-example-tests)  
-    (make)
-    (use-module 
-      (library ../examples/prolog/nal/nal-examples) 
-      (:: (/ nal-example-test 2)))
-    (add-history run-nars-example-tests)
-    (forall 
-      (with_self  
-        (nal-examples *) 
-        (nal-example-test $Goal $Results)) 
-      (take-nal-example-test $Goal $Results)))
+  (= run-nars-example-tests  
+    (make 
+      (use-module 
+        (library ../examples/prolog/nal/nal-examples) 
+        (:: (/ nal-example-test 2))) 
+      (add-history run-nars-example-tests) 
+      (forall 
+        (with-self  
+          (nal-examples *) 
+          (nal-example-test $Goal $Results)) 
+        (take-nal-example-test $Goal $Results))))
 
 
 
-  (= (with_self  (baseKB *) (sanity-test))  
-    (do-nars-example-tests))
+  (= (with-self  (baseKB *) sanity-test)  do-nars-example-tests)
 
-  (= (with_self  (baseKB *) (feature-test))  
-    (run-nars-example-tests))
+  (= (with-self  (baseKB *) feature-test)  run-nars-example-tests)
 
-  (= (nal-into-prolog)  
-    (make)
-    (forall 
-      (, 
-        (nal-is-test $Type $Text) 
-        (== $Type into-prolog)) 
-      (nal-do-exec-test $Type $Text)))
+  (= nal-into-prolog  
+    (make (forall (, (nal-is-test $Type $Text) (== $Type into-prolog)) (nal-do-exec-test $Type $Text))))
 ; /* ```diff - text in red + text in green ! text in orange # text in gray @@ text in purple (and bold)@@ ``` */
 ; ;take_nal_example_test(_,_):- make, fail.
 
@@ -130,8 +122,7 @@
     (set-det)
     (nars-exec-ex1 cmt $C))
   (= (nars-exec-ex1 $IO $C)  
-    (dmsg (= $IO $C))
-    (fail))
+    ( (dmsg (= $IO $C)) fail))
   (= (nars-exec-ex1 $_ (do-steps $N))  
     (set-det)
     (forall 
@@ -141,23 +132,16 @@
 ;
 ; nars_exec_ex1(IO,task(judgement,C,_,TV,_)):- !, nars_exec_ex1(IO,C).
   (= (nars-exec-ex1 in $C)  
-    ( (add-is-symbol  &self 
-        (nars_db  $C)) 
+    ( (add-atom  &self 
+        (nars-db  $C)) 
       (nop (derive-event $C)) 
       (set-det)))
-  (= (nars_exec_ex1  $_ $_)  True)
+  (= (nars-exec-ex1  $_ $_)  True)
 
 
 
-  (= (nal-exec-tests)  
-    (make)
-    (forall 
-      (, 
-        (with_self  
-          (nal-reader *) 
-          (nal-is-test $Type $Text)) 
-        (\== $Type read)) 
-      (nal-do-exec-test $Type $Text)))
+  (= nal-exec-tests  
+    (make (forall (, (with-self  (nal-reader *) (nal-is-test $Type $Text)) (\== $Type read)) (nal-do-exec-test $Type $Text))))
 
 
 
@@ -192,7 +176,7 @@
   (= (nal-clauses-to-test $CMT $Goal $Goal $In $Out)  
     (\== $In True)
     (= $CMT 
-      ($COMMENT $_ $_ $_))
+      (%COMMENT $_ $_ $_))
     (set-det)
     (nal-to-prolog out $CMT $P)
     (conjoin $In $P $Out))
@@ -206,7 +190,7 @@
 ;
 ; nal_to_MeTTa(IO,'$COMMENT'(_,_,_),true):- !.
 
-  (= (nal-to-prolog $IO ($COMMENT $C $_ $_) $M)  
+  (= (nal-to-prolog $IO (%COMMENT $C $_ $_) $M)  
     (set-det)
     (nal-to-prolog $IO 
       (write $C) $M))
@@ -232,8 +216,8 @@
   (= (nal-to-prolog $IO (task judgement $S $_ $FC $_) $O)  
     (append-term $S $FC $M)
     (nal-to-prolog $IO $M $O))
-  (= (nal_to_prolog  in $X (nop  $X))  True)
-  (= (nal_to_prolog  out $X (nop  (expected  $X)))  True)
+  (= (nal-to-prolog  in $X (nop  $X))  True)
+  (= (nal-to-prolog  out $X (nop  (expected  $X)))  True)
 
 
 
@@ -279,7 +263,7 @@
           (= $Failed failed))) 
       (set-det) 
       (format '~n~n```prolog ' Nil) 
-      (with_self  
+      (with-self  
         (mu *) 
         (print-tree-nl $ResultsExpected)) 
       (format ```~n~n Nil) 
@@ -311,8 +295,7 @@
       (if 
         (call $X) True) 
       (, 
-        (nop (print-tree-nl (failed-nars-call-ex $X))) 
-        (fail))))
+        (nop (print-tree-nl (failed-nars-call-ex $X))) fail)))
 
 
 
@@ -341,10 +324,8 @@
     (or 
       (if 
         (call $X) True) 
-      (, 
-        (fail) 
-        (print-tree (test-failed $X)) 
-        (fail))))
+      (, fail 
+        (print-tree (test-failed $X)) fail)))
 
 
   (= (nars-close-enough $R $V)  
@@ -400,19 +381,19 @@
     (use-nars-config-info (= $Name $Value)))
   (= (use-nars-config-info (= $Name $Value))  
     (nars-string $Name)
-    (downcase-atom $Name $NameD)
+    (downcase-symbol $Name $NameD)
     (\= $NameD $Name)
     (set-det)
     (use-nars-config-info (= $NameD $Value)))
   (= (use-nars-config-info (= $Name $Value))  
     (nars-string $Value)
-    (downcase-atom $Value $ValueD)
+    (downcase-symbol $Value $ValueD)
     (\= $ValueD $Value)
     (set-det)
     (use-nars-config-info (= $Name $ValueD)))
   (= (use-nars-config-info (= $Name $Value))  
     (atom $Value)
-    (atom-number $Value $Number)
+    (symbol-number $Value $Number)
     (use-nars-config-info (= $Name $Number)))
 ;
 ; use_nars_config_info(Ignore):- nars_string(Ignore), !.
@@ -422,7 +403,7 @@
 ; use_nars_config_info(Name=Value):- number(Value), !, nb_setval(Name, Value).
   (= (use-nars-config-info (= $Name $Value))  
     (nb-setval $Name $Value))
-  (= (use_nars_config_info  $_)  True)
+  (= (use-nars-config-info  $_)  True)
 
 
 ;
@@ -539,7 +520,7 @@
     (set-det))
 
  
-  (= (parse-config)  
+  (= parse-config  
     (use-nars-config (library ../config/mvpConfig.xml)))
 
 
@@ -564,7 +545,7 @@
 ; (3) "inference" generates a conclusion from one or two premises.
 
 
-  (= (nars_ctx  default)  True)
+  (= (nars-ctx  default)  True)
 
 ;
 ; revision/3
@@ -1130,7 +1111,7 @@
     (narz-f-ana $T1 $T0 $T))
 
 
-  (= (replace_var  () $_ () $_)  True)
+  (= (replace-var  () $_ () $_)  True)
   (= (replace-var (Cons  (inheritance $S1 $P) $T1) $S1 (Cons  (inheritance $S2 $P) $T2) $S2)  
     (replace-var $T1 $S1 $T2 $S2))
   (= (replace-var (Cons  (inheritance $S $P1) $T1) $P1 (Cons  (inheritance $S $P2) $T2) $P2)  
@@ -1222,8 +1203,8 @@
     (nars-implication $Ctx $X $Y))
 
 
-  (= (nars_implication  $Ctx (similarity  $S $P) (inheritance  $S $P))  True)
-  (= (nars_implication  $Ctx (equivalence  $S $P) (implication  $S $P))  True)
+  (= (nars-implication  $Ctx (similarity  $S $P) (inheritance  $S $P))  True)
+  (= (nars-implication  $Ctx (equivalence  $S $P) (implication  $S $P))  True)
 
   (= (nars-implication $Ctx (conjunction $L) $M)  
     (narz-ground $L)
@@ -1350,10 +1331,10 @@
     (\== $X $Y)
     (set-det))
 
-  (= (nars_equivalence  $Ctx (similarity  $S $P) (similarity  $P $S))  True)
+  (= (nars-equivalence  $Ctx (similarity  $S $P) (similarity  $P $S))  True)
 
-  (= (nars_equivalence  $Ctx (inheritance  $S (ext_set  ($P))) (similarity  $S (ext_set  ($P))))  True)
-  (= (nars_equivalence  $Ctx (inheritance  (int_set  ($S)) $P) (similarity  (int_set  ($S)) $P))  True)
+  (= (nars-equivalence  $Ctx (inheritance  $S (ext-set  ($P))) (similarity  $S (ext-set  ($P))))  True)
+  (= (nars-equivalence  $Ctx (inheritance  (int-set  ($S)) $P) (similarity  (int-set  ($S)) $P))  True)
 
   (= (nars-equivalence $Ctx (inheritance $S (ext-intersection $Lp)) (conjunction $L))  
     (findall 
@@ -1364,8 +1345,8 @@
       (nars-inheritance $Ctx $S $P) 
       (member $S $Ls) $L))
 
-  (= (nars_equivalence  $Ctx (inheritance  $S (ext_difference  $P1 $P2)) (conjunction  ((inheritance  $S $P1) (negation  (inheritance  $S $P2)))))  True)
-  (= (nars_equivalence  $Ctx (inheritance  (int_difference  $S1 $S2) $P) (conjunction  ((inheritance  $S1 $P) (negation  (inheritance  $S2 $P)))))  True)
+  (= (nars-equivalence  $Ctx (inheritance  $S (ext-difference  $P1 $P2)) (conjunction  ((inheritance  $S $P1) (negation  (inheritance  $S $P2)))))  True)
+  (= (nars-equivalence  $Ctx (inheritance  (int-difference  $S1 $S2) $P) (conjunction  ((inheritance  $S1 $P) (negation  (inheritance  $S2 $P)))))  True)
 
   (= (nars-equivalence $Ctx (inheritance (product $Ls) (product $Lp)) (conjunction $L))  
     (equ-product $Ls $Lp $L))
@@ -1385,9 +1366,9 @@
   (= (nars-equivalence $Ctx (inheritance $R (product $L)) (inheritance (int-image $R $L1) $T))  
     (narz-replace $L $T $L1))
 
-  (= (nars_equivalence  $Ctx (equivalence  $S $P) (equivalence  $P $S))  True)
+  (= (nars-equivalence  $Ctx (equivalence  $S $P) (equivalence  $P $S))  True)
 
-  (= (nars_equivalence  $Ctx (equivalence  (negation  $S) $P) (equivalence  (negation  $P) $S))  True)
+  (= (nars-equivalence  $Ctx (equivalence  (negation  $S) $P) (equivalence  (negation  $P) $S))  True)
 
   (= (nars-equivalence $Ctx (conjunction $L1) (conjunction $L2))  
     (narz-same-set $L1 $L2))
@@ -1413,7 +1394,7 @@
     (nars-equivalence-list $Ctx $L1 $L2))
 
 
-  (= (nars_equivalence_list  $Ctx $L $L)  True)
+  (= (nars-equivalence-list  $Ctx $L $L)  True)
   (= (nars-equivalence-list $Ctx (Cons  $H $L1) (Cons  $H $L2))  
     (nars-equivalence-list $Ctx $L1 $L2))
   (= (nars-equivalence-list $Ctx (Cons  $H1 $L1) (Cons  $H2 $L2))  
@@ -1533,7 +1514,7 @@
       (:: $L1) $L2 $L)
     (set-det))
 
-  (= (narz_reduce  $X $X)  True)
+  (= (narz-reduce  $X $X)  True)
 
 
 ;
@@ -1553,7 +1534,7 @@
 ; ;; Argument processing
 
 
-  (= (equ_product  () () ())  True)
+  (= (equ-product  () () ())  True)
   (= (equ-product (Cons  $T $Ls) (Cons  $T $Lp) $L)  
     (equ-product $Ls $Lp $L)
     (set-det))
@@ -1569,7 +1550,7 @@
     (\== $L1 $L2))
 
 
-  (= (narz_same  () ())  True)
+  (= (narz-same  () ())  True)
   (= (narz-same $L (Cons  $H $T))  
     (member $H $L)
     (nars-subtract $L 
@@ -1593,23 +1574,21 @@
       (Cons  $H1 $T1) $T2))
 
 
-  (= (narz_not_member  $_ ())  True)
+  (= (narz-not-member  $_ ())  True)
   (= (narz-not-member $C (Cons  $C $_))  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (narz-not-member (:: $S $T) (Cons  (:: $S1 $T) $_))  
-    (nars-equivalence $Ctx $S $S1)
-    (set-det)
-    (fail))
+    ( (nars-equivalence $Ctx $S $S1) 
+      (set-det) fail))
   (= (narz-not-member $C (Cons  $_ $L))  
     (narz-not-member $C $L))
 
 
-  (= (narz_replace  (Cons  $T $L) $T (Cons  nil $L))  True)
+  (= (narz-replace  ([|]  $T $L) $T ([|]  nil $L))  True)
   (= (narz-replace (Cons  $H $L) $T (Cons  $H $L1))  
     (narz-replace $L $T $L1))
 
-  (= (narz_replace  (Cons  $H1 $T) $H1 (Cons  $H2 $T) $H2)  True)
+  (= (narz-replace  ([|]  $H1 $T) $H1 ([|]  $H2 $T) $H2)  True)
   (= (narz-replace (Cons  $H $T1) $H1 (Cons  $H $T2) $H2)  
     (narz-replace $T1 $H1 $T2 $H2))
 
@@ -1630,7 +1609,7 @@
   (= (narz-dependant (int-image $R $A) $Y (int-image $R $A1))  
     (narz-dependant $A $Y $A1)
     (set-det))
-  (= (narz_dependant  $X $_ $X)  True)
+  (= (narz-dependant  $X $_ $X)  True)
 
 
 ;
@@ -1722,7 +1701,7 @@
     (u-w2c $W $C))
 
 
-  (= (narz_f_com  (0 $C1) (0 $C2) (0 0))  True)
+  (= (narz-f-com  (0 $C1) (0 $C2) (0 0))  True)
   (= (narz-f-com (:: $F1 $C1) (:: $F2 $C2) (:: $F $C))  
     (u-or 
       (:: $F1 $F2) $F0)
@@ -1801,7 +1780,7 @@
     (set-det))
 
 
-  (= (u_and  ($N) $N)  True)
+  (= (u-and  ($N) $N)  True)
   (= (u-and (Cons  $N0 $Nt) $N)  
     (u-and $Nt $N1)
     (is $N 
@@ -1809,7 +1788,7 @@
     (set-det))
 
 
-  (= (u_or  ($N) $N)  True)
+  (= (u-or  ($N) $N)  True)
   (= (u-or (Cons  $N0 $Nt) $N)  
     (u-or $Nt $N1)
     (is $N 
@@ -1901,12 +1880,11 @@
         (heap-add $Priority2 $Event2 belief-events-queue) 
         (inference $Event $Event2 $Conclusion) 
         (derive-event $Conclusion) 
-        (write $Conclusion) 
-        (nl)) True))
+        (write $Conclusion) nl) True))
 ; ;undo removal of the second premise (TODO)
 
 
-  (= (nars-main)  
+  (= nars-main  
     (create-heap belief-events-queue)
     (nars-main 1))
   (= (nars-main $T)  
@@ -1914,17 +1892,14 @@
     (or 
       (, 
         (= $X 1) 
-        (write "performing 1 inference steps:") 
-        (nl) 
+        (write "performing 1 inference steps:") nl 
         (inference-step $T) 
-        (write "done with 1 additional inference steps.") 
-        (nl) 
+        (write "done with 1 additional inference steps.") nl 
         (nars-main (+ $T 1))) 
       (, 
         (\= $X 1) 
         (write "Input: ") 
-        (write $X) 
-        (nl) 
+        (write $X) nl 
         (input-event $X) 
         (nars-main (+ $T 1)))))
 

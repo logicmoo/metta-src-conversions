@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  referee $_103860 metagame/comms/referee.pl metagame/comms/referee.metta)
+;                                           (convert-to-metta-file  referee $_78744 metagame/comms/referee.pl metagame/comms/referee.metta)
 ;
 ; ============================================================
 ;
@@ -42,11 +42,10 @@
 ;
 ; Redefine metagame here, so we don't give menu and instead just start referee.
 
-  (= (metagame)  
-    (start-ref))
+  (= metagame  start-ref)
 
 
-  (= (start-ref)  
+  (= start-ref  
     (find-server $Server $Port)
     (find-players $Player1 $Player2)
     (referee $Server $Port $Player1 $Player2))
@@ -68,12 +67,11 @@
   (= (referee $ServerAddr $Port $Player1 $Player2)  
     ( (use-module (library linda/client)) 
       (port-number $Port $PortNum) 
-      (linda-client-wait (with_self  $ServerAddr $PortNum)) 
+      (linda-client-wait (with-self  $ServerAddr $PortNum)) 
       (greet-players $Player1 $Player2) 
       (format "~nI'm your referee!~n" Nil) 
-      (add-is-symbol  &self 
-        (players  $Player1 $Player2)) 
-      (start-controller)))
+      (add-atom  &self 
+        (players  $Player1 $Player2)) start-controller))
 
 
   (= (greet-players $P1 $P2)  
@@ -92,8 +90,7 @@
 
 
   (= (referee-game-contests $P1 $P2 $G 0)  
-    (set-det)
-    (record-statistics))
+    ( (set-det) record-statistics))
   (= (referee-game-contests $P1 $P2 $G $Contests)  
     (> $Contests 0)
     (referee-contest $P1 $P2 $G)
@@ -109,14 +106,11 @@
 
 
   (= (close-match $P1 $P2)  
-    (close-players $P1 $P2)
-    (close-server)
-    (record-statistics)
-    (close-client))
+    ( (close-players $P1 $P2) close-server record-statistics close-client))
 	
 
-  (= (close-server)  
-    (with_self  
+  (= close-server  
+    (with-self  
       (linda *) 
       (linda-call halt)))
 
@@ -200,8 +194,8 @@
 ; players(White,Black) is initially saved upon entry above.
 
   (= (next-players $White $Black)  
-    ( (remove-is-symbol  &self 
-        (players  $Black $White)) (add-is-symbol  &self (players  $White $Black))))
+    ( (remove-atom  &self 
+        (players  $Black $White)) (add-atom  &self (players  $White $Black))))
 	
 
 ;
@@ -234,7 +228,7 @@
 ; Probably this could be done over email.
 
 
-  (= (get-current-game)  
+  (= get-current-game  
     (select-next-game $GameName)
     (load-game $GameName)
     (send-game-name-to-players $GameName))
@@ -262,7 +256,7 @@
   (= (select-next-game $GameName)  
     (next-alternate-game $GameName)
     (set-det))
-  (= (select_next_game  chess)  True)
+  (= (select-next-game  chess)  True)
 
 
   (= (next-alternate-game $GameName)  
@@ -276,9 +270,9 @@
     (game-name $G $Name))
 
 
-  (= (game_follows  chess checkers)  True)
-  (= (game_follows  checkers shogi)  True)
-  (= (game_follows  shogi turncoat_chess)  True)
+  (= (game-follows  chess checkers)  True)
+  (= (game-follows  checkers shogi)  True)
+  (= (game-follows  shogi turncoat_chess)  True)
 
 
 ;
@@ -345,27 +339,25 @@
 
 
   (= (terminate-game $SIn)  
-    (format "~nThe game has finished~n" Nil)
-    (process-results $SIn)
-    (restart-or-end))
+    ( (format "~nThe game has finished~n" Nil) 
+      (process-results $SIn) restart-or-end))
 
 ;
 ; How results are processed to be defined later.
 
-  (= (process_results  $SIn)  True)
+  (= (process-results  $SIn)  True)
 
 
-  (= (restart-or-end)  
+  (= restart-or-end  
     (det-if-then-else 
       (next-alternate-game $GameName) restart goodbye-players))
 	
 
-  (= (restart)  
-    (out-to-players (reset new))
-    (start-controller))
+  (= restart  
+    ( (out-to-players (reset new)) start-controller))
 
 
-  (= (goodbye-players)  
+  (= goodbye-players  
     (out-to-players (reset end))
     (format "~nTournament is finished. Bye!~n" Nil))
 
@@ -385,9 +377,8 @@
 
 
   (= (should-continue $SIn)  
-    (continuous)
-    (set-det)
-    (not-abort))
+    (continuous 
+      (set-det) not-abort))
   (= (should-continue $SIn)  
     (ask-continue y))
 
@@ -396,11 +387,10 @@
 ;
 ; can emergency abort by connecting to the server also.
 
-  (= (not-abort)  
-    (rd-noblock abort)
-    (set-det)
-    (format "~nUser chose to abort!~n")
-    (fail))
+  (= not-abort  
+    ( (rd-noblock abort) 
+      (set-det) 
+      (format "~nUser chose to abort!~n") fail))
   (= not_abort  True)
 
 ;
@@ -441,18 +431,16 @@
 ; If the move isn't legal, we crash at the moment.
 
   (= (observe-choice $Player $Role $SIn $SOut)  
-    (format "~nPlayer ~w, as ~w, must select his move.~n" 
-      (:: $Player $Role))
-    (observe-move $Player $MoveString)
-    (nl)
-    (format "Observed: ~s" 
-      (:: $MoveString))
-    (nl)
-    (find-correct-interpretation $Player $Role $MoveString $SIn $SOut)
-    (other-player $Player $Other)
-    (out-personal $Other legal)
-    (format "~nPlayer ~w, as ~w, has selected his move.~n" 
-      (:: $Player $Role)))
+    ( (format "~nPlayer ~w, as ~w, must select his move.~n" 
+        (:: $Player $Role)) 
+      (observe-move $Player $MoveString) nl 
+      (format "Observed: ~s" 
+        (:: $MoveString)) nl 
+      (find-correct-interpretation $Player $Role $MoveString $SIn $SOut) 
+      (other-player $Player $Other) 
+      (out-personal $Other legal) 
+      (format "~nPlayer ~w, as ~w, has selected his move.~n" 
+        (:: $Player $Role))))
 	
 
   (= (find-correct-interpretation $Player $Role $MoveString $SIn $SOut)  
@@ -462,9 +450,8 @@
   (= (find-correct-interpretation $Player $Role $MoveString $SIn $SOut)  
     ( (format "~nCouldn't interpret the move, ~s, of player ~w, as ~w~n" 
         (:: $MoveString $Player $Role)) 
-      (add-is-symbol  &self 
-        (checkpoints  $Player $Role $MoveString $SIn $SOut)) 
-      (break)))
+      (add-atom  &self 
+        (checkpoints  $Player $Role $MoveString $SIn $SOut)) break))
  
 
   (= (check-legality $Player $Role $Move $SIn $SOut)  
@@ -480,18 +467,17 @@
 
 
   (= (observe-choice $Player $Role $SIn $SOut)  
-    (format "~nPlayer ~w, as ~w, selected an illegal move!!!~n" 
-      (:: $Player $Role))
-    (set-det)
-    (fail))
+    ( (format "~nPlayer ~w, as ~w, selected an illegal move!!!~n" 
+        (:: $Player $Role)) 
+      (set-det) fail))
 
 
   (= (observe-move $Player $Move)  
     (rd-wait (moved $Player $Move)))
 
 
-  (= (role_player  player $White $_ $White)  True)
-  (= (role_player  opponent $_ $Black $Black)  True)
+  (= (role-player  player $White $_ $White)  True)
+  (= (role-player  opponent $_ $Black $Black)  True)
 
 
   (= (other-player $Player $Other)  

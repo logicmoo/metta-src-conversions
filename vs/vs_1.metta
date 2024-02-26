@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  vs_1 $_139518 vs/vs_1.pl vs/vs_1.metta)
+;                                           (convert-to-metta-file  vs_1 $_80290 vs/vs_1.pl vs/vs_1.metta)
 
   (= (son  mono color)  True)
 ; /******************************************************************/

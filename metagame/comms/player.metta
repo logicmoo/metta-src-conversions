@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  player $_380830 metagame/comms/player.pl metagame/comms/player.metta)
+;                                           (convert-to-metta-file  player $_343154 metagame/comms/player.pl metagame/comms/player.metta)
 ;
 ; ============================================================
 ;
@@ -51,14 +51,13 @@
 ;
 ; Redefine metagame here, so we don't give menu and instead just start player.
 
-  (= (metagame)  
-    (start-player))
+  (= metagame  start-player)
 
 
-  (= (start-player)  
+  (= start-player  
     ( (find-my-name $Name) 
-      (add-is-symbol  &self 
-        (my_name  $Name)) 
+      (add-atom  &self 
+        (my-name  $Name)) 
       (find-server $Addr $Port) 
       (play $Addr $Port $Name)))
 
@@ -73,13 +72,12 @@
 
 
   (= (play $ServerAddr $Port $Player)  
-    (use-module (library linda/client))
-    (port-number $Port $PortNum)
-    (format "Server address is ~q:~q~n" 
-      (:: $ServerAddr $PortNum))
-    (linda-client-wait (with_self  $ServerAddr $PortNum))
-    (greet-ref $Player)
-    (start-controller))
+    ( (use-module (library linda/client)) 
+      (port-number $Port $PortNum) 
+      (format "Server address is ~q:~q~n" 
+        (:: $ServerAddr $PortNum)) 
+      (linda-client-wait (with-self  $ServerAddr $PortNum)) 
+      (greet-ref $Player) start-controller))
 
 
   (= (greet-ref $Player)  
@@ -175,13 +173,13 @@
       (my-name $Me) 
       (find-opponent $White $Black $Me $Opponent) 
       (remove-all-atoms  &self 
-        (my_opponent  $_)) 
-      (add-is-symbol  &self 
-        (my_opponent  $Opponent))))
+        (my-opponent  $_)) 
+      (add-atom  &self 
+        (my-opponent  $Opponent))))
 
 
-  (= (find_opponent  $White $Black $White $Black)  True)
-  (= (find_opponent  $White $Black $Black $White)  True)
+  (= (find-opponent  $White $Black $White $Black)  True)
+  (= (find-opponent  $White $Black $Black $White)  True)
 
 
 ;
@@ -196,7 +194,7 @@
 ; Then load it as the current game.
 
 
-  (= (get-current-game)  
+  (= get-current-game  
     (receive-game-name $GameName)
     (load-game $GameName))
 
@@ -251,29 +249,26 @@
 
 
   (= (terminate-game $SIn)  
-    (format "~nI'm finished playing the game.~n" Nil)
-    (analyze-game $SIn)
-    (restart-or-end))
+    ( (format "~nI'm finished playing the game.~n" Nil) 
+      (analyze-game $SIn) restart-or-end))
 
 ;
 ; To be defined by player's own programs.
 
-  (= (analyze_game  $_)  True)
+  (= (analyze-game  $_)  True)
 	
 
 
-  (= (restart-or-end)  
+  (= restart-or-end  
     (in-wait-personal (reset $R))
     (set-det)
     (restart-if $R))
 
 
   (= (restart-if new)  
-    (format "~nStarting again!~n" Nil)
-    (start-controller))
+    ( (format "~nStarting again!~n" Nil) start-controller))
   (= (restart-if end)  
-    (format "~nTournament is finished. Bye!~n" Nil)
-    (close-player))
+    ( (format "~nTournament is finished. Bye!~n" Nil) close-player))
 
 
   (= close_player  True)  
@@ -295,9 +290,8 @@
 
 
   (= (should-continue $_)  
-    (continuous)
-    (set-det)
-    (not-abort))
+    (continuous 
+      (set-det) not-abort))
   (= (should-continue $_)  
     (ask-continue y))
 
@@ -307,11 +301,10 @@
 ;
 ; can emergency abort by connecting to the server also.
 
-  (= (not-abort)  
-    (rd-noblock abort)
-    (set-det)
-    (format "~nUser chose to abort!~n")
-    (fail))
+  (= not-abort  
+    ( (rd-noblock abort) 
+      (set-det) 
+      (format "~nUser chose to abort!~n") fail))
   (= not_abort  True)
 
 ;
@@ -397,13 +390,11 @@
 ; legal (assumed unambiguous w.r.t. current position).
 
   (= (other-choice $Role $SIn $SOut)  
-    (my-opponent $Player)
-    (get-move $Player $MoveString)
-    (nl)
-    (format "Received: ~s" 
-      (:: $MoveString))
-    (nl)
-    (find-correct-interpretation $Player $Role $MoveString $SIn $SOut))
+    ( (my-opponent $Player) 
+      (get-move $Player $MoveString) nl 
+      (format "Received: ~s" 
+        (:: $MoveString)) nl 
+      (find-correct-interpretation $Player $Role $MoveString $SIn $SOut)))
 ; ; nl, format(MoveString,[]), nl,
 
 
@@ -415,9 +406,8 @@
   (= (find-correct-interpretation $Player $Role $MoveString $SIn $SOut)  
     ( (format "~nCouldn't interpret the move, ~s, of player ~w, as ~w~n" 
         (:: $MoveString $Player $Role)) 
-      (add-is-symbol  &self 
-        (checkpoints  $Player $Role $MoveString $SIn $SOut)) 
-      (break)))
+      (add-atom  &self 
+        (checkpoints  $Player $Role $MoveString $SIn $SOut)) break))
  
 
   (= (check-legality $Player $Role $Move $SIn $SOut)  

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  genstructs $_315834 metagame/generator/genstructs.pl metagame/generator/genstructs.metta)
+;                                           (convert-to-metta-file  genstructs $_375270 metagame/generator/genstructs.pl metagame/generator/genstructs.metta)
 ;
 ; ============================================================
 ;
@@ -141,7 +141,7 @@
     (unpair $Pairs $Squares))
 
 
-  (= (invert_board_squares_player  player $Board $Squares $Squares)  True)
+  (= (invert-board-squares-player  player $Board $Squares $Squares)  True)
   (= (invert-board-squares-player opponent $Board $Squares1 $Squares)  
     (invert-board-squares $Board $Squares1 $Squares))
 
@@ -152,7 +152,7 @@
     (invert-squares-dim $Squares1 $Inv $XN $YN $Squares))
 
 
-  (= (invert_squares_dim  () $Inv $XN $YN ())  True)
+  (= (invert-squares-dim  () $Inv $XN $YN ())  True)
   (= (invert-squares-dim (Cons  $Sq $Sqs) $Inv $XN $YN (Cons  $ISq $ISqs))  
     (invert-square-dim $Inv $XN $YN $Sq $ISq)
     (invert-squares-dim $Sqs $Inv $XN $YN $ISqs))
@@ -358,7 +358,7 @@
 ;
 ; ===========================================================================
 
-  (= (complex_movement  (or  $M1 $M2) $M1 $M2)  True)
+  (= (complex-movement  (or  $M1 $M2) $M1 $M2)  True)
 
 ;
 ; ===========================================================================
@@ -367,7 +367,7 @@
 ;
 ; ===========================================================================
 
-  (= (complex_capture  (or  $C1 $C2) $C1 $C2)  True)
+  (= (complex-capture  (or  $C1 $C2) $C1 $C2)  True)
 
 ;
 ; ===========================================================================
@@ -470,7 +470,7 @@
 ; ===========================================================================
 
 
-  (= (piece_description  (piece_desc  $Player $Piece) $Player $Piece)  True)
+  (= (piece-description  (piece-desc  $Player $Piece) $Player $Piece)  True)
   (= (piece-description $X)  
     (functor $X piece-desc 2))
 
@@ -519,7 +519,7 @@
 ;
 ; ===========================================================================
 
-  (= (complex_goal  (or  $M1 $M2) $M1 $M2)  True)
+  (= (complex-goal  (or  $M1 $M2) $M1 $M2)  True)
 
 ;
 ; ===========================================================================
@@ -531,7 +531,7 @@
 ;
 ; ARRIVE
 
-  (= (arrive_goal  (arrive  $Desc $Sq) $Desc $Sq)  True)
+  (= (arrive-goal  (arrive  $Desc $Sq) $Desc $Sq)  True)
 
   (= (arrive-goal (arrive $Desc $Sq) $Player $Type $Sq)  
     (piece-description $Desc $Player $Type))
@@ -539,7 +539,7 @@
 ;
 ; ERADICATE
 
-  (= (eradicate_goal  (eradicate  $Desc) $Desc)  True)
+  (= (eradicate-goal  (eradicate  $Desc) $Desc)  True)
 
   (= (eradicate-goal (eradicate $Desc) $Player $Type)  
     (piece-description $Desc $Player $Type))
@@ -547,7 +547,7 @@
 ;
 ; STALEMATE
 
-  (= (stalemate_goal  (stalemate  $Player) $Player)  True)
+  (= (stalemate-goal  (stalemate  $Player) $Player)  True)
 
 
 ;

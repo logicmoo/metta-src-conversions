@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  train $_386202 index/train.pl index/train.metta)
+;                                           (convert-to-metta-file  train $_87358 index/train.pl index/train.metta)
 
   !(dynamic (/ rel 2))
   !(dynamic (/ pos-tuple 1))
@@ -78,17 +78,17 @@
   (= (fasttrain  utrecht 25)  True)
 
 
-  (= (fasttrain_stop1  utrecht (-  den bosch))  True)
-  (= (fasttrain_stop1  tilburg tilburg)  True)
-  (= (fasttrain_stop1  maastricht weert)  True)
+  (= (fasttrain-stop1  utrecht (-  den bosch))  True)
+  (= (fasttrain-stop1  tilburg tilburg)  True)
+  (= (fasttrain-stop1  maastricht weert)  True)
 
 
   (= (slowtrain  utrecht 13)  True)
   (= (slowtrain  tilburg 17)  True)
 
 
-  (= (slowtrain_stop1  utrecht (-  eindhoven bkln))  True)
-  (= (slowtrain_stop1  tilburg (-  eindhoven bkln))  True)
+  (= (slowtrain-stop1  utrecht (-  eindhoven bkln))  True)
+  (= (slowtrain-stop1  tilburg (-  eindhoven bkln))  True)
 
 
   (= (specialtrain  utrecht 8 31 utrecht)  True)

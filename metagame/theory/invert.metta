@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  invert $_168502 metagame/theory/invert.pl metagame/theory/invert.metta)
+;                                           (convert-to-metta-file  invert $_197250 metagame/theory/invert.pl metagame/theory/invert.metta)
 ;
 ; ============================================================
 ;

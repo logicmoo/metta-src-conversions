@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  randomist $_39218 metagame/comms/randomist.pl metagame/comms/randomist.metta)
+;                                           (convert-to-metta-file  randomist $_13434 metagame/comms/randomist.pl metagame/comms/randomist.metta)
 ;
 ; ============================================================
 ;

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  value $_70984 metagame/play/value.pl metagame/play/value.metta)
+;                                           (convert-to-metta-file  value $_36932 metagame/play/value.pl metagame/play/value.metta)
 ;
 ; ============================================================
 ;
@@ -229,7 +229,7 @@
     (sumlist $Vals $Value))
 
 
-  (= (weigh_advices  () () $_)  True)
+  (= (weigh-advices  () () $_)  True)
   (= (weigh-advices (Cons  $A $As) (Cons  $V $Vals) $Tables)  
     (weigh-advice $A $V $Tables)
     (weigh-advices $As $Vals $Tables))
@@ -255,51 +255,51 @@
 
 
 
-  (= (dynamic_advisor  gen_material 0)  True)
-  (= (dynamic_advisor  material 0)  True)
-  (= (dynamic_advisor  square 0)  True)
-  (= (dynamic_advisor  lthreat 0)  True)
-  (= (dynamic_advisor  potent 0)  True)
-  (= (dynamic_advisor  dynamic_mobility 0)  True)
+  (= (dynamic-advisor  gen_material 0)  True)
+  (= (dynamic-advisor  material 0)  True)
+  (= (dynamic-advisor  square 0)  True)
+  (= (dynamic-advisor  lthreat 0)  True)
+  (= (dynamic-advisor  potent 0)  True)
+  (= (dynamic-advisor  dynamic_mobility 0)  True)
 
-  (= (dynamic_advisor  gmovmob 0)  True)
-  (= (dynamic_advisor  gcapmob 0)  True)
-  (= (dynamic_advisor  gthreat 0)  True)
-  (= (dynamic_advisor  pthreat 0)  True)
+  (= (dynamic-advisor  gmovmob 0)  True)
+  (= (dynamic-advisor  gcapmob 0)  True)
+  (= (dynamic-advisor  gthreat 0)  True)
+  (= (dynamic-advisor  pthreat 0)  True)
 
-  (= (dynamic_advisor  static_mobility 0)  True)
-  (= (dynamic_advisor  eventual_mobility 0)  True)
-  (= (dynamic_advisor  arrive_distance 0)  True)
-  (= (dynamic_advisor  promote_distance 0)  True)
-  (= (dynamic_advisor  possess 0)  True)
-  (= (dynamic_advisor  initprom 0)  True)
+  (= (dynamic-advisor  static_mobility 0)  True)
+  (= (dynamic-advisor  eventual_mobility 0)  True)
+  (= (dynamic-advisor  arrive_distance 0)  True)
+  (= (dynamic-advisor  promote_distance 0)  True)
+  (= (dynamic-advisor  possess 0)  True)
+  (= (dynamic-advisor  initprom 0)  True)
 ;
 ; dynamic_advisor(dominate,0).
-  (= (dynamic_advisor  eradicate 0)  True)
-  (= (dynamic_advisor  vital 0)  True) 
+  (= (dynamic-advisor  eradicate 0)  True)
+  (= (dynamic-advisor  vital 0)  True) 
 
 
-  (= (static_advisor  random 0)  True)
-  (= (static_advisor  static 0)  True)
-  (= (static_advisor  victims 0)  True)
-  (= (static_advisor  max_static_mob 0)  True)
-  (= (static_advisor  max_eventual_mob 0)  True)
-  (= (static_advisor  avg_static_mob 0)  True)
-  (= (static_advisor  avg_eventual_mob 0)  True)
-  (= (static_advisor  eradicate 0)  True)
-  (= (static_advisor  stalemate 0)  True)
-  (= (static_advisor  arrive 0)  True)
-  (= (static_advisor  giveaway 0)  True)
-  (= (static_advisor  immunity 0)  True)
+  (= (static-advisor  random 0)  True)
+  (= (static-advisor  static 0)  True)
+  (= (static-advisor  victims 0)  True)
+  (= (static-advisor  max_static_mob 0)  True)
+  (= (static-advisor  max_eventual_mob 0)  True)
+  (= (static-advisor  avg_static_mob 0)  True)
+  (= (static-advisor  avg_eventual_mob 0)  True)
+  (= (static-advisor  eradicate 0)  True)
+  (= (static-advisor  stalemate 0)  True)
+  (= (static-advisor  arrive 0)  True)
+  (= (static-advisor  giveaway 0)  True)
+  (= (static-advisor  immunity 0)  True)
 ;
 ; advisor(,0).
 
 
 
-  (= (initialize-advisors)  
+  (= initialize-advisors  
     ( (whenever 
         (advisor $Name $Default) 
-        (add-parameter $Name $Default)) (add-is-symbol  &self initialized_advisors)))
+        (add-parameter $Name $Default)) (add-atom  &self initialized_advisors)))
 
 
   (= (active-parameter $P)  
@@ -320,19 +320,19 @@
 ; ----------------------------------------
 
 
-  (= (movtable)  
+  (= movtable  
     (det-if-then 
       (, 
         (needs-movtable $Param) 
         (active-parameter $Param)) True))
 
 
-  (= (needs_movtable  dynamic_mobility)  True)
-  (= (needs_movtable  gmovmob)  True)
+  (= (needs-movtable  dynamic_mobility)  True)
+  (= (needs-movtable  gmovmob)  True)
 
 
 
-  (= (captable)  
+  (= captable  
     (det-if-then 
       (, 
         (needs-captable $Param) 
@@ -341,14 +341,14 @@
 ;
 ; needs_captable(threat).
 
-  (= (needs_captable  gcapmob)  True)
-  (= (needs_captable  vital)  True)
-  (= (needs_captable  gthreat)  True)
-  (= (needs_captable  pthreat)  True)
-  (= (needs_captable  lthreat)  True)
-  (= (needs_captable  gcapmob)  True)
-  (= (needs_captable  eradicate)  True)
-  (= (needs_captable  potent)  True)
+  (= (needs-captable  gcapmob)  True)
+  (= (needs-captable  vital)  True)
+  (= (needs-captable  gthreat)  True)
+  (= (needs-captable  pthreat)  True)
+  (= (needs-captable  lthreat)  True)
+  (= (needs-captable  gcapmob)  True)
+  (= (needs-captable  eradicate)  True)
+  (= (needs-captable  potent)  True)
 
 
 ;
@@ -758,7 +758,7 @@
         (- $Val1))))
 
 
-  (= (negate_for_player  player $Val $Val)  True)
+  (= (negate-for-player  player $Val $Val)  True)
   (= (negate-for-player opponent $Val $Val1)  
     (is $Val1 
       (- $Val)))
@@ -824,7 +824,7 @@
     (advisor-weight $Adv $Weight $_))
 
 
-  (= (show-advisors)  
+  (= show-advisors  
     (format "Advisors: ~n" Nil)
     (whenever 
       (advisor-weight $Adv $Weight) 
@@ -832,32 +832,26 @@
         (:: $Adv $Weight))))
 
 
-  (= (alladvisors-com $_ $_ $_)  
-    (show-advisors))
+  (= (alladvisors-com $_ $_ $_)  show-advisors)
 
-  (= (alladvisors-top)  
-    (show-advisors))
+  (= alladvisors-top  show-advisors)
 
 
 
-  (= (seta-com $_ $_ $_)  
-    (show-active-advisors))
+  (= (seta-com $_ $_ $_)  show-active-advisors)
 
 
-  (= (seta-top)  
-    (show-active-advisors))
+  (= seta-top  show-active-advisors)
 	
 
-  (= (active-com $_ $_ $_)  
-    (show-active-advisors))
+  (= (active-com $_ $_ $_)  show-active-advisors)
 
 
-  (= (active-top)  
-    (show-active-advisors))
+  (= active-top  show-active-advisors)
 
 
 
-  (= (show-active-advisors)  
+  (= show-active-advisors  
     (format "Active Advisors: ~n" Nil)
     (whenever 
       (, 

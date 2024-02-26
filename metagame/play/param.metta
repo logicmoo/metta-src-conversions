@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  param $_408480 metagame/play/param.pl metagame/play/param.metta)
+;                                           (convert-to-metta-file  param $_336362 metagame/play/param.pl metagame/play/param.metta)
 ;
 ; ============================================================
 ;

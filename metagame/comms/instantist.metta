@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  instantist $_203568 metagame/comms/instantist.pl metagame/comms/instantist.metta)
+;                                           (convert-to-metta-file  instantist $_161464 metagame/comms/instantist.pl metagame/comms/instantist.metta)
 ;
 ; ============================================================
 ;

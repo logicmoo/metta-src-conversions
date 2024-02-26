@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  attdsc_1 $_448868 attdsc/attdsc_1.pl attdsc/attdsc_1.metta)
+;                                           (convert-to-metta-file  attdsc_1 $_51816 attdsc/attdsc_1.pl attdsc/attdsc_1.metta)
 
   (= (attribute  size (small large))  True)
   (= (attribute  shape (long compact other))  True)

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  timing $_456020 metagame/misc/timing.pl metagame/misc/timing.metta)
+;                                           (convert-to-metta-file  timing $_242776 metagame/misc/timing.pl metagame/misc/timing.metta)
 ;
 ; ============================================================
 ;
@@ -214,7 +214,7 @@
 ;
 ; to initalize the random seed.
 
-  (= (realtime-randomize)  
+  (= realtime-randomize  
     (realtime-seconds $S)
     (random 10 $S $R)
     (is $X 
@@ -222,8 +222,7 @@
     (or 
       (dotimes $X 
         (, 
-          (random $_) 
-          (fail))) True))
+          (random $_) fail)) True))
 	
 
 
@@ -240,7 +239,7 @@
       (Cons  $T0 $_))
     (cumulative-time $Tasks $T0 1))
 
-  (= (cumulative_time  () $_ $_)  True)
+  (= (cumulative-time  () $_ $_)  True)
   (= (cumulative-time (Cons  $Task $Tasks) $T0 $N)  
     (det-if-then-else $Task 
       (= 
@@ -297,20 +296,20 @@
 
 
   (= (timing $Call)  
-    (timing)
-    (set-det)
-    (runtime $Call))
+    (timing 
+      (set-det) 
+      (runtime $Call)))
   (= (timing $Call)  
     (call $Call))
 
-  (= (timing)  
+  (= timing  
     (parameter timing on))
 
 
-  (= (set-timing)  
+  (= set-timing  
     (set-parameter timing on))
 
-  (= (unset-timing)  
+  (= unset-timing  
     (set-parameter timing off))
 
 

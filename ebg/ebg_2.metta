@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ebg_2 $_501270 ebg/ebg_2.pl ebg/ebg_2.metta)
+;                                           (convert-to-metta-file  ebg_2 $_176250 ebg/ebg_2.pl ebg/ebg_2.metta)
 
   (= (on  o1 o2)  True)
 
@@ -37,6 +37,6 @@
     (isa $O endtable))
 
 
-  (= (?-  (;  (,  (ebg  (save_to_stack  o1 o2) $L) (,  (write  $L) fail)) true))  True)
+  (= (?-  (;  (,  (ebg  (save-to-stack  o1 o2) $L) (,  (write  $L) fail)) true))  True)
 
 

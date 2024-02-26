@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  print_boards $_355286 metagame/theory/print_boards.pl metagame/theory/print_boards.metta)
+;                                           (convert-to-metta-file  print_boards $_455812 metagame/theory/print_boards.pl metagame/theory/print_boards.metta)
 ;
 ; ============================================================
 ;
@@ -20,23 +20,18 @@
 ; ================================================================================
 
 
-  (= (print-state)  
-    (print-board)
-    (move-count $Count)
-    (control $P)
-    (nl)
-    (write-pieces-in-hand player)
-    (write-pieces-in-hand opponent)
-    (format "~nMove Number: ~d~nControl: ~p~n" 
-      (:: $Count $P))
-    (print-stage)
-    (print-opponent-promotes)
-    (print-effect)
-    (print-movement))
+  (= print-state  
+    (print-board 
+      (move-count $Count) 
+      (control $P) nl 
+      (write-pieces-in-hand player) 
+      (write-pieces-in-hand opponent) 
+      (format "~nMove Number: ~d~nControl: ~p~n" 
+        (:: $Count $P)) print-stage print-opponent-promotes print-effect print-movement))
 ; ; print_captured,
 
 
-  (= (print-stage)  
+  (= print-stage  
     (det-if-then-else 
       (stage $S) 
       (verbosely-format "Stage: ~p~n" 
@@ -49,7 +44,7 @@
 ;
 ; player's move, otherwise when opponents.
 
-  (= (print-opponent-promotes)  
+  (= print-opponent-promotes  
     (det-if-then-else 
       (opponent-promotes $OldPiece $Sq) 
       (, 
@@ -58,14 +53,14 @@
           (:: $O $OldPiece $Sq))) True))
 
 
-  (= (print-movement)  
+  (= print-movement  
     (det-if-then-else 
       (moved-onto $Piece $Square) 
       (format "~p moved onto ~p~n" 
         (:: $Piece $Square)) True))
 
 
-  (= (print-effect)  
+  (= print-effect  
     (det-if-then-else 
       (effects $Effect $Captured) 
       (, 
@@ -76,7 +71,7 @@
 	  
 
 
-  (= (print-captured)  
+  (= print-captured  
     (det-if-then-else 
       (setof 
         (@ $C $Sq) 
@@ -98,10 +93,9 @@
         (:: $Player $Pieces)) True))
 
 
-  (= (print-board)  
-    (current-board-size $X $Y)
-    (nl)
-    (print-squares-in-rows 1 $Y $X))
+  (= print-board  
+    ( (current-board-size $X $Y) nl 
+      (print-squares-in-rows 1 $Y $X)))
 
 
 
@@ -119,9 +113,8 @@
     (print-column-labels 1 $Size))
 
   (= (print-column-labels $X $Max)  
-    (> $X $Max)
-    (set-det)
-    (nl))
+    ( (> $X $Max) 
+      (set-det) nl))
   (= (print-column-labels $C $Max)  
     (write   )
     (print-column-label $C)
@@ -156,12 +149,11 @@
   (= (print-squares-in-rows $_ $_ $_ 0)  
     (set-det))
   (= (print-squares-in-rows $Row $Min $Max $Size)  
-    (print-squares-in-row $Row $Size)
-    (nl)
-    (print-hline $Size)
-    (is $Row1 
-      (- $Row 1))
-    (print-squares-in-rows $Row1 $Min $Max $Size))
+    ( (print-squares-in-row $Row $Size) nl 
+      (print-hline $Size) 
+      (is $Row1 
+        (- $Row 1)) 
+      (print-squares-in-rows $Row1 $Min $Max $Size)))
 
 
   (= (print-squares-in-row $Row $Size)  
@@ -242,11 +234,11 @@
 ; parity_marker(1,'-').
 
 
-  (= (parity_marker  0 ...)  True)
-  (= (parity_marker  1    )  True)
+  (= (parity-marker  0 ...)  True)
+  (= (parity-marker  1    )  True)
 
 
-  (= (question_marker  $_  ? )  True)
+  (= (question-marker  $_  ? )  True)
 
 
 

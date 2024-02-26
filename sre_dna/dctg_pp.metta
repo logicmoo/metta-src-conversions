@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dctg_pp $_459326 sre_dna/dctg_pp.pl sre_dna/dctg_pp.metta)
+;                                           (convert-to-metta-file  dctg_pp $_65126 sre_dna/dctg_pp.pl sre_dna/dctg_pp.metta)
 
 ;
 ; Brian Ross
@@ -41,19 +41,16 @@
 ; Should not use same functor name for different arity grammar rules!
 
 
-  (= (make-grammar-table)  
-    (cleanup-grammar-data)
-    (make-rule-id-list)
-    (generate-rule-data)
-    (enhance-rule-id-list)
-    (set-det))
+  (= make-grammar-table  
+    (cleanup-grammar-data make-rule-id-list generate-rule-data enhance-rule-id-list 
+      (set-det)))
 
 
-  (= (cleanup-grammar-data)  
+  (= cleanup-grammar-data  
     ( (remove-all-atoms  &self 
-        (dctg_rule_info  $_ $_ $_ $_)) 
+        (dctg-rule-info  $_ $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (dctg_id_table  $_ $_ $_ $_)) 
+        (dctg-id-table  $_ $_ $_ $_)) 
       (set-det)))
 
 ;
@@ -67,7 +64,7 @@
   (= (get-rule-name $Call2)  
     ( (==  
         (= 
-          (semantic_rule  $ID $_ $Call $_) $_) 
+          (semantic-rule  $ID $_ $Call $_) $_) 
         (get-atoms  &self)) 
       (=.. $Call 
         (Cons  $Name $Args)) 
@@ -98,7 +95,7 @@
 ; terminal or nonterminal. Result saved in dctg_rule_info/4.
 
 
-  (= (generate-rule-data)  
+  (= generate-rule-data  
     (findall $Call 
       (get-rule-name $Call) $Calls)
     (rem-dups $Calls $Calls2)
@@ -153,19 +150,12 @@
       (, 
         (write 'Problem - ') 
         (write $L) 
-        (write ' rules cannot terminate:') 
-        (nl) 
-        (writelist $Unknown) 
-        (nl) 
-        (write 'these terminated - ') 
-        (nl) 
-        (writelist $Known2) 
-        (nl) 
-        (write 'These are mincalls - ') 
-        (nl) 
-        (writelist $MinCalls2) 
-        (nl) 
-        (fail)) 
+        (write ' rules cannot terminate:') nl 
+        (writelist $Unknown) nl 
+        (write 'these terminated - ') nl 
+        (writelist $Known2) nl 
+        (write 'These are mincalls - ') nl 
+        (writelist $MinCalls2) nl fail) 
       (grammar-depth-top-loop $Unknown $Known2 $MinCalls2 $Known3))
     (set-det))
 ; ; if no changes...
@@ -293,7 +283,7 @@
 ; Finds the minimum depth value for Name in list of Calls.
 
 
-  (= (find_minimum_depth  $_ () $D $D)  True)
+  (= (find-minimum-depth  $_ () $D $D)  True)
   (= (find-minimum-depth $CallName (Cons  (, $Call $D) $Rest) $MinSoFar $MinDepth)  
     (=.. $Call 
       (Cons  $CallName $_))
@@ -441,7 +431,7 @@
   (= (goal-type $Call (, $_ $B) $Rest $U $T $NT $U2 $T2 $NT2)  
     (set-det)
     (goal-type $Call $B $Rest $U $T $NT $U2 $T2 $NT2))
-  (= (goal_type  $Call $_ $_ $U $T $NT $U (Cons  $Call $T) $NT)  True) ;
+  (= (goal-type  $Call $_ $_ $U $T $NT $U ([|]  $Call $T) $NT)  True) ;
 ; 4
 
 
@@ -478,8 +468,8 @@
         (member $Rule $Terminal) 
         (= $Type terminal) 
         (= $Type nonterminal)) 
-      (add-is-symbol  &self 
-        (dctg_rule_info  $Name $ID $Rule $Depth $Type)) 
+      (add-atom  &self 
+        (dctg-rule-info  $Name $ID $Rule $Depth $Type)) 
       (set-rule-data $Rest $Terminal) 
       (set-det)))
 
@@ -491,7 +481,7 @@
 ; to be set later.
 
 
-  (= (make-rule-id-list)  
+  (= make-rule-id-list  
     (findall 
       (, $Name $IDs) 
       (make-rule-id-list2 $Name $IDs) $RuleIDs)
@@ -508,15 +498,15 @@
   (= (get-rule-stuff $Name $ID)  
     ( (==  
         (= 
-          (semantic_rule  $ID $_ $Call $_) $_) 
+          (semantic-rule  $ID $_ $Call $_) $_) 
         (get-atoms  &self)) (=.. $Call (Cons  $Name $_))))
 
 
   (= (make-id-entries Nil)  
     (set-det))
   (= (make-id-entries (Cons  (, $Name $IDs) $Rest))  
-    ( (add-is-symbol  &self 
-        (dctg_id_table  $Name $IDs $_ $_)) 
+    ( (add-atom  &self 
+        (dctg-id-table  $Name $IDs $_ $_)) 
       (make-id-entries $Rest) 
       (set-det)))
 
@@ -526,17 +516,16 @@
 ; and which are nonterminal.
 
 
-  (= (enhance-rule-id-list)  
-    ( (remove-is-symbol  &self 
-        (dctg_id_table  $Name $IDs $_ $_)) 
+  (= enhance-rule-id-list  
+    ( (remove-atom  &self 
+        (dctg-id-table  $Name $IDs $_ $_)) 
       (identify-type $IDs $Terms $Nonterms) 
-      (add-is-symbol  &self 
-        (dctg_id_table  $Name $IDs $Terms $Nonterms)) 
-      (fail)))
+      (add-atom  &self 
+        (dctg-id-table  $Name $IDs $Terms $Nonterms)) fail))
   (= enhance_rule_id_list  True)
 
 
-  (= (identify_type  () () ())  True)
+  (= (identify-type  () () ())  True)
   (= (identify-type (Cons  $ID $Rest) (Cons  $ID $Terms) $Nonterms)  
     (dctg-rule-info $_ $ID $_ $_ terminal)
     (set-det)

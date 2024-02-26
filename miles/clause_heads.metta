@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  clause_heads $_472804 miles/clause_heads.pl miles/clause_heads.metta)
+;                                           (convert-to-metta-file  clause_heads $_338490 miles/clause_heads.pl miles/clause_heads.metta)
 ;
 ; MODULE clause_heads EXPORTS
 
@@ -130,7 +130,7 @@
 ; ************************************************************************
 
 
-  (= (clause-heads)  
+  (= clause-heads  
     (mysetof $E 
       (^ $I 
         (get-example $I $E +)) $Elist)
@@ -181,14 +181,7 @@
 
 
   (= (heads $HL)  
-    (clause-heads)
-    (mysetof $Head 
-      (^ $ID 
-        (^ $Body 
-          (^ $CL 
-            (, 
-              (get-clause $ID $Head $Body $CL head) 
-              (delete-clause $ID))))) $HL))
+    (clause-heads (mysetof $Head (^ $ID (^ $Body (^ $CL (, (get-clause $ID $Head $Body $CL head) (delete-clause $ID))))) $HL)))
 
 
 ;
@@ -327,14 +320,13 @@
 ; ************************************************************************
 
 
-  (= (clause_heads  ())  True)
+  (= (clause-heads  ())  True)
   (= (clause-heads (Cons  $EL $R))  
-    (clause-heads $R)
-    (clause-heads $EL $Heads)
-    (make-unique $Heads $Heads1)
-    (minimize-heads $Heads1 $EL $Heads2)
-    (store-clauses $Heads2 head)
-    (eval-examples))
+    ( (clause-heads $R) 
+      (clause-heads $EL $Heads) 
+      (make-unique $Heads $Heads1) 
+      (minimize-heads $Heads1 $EL $Heads2) 
+      (store-clauses $Heads2 head) eval-examples))
    
 
 ;
@@ -397,7 +389,7 @@
       (Cons  $E $R) $B $Heads))
 
 
-  (= (trivial_tr  () ())  True)
+  (= (trivial-tr  () ())  True)
   (= (trivial-tr (Cons  $X $R) (Cons  $T $R1))  
     (trivial-tr $R $R1)
     (=.. $T 
@@ -540,7 +532,7 @@
     (split-examples-by-types $Types $P $E Nil $Elist)
     (construct-heads $Elist $Heads))
 
-  (= (split_examples_by_types  () $_ $_ $EL $EL)  True)
+  (= (split-examples-by-types  () $_ $_ $EL $EL)  True)
   (= (split-examples-by-types (Cons  $T $R) $P $E $EL $EL3)  
     (split-examples-by-types $R $P $E $EL $EL1)
     (mysetof 
@@ -553,13 +545,13 @@
 
 
 
-  (= (split_example_list  () ())  True)
+  (= (split-example-list  () ())  True)
   (= (split-example-list (Cons  (, $E $Ts) $R) (Cons  (Cons  $E $EL) $R1))  
     (split-elist $R $Ts $EL $R0)
     (split-example-list $R0 $R1))
 
 
-  (= (split_elist  () $_ () ())  True)
+  (= (split-elist  () $_ () ())  True)
   (= (split-elist (Cons  (, $E $Ts) $R) $Ts (Cons  $E $R1) $R2)  
     (split-elist $R $Ts $R1 $R2))
   (= (split-elist (Cons  $E $R) $Ts $R1 (Cons  $E $R2))  
@@ -604,12 +596,12 @@
 ; ************************************************************************
 
 
-  (= (construct-heads (Cons  $EL $R) (Cons  (with_self  $H $Vars) $R1))  
+  (= (construct-heads (Cons  $EL $R) (Cons  (with-self  $H $Vars) $R1))  
     (set-lgg $EL $H)
     (functor $H $_ $N)
     (terms $N $H Nil $Vars)
     (construct-heads $R $R1))
-  (= (construct_heads  () ())  True)
+  (= (construct-heads  () ())  True)
 
 
 ;
@@ -658,8 +650,8 @@
 ; ************************************************************************
 
 
-  (= (best_lgg  () $_ $HL $HL)  True)
-  (= (best-lgg (Cons  (with_self  $H $Vars) $R) $E $HL $HL1)  
+  (= (best-lgg  () $_ $HL $HL)  True)
+  (= (best-lgg (Cons  (with-self  $H $Vars) $R) $E $HL $HL1)  
     (det-if-then-else 
       (variant-mem $H $HL) 
       (best-lgg $R $E $HL $HL1) 
@@ -716,13 +708,13 @@
 ; ************************************************************************
 
 
-  (= (try_to_unify  $_ () $_ $_ $L $L)  True)
+  (= (try-to-unify  $_ () $_ $_ $L $L)  True)
   (= (try-to-unify $H (Cons  $X $R) $V $E $L $L2)  
     (unify-vars $H $X $V $E $L $L1)
     (try-to-unify $H $R $V $E $L1 $L2))
 
 
-  (= (unify_vars  $_ $_ () $_ $L $L)  True)
+  (= (unify-vars  $_ $_ () $_ $L $L)  True)
   (= (unify-vars $H $X (Cons  $Y $R) $E $L $L2)  
     (copy-term 
       (, $H $X $Y) 
@@ -745,11 +737,11 @@
         (terms $N $H1 Nil $Vars1) 
         (= $L1 
           (Cons  
-            (with_self  $H1 $Vars1) $L0))) 
+            (with-self  $H1 $Vars1) $L0))) 
       (= $L1 $L0)))
 ; ; ( Vars1 == [] -> ; L1 = L0 ; ;
 ; ; )
-  (= (unify_var  $_ $_ $_ $_ $L $L)  True)
+  (= (unify-var  $_ $_ $_ $_ $L $L)  True)
 
 
 ;
@@ -796,7 +788,7 @@
     (remove-base-examples $B $R $R1))
   (= (remove-base-examples $B (Cons  $E $R) (Cons  $E $R1))  
     (remove-base-examples $B $R $R1))
-  (= (remove_base_examples  $_ () ())  True)
+  (= (remove-base-examples  $_ () ())  True)
 
 
 
@@ -890,7 +882,7 @@
 ; ************************************************************************
 
 
-  (= (sort_heads_theta  () ())  True)
+  (= (sort-heads-theta  () ())  True)
   (= (sort-heads-theta (Cons  $H $R) $L)  
     (sort-heads-theta $R $L1)
     (insert-heads-theta $L1 $H $L))
@@ -900,7 +892,7 @@
     (subsumes-chk $H1 $H)
     (set-det)
     (insert-heads-theta $R $H $R1))
-  (= (insert_heads_theta  $L $H (Cons  $H $L))  True)
+  (= (insert-heads-theta  $L $H ([|]  $H $L))  True)
 
 
 ;
@@ -948,7 +940,7 @@
       (heads-cover $HL0 $EL) 
       (remove-redundant $R $HL0 $EL $HL1) 
       (remove-redundant $R $HL $EL $HL1)))
-  (= (remove_redundant  () $HL $_ $HL)  True)
+  (= (remove-redundant  () $HL $_ $HL)  True)
 
 
 ;
@@ -989,7 +981,7 @@
 ; ************************************************************************
 
 
-  (= (heads_cover  $_ ())  True)
+  (= (heads-cover  $_ ())  True)
   (= (heads-cover (Cons  $H $R) $E)  
     (split-examples $E $H $_ $E1)
     (heads-cover $R $E1))

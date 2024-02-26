@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  notation $_214764 metagame/play/notation.pl metagame/play/notation.metta)
+;                                           (convert-to-metta-file  notation $_134018 metagame/play/notation.pl metagame/play/notation.metta)
 ;
 ; ============================================================
 ;
@@ -39,15 +39,15 @@
 ;
 ; MOVE_NOTATION
 
-  (= (-->  (move_notation  $M) (,  (prelims  $M $Pre) (,  (main  $Pre ()) period)))  True)
+  (= (-->  (move-notation  $M) (,  (prelims  $M $Pre) (,  (main  $Pre ()) period)))  True)
 
 
 ;
 ; PRELIMS - covers ending assignments and init promotes.
 ;
 ; Can also be bypassed (thus nothing) if last move was a placement.
-  (= (-->  (prelims  (Cons  $P $Out) $Out) (init_promote  $P))  True)
-  (= (-->  (prelims  (Cons  end_assign $Rest) $Rest) ())  True)
+  (= (-->  (prelims  ([|]  $P $Out) $Out) (init-promote  $P))  True)
+  (= (-->  (prelims  ([|]  end_assign $Rest) $Rest) ())  True)
   (= (-->  (prelims  $Rest $Rest) ())  True)
 
 
@@ -57,17 +57,17 @@
 ; init_promote(opponent_promote(square(5,1),piece(piece2,player),piece(piece3,player)),S,[]).
 ;
 ; S = [promote,'(',5,',',1,')',white,piece3] ?
-  (= (-->  (init_promote  (opponent_promote  () () ())) ())  True)
-  (= (-->  (init_promote  (opponent_promote  $Sq $OldPiece $NewPiece)) (,  (promote) (,  (gsquare  $Sq) (,  (piece  $NewPiece) (,  (;) line)))))  True)
+  (= (-->  (init-promote  (opponent-promote  () () ())) ())  True)
+  (= (-->  (init-promote  (opponent-promote  $Sq $OldPiece $NewPiece)) (,  (promote) (,  (gsquare  $Sq) (,  (piece  $NewPiece) (,  (;) line)))))  True)
 
 
 ;
 ; CONSIDER_PROMOTE
-  (= (-->  (consider_promote  (Cons  $T $Sel) $Rest) (,  (attempt_promote  $T) (select_promote  $Sel $Rest)))  True)
+  (= (-->  (consider-promote  ([|]  $T $Sel) $Rest) (,  (attempt-promote  $T) (select-promote  $Sel $Rest)))  True)
 
-  (= (-->  (select_promote  (Cons  (promote_select  $Square $OldPiece $OldPiece) $Rest) $Rest) ())  True)
-  (= (-->  (select_promote  (Cons  (promote_select  $Square $OldPiece $NewPiece) $Rest) $Rest) (,  (;) (,  line (,  (promote) (,  (gsquare  $Square) (piece  $NewPiece))))))  True)
-  (= (-->  (select_promote  $Rest $Rest) ())  True)
+  (= (-->  (select-promote  ([|]  (promote-select  $Square $OldPiece $OldPiece) $Rest) $Rest) ())  True)
+  (= (-->  (select-promote  ([|]  (promote-select  $Square $OldPiece $NewPiece) $Rest) $Rest) (,  (;) (,  line (,  (promote) (,  (gsquare  $Square) (piece  $NewPiece))))))  True)
+  (= (-->  (select-promote  $Rest $Rest) ())  True)
 
 
 
@@ -85,24 +85,24 @@
 ; Thus if promotion isn't mentioned but it should promote, assume it chooses
 ;
 ; same piece.
-  (= (-->  (attempt_promote  (try_promote  $Square $OldPiece ())) ())  True)
-  (= (-->  (attempt_promote  (try_promote  $Square $OldPiece $OldPiece)) ())  True)
+  (= (-->  (attempt-promote  (try-promote  $Square $OldPiece ())) ())  True)
+  (= (-->  (attempt-promote  (try-promote  $Square $OldPiece $OldPiece)) ())  True)
 ;
 ; attempt_promote(try_promote(_Square,_OldPiece,NewPiece)) --> {var(NewPiece)}, [].
-  (= (-->  (attempt_promote  (try_promote  $Square $OldPiece $NewPiece)) (,  (;) (,  (promote) (,  (gsquare  $Square) (piece  $NewPiece)))))  True)
+  (= (-->  (attempt-promote  (try-promote  $Square $OldPiece $NewPiece)) (,  (;) (,  (promote) (,  (gsquare  $Square) (piece  $NewPiece)))))  True)
 
 
 ;
 ; MAIN
 ;
 ; Repeated Transfers, followed by possible player promotion.
-  (= (-->  (main  (Cons  $P $Out) $Out) (placing  $P))  True)
-  (= (-->  (main  $In $Out) (,  (transfers  $In $T) (consider_promote  $T $Out)))  True)
+  (= (-->  (main  ([|]  $P $Out) $Out) (placing  $P))  True)
+  (= (-->  (main  $In $Out) (,  (transfers  $In $T) (consider-promote  $T $Out)))  True)
 
 
 ;
 ; TRANSFERS
-  (= (-->  (transfers  $In $Out) (,  (transfer  $In $T) (continued_transfers  $T $Out)))  True)
+  (= (-->  (transfers  $In $Out) (,  (transfer  $In $T) (continued-transfers  $T $Out)))  True)
 
 ;
 ; CONTINUED_TRANSFERS
@@ -110,9 +110,9 @@
 ; Either no more transfers, or ';' and more transfers.
 ;
 ; Could tighten this rule: can't continue unless did a movement.
-  (= (-->  (continued_transfers  $In $In) ())  True)
-  (= (-->  (continued_transfers  (Cons  end_continues $Rest) $Rest) ())  True)
-  (= (-->  (continued_transfers  $In $Out) (,  (;) (,  line (transfers  $In $Out))))  True)
+  (= (-->  (continued-transfers  $In $In) ())  True)
+  (= (-->  (continued-transfers  ([|]  end_continues $Rest) $Rest) ())  True)
+  (= (-->  (continued-transfers  $In $Out) (,  (;) (,  line (transfers  $In $Out))))  True)
 
 
 ;
@@ -123,13 +123,13 @@
 ; --> [white,piece6,'(',5,',',1,')',->,'(',4,',',1,')',x,'(',4,',',1,')']
 ;
 ; 
-  (= (-->  (transfer  (Cons  $Move $Capture) $Rest) (,  (moving  $Move) (capture  $Capture $Rest)))  True)
+  (= (-->  (transfer  ([|]  $Move $Capture) $Rest) (,  (moving  $Move) (capture  $Capture $Rest)))  True)
 
 
   (= (-->  (placing  $M) (,  {(= $M  
-    (place  $Piece $Player $Sq)) } (,  (piece  $Piece) (,  (paren_color_player  $Player) (,  (->) (gsquare  $Sq))))))  True)
+    (place  $Piece $Player $Sq)) } (,  (piece  $Piece) (,  (paren-color-player  $Player) (,  (->) (gsquare  $Sq))))))  True)
   (= (-->  (placing  $M) (,  {(= $M  
-    (assign  $Piece $Player $Sq)) } (,  (piece  $Piece) (,  (paren_color_player  $Player) (,  (->) (gsquare  $Sq))))))  True)
+    (assign  $Piece $Player $Sq)) } (,  (piece  $Piece) (,  (paren-color-player  $Player) (,  (->) (gsquare  $Sq))))))  True)
 
 ;
 ; MOVING
@@ -139,32 +139,32 @@
 ; S = [black,piece1,'(',1,',',6,')',->,'(',2,',',4,')']
   (= (-->  (moving  (move  $Piece $Player $From $To)) (,  (piece  $Piece) (,  (gsquare  $From) (,  (->) (gsquare  $To)))))  True)
 
-  (= (-->  (capture  $In $Out) (null_capture  $In $Out))  True)
-  (= (-->  (capture  $In $Out) (real_capture  $In $Out))  True)
+  (= (-->  (capture  $In $Out) (null-capture  $In $Out))  True)
+  (= (-->  (capture  $In $Out) (real-capture  $In $Out))  True)
 
-  (= (-->  (null_capture  $X $X) ())  True)
+  (= (-->  (null-capture  $X $X) ())  True)
 
-  (= (-->  (real_capture  (Cons  $C $Cs) $Rest) (,  (x) (,  (simp_capture  $C) (capture  $Cs $Rest))))  True)
+  (= (-->  (real-capture  ([|]  $C $Cs) $Rest) (,  (x) (,  (simp-capture  $C) (capture  $Cs $Rest))))  True)
 
-  (= (-->  (simp_capture  $M) (remove  $M))  True)
-  (= (-->  (simp_capture  $M) (possess  $M))  True)
+  (= (-->  (simp-capture  $M) (remove  $M))  True)
+  (= (-->  (simp-capture  $M) (possess  $M))  True)
 
 ;
 ; REMOVE
-  (= (-->  (remove  (capture  remove $Caps)) (capture_effects_list  $Caps))  True)
+  (= (-->  (remove  (capture  remove $Caps)) (capture-effects-list  $Caps))  True)
 
 ;
 ; POSSESS
-  (= (-->  (possess  (capture  (possess  $Player) $Caps)) (,  (capture_effects_list  $Caps) (,  (/) (paren_color_player  $Player))))  True)
+  (= (-->  (possess  (capture  (possess  $Player) $Caps)) (,  (capture-effects-list  $Caps) (,  (/) (paren-color-player  $Player))))  True)
 
-  (= (-->  (capture_effects_list  ()) ())  True)
-  (= (-->  (capture_effects_list  (Cons  $C $Caps)) (,  (capture_effect  $C) (capture_effects_list  $Caps)))  True)
+  (= (-->  (capture-effects-list  ()) ())  True)
+  (= (-->  (capture-effects-list  ([|]  $C $Caps)) (,  (capture-effect  $C) (capture-effects-list  $Caps)))  True)
 
 ;
 ; Capture effects are of the form: piece square, like: white king (d,2)
 ;
 ; capture_effect(C) --> {captured(C,_Piece,Square)}, gsquare(Square).
-  (= (-->  (capture_effect  $C) (,  {(captured  $C $Piece $Square) } (,  (piece  $Piece) (gsquare  $Square))))  True)
+  (= (-->  (capture-effect  $C) (,  {(captured  $C $Piece $Square) } (,  (piece  $Piece) (gsquare  $Square))))  True)
 
 
 
@@ -180,17 +180,17 @@
 ; Interesting idea: Allow variables here, or omitted components,
 ;
 ; for pattern-matching move notation.
-  (= (-->  (piece  $P) (,  {(,  (piece_struct_name  $P $Name) (piece_struct_owner  $P $O)) } (,  (color_player  $O) (piece_name  $Name))))  True)
+  (= (-->  (piece  $P) (,  {(,  (piece-struct-name  $P $Name) (piece-struct-owner  $P $O)) } (,  (color-player  $O) (piece-name  $Name))))  True)
 
 
 ;
 ; PAREN_COLOR_PLAYER
 ;
 ; Maps a player into the corresponding color, wrapped in parens.
-  (= (-->  (paren_color_player  $P) (,  (() (,  (color_player  $P) ()))))  True)
+  (= (-->  (paren-color-player  $P) (,  (() (,  (color-player  $P) ()))))  True)
 
-  (= (-->  (color_player  player) (white))  True)
-  (= (-->  (color_player  opponent) (black))  True)
+  (= (-->  (color-player  player) (white))  True)
+  (= (-->  (color-player  opponent) (black))  True)
 
 ;
 ; color_player(player,white).
@@ -198,12 +198,12 @@
 ; color_player(opponent,black).
 
 
-  (= (color_player  white player)  True)
-  (= (color_player  black opponent)  True)
+  (= (color-player  white player)  True)
+  (= (color-player  black opponent)  True)
 
 
-  (= (player_color  player white)  True)
-  (= (player_color  opponent black)  True)
+  (= (player-color  player white)  True)
+  (= (player-color  opponent black)  True)
 
 
 ;
@@ -249,17 +249,15 @@
 ; Note print
 
   (= (print-read-move-from-file $File)  
-    (format "~nReading move from file~n" Nil)
-    (read-move-from-file-to-list $File $Move)
-    (format "~nRead move from file~n" Nil)
-    (set-parsing-mode)
-    (format "~nParsing move in parse mode~n" Nil)
-    (move-notation $ComplexMove $Move Nil)
-    (set-printing-mode)
-    (format "~nParsing move in print mode~n" Nil)
-    (move-notation $ComplexMove $Move1 Nil)
-    (format "~nPrinting move~n" Nil)
-    (print-tokens $Move1))
+    ( (format "~nReading move from file~n" Nil) 
+      (read-move-from-file-to-list $File $Move) 
+      (format "~nRead move from file~n" Nil) set-parsing-mode 
+      (format "~nParsing move in parse mode~n" Nil) 
+      (move-notation $ComplexMove $Move Nil) set-printing-mode 
+      (format "~nParsing move in print mode~n" Nil) 
+      (move-notation $ComplexMove $Move1 Nil) 
+      (format "~nPrinting move~n" Nil) 
+      (print-tokens $Move1)))
 
 
   (= (read-move-from-file-to-list $File $Move)  

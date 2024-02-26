@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sxx_meta $_115346 sxx_machine/sxx_meta.pl sxx_machine/sxx_meta.metta)
+;                                           (convert-to-metta-file  sxx_meta $_397876 sxx_machine/sxx_meta.pl sxx_machine/sxx_meta.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;

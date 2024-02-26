@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tdref_it $_204458 miles/tdref_it.pl miles/tdref_it.metta)
+;                                           (convert-to-metta-file  tdref_it $_158114 miles/tdref_it.pl miles/tdref_it.metta)
 ;
 ; MODULE tdref_it EXPORTS
 
@@ -328,7 +328,7 @@
 ; ***********************************************************************
 
 
-  (= (ref_unify_vars  $_ () $_ $CL $CL)  True)
+  (= (ref-unify-vars  $_ () $_ $CL $CL)  True)
   (= (ref-unify-vars $C (Cons  $X $R) $V $CL $CL2)  
     (ref-unify-vars $C $R $V $CL $CL1)
     (ref-unify-vars1 $C $X $V $CL1 $CL2))
@@ -384,10 +384,10 @@
 ; ***********************************************************************
 
 
-  (= (ref_unify_vars1  $_ $_ () $CL $CL)  True)
-  (= (ref-unify-vars1 $C (with_self  $X $Tx) (Cons  (with_self  $Y $Ty) $R) $CL $CL2)  
+  (= (ref-unify-vars1  $_ $_ () $CL $CL)  True)
+  (= (ref-unify-vars1 $C (with-self  $X $Tx) (Cons  (with-self  $Y $Ty) $R) $CL $CL2)  
     (ref-unify-vars1 $C 
-      (with_self  $X $Tx) $R $CL $CL1)
+      (with-self  $X $Tx) $R $CL $CL1)
     (det-if-then-else 
       (, 
         (compare-types $Tx $Ty $_) 
@@ -397,7 +397,7 @@
           (, $C $X $Y) 
           (, $C1 $Z $Z)) 
         (det-if-then-else 
-          (noduplicate-atoms $C1) 
+          (noduplicate-symbols $C1) 
           (= $CL2 
             (Cons  $C1 $CL1)) 
           (= $CL2 $CL1))) 
@@ -450,8 +450,8 @@
 ; ***********************************************************************
 
 
-  (= (ref_instantiate_vars  $_ () $CL $CL)  True)
-  (= (ref-instantiate-vars $C (Cons  (with_self  $X $T) $R) $CL $CL2)  
+  (= (ref-instantiate-vars  $_ () $CL $CL)  True)
+  (= (ref-instantiate-vars $C (Cons  (with-self  $X $T) $R) $CL $CL2)  
     (ref-instantiate-vars $C $R $CL $CL1)
     (=.. $H 
       (:: $T $X))
@@ -469,7 +469,7 @@
     (append $HL1 $CL1 $CL2))
 
 
-  (= (ref_inst_vars  () $_ $_ ())  True)
+  (= (ref-inst-vars  () $_ $_ ())  True)
   (= (ref-inst-vars (Cons  $H1 $R) $H $C $HL2)  
     (ref-inst-vars $R $H $C $HL1)
     (det-if-then-else 
@@ -477,7 +477,7 @@
         (copy-term 
           (, $H $C) 
           (, $H1 $C1)) 
-        (noduplicate-atoms $C1)) 
+        (noduplicate-symbols $C1)) 
       (= $HL2 
         (Cons  $C1 $HL1)) 
       (= $HL2 $HL1)))
@@ -589,7 +589,7 @@
 ; ***********************************************************************
 
 
-  (= (add_to_bodies  () $_ $CL $CL)  True)
+  (= (add-to-bodies  () $_ $CL $CL)  True)
   (= (add-to-bodies (Cons  $Pred $R) $C $CL $CL2)  
     (add-to-bodies $R $C $CL $CL1)
     (copy-term 
@@ -597,7 +597,7 @@
       (, $Pred1 
         (= $H1  $B1)))
     (det-if-then-else 
-      (noduplicate-atom $Pred1 
+      (noduplicate-symbol $Pred1 
         (, $H1 $B1)) 
       (, 
         (append-body 
@@ -661,8 +661,8 @@
 ; ***********************************************************************
 
 
-  (= (enumerate_terms  () $_ $_ $L $L)  True)
-  (= (enumerate-terms (Cons  (with_self  $P $PVars) $R) $V $C $L $L2)  
+  (= (enumerate-terms  () $_ $_ $L $L)  True)
+  (= (enumerate-terms (Cons  (with-self  $P $PVars) $R) $V $C $L $L2)  
     (enumerate-terms $R $V $C $L $L1)
     (distribute-vars $PVars $V $PVars1)
     (enumerate-t $PVars1 

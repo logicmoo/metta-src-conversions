@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  discr $_420542 discr/discr.pl discr/discr.metta)
+;                                           (convert-to-metta-file  discr $_59064 discr/discr.pl discr/discr.metta)
 
   !(dynamic (/ :: 2))
 ; /******************************************************************/
@@ -16,7 +16,7 @@
 ; /* */
 ; /* reference : problem 93 */
 ; /* chapter 9 */
-; /* PROLOG by example */
+; /* MeTTa by example */
 ; /* Helder Coelho, Jose' C. Cotta */
 ; /* Berlin, Heidelberg, New York */
 ; /* Springer-Verlag, 1988 */
@@ -49,7 +49,7 @@
 ; /* cn :: HEAD <- PRED1 & PRED2 & ..... PREDN */
 ; /* */
 ; /* where cn is a unique name for every single clause, <- denotes */
-; /* implication and & denotes conjunction. PREDN can be a PROLOG */
+; /* implication and & denotes conjunction. PREDN can be a MeTTa */
 ; /* build-in predicate, which is evaluated in the normal fasion. */
 ; /* See discr_1.pro and discr_2.pro. Sorry I haven't yet some nice */
 ; /* examples. */
@@ -73,11 +73,9 @@
       (expand-derivation $P $P2 $ID1 $ID2 
         (:: $I1 $ID1) 
         (:: $I2 $DERIVATION)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (::  $TYP $DERIVATION)) 
-      (write (:: $TYP $DERIVATION)) 
-      (nl) 
-      (fail)))
+      (write (:: $TYP $DERIVATION)) nl fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : derivation(+EXPRESSION,+TYP) */
@@ -103,7 +101,7 @@
     ( (set-det) 
       (name $C 
         (:: $N1 $N2)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (::  $C 
           (<-  $P1 true))) 
       (is $N3 
@@ -126,7 +124,7 @@
 ; /******************************************************************/
   (= (add-context (:: $N1 $N2) $P1)  
     ( (name $C 
-        (:: $N1 $N2)) (add-is-symbol  &self (::  $C (<-  $P1 true)))))
+        (:: $N1 $N2)) (add-atom  &self (::  $C (<-  $P1 true)))))
 
 
   (= (del-context (:: $N1 $N2))  
@@ -134,10 +132,9 @@
         (<- $P1 True)) 
       (name $C 
         (:: $N1 $_)) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (::  $C 
-          (<-  $P1 true))) 
-      (fail)))
+          (<-  $P1 true))) fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : del_context(+CLAUSENAME) */
@@ -150,7 +147,7 @@
 ; /* The deletion of contexts is done with this predicate. CLAUSE- */
 ; /* NAME is a list of characters of length 2. */
 ; /******************************************************************/
-  (= (del_context  $_)  True)
+  (= (del-context  $_)  True)
 
 
   (= (generate-goal-ids (& $P1 $P2) (& $I1 $I2) $I1 $I4)  
@@ -206,7 +203,7 @@
 ; /* chaining manner) a goal of GOALCONJUNCTION1. It returns the */
 ; /* still unsolved goals in GOALCONJUNCTION2 and their */
 ; /* corresponding goal ids in IDCONJUNCTION2. Notice, this is a */
-; /* kind of PROLOG meta-interpreter, which collect the derivation */
+; /* kind of MeTTa meta-interpreter, which collect the derivation */
 ; /* tree. Derivation tree's in the sense of this programm are */
 ; /* ordered, ::-connected lists. */
 ; /******************************************************************/
@@ -219,7 +216,7 @@
       (& $ID2 $ID3) $ID4)
     (expand-derivation $P4 $P5 $ID4 $ID5 $D2 $D3))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  discr/discr.pl 201 8 11767))
 
 
@@ -254,10 +251,10 @@
 ; /******************************************************************/
   (= (join-goals (& True $P3) $P3 (& $ID1 $ID3) $ID3)  
     (set-det))
-  (= (join_goals  $P1 $P1 $ID1 $ID1)  True)
+  (= (join-goals  $P1 $P1 $ID1 $ID1)  True)
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  discr/discr.pl 248 8 14466))
 
 
@@ -297,11 +294,9 @@
         (:: 
           (:: 
             (:: $PA $IA) $PR) $IR)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (::  disc $PA)) 
-      (write (:: disc $PA)) 
-      (nl) 
-      (fail)))
+      (write (:: disc $PA)) nl fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : generate_discriminants(+EXPRESSION, */
@@ -323,10 +318,10 @@
 ; /* rejection contexts. As we can see from discr_2.pro this is not */
 ; /* the case for the second discriminant !. */
 ; /******************************************************************/
-  (= (generate_discriminants  $_ $_ $_)  True)
+  (= (generate-discriminants  $_ $_ $_)  True)
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  discr/discr.pl 293 8 16547))
 
 
@@ -371,7 +366,7 @@
           (& $PR1 $PR4)) 
         (& $IR1 $PR4))))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  discr/discr.pl 305 8 17158))
 
 
@@ -406,9 +401,8 @@
       (:: $X $C) $DER))
 
 
-  (= (help)  
-    (write 'Load data set with command: [Filename].')
-    (nl))
+  (= help  
+    ( (write 'Load data set with command: [Filename].') nl))
 
 
   !(help *)

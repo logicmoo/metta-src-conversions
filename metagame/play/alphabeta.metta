@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  alphabeta $_356316 metagame/play/alphabeta.pl metagame/play/alphabeta.metta)
+;                                           (convert-to-metta-file  alphabeta $_155300 metagame/play/alphabeta.pl metagame/play/alphabeta.metta)
 ;
 ; ============================================================
 ;
@@ -162,8 +162,7 @@
           (print-choice $Move $SIn $SOut) 
           (set-parameter weights $Old)) 
         (, 
-          (set-parameter weights $Old) 
-          (fail))) 
+          (set-parameter weights $Old) fail)) 
       (det-if-then 
         (timing $Goal) 
         (print-choice $Move $SIn $SOut))))
@@ -202,7 +201,7 @@
     (value-of-outcome opponent $A))
 
 
-  (= (reset-alpha-params)  
+  (= reset-alpha-params  
     (set-parameter depth 1)
     (set-parameter move-time-limit 10000)
     (set-parameter move-horizon 1)
@@ -427,13 +426,11 @@
 ;
 ; and equating the input and output moves and states.
 
-  (= (accept-forced-move $M $S $M $S)  
-    (print-forced-notice))   ;
+  (= (accept-forced-move $M $S $M $S)  print-forced-notice)   ;
 ; in advisors.pl
 
 
-  (= (accept-rushed-move $M $S $M $S)  
-    (print-rushed-notice))   ;
+  (= (accept-rushed-move $M $S $M $S)  print-rushed-notice)   ;
 ; in advisors.pl
 
 ;
@@ -667,14 +664,13 @@
 
 
   (= (print-pc-info $Node)  
-    (node-cont $Node $PC)
-    (pc-moves $PC $Moves)
-    (format "The principal continuation here is: ~n" Nil)
-    (print-moves $Moves)
-    (nl))
+    ( (node-cont $Node $PC) 
+      (pc-moves $PC $Moves) 
+      (format "The principal continuation here is: ~n" Nil) 
+      (print-moves $Moves) nl))
 
 
-  (= (print_moves  ())  True)
+  (= (print-moves  ())  True)
   (= (print-moves (Cons  $M $Moves))  
     (print-move $M)
     (print-moves $Moves))
@@ -948,7 +944,7 @@
         (max-to-move-node $Node) 
         (=< $Val $Val1) 
         (set-det))))
-  (= (betterof_node  $_ $_ $Node1 $Val1 $Node1 $Val1)  True)
+  (= (betterof-node  $_ $_ $Node1 $Val1 $Node1 $Val1)  True)
 
 
   (= (max-to-move-node $Node)  
@@ -1050,8 +1046,7 @@
           (successor-node $Node $Node2 $Tables) $Nodes) 
         (det-if-then otherwise 
           (, 
-            (format "Error in successor_nodes/3: Invalid ordering parameter!!~n") 
-            (fail))))))
+            (format "Error in successor_nodes/3: Invalid ordering parameter!!~n") fail)))))
 
 
   (= (successor-node $Node $Node2 $Tables)  
@@ -1099,8 +1094,7 @@
         (format "Resulting (~p-complete) value <~p> after move:~n" 
           (:: $Complete $Val)) 
         (node-move $GoodNode $GoodMove) 
-        (print-move $GoodMove) 
-        (nl))))
+        (print-move $GoodMove) nl)))
 
 ;
 ; ================================================================================
@@ -1132,11 +1126,10 @@
 
 
   (= (print-eval-info $Node $Val)  
-    (node-move $Node $Move)
-    (format "Evaluation <~p> for move: " 
-      (:: $Val))
-    (print-move $Move)
-    (nl))
+    ( (node-move $Node $Move) 
+      (format "Evaluation <~p> for move: " 
+        (:: $Val)) 
+      (print-move $Move) nl))
 
 
 
@@ -1166,9 +1159,9 @@
 ;
 ; 
 
-  (= (value_of_outcome  draw 0)  True)
-  (= (value_of_outcome  player 100000)  True)
-  (= (value_of_outcome  opponent -100000)  True)
+  (= (value-of-outcome  draw 0)  True)
+  (= (value-of-outcome  player 100000)  True)
+  (= (value-of-outcome  opponent -100000)  True)
 
 
 ;
@@ -1245,7 +1238,7 @@
 ; Low-level node implementation.
 
 
-  (= (search_node  (node  $State $Parent $Move $Cont $PC $Comp) $State $Parent $Move $Cont $PC $Comp)  True)
+  (= (search-node  (node  $State $Parent $Move $Cont $PC $Comp) $State $Parent $Move $Cont $PC $Comp)  True)
   (= (search-node $N)  
     (functor $N node 6))
 
@@ -1447,10 +1440,10 @@
       (ab $Level) $Status))
 
 
-  (= (silent-ab)  
+  (= silent-ab  
     (all-ab off))
 
-  (= (loud-ab)  
+  (= loud-ab  
     (all-ab on))
 
 
@@ -1465,25 +1458,25 @@
 
 
 
-  (= (trace-ab-expand)  
+  (= trace-ab-expand  
     (set-ab-verbosity expand on)) 
 
-  (= (trace-ab-eval)  
+  (= trace-ab-eval  
     (set-ab-verbosity eval on)) 
 
-  (= (trace-ab-value)  
+  (= trace-ab-value  
     (set-ab-verbosity value on)) 
 
-  (= (trace-ab-ordering)  
+  (= trace-ab-ordering  
     (set-ab-verbosity ordering on)) 
 
-  (= (trace-ab-resources)  
+  (= trace-ab-resources  
     (set-ab-verbosity resources on)) 
 
-  (= (trace-ab-timing)  
+  (= trace-ab-timing  
     (set-ab-verbosity timing on)) 
 
-  (= (trace-ab-iterations)  
+  (= trace-ab-iterations  
     (set-ab-verbosity iteration on))
 
 ;

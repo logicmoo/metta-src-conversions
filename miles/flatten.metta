@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  flatten $_484398 miles/flatten.pl miles/flatten.metta)
+;                                           (convert-to-metta-file  flatten $_103056 miles/flatten.pl miles/flatten.metta)
 ;
 ; MODULE flatten EXPORTS
 
@@ -200,7 +200,7 @@
   (= (flatten-term $A $V $S (Cons  (/ $V $A) $S) $Bg (Cons  $B $Bg) (:: $L))  
     (atom $A)
     (set-det)
-    (concat-atom 
+    (concat-symbol 
       (:: $A p) - $Functor)
     (=.. $L 
       (:: $Functor $V))
@@ -246,7 +246,7 @@
         (/ $V $Function) $Snew1))
     (append $Vs 
       (:: $V) $NewArgs)
-    (concat-atom 
+    (concat-symbol 
       (:: $Functor p) - $NewFunctor)
     (=.. $Predicate 
       (Cons  $NewFunctor $NewArgs))
@@ -260,7 +260,7 @@
 
 
 
-  (= (flatten_args  () () $S $S $Bg $Bg ())  True)
+  (= (flatten-args  () () $S $S $Bg $Bg ())  True)
   (= (flatten-args (Cons  $A $Args) (Cons  $V $Vars) $S $Snew $Bg $Bg1 $Literals)  
     (flatten-term $A $V $S $Snew1 $Bg $Bg2 $L1)
     (flatten-args $Args $Vars $Snew1 $Snew $Bg2 $Bg1 $L2)
@@ -425,8 +425,7 @@
   (= (flatten-clause $In $Out)  
     (= $In 
       (Cons  
-        (with_self  $_ 
-          (p)) $_))
+        (with-self  $_ p) $_))
     (set-det)
     (clist-to-prolog $In $F)
     (flatten-clause $F $G)
@@ -507,7 +506,7 @@
 ;
 ; substitute all occurences of Var in LiteralIn by Term
 
-  (= (substitute_in_literals  $Var $Term () ())  True)
+  (= (substitute-in-literals  $Var $Term () ())  True)
   (= (substitute-in-literals $Var $Term (Cons  $Lit1 $Lits) (Cons  $Lit1new $Litsnew))  
     (set-det)
     (substitute-in-literal $Var $Term $Lit1 $Lit1new)
@@ -543,7 +542,7 @@
   (= (substitute-args $Var $Term (Cons  $V $Vs) (Cons  $V $Args))  
     (substitute-args $Var $Term $Vs $Args))
 
-  (= (substitute_args  $Var $Term () ())  True)
+  (= (substitute-args  $Var $Term () ())  True)
 
  
 ;
@@ -602,8 +601,7 @@
   (= (unflatten-clause $In $Out)  
     (= $In 
       (Cons  
-        (with_self  $_ 
-          (p)) $_))
+        (with-self  $_ p) $_))
     (set-det)
     (clist-to-prolog $In $F)
     (unflatten-clause $F $G)
@@ -747,7 +745,7 @@
 
 
 
-  (= (unflatten_clause1  $Head $Body () $Head $Body () $Bg)  True)
+  (= (unflatten-clause1  $Head $Body () $Head $Body () $Bg)  True)
 
 
 ;
@@ -796,8 +794,8 @@
     (integer $Integer)
     (var $PredName)
     (number-chars $Integer $String)
-    (atom-chars $Atom $String)
-    (concat-atom 
+    (symbol-chars $Atom $String)
+    (concat-symbol 
       (:: integer $Atom p) - $PredName)
     (set-det))
 ; ; integers , e.g. 15 -> integer_15_p
@@ -814,7 +812,7 @@
   (= (map-function-to-pred $FunctionName $PredName)  
     (atom $FunctionName)
     (var $PredName)
-    (concat-atom 
+    (concat-symbol 
       (:: $FunctionName -p) $PredName)
     (set-det))
 ; ; function symbols

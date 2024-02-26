@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dna_proc $_43138 sre_dna/dna_proc.pl sre_dna/dna_proc.metta)
+;                                           (convert-to-metta-file  dna_proc $_158998 sre_dna/dna_proc.pl sre_dna/dna_proc.metta)
 
 ;
 ; Nov/99
@@ -12,7 +12,7 @@
 
   (= (dna-proc $List $List3)  
     (remove-dups $List $List2)
-    (conv-to-lc-atoms $List2 $List3)
+    (conv-to-lc-symbols $List2 $List3)
     (make-new-alpha $List3))
 
 ;
@@ -23,7 +23,7 @@
 
   (= (dna-proc2 $List $List4)  
     (remove-dups $List $List2)
-    (conv-to-lc-atoms $List2 $List3)
+    (conv-to-lc-symbols $List2 $List3)
     (unaligned-P $_ $StrSize)
     (= $List3 
       (Cons  $S $_))
@@ -43,22 +43,22 @@
     (remove-dups $R $S))
 
 
-  (= (conv-to-lc-atoms Nil Nil)  
+  (= (conv-to-lc-symbols Nil Nil)  
     (set-det))
-  (= (conv-to-lc-atoms (Cons  $A $R) (Cons  $B $S))  
+  (= (conv-to-lc-symbols (Cons  $A $R) (Cons  $B $S))  
     (name $A $L)
-    (conv-to-lc-atoms2 $L $B)
-    (conv-to-lc-atoms $R $S))
+    (conv-to-lc-symbols2 $L $B)
+    (conv-to-lc-symbols $R $S))
 
 
-  (= (conv-to-lc-atoms2 Nil Nil)  
+  (= (conv-to-lc-symbols2 Nil Nil)  
     (set-det))
-  (= (conv-to-lc-atoms2 (Cons  $A $R) (Cons  $B $S))  
+  (= (conv-to-lc-symbols2 (Cons  $A $R) (Cons  $B $S))  
     (is $A2 
       (+ $A 32))
     (name $B 
       (:: $A2))
-    (conv-to-lc-atoms2 $R $S))
+    (conv-to-lc-symbols2 $R $S))
 ; ; upper-case ascii to lower ascii
 
 
@@ -78,14 +78,13 @@
     (=< $N 0)
     (set-det))
   (= (make-random-strings $N $L $Plist (Cons  $S $R))  
-    (is $M 
-      (- $N 1))
-    (make-random-strings $M $L $Plist $R)
-    (repeat)
-    (make-randstring $L $S)
-    (not (member $S $R))
-    (not (member $S $Plist))
-    (set-det))
+    ( (is $M 
+        (- $N 1)) 
+      (make-random-strings $M $L $Plist $R) repeat 
+      (make-randstring $L $S) 
+      (not (member $S $R)) 
+      (not (member $S $Plist)) 
+      (set-det)))
 
 
   (= (make-randstring $N Nil)  
@@ -105,10 +104,10 @@
     ( (append-all $List Nil $All) 
       (remove-dups $All $All2) 
       (length $All2 $L) 
-      (remove-is-symbol  &self 
-        (alphabet_P  $_ $_)) 
-      (add-is-symbol  &self 
-        (alphabet_P  $L $All2)) 
+      (remove-atom  &self 
+        (alphabet-P  $_ $_)) 
+      (add-atom  &self 
+        (alphabet-P  $L $All2)) 
       (set-det)))
 
 

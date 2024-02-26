@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  goals $_46672 metagame/theory/goals.pl metagame/theory/goals.metta)
+;                                           (convert-to-metta-file  goals $_66008 metagame/theory/goals.pl metagame/theory/goals.metta)
 ;
 ; ============================================================
 ;
@@ -68,11 +68,11 @@
 ;
 ; (REPETITION IS NOT IMPLEMENTED YET, maybe never!).
 
-  (= (game-over)  
+  (= game-over  
     (goal-achieved $Player $Game))
-  (= (game-over)  
+  (= game-over  
     (exceeded-move-limit $Game))
-  (= (game-over)  
+  (= game-over  
     (too-many-repetitions $Game))
 
 
@@ -97,7 +97,7 @@
 ;
 ; Here we just set it for all games.
 
-  (= (game_move_limit  $Game 200)  True)
+  (= (game-move-limit  $Game 200)  True)
 
 ;
 ; MOVE_LIMIT_OUTCOME(+Game,-Outcome).
@@ -108,7 +108,7 @@
 ;
 ; Here we say it is a draw for all games.
 
-  (= (move_limit_outcome  $Game draw)  True)
+  (= (move-limit-outcome  $Game draw)  True)
 
 
 ;
@@ -129,7 +129,7 @@
 ;
 ; Here we just say a game ends if a position repeats 3 times.
 
-  (= (game_repetitions  $Game 3)  True)
+  (= (game-repetitions  $Game 3)  True)
 
 ;
 ; REPETITION_OUTCOME(+Game,-Outcome).
@@ -140,7 +140,7 @@
 ;
 ; Here we say it is a draw for all games.
 
-  (= (repetition_outcome  $Game draw)  True)
+  (= (repetition-outcome  $Game draw)  True)
 
 ;
 ; TOO_MANY_REPETITIONS
@@ -151,7 +151,7 @@
 ;
 ; 
 
-  (= (too_many_repetitions  $Game)  
+  (= (too-many-repetitions  $Game)  
     (empty))
 
 

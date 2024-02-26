@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  rul $_455226 miles/gencon_instances/rul.pl miles/gencon_instances/rul.metta)
+;                                           (convert-to-metta-file  rul $_67888 miles/gencon_instances/rul.pl miles/gencon_instances/rul.metta)
 ;
 ; MODULE rul EXPORTS
 
@@ -100,14 +100,14 @@
 ; ***********************************************************************
 
 
-  (= (learn-rul)  
+  (= learn-rul  
     (gilppi initialize stop-c quality-c update select add filter one-of spec gen l-newp output))
 
 
 
 
 
-  (= (initialize (:: (with_self  $HL (active))))  
+  (= (initialize (:: (with-self  $HL active)))  
     (mysetof $E 
       (^ $I 
         (get-example $I $E +)) $Elist)
@@ -139,10 +139,10 @@
 
 
 
-  (= (stop_c  ($_))  True)
+  (= (stop-c  ($_))  True)
 
 
-  (= (quality_c  ())  True)
+  (= (quality-c  ())  True)
   (= (quality-c (Cons  (= $H  $B) $R))  
     (only-vars $H $HV)
     (only-vars $B $BV)
@@ -159,14 +159,14 @@
     (select-passive $Partial_Sols $PS))
 
 
-  (= (select_active  (Cons  (:  $PS active) $R) $PS (Cons  (:  $PS passive) $R))  True)
+  (= (select-active  ([|]  (:  $PS active) $R) $PS ([|]  (:  $PS passive) $R))  True)
   (= (select-active (Cons  $P $R) $PS (Cons  $P $R1))  
     (select-active $R $PS $R1))
 
 
-  (= (select-passive (:: (with_self  $PS $_)) $PS)  
+  (= (select-passive (:: (with-self  $PS $_)) $PS)  
     (set-det))
-  (= (select-passive (Cons  (with_self  $PS $_) $R) $PS2)  
+  (= (select-passive (Cons  (with-self  $PS $_) $R) $PS2)  
     (select-passive $R $PS1)
     (most-specific $PS $PS1 $PS2))
 
@@ -193,13 +193,12 @@
       (delete-all $IDA) 
       (, 
         (delete-all $IDA) 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
 
 
-  (= (more_spec  ())  True)
-  (= (more-spec (Cons  (with_self  $Spec $Gen) $R))  
+  (= (more-spec  ())  True)
+  (= (more-spec (Cons  (with-self  $Spec $Gen) $R))  
     (type-sub $Gen $Spec)
     (more-spec $R))
 
@@ -231,13 +230,13 @@
     (transform-t $Spec $Spec1 $Tlist))
 
 
-  (= (rename_t  () ())  True)
-  (= (rename-t (Cons  $P $R) (Cons  (with_self  $P1 $P) $R1))  
+  (= (rename-t  () ())  True)
+  (= (rename-t (Cons  $P $R) (Cons  (with-self  $P1 $P) $R1))  
     (rename-t $R $R1)
     (gensym $P $P1))
 
 
-  (= (transform_t  () () $_)  True)
+  (= (transform-t  () () $_)  True)
   (= (transform-t (Cons  (= $H  $B) $R) (Cons  (= $H1  $B1) $R1) $Tlist)  
     (transform-t $R $R1 $Tlist)
     (transform-t1 
@@ -256,7 +255,7 @@
       (:: $Pred $Arg))
     (det-if-then-else 
       (member 
-        (with_self  $Pred1 $Pred) $Tlist) 
+        (with-self  $Pred1 $Pred) $Tlist) 
       (=.. $A1 
         (:: $Pred1 $Arg)) 
       (= $A1 $A)))
@@ -274,7 +273,7 @@
     (filter $R $CL $R1 $CL1)
     (filter $R1 $R2))
   (= (filter  () $CL () $CL)  True)
-  (= (filter (Cons  (with_self  $CL1 $A) $R) (with_self  $CL $B) $R1 $CL2)  
+  (= (filter (Cons  (with-self  $CL1 $A) $R) (with-self  $CL $B) $R1 $CL2)  
     (det-if-then-else 
       (more-specific $CL $CL1) 
       (det-if-then-else 
@@ -282,9 +281,9 @@
           (== $B active) 
           (== $A passive)) 
         (filter $R 
-          (with_self  $CL $B) $R1 $CL2) 
+          (with-self  $CL $B) $R1 $CL2) 
         (filter $R 
-          (with_self  $CL1 $A) $R1 $CL2)) 
+          (with-self  $CL1 $A) $R1 $CL2)) 
       (det-if-then-else 
         (more-specific $CL1 $CL) 
         (det-if-then-else 
@@ -292,47 +291,45 @@
             (== $A active) 
             (== $B passive)) 
           (filter $R 
-            (with_self  $CL1 $A) $R1 $CL2) 
+            (with-self  $CL1 $A) $R1 $CL2) 
           (filter $R 
-            (with_self  $CL $B) $R1 $CL2)) 
+            (with-self  $CL $B) $R1 $CL2)) 
         (, 
           (= $R1 
             (Cons  
-              (with_self  $CL1 $A) $R0)) 
+              (with-self  $CL1 $A) $R0)) 
           (filter $R 
-            (with_self  $CL $B) $R0 $CL2)))))
+            (with-self  $CL $B) $R0 $CL2)))))
 
 
 
 
   (= (one-of $PS $M)  
-    (store-clauses $PS hypo $IDL)
-    (eval-examples)
-    (mysetof 
-      (with_self  $ID $P) 
-      (get-example $ID $P +) $Pos)
-    (rem-other-covered $IDL $Pos $Pos1)
-    (delete-all $IDL)
-    (det-if-then-else 
-      (= $Pos1 Nil) 
-      (= $M spec) 
-      (= $M gen)))
+    ( (store-clauses $PS hypo $IDL) eval-examples 
+      (mysetof 
+        (with-self  $ID $P) 
+        (get-example $ID $P +) $Pos) 
+      (rem-other-covered $IDL $Pos $Pos1) 
+      (delete-all $IDL) 
+      (det-if-then-else 
+        (= $Pos1 Nil) 
+        (= $M spec) 
+        (= $M gen))))
 
 
 
   (= (spec $PS $PSL)  
-    (store-clauses $PS hypo $IDL)
-    (eval-examples)
-    (mysetof $P 
-      (^ $ID0 
-        (^ $H0 
-          (^ $B0 
-            (^ $CL0 
-              (^ $L0 
-                (, 
-                  (get-clause $ID0 $H0 $B0 $CL0 $L0) 
-                  (functor $H0 $P 1))))))) $Predlist)
-    (spec $IDL $Predlist $PSL))
+    ( (store-clauses $PS hypo $IDL) eval-examples 
+      (mysetof $P 
+        (^ $ID0 
+          (^ $H0 
+            (^ $B0 
+              (^ $CL0 
+                (^ $L0 
+                  (, 
+                    (get-clause $ID0 $H0 $B0 $CL0 $L0) 
+                    (functor $H0 $P 1))))))) $Predlist) 
+      (spec $IDL $Predlist $PSL)))
 
   (= (spec Nil $_ Nil)  
     (mysetof 
@@ -393,7 +390,7 @@
     (set-det))
 
 
-  (= (rem_other_covered  () $Pos $Pos)  True)
+  (= (rem-other-covered  () $Pos $Pos)  True)
   (= (rem-other-covered (Cons  $ID $R) $Pos $Pos2)  
     (rem-other-covered $R $Pos $Pos1)
     (get-evaluation $ID 
@@ -402,64 +399,61 @@
 
 
 
-  (= (spec_c  () $_ $_ $_ $_ $_ ())  True)
+  (= (spec-c  () $_ $_ $_ $_ $_ ())  True)
   (= (spec-c (Cons  $V $R) $H $B $Predlist $ID $Pos $PSL)  
     (spec-c $R $H $B $Predlist $ID $Pos $PSL0)
     (spec-c1 $Predlist $V $H $B $ID $Pos $PSL1)
     (append $PSL0 $PSL1 $PSL))
 
 
-  (= (spec_c1  () $_ $_ $_ $_ $_ ())  True)
+  (= (spec-c1  () $_ $_ $_ $_ $_ ())  True)
   (= (spec-c1 (Cons  $Pred $R) $V $H $B $ID $Pos $PSL)  
-    (copy-term 
-      (, $V $H $B) 
-      (, $V1 $H1 $B1))
-    (=.. $Lit 
-      (:: $Pred $V1))
-    (append-body 
-      (= $H1  $B1) $Lit $C)
-    (store-clause $C $_ hypo $ID)
-    (eval-examples)
-    (get-evaluation $ID 
-      (evaluation $_ $_ $Pos1 $_ $_ $_ $_ $_ $_))
-    (delete-clause $ID)
-    (det-if-then-else 
-      (remove-v $Pos1 $Pos Nil) 
-      (, 
-        (mysetof 
-          (= $H2  $B2) 
-          (^ $ID2 
-            (^ $CL 
-              (get-clause $ID2 $H2 $B2 $CL hypo))) $RestPS) 
-        (= $PSL 
-          (Cons  
-            (with_self  
-              (Cons  $C $RestPS) 
-              (active)) $PSL0))) 
-      (= $PSL $PSL0))
-    (spec-c1 $R $V $H $B $ID $Pos $PSL0))
+    ( (copy-term 
+        (, $V $H $B) 
+        (, $V1 $H1 $B1)) 
+      (=.. $Lit 
+        (:: $Pred $V1)) 
+      (append-body 
+        (= $H1  $B1) $Lit $C) 
+      (store-clause $C $_ hypo $ID) eval-examples 
+      (get-evaluation $ID 
+        (evaluation $_ $_ $Pos1 $_ $_ $_ $_ $_ $_)) 
+      (delete-clause $ID) 
+      (det-if-then-else 
+        (remove-v $Pos1 $Pos Nil) 
+        (, 
+          (mysetof 
+            (= $H2  $B2) 
+            (^ $ID2 
+              (^ $CL 
+                (get-clause $ID2 $H2 $B2 $CL hypo))) $RestPS) 
+          (= $PSL 
+            (Cons  
+              (with-self  
+                (Cons  $C $RestPS) active) $PSL0))) 
+        (= $PSL $PSL0)) 
+      (spec-c1 $R $V $H $B $ID $Pos $PSL0)))
 
 
 
 
-  (= (gen $PS (:: (with_self  (Cons  (= $H  True) $RestPS) (active))))  
-    (store-clauses $PS hypo)
-    (eval-examples)
-    (covered-pos-examples $Cov)
-    (get-clause $ID $H $_ $_ hypo)
-    (mysetof $IDE 
-      (^ $H 
-        (get-example $IDE $H +)) $PH)
-    (remove-v $Cov $PH $P1)
-    (\== $P1 Nil)
-    (delete-clause $ID)
-    (mysetof 
-      (= $H2  $B2) 
-      (^ $ID2 
-        (^ $CL2 
-          (, 
-            (get-clause $ID2 $H2 $B2 $CL2 hypo) 
-            (delete-clause $ID2)))) $RestPS))
+  (= (gen $PS (:: (with-self  (Cons  (= $H  True) $RestPS) active)))  
+    ( (store-clauses $PS hypo) eval-examples 
+      (covered-pos-examples $Cov) 
+      (get-clause $ID $H $_ $_ hypo) 
+      (mysetof $IDE 
+        (^ $H 
+          (get-example $IDE $H +)) $PH) 
+      (remove-v $Cov $PH $P1) 
+      (\== $P1 Nil) 
+      (delete-clause $ID) 
+      (mysetof 
+        (= $H2  $B2) 
+        (^ $ID2 
+          (^ $CL2 
+            (, 
+              (get-clause $ID2 $H2 $B2 $CL2 hypo) 
+              (delete-clause $ID2)))) $RestPS)))
    
 
 
@@ -467,14 +461,13 @@
 
 
 
-  (= (l-newp $PS (:: (with_self  $Clist1 (active))) $_ $_ $_ $_ $_ $_ $_ $_ $_ $_ $_ $_)  
-    (store-clauses $PS hypo)
-    (eval-examples)
-    (get-all-clauses $Clist)
-    (correct-with-newp $Clist $Clist1))
+  (= (l-newp $PS (:: (with-self  $Clist1 active)) $_ $_ $_ $_ $_ $_ $_ $_ $_ $_ $_ $_)  
+    ( (store-clauses $PS hypo) eval-examples 
+      (get-all-clauses $Clist) 
+      (correct-with-newp $Clist $Clist1)))
 
 
-  (= (get-all-clauses (Cons  (with_self  (= $H  $B) (with_self  $Pos $RV)) $R))  
+  (= (get-all-clauses (Cons  (with-self  (= $H  $B) (with-self  $Pos $RV)) $R))  
     (get-clause $ID $H $B $_ hypo)
     (get-evaluation $ID 
       (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_))
@@ -483,14 +476,14 @@
     (remove-v $BV $HV $RV)
     (delete-clause $ID)
     (get-all-clauses $R))
-  (= (get_all_clauses  ())  True)
+  (= (get-all-clauses  ())  True)
 
 
-  (= (correct_with_newp  () ())  True)
-  (= (correct-with-newp (Cons  (with_self  (= $H  $B) (with_self  $_ Nil)) $R) (Cons  (= $H  $B) $R1))  
+  (= (correct-with-newp  () ())  True)
+  (= (correct-with-newp (Cons  (with-self  (= $H  $B) (with-self  $_ Nil)) $R) (Cons  (= $H  $B) $R1))  
     (set-det)
     (correct-with-newp $R $R1))
-  (= (correct-with-newp (Cons  (with_self  (= $H  $B) (with_self  $Pos $RV)) $R) $R2)  
+  (= (correct-with-newp (Cons  (with-self  (= $H  $B) (with-self  $Pos $RV)) $R) $R2)  
     (correct-with-newp $R $R1)
     (c-with-newp $RV $B $B1 $Newps)
     (instances $Newps $Pos $H $Elist)
@@ -500,7 +493,7 @@
         (= $H  $B1) $R1) $HL $R2))
 
 
-  (= (c_with_newp  () $B $B ())  True)
+  (= (c-with-newp  () $B $B ())  True)
   (= (c-with-newp (:: $V) True $New (:: $New))  
     (set-det)
     (gensym newp $Newp)
@@ -522,33 +515,32 @@
           (^ $H 
             (, 
               (member 
-                (with_self  $I $H) $Pos) 
+                (with-self  $I $H) $Pos) 
               (store-ex $New + $J))))) $NewE))
 
 
   (= (output (:: $CL))  
-    (mysetof $PN 
-      (^ $H 
-        (^ $B 
-          (^ $R 
-            (, 
-              (member 
-                (= $H  $B) $CL) 
-              (=.. $H 
-                (Cons  $PN $R)) 
-              (is-newpred $PN))))) $Newpredlist)
-    (minimize-output $Newpredlist $CL $CL1)
-    (store-clauses $CL1 rul)
-    (show-kb))
+    ( (mysetof $PN 
+        (^ $H 
+          (^ $B 
+            (^ $R 
+              (, 
+                (member 
+                  (= $H  $B) $CL) 
+                (=.. $H 
+                  (Cons  $PN $R)) 
+                (is-newpred $PN))))) $Newpredlist) 
+      (minimize-output $Newpredlist $CL $CL1) 
+      (store-clauses $CL1 rul) show-kb))
 
 
-  (= (minimize_output  () $CL $CL)  True)
+  (= (minimize-output  () $CL $CL)  True)
   (= (minimize-output (Cons  $P $R) $CL $CL2)  
     (findall $P1 
       (, 
         (member $P1 $R) 
         (type-equal $P $P1 
-          (:: (with_self  $P $P1)) $CL)) $P1L)
+          (:: (with-self  $P $P1)) $CL)) $P1L)
     (replace-t $CL $P1L $P $CL1)
     (findall $I 
       (, 

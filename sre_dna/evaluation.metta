@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  evaluation $_217042 sre_dna/evaluation.pl sre_dna/evaluation.metta)
+;                                           (convert-to-metta-file  evaluation $_336162 sre_dna/evaluation.pl sre_dna/evaluation.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -30,22 +30,20 @@
 
 
 
-  (= (genesis)  
-    (population-size-P $InitPopSize $PopSize)
-    (ramped-population $InitPopSize)
-    (nl)
-    (evalInitialPopn)
-    (writel (:: nl '*** Culling population' nl))
-    (cull-population $InitPopSize $PopSize)
-    (collect-stats (- 0 culled))
-    (set-det))
+  (= genesis  
+    ( (population-size-P $InitPopSize $PopSize) 
+      (ramped-population $InitPopSize) nl evalInitialPopn 
+      (writel (:: nl '*** Culling population' nl)) 
+      (cull-population $InitPopSize $PopSize) 
+      (collect-stats (- 0 culled)) 
+      (set-det)))
 
 ;
 ; following only used for initial population...
 
 
-  (= (evalInitialPopn)  
-    ( (remove-is-symbol  &self 
+  (= evalInitialPopn  
+    ( (remove-atom  &self 
         (individual  $ID $Fitness $Expression)) 
       (det-if-then-else 
         (var $Fitness) 
@@ -53,28 +51,24 @@
           (eval-with-ID-P yes) 
           (evaluator $ID $Expression $Fitness) 
           (evaluator $Expression $Fitness)) True) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (individual  $ID $Fitness $Expression)) 
-      (write ?) 
-      (ttyflush) 
-      (fail)))
+      (write ?) ttyflush fail))
 ; ; only reevaluate if not scored
-  (= (evalInitialPopn)  
+  (= evalInitialPopn  
     (collect-stats (- 0 genesis)))
 
 
   (= (cull-population $PopSize $PopSize)  
     (set-det))
   (= (cull-population $InitPopSize $PopSize)  
-    (< $InitPopSize $PopSize)
-    (set-det)
-    (writel (:: 'Error: init pop size ' $InitPopSize '< pop size' $PopSize nl))
-    (fail))
+    ( (< $InitPopSize $PopSize) 
+      (set-det) 
+      (writel (:: 'Error: init pop size ' $InitPopSize '< pop size' $PopSize nl)) fail))
   (= (cull-population $_ $PopSize)  
     ( (cull-method-P elite) 
       (set-det) 
-      (write Culling...) 
-      (nl) 
+      (write Culling...) nl 
       (setof 
         (, $V $K $E) 
         (individual $K $V $E) $Set) 
@@ -84,16 +78,15 @@
       (assert-elite $Set2)))
   (= (cull-population $CurrPopSize $PopSize)  
     ( (tournament-select worst $CurrPopSize $ID $_) 
-      (write x) 
-      (ttyflush) 
-      (remove-is-symbol  &self 
+      (write x) ttyflush 
+      (remove-atom  &self 
         (individual  $ID $_ $_)) 
       (det-if-then-else 
         (\== $ID $CurrPopSize) 
         (, 
-          (remove-is-symbol  &self 
+          (remove-atom  &self 
             (individual  $CurrPopSize $Fit $Expr)) 
-          (add-is-symbol  &self 
+          (add-atom  &self 
             (individual  $ID $Fit $Expr))) True) 
       (is $NewPopSize 
         (- $CurrPopSize 1)) 
@@ -114,11 +107,11 @@
       (< $Min $BestSoFar) 
       (set-det) 
       (individual $_ $Min $Expression) 
-      (remove-is-symbol  &self 
-        (best_in_run  $_ $_ $_)) 
-      (add-is-symbol  &self 
-        (best_in_run  $Gen $Min $Expression))))
-  (= (set_best_in_run  $_)  True)
+      (remove-atom  &self 
+        (best-in-run  $_ $_ $_)) 
+      (add-atom  &self 
+        (best-in-run  $Gen $Min $Expression))))
+  (= (set-best-in-run  $_)  True)
 
 
   (= (set-best-so-far $Run)  
@@ -126,11 +119,11 @@
       (best-so-far $_ $_ $BV $_) 
       (< $Value $BV) 
       (set-det) 
-      (remove-is-symbol  &self 
-        (best_so_far  $_ $_ $_ $_)) 
-      (add-is-symbol  &self 
-        (best_so_far  $Run $Gen $Value $Expr))))
-  (= (set_best_so_far  $_)  True)
+      (remove-atom  &self 
+        (best-so-far  $_ $_ $_ $_)) 
+      (add-atom  &self 
+        (best-so-far  $Run $Gen $Value $Expr))))
+  (= (set-best-so-far  $_)  True)
 
 ;
 ; assert_elite asserts individuals into population....
@@ -139,7 +132,7 @@
   (= (assert-elite Nil)  
     (set-det))
   (= (assert-elite (Cons  (, $V $K $E) $R))  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (individual  $K $V $E)) 
       (assert-elite $R) 
       (set-det)))

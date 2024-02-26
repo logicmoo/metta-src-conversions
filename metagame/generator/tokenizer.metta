@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tokenizer $_437342 metagame/generator/tokenizer.pl metagame/generator/tokenizer.metta)
+;                                           (convert-to-metta-file  tokenizer $_24244 metagame/generator/tokenizer.pl metagame/generator/tokenizer.metta)
 ;
 ; ============================================================
 ;
@@ -33,15 +33,12 @@
 ; READ_TOKENS_FROM_FILE(+File,-Tokens)
 
   (= (read-tokens-from-file $File $Tokens)  
-    (see $File)
-    (read-tokens $Tokens)
-    (set-det)
-    (seen))
+    ( (see $File) 
+      (read-tokens $Tokens) 
+      (set-det) seen))
   (= (read-tokens-from-file $File $Tokens)  
-    (format "~nError: Couldn't read tokens from file ~w~n" 
-      (:: $File))
-    (seen)
-    (fail))
+    ( (format "~nError: Couldn't read tokens from file ~w~n" 
+        (:: $File)) seen fail))
 
 
 ;
@@ -157,9 +154,9 @@
 ;
 ; Quote char is: 0'' (ie.: "'").
 
-  (= (toggle_quote  39 n y)  True)
-  (= (toggle_quote  39 y n)  True)
-  (= (toggle_quote  $_ $Q $Q)  True)
+  (= (toggle-quote  39 n y)  True)
+  (= (toggle-quote  39 y n)  True)
+  (= (toggle-quote  $_ $Q $Q)  True)
 
 ;
 ; toggle_comment(Char,OldComment,NewComment)
@@ -168,9 +165,9 @@
 ;
 ; End Comment char is newline.
 
-  (= (toggle_comment  37 n y)  True)
-  (= (toggle_comment  10 y n)  True)
-  (= (toggle_comment  $_ $C $C)  True)
+  (= (toggle-comment  37 n y)  True)
+  (= (toggle-comment  10 y n)  True)
+  (= (toggle-comment  $_ $C $C)  True)
 
 ;
 ; read_char(Char) :- get0(N), name(Char,[N]).
@@ -229,11 +226,11 @@
   (= (-->  (tokens  $In $Out) (,  (token  $In $S) (tokens  $S $Out)))  True)
 
 
-  (= (-->  (token  (Cons  $C $Rest) $Rest) (,  (identifier  $C) !))  True)
-  (= (-->  (token  $Rest $Rest) (,  (layout_string  $C) !))  True)
+  (= (-->  (token  ([|]  $C $Rest) $Rest) (,  (identifier  $C) !))  True)
+  (= (-->  (token  $Rest $Rest) (,  (layout-string  $C) !))  True)
   (= (-->  (token  $Rest $Rest) (,  (comment  $C) !))  True)
-  (= (-->  (token  (Cons  $C $Rest) $Rest) (operator  $C))  True)
-  (= (-->  (token  (Cons  $C $Rest) $Rest) (quote_symbol  $C))  True)
+  (= (-->  (token  ([|]  $C $Rest) $Rest) (operator  $C))  True)
+  (= (-->  (token  ([|]  $C $Rest) $Rest) (quote-symbol  $C))  True)
 
 
 ;
@@ -243,18 +240,18 @@
 ;
 ; ----------------------------------------
 
-  (= (-->  (quote_symbol  $C) (,  (quote_char  $_) (,  (non_quote_chars  $Cs) (,  (quote_char  $_) {(string_chars  $Cs $C) }))))  True)
+  (= (-->  (quote-symbol  $C) (,  (quote-char  $_) (,  (non-quote-chars  $Cs) (,  (quote-char  $_) {(string-chars  $Cs $C) }))))  True)
 
-  (= (-->  (non_quote_chars  ()) ())  True)
-  (= (-->  (non_quote_chars  (Cons  $C $Cs)) (,  (non_quote_char  $C) (more_non_quote_chars  $Cs)))  True)
+  (= (-->  (non-quote-chars  ()) ())  True)
+  (= (-->  (non-quote-chars  ([|]  $C $Cs)) (,  (non-quote-char  $C) (more-non-quote-chars  $Cs)))  True)
 
-  (= (-->  (more_non_quote_chars  $Cs) (non_quote_chars  $Cs))  True)
-  (= (-->  (more_non_quote_chars  ()) ())  True)
+  (= (-->  (more-non-quote-chars  $Cs) (non-quote-chars  $Cs))  True)
+  (= (-->  (more-non-quote-chars  ()) ())  True)
 
-  (= (-->  (non_quote_char  $C) (,  (quote_char  $C) (,  ! {fail })))  True)
-  (= (-->  (non_quote_char  $C) ($C))  True)
+  (= (-->  (non-quote-char  $C) (,  (quote-char  $C) (,  ! {fail })))  True)
+  (= (-->  (non-quote-char  $C) ($C))  True)
 
-  (= (-->  (quote_char  39) (39))  True)
+  (= (-->  (quote-char  39) (39))  True)
 
 ;
 ; ----------------------------------------
@@ -264,16 +261,16 @@
 ; ----------------------------------------
 
 
-  (= (-->  (comment  $C) (,  (37) (,  (non_lf_chars  $Cs) (,  (linefeed  $_) {(string_chars  $Cs $C) }))))  True)
+  (= (-->  (comment  $C) (,  (37) (,  (non-lf-chars  $Cs) (,  (linefeed  $_) {(string-chars  $Cs $C) }))))  True)
 
-  (= (-->  (non_lf_chars  ()) ())  True)
-  (= (-->  (non_lf_chars  (Cons  $C $Cs)) (,  (non_lf_char  $C) (more_non_lf_chars  $Cs)))  True)
+  (= (-->  (non-lf-chars  ()) ())  True)
+  (= (-->  (non-lf-chars  ([|]  $C $Cs)) (,  (non-lf-char  $C) (more-non-lf-chars  $Cs)))  True)
 
-  (= (-->  (more_non_lf_chars  $Cs) (non_lf_chars  $Cs))  True)
-  (= (-->  (more_non_lf_chars  ()) ())  True)
+  (= (-->  (more-non-lf-chars  $Cs) (non-lf-chars  $Cs))  True)
+  (= (-->  (more-non-lf-chars  ()) ())  True)
 
-  (= (-->  (non_lf_char  $C) (,  (linefeed  $C) (,  ! {fail })))  True)
-  (= (-->  (non_lf_char  $C) ($C))  True)
+  (= (-->  (non-lf-char  $C) (,  (linefeed  $C) (,  ! {fail })))  True)
+  (= (-->  (non-lf-char  $C) ($C))  True)
 
   (= (-->  (linefeed  10) (10))  True) 
 
@@ -285,14 +282,14 @@
 ; ----------------------------------------
 
 
-  (= (-->  (operator  $X) (,  (comparison_operator  $X) !))  True)
-  (= (-->  (operator  $X) (,  (transfer_operator  $X) !))  True)
-  (= (-->  (operator  $X) (,  ($Y) {(terminal_char  $Y $X) }))  True)
+  (= (-->  (operator  $X) (,  (comparison-operator  $X) !))  True)
+  (= (-->  (operator  $X) (,  (transfer-operator  $X) !))  True)
+  (= (-->  (operator  $X) (,  ($Y) {(terminal-char  $Y $X) }))  True)
 
-  (= (-->  (comparison_operator  >=) (,  (62) (61)))  True)
-  (= (-->  (comparison_operator  <=) (,  (60) (61)))  True)
+  (= (-->  (comparison-operator  >=) (,  (62) (61)))  True)
+  (= (-->  (comparison-operator  <=) (,  (60) (61)))  True)
 
-  (= (-->  (transfer_operator  ->) (45 62))  True)
+  (= (-->  (transfer-operator  ->) (45 62))  True)
 
 
 
@@ -327,17 +324,17 @@
 ; ----------------------------------------
 
 
-  (= (-->  (layout_string  (Cons  $X $Xs)) (,  (layout_char  $X) (more_layout_chars  $Xs)))  True)
-  (= (-->  (more_layout_chars  $Xs) (,  (layout_string  $Xs) !))  True)
-  (= (-->  (more_layout_chars  ()) ())  True)
+  (= (-->  (layout-string  ([|]  $X $Xs)) (,  (layout-char  $X) (more-layout-chars  $Xs)))  True)
+  (= (-->  (more-layout-chars  $Xs) (,  (layout-string  $Xs) !))  True)
+  (= (-->  (more-layout-chars  ()) ())  True)
 
 
-  (= (-->  (layout_char  $X) (,  ($X) {(layout_char  $X) }))  True)
+  (= (-->  (layout-char  $X) (,  ($X) {(layout-char  $X) }))  True)
 
 
-  (= (layout_char  9)  True)
-  (= (layout_char  10)  True)
-  (= (layout_char  32)  True)
+  (= (layout-char  9)  True)
+  (= (layout-char  10)  True)
+  (= (layout-char  32)  True)
 	
 
 ;
@@ -348,7 +345,7 @@
 ; ----------------------------------------
 
 
-  (= (-->  (identifier  $Id) (,  (alphanumchars  $Chars) {(string_chars  $Chars $Id) }))  True)
+  (= (-->  (identifier  $Id) (,  (alphanumchars  $Chars) {(string-chars  $Chars $Id) }))  True)
 
 
 
@@ -356,7 +353,7 @@
     (name $Id $Chars))
 
 
-  (= (chars_to_nums  () ())  True)
+  (= (chars-to-nums  () ())  True)
 ; /* not used */
   (= (chars-to-nums (Cons  $H $T) (Cons  $NH $NT))  
     (name $H 
@@ -364,10 +361,10 @@
     (chars-to-nums $T $NT))
 
 
-  (= (-->  (alphanumchars  (Cons  $X $Xs)) (,  (alphanumchar  $X) (more_alphanumchars  $Xs)))  True)
+  (= (-->  (alphanumchars  ([|]  $X $Xs)) (,  (alphanumchar  $X) (more-alphanumchars  $Xs)))  True)
 
-  (= (-->  (more_alphanumchars  $X) (,  (alphanumchars  $X) !))  True)
-  (= (-->  (more_alphanumchars  ()) ())  True)
+  (= (-->  (more-alphanumchars  $X) (,  (alphanumchars  $X) !))  True)
+  (= (-->  (more-alphanumchars  ()) ())  True)
 
   (= (-->  (alphanumchar  $Y) (,  ($X) {(alphanumchar  $X $Y) }))  True)
 
@@ -398,7 +395,7 @@
     (is $Lower 
       (- 
         (+ $Upper "a") "A")))
-  (= (downcase_char_num  $X $X)  True)
+  (= (downcase-char-num  $X $X)  True)
 
 
   (= (uppercase $N)  
@@ -445,10 +442,10 @@
   (= (set-parsing-mode $Mode)  
     (set-parameter parsing-mode $Mode))
 
-  (= (set-parsing-mode)  
+  (= set-parsing-mode  
     (set-parsing-mode parsing))
 
-  (= (set-printing-mode)  
+  (= set-printing-mode  
     (set-parsing-mode printing))
 
 ;
@@ -508,11 +505,10 @@
     (set-det)
     (set-alpha-squares-mode $Mode))
   (= (with-alpha-squares $Goal $Mode)  
-    (set-alpha-squares-mode $Mode)
-    (fail))
+    ( (set-alpha-squares-mode $Mode) fail))
 
 
-  (= (recover-grammar)  
+  (= recover-grammar  
     (add-parameter alpha-squares-mode off))
 
 ;
@@ -523,8 +519,7 @@
 
 
   (= (print-token line)  
-    (set-det)
-    (nl))
+    ( (set-det) nl))
   (= (print-token (tab $T))  
     (set-det)
     (tab $T))
@@ -533,17 +528,16 @@
     (tab 1))
 
 
-  (= (print_tokens  ())  True)
+  (= (print-tokens  ())  True)
   (= (print-tokens (Cons  $H $T))  
     (print-token $H)
     (print-tokens $T))
 
 
   (= (print-tokens-to-file $Tokens $File)  
-    (set-printing-mode)
-    (tell $File)
-    (print-tokens $Tokens)
-    (told))
+    (set-printing-mode 
+      (tell $File) 
+      (print-tokens $Tokens) told))
 
 
 
@@ -581,7 +575,7 @@
 
 
 
-  (= (print_tokens_to_string  () ())  True)
+  (= (print-tokens-to-string  () ())  True)
   (= (print-tokens-to-string (Cons  $H $T) $String)  
     (print-token-to-string $H $StrH)
     (print-tokens-to-string $T $StrT)

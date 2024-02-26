@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  pipes $_268156 metagame/comms/pipes.pl metagame/comms/pipes.metta)
+;                                           (convert-to-metta-file  pipes $_226584 metagame/comms/pipes.pl metagame/comms/pipes.metta)
 ;
 ; ============================================================
 ;
@@ -54,8 +54,8 @@
 
 
 
-  (= (mode_arrow  read <)  True)
-  (= (mode_arrow  write >)  True)
+  (= (mode-arrow  read <)  True)
+  (= (mode-arrow  write >)  True)
 
 
   (= (open-pipe $Pipe $Mode $Stream)  
@@ -88,49 +88,44 @@
 ;
 ; 
 
-  (= (reconnect-pipes)  
-    (reconnect-inpipe)
-    (reconnect-outpipe))
+  (= reconnect-pipes  
+    (reconnect-inpipe reconnect-outpipe))
 
 
-  (= (reconnect-inpipe)  
+  (= reconnect-inpipe  
     (global inpipe $PIn)
     (open-pipe $PIn read $InStream)
     (add-global instream $InStream))
 
 
-  (= (reconnect-outpipe)  
+  (= reconnect-outpipe  
     (global outpipe $POut)
     (open-pipe $POut write $OutStream)
     (add-global outstream $OutStream))
 
 
 
-  (= (close-int)  
-    (interface-close))
+  (= close-int  interface-close)
 
 
-  (= (interface-close)  
-    (interface-close-streams)
-    (interface-close-pipes))
+  (= interface-close  
+    (interface-close-streams interface-close-pipes))
 
 
-  (= (close-streams)  
-    (interface-close-streams))
+  (= close-streams  interface-close-streams)
 
 
-  (= (interface-close-streams)  
+  (= interface-close-streams  
     (global instream $InStream)
     (close $InStream)
     (global outstream $OutStream)
     (close $OutStream))
 
 
-  (= (close-pipes)  
-    (interface-close-pipes))
+  (= close-pipes  interface-close-pipes)
 
 
-  (= (interface-close-pipes)  
+  (= interface-close-pipes  
     (rm-gpipe inpipe)
     (rm-gpipe outpipe))
 

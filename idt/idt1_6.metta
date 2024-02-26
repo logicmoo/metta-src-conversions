@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  idt1_6 $_18768 idt/idt1_6.pl idt/idt1_6.metta)
+;                                           (convert-to-metta-file  idt1_6 $_231186 idt/idt1_6.pl idt/idt1_6.metta)
 
   (= (classes  (n p))  True)
 

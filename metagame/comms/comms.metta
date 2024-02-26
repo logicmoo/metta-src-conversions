@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  comms $_47128 metagame/comms/comms.pl metagame/comms/comms.metta)
+;                                           (convert-to-metta-file  comms $_503836 metagame/comms/comms.pl metagame/comms/comms.metta)
 ;
 ; ============================================================
 ;
@@ -26,11 +26,11 @@
 ; ============================================================================
 
 
-  (= (linda-client-wait (with_self  $ServerAddr $PortNum))  
-    (linda-client (with_self  $ServerAddr $PortNum))
+  (= (linda-client-wait (with-self  $ServerAddr $PortNum))  
+    (linda-client (with-self  $ServerAddr $PortNum))
     (set-det))
-  (= (linda-client-wait (with_self  $ServerAddr $PortNum))  
-    (linda-client-wait (with_self  $ServerAddr $PortNum)))
+  (= (linda-client-wait (with-self  $ServerAddr $PortNum))  
+    (linda-client-wait (with-self  $ServerAddr $PortNum)))
 
 
 
@@ -103,11 +103,11 @@
 ; play_match(shoveller,rando,'/homes/bdp/MeTTa/play/randomist',instanto,'/homes/bdp/MeTTa/play/instantist').
 
 
-  (= (human_file  /homes/bdp/prolog/play/humanist)  True)
+  (= (human-file  /homes/bdp/prolog/play/humanist)  True)
 
-  (= (random_file  /homes/bdp/prolog/play/randomist)  True)
+  (= (random-file  /homes/bdp/prolog/play/randomist)  True)
 
-  (= (instant_file  /homes/bdp/prolog/play/instantist)  True)
+  (= (instant-file  /homes/bdp/prolog/play/instantist)  True)
 
 
 
@@ -128,10 +128,10 @@
 
 
   (= (port-number $P $N)  
-    (atom-to-number $P $N))
+    (symbol-to-number $P $N))
 
 
-  (= (atom-to-number $A $N)  
+  (= (symbol-to-number $A $N)  
     (name $A $N1)
     (number-chars $N $N1))
 

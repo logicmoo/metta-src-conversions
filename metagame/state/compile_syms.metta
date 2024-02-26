@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  compile_syms $_439786 metagame/state/compile_syms.pl metagame/state/compile_syms.metta)
+;                                           (convert-to-metta-file  compile_syms $_426122 metagame/state/compile_syms.pl metagame/state/compile_syms.metta)
 ;
 ; ============================================================
 ;
@@ -80,7 +80,7 @@
     (close1 $NewAs $Ts $NewTable $Close))
 
 
-  (= (close_item  () $_ $As $T $As $T)  True)
+  (= (close-item  () $_ $As $T $As $T)  True)
   (= (close-item (Cons  $T $Ts) $A $As $TIn $NewAs $TOut)  
     (transform-item $A $T $ATrans)
     (schedule-if $ATrans $As $TIn $NewAs1 $T1)
@@ -90,7 +90,7 @@
   (= (schedule-if $Item $As $Table $As $Table)  
     (member $Item $Table)
     (set-det))
-  (= (schedule_if  $Item $As $Table (Cons  $Item $As) (Cons  $Item $Table))  True)
+  (= (schedule-if  $Item $As $Table ([|]  $Item $As) ([|]  $Item $Table))  True)
 	
 	
 
@@ -174,7 +174,7 @@
 
 
 
-  (= (index-sym-dirs)  
+  (= index-sym-dirs  
     (with-temp-file syms $File 
       (, 
         (index-sym-dirs-to-file $File) 
@@ -182,19 +182,16 @@
 
 
   (= (index-sym-dirs-to-file $File)  
-    (format "~nIndexing Symmetries to file: ~w~n" 
-      (:: $File))
-    (assert-sym-indices)
-    (with-output-file $File write 
-      (, 
-        (print-sym-overwrite) 
-        (listing sym-index) 
-        (overwrite-game)))
-    (abolish (/ sym-index 3)))
+    ( (format "~nIndexing Symmetries to file: ~w~n" 
+        (:: $File)) assert-sym-indices 
+      (with-output-file $File write 
+        (, print-sym-overwrite 
+          (listing sym-index) overwrite-game)) 
+      (abolish (/ sym-index 3))))
 
 
 
-  (= (assert-sym-indices)  
+  (= assert-sym-indices  
     (abolish (/ sym-index 3))
     (unique-sym-dirs $Dirs)
     (whenever 
@@ -205,18 +202,17 @@
 
 
   (= (assert-sym-index $Dir $Syms $Sym)  
-    ( (dir-key $Dir $Key) (add-is-symbol  &self (sym_index  $Key $Syms $Sym))))
+    ( (dir-key $Dir $Key) (add-atom  &self (sym-index  $Key $Syms $Sym))))
 
 
 
-  (= (print-all-syms)  
-    (unique-sym-dirs $L)
-    (member 
-      (- 
-        (- $Dir $_) $Sym) $L)
-    (format "~p --> ~p~n" 
-      (:: $Dir $Sym))
-    (fail))
+  (= print-all-syms  
+    ( (unique-sym-dirs $L) 
+      (member 
+        (- 
+          (- $Dir $_) $Sym) $L) 
+      (format "~p --> ~p~n" 
+        (:: $Dir $Sym)) fail))
 
 
   (= (indexed-sym-dir $Dir $Syms $Sym)  
@@ -225,19 +221,19 @@
 
 
 
-  (= (print-sym-overwrite)  
+  (= print-sym-overwrite  
     (format "\n% Compiled Symmetry File\n\n:- abolish(sym_dir/3).\n\nsym_dir(Dir,Syms,Sym) :- \n\tindexed_sym_dir(Dir,Syms,Sym).\n\n" Nil))
 
 
 
-  (= (overwrite-game)  
-    (print-game-overwrite)
-    (listing player-current-game)
-    (listing opponent-current-game))
+  (= overwrite-game  
+    (print-game-overwrite 
+      (listing player-current-game) 
+      (listing opponent-current-game)))
 
 
 
-  (= (print-game-overwrite)  
+  (= print-game-overwrite  
     (format "\n% Compiled Game File\n\n:- abolish(player_current_game/1).\n:- abolish(opponent_current_game/1).\n\n" Nil))
 
 
@@ -261,13 +257,11 @@
 
 
 
-  (= (time1)  
-    (timing (fastsyms $FastS))
-    (nl)
-    (print $FastS)
-    (timing (slowsyms $SlowS))
-    (nl)
-    (print $SlowS))
+  (= time1  
+    ( (timing (fastsyms $FastS)) nl 
+      (print $FastS) 
+      (timing (slowsyms $SlowS)) nl 
+      (print $SlowS)))
 
 
   (= (time-sym $N)  

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  argument_types $_195816 miles/argument_types.pl miles/argument_types.metta)
+;                                           (convert-to-metta-file  argument_types $_463422 miles/argument_types.pl miles/argument_types.metta)
 ;
 ; MODULE argument_types EXPORTS
 
@@ -161,7 +161,7 @@
 ; ***********************************************************************
 
 
-  (= (argument-types)  
+  (= argument-types  
     (mysetof $E 
       (^ $I 
         (get-example $I $E +)) $Elist)
@@ -174,7 +174,7 @@
 ; ; the same predicate symbol
 
 
-  (= (argument_types  ())  True)
+  (= (argument-types  ())  True)
   (= (argument-types (Cons  $E $R))  
     (argument-types $R)
     (arg-types $E))
@@ -185,8 +185,8 @@
     (functor $P1 $P $N)
     (det-if-then-else 
       (type-restriction $P1 $_) True 
-      (add-is-symbol  &self 
-        (type_restriction  $P1 ())))
+      (add-atom  &self 
+        (type-restriction  $P1 ())))
     (arg-types $N 
       (Cons  $E $R) $P $N))
 ; ; assert a type restriction for the
@@ -312,7 +312,7 @@
 ; generate clause bodies
 
 
-  (= (init_cl  () $_ ())  True)
+  (= (init-cl  () $_ ())  True)
   (= (init-cl (Cons  $EL $R) $T (Cons  (= $T1  True) $R1))  
     (init-cl $R $T $R1)
     (set-lgg $EL $E)
@@ -370,7 +370,7 @@
 ; ***********************************************************************
 
 
-  (= (refine_cl  () $_ $_ $CL $CL)  True)
+  (= (refine-cl  () $_ $_ $CL $CL)  True)
   (= (refine-cl (Cons  $S $R) $A (Cons  (= $Head  $_) $R1) $CL $CL2)  
     (refine-cl $R $A $R1 $CL $CL1)
     (arg 1 $Head $E)
@@ -504,10 +504,10 @@
 
 
   (= (test-var-instantiations $X $S $H $_ $CL $CL1)  
-    (myforall $S is-symbol)
+    (myforall $S atom)
     (set-det)
     (=.. $Lit 
-      (:: is-symbol $X))
+      (:: atom $X))
     (add-literal $CL $H $Lit $CL1))
 
   (= (test-var-instantiations $X $S $H $_ $CL $CL1)  
@@ -518,10 +518,10 @@
     (add-literal $CL $H $Lit $CL1))
 
   (= (test-var-instantiations $X $S $H $_ $CL $CL1)  
-    (myforall $S symbolic)
+    (myforall $S atomic)
     (set-det)
     (=.. $Lit 
-      (:: symbolic $X))
+      (:: atomic $X))
     (add-literal $CL $H $Lit $CL1))
 
   (= (test-var-instantiations $X $S $H $A $CL $CL1)  
@@ -593,7 +593,7 @@
 ; ***********************************************************************
 
 
-  (= (myforall_interpreted  () $_ $_)  True)
+  (= (myforall-interpreted  () $_ $_)  True)
   (= (myforall-interpreted (Cons  $E $R) $Pred $CL)  
     (=.. $C 
       (:: $Pred $E))
@@ -707,8 +707,8 @@
 
   (= (adapt-type-restriction $M $P $N $T)  
     ( (functor $P1 $P $M) 
-      (remove-is-symbol  &self 
-        (type_restriction  $P1 $L)) 
+      (remove-atom  &self 
+        (type-restriction  $P1 $L)) 
       (arg $N $P1 $P1n) 
       (det-if-then-else 
         (, 
@@ -722,16 +722,16 @@
             (:: $Tnew $P1n)) 
           (remove-v 
             (:: $T1) $L $L1) 
-          (add-is-symbol  &self 
-            (type_restriction  $P1 
-              (Cons  $D $L1))) 
+          (add-atom  &self 
+            (type-restriction  $P1 
+              ([|]  $D $L1))) 
           (adapt-tr $Tnew $T $T2)) 
         (, 
           (=.. $D 
             (:: $T $P1n)) 
-          (add-is-symbol  &self 
-            (type_restriction  $P1 
-              (Cons  $D $L)))))))
+          (add-atom  &self 
+            (type-restriction  $P1 
+              ([|]  $D $L)))))))
 
 
   (= (adapt-tr $Tnew $T1 $T2)  
@@ -753,7 +753,7 @@
     (store-clauses $C5 type))
 
 
-  (= (adapt_tr1  () $_ ())  True)
+  (= (adapt-tr1  () $_ ())  True)
   (= (adapt-tr1 (Cons  (= $H  $B) $R) $T (Cons  (= $H1  $B) $R1))  
     (adapt-tr1 $R $T $R1)
     (=.. $H 
@@ -838,7 +838,7 @@
       (, 
         (member $T1 $Newt_names) 
         (type-equal $T $T1 
-          (:: (with_self  $T $T1)) $Clauses)) $Tlist)
+          (:: (with-self  $T $T1)) $Clauses)) $Tlist)
     (replace-t $CL $Tlist $T $CL1)
     (make-unique $CL1 $CL2)
     (remove-v $Tlist $Newt_names $Newt_names1)
@@ -860,7 +860,7 @@
       (, 
         (member $T1 $R) 
         (type-equal $T $T1 
-          (:: (with_self  $T $T1)) $Clauses)) $Tlist)
+          (:: (with-self  $T $T1)) $Clauses)) $Tlist)
     (replace-t $CL $Tlist $T $CL1)
     (make-unique $CL1 $CL2)
     (remove-v $Tlist $R $R1)
@@ -871,7 +871,7 @@
     (minim-cl $R1 $Clauses $CL2 $Type1 $Type2))
 
 
-  (= (min_cl  () ())  True)
+  (= (min-cl  () ())  True)
   (= (min-cl (Cons  (= $H  $B) $R) (Cons  (= $H  $B1) $R1))  
     (min-cl $R $R1)
     (min-cl1 $B $B1))
@@ -923,7 +923,7 @@
 ; ***********************************************************************
 
 
-  (= (replace_t  () $_ $_ ())  True)
+  (= (replace-t  () $_ $_ ())  True)
   (= (replace-t (Cons  (= $H  $_) $R) $Tlist $T $R1)  
     (=.. $H 
       (Cons  $T1 $_))
@@ -1010,7 +1010,7 @@
                 (Cons  $T2 $R)))))) $Clauses2)
     (append $Clauses1 $Clauses2 $Clauses)
     (type-equal $T1 $T2 
-      (:: (with_self  $T1 $T2)) $Clauses))
+      (:: (with-self  $T1 $T2)) $Clauses))
 
   (= (type-equal $T $T $_ $_)  
     (set-det))
@@ -1080,7 +1080,7 @@
 ; ***********************************************************************
 
 
-  (= (compare_clauses  () () $_ $_)  True)
+  (= (compare-clauses  () () $_ $_)  True)
   (= (compare-clauses (Cons  (= $H1  $B1) $R) $CL2 $Clauses $Ancestors)  
     (find-variant-clause $CL2 $H1 $CL21 
       (= $H2  $B2))
@@ -1114,33 +1114,32 @@
     (comp-clauses $E1n $E2n $B1 $B2 $C $A))
 
 
-  (= (c-clauses is-symbol $L $_ $_)  
+  (= (c-clauses atom $L $_ $_)  
     (set-det)
-    (= $L is-symbol))
+    (= $L atom))
   (= (c-clauses number $L $_ $_)  
     (set-det)
     (= $L number))
-  (= (c-clauses symbolic $L $_ $_)  
+  (= (c-clauses atomic $L $_ $_)  
     (set-det)
-    (= $L symbolic))
+    (= $L atomic))
   (= (c-clauses $_ $L2 $_ $_)  
-    (or 
-      (= $L2 is-symbol) 
-      (or 
-        (= $L2 number) 
-        (= $L2 symbolic)))
-    (set-det)
-    (fail))
+    ( (or 
+        (= $L2 atom) 
+        (or 
+          (= $L2 number) 
+          (= $L2 atomic))) 
+      (set-det) fail))
   (= (c-clauses $T1 $T2 $C $A)  
     (det-if-then-else 
       (or 
         (member 
-          (with_self  $T1 $T2) $A) 
+          (with-self  $T1 $T2) $A) 
         (member 
-          (with_self  $T2 $T1) $A)) True 
+          (with-self  $T2 $T1) $A)) True 
       (type-equal $T1 $T2 
         (Cons  
-          (with_self  $T1 $T2) $A) $C)))
+          (with-self  $T1 $T2) $A) $C)))
 
 ;
 ; ***********************************************************************
@@ -1236,7 +1235,7 @@
   (= (def-literal $X $A $A)  
     (contains-var $X $A)
     (set-det))
-  (= (def_literal  $X $_ (all  $X))  True)
+  (= (def-literal  $X $_ (all  $X))  True)
 
 ;
 ; **********************************************************************************
@@ -1280,7 +1279,7 @@
       (:: (= $H  $B)) $Gen Nil))
   (= (type-sub $Gen $Spec)  
     (type-sub $Gen $Spec 
-      (:: (with_self  $Gen $Spec))))
+      (:: (with-self  $Gen $Spec))))
 
 
 
@@ -1334,12 +1333,12 @@
     (== $T $T1)
     (set-det))
 
-  (= (type-sub symbolic $T $_)  
+  (= (type-sub atomic $T $_)  
     (set-det)
     (or 
-      (= $T is-symbol) 
+      (= $T atom) 
       (or 
-        (= $T symbolic) 
+        (= $T atomic) 
         (or 
           (= $T number) 
           (, 
@@ -1350,11 +1349,11 @@
                 (^ $CL 
                   (get-clause $ID $HT $B $CL type))) $TL) 
             (all-t-in $TL 
-              (:: is-symbol number symbolic)))))))
-  (= (type-sub is-symbol $T $_)  
+              (:: atom number atomic)))))))
+  (= (type-sub atom $T $_)  
     (set-det)
     (or 
-      (= $T is-symbol) 
+      (= $T atom) 
       (, 
         (functor $HT $T 1) 
         (setof 
@@ -1363,7 +1362,7 @@
             (^ $CL 
               (get-clause $ID $HT $B $CL type))) $TL) 
         (all-t-in $TL 
-          (:: is-symbol))))) 
+          (:: atom))))) 
   (= (type-sub number $T $_)  
     (set-det)
     (or 
@@ -1378,10 +1377,10 @@
         (all-t-in $TL 
           (:: number)))))
 
-  (= (type-sub $T symbolic $_)  
+  (= (type-sub $T atomic $_)  
     (set-det)
     (or 
-      (= $T symbolic) 
+      (= $T atomic) 
       (or 
         (= $T all) 
         (, 
@@ -1392,13 +1391,13 @@
               (^ $CL 
                 (get-clause $ID $HT $B $CL type))) $TL) 
           (all-t-in $TL 
-            (:: symbolic))))))
-  (= (type-sub $T is-symbol $_)  
+            (:: atomic))))))
+  (= (type-sub $T atom $_)  
     (set-det)
     (or 
-      (= $T is-symbol) 
+      (= $T atom) 
       (or 
-        (= $T symbolic) 
+        (= $T atomic) 
         (or 
           (= $T all) 
           (, 
@@ -1409,13 +1408,13 @@
                 (^ $CL 
                   (get-clause $ID $HT $B $CL type))) $TL) 
             (all-t-in $TL 
-              (:: is-symbol symbolic)))))))
+              (:: atom atomic)))))))
   (= (type-sub $T number $_)  
     (set-det)
     (or 
       (= $T number) 
       (or 
-        (= $T symbolic) 
+        (= $T atomic) 
         (or 
           (= $T all) 
           (, 
@@ -1426,7 +1425,7 @@
                 (^ $CL 
                   (get-clause $ID $HT $B $CL type))) $TL) 
             (all-t-in $TL 
-              (:: number symbolic)))))))
+              (:: number atomic)))))))
 
 
   (= (type-sub $TG $TS $A)  
@@ -1478,7 +1477,7 @@
 ; ***********************************************************************
 
 
-  (= (type_sub1  () $_ $_)  True)
+  (= (type-sub1  () $_ $_)  True)
   (= (type-sub1 (Cons  (= $H  $B) $R) (= $HG  $BG) $A)  
     (set-det)
     (type-sub1 $R 
@@ -1552,7 +1551,7 @@
 ; ***********************************************************************
 
 
-  (= (type_sub2  () $_ $_ $_)  True)
+  (= (type-sub2  () $_ $_ $_)  True)
   (= (type-sub2 (Cons  $X $R) $BG1 $B $A)  
     (type-sub2 $R $BG1 $B $A)
     (set-det)
@@ -1564,10 +1563,10 @@
       (Cons  $TG $_))
     (det-if-then-else 
       (member 
-        (with_self  $TG $TS) $A) True 
+        (with-self  $TG $TS) $A) True 
       (type-sub $TG $TS 
         (Cons  
-          (with_self  $TG $TS) $A))))
+          (with-self  $TG $TS) $A))))
 
 
 ;
@@ -1718,13 +1717,13 @@
       (:: $T $X))
     (ground $X)
     (or 
-      (= $T is-symbol) 
+      (= $T atom) 
       (or 
-        (= $T symbolic) 
+        (= $T atomic) 
         (= $T number)))
     (set-det)
     (call $A))
-  (= (test_type_def  $_)  True)
+  (= (test-type-def  $_)  True)
 
 
 ;
@@ -1770,7 +1769,7 @@
     (is-type-def $Vars $B))
 
 
-  (= (is_type_def  () $_)  True)
+  (= (is-type-def  () $_)  True)
   (= (is-type-def (Cons  $X $R) $B)  
     (def-literal $X $B $Lit)
     (set-det)
@@ -1780,7 +1779,7 @@
     (is-type-def $R $B))
 
 
-  (= (all_t_in  () $_)  True)
+  (= (all-t-in  () $_)  True)
   (= (all-t-in (Cons  (, $H $B) $R) $L)  
     (=.. $H 
       (:: $_ $X))
@@ -1853,10 +1852,10 @@
             (contains-var $T $Ts)) $TsL) 
         (type-of1 $TsL $T $Type)) 
       (= $Type all)))
-  (= (type_of  $_ true all)  True)
+  (= (type-of  $_ true all)  True)
 
 
-  (= (type_of1  () $_ all)  True)
+  (= (type-of1  () $_ all)  True)
   (= (type-of1 (Cons  $Ts $R) $T $Type)  
     (set-det)
     (type-of1 $R $T $Type1)
@@ -1871,7 +1870,7 @@
         (mysetof $Ts1 
           (, 
             (member 
-              (with_self  $Ts1 $_) $CL) 
+              (with-self  $Ts1 $_) $CL) 
             (contains-var $T $Ts1)) $TsL) 
         (det-if-then-else 
           (= $TsL Nil) 
@@ -1882,7 +1881,7 @@
                 (shares-var $T $Ts2)) $TsL1) 
             (=.. $H_int 
               (:: t-int $T)) 
-            (with_self  
+            (with-self  
               (kb *) 
               (body2list $B_int $TsL1)) 
             (compare-types $Type1 
@@ -1927,8 +1926,8 @@
 ; **********************************************************************************
 
 
-  (= (types_of  () $_ ())  True)
-  (= (types-of (Cons  $V $R) $C (Cons  (with_self  $V $T) $R1))  
+  (= (types-of  () $_ ())  True)
+  (= (types-of (Cons  $V $R) $C (Cons  (with-self  $V $T) $R1))  
     (type-of $V $C $T)
     (types-of $R $C $R1))
 
@@ -2015,56 +2014,53 @@
 ; ***********************************************************************
 
 
-  (= (define-type)  
-    (show-kb-types)
-    (read-type-restriction))
+  (= define-type  
+    (show-kb-types read-type-restriction))
 
 
-  (= (read-type-restriction)  
-    (repeat)
-    (nl)
-    (write 'Please enter name and arity of the predicate p/n: ')
-    (det-if-then-else 
-      (, 
-        (read (/ $P $N)) 
-        (atom $P) 
-        (integer $N)) 
-      (, 
-        (functor $F $P $N) 
-        (=.. $F 
-          (Cons  $P $Args)) 
-        (read-type-restriction $Args 1 $Alist) 
-        (add-is-symbol  &self 
-          (type_restriction  $F $Alist))) fail))
-
-  (= (read_type_restriction  () $_ ())  True)
-  (= (read-type-restriction (Cons  $V $R) $N (Cons  $T $R1))  
-    (repeat)
-    (nl)
-    (write 'Please enter the type at argument position ')
-    (write $N)
-    (write  : )
-    (det-if-then-else 
-      (, 
-        (read $TN) 
-        (atom $TN)) 
+  (= read-type-restriction  
+    (repeat nl 
+      (write 'Please enter name and arity of the predicate p/n: ') 
       (det-if-then-else 
-        (or 
-          (, 
-            (=.. $H 
-              (:: $TN $_)) 
-            (get-clause $_ $H $_ $_ type)) 
-          (member $TN 
-            (:: is-symbol number symbolic))) 
-        (=.. $T 
-          (:: $TN $V)) 
         (, 
-          (read-type-definition $TN) 
+          (read (/ $P $N)) 
+          (atom $P) 
+          (integer $N)) 
+        (, 
+          (functor $F $P $N) 
+          (=.. $F 
+            (Cons  $P $Args)) 
+          (read-type-restriction $Args 1 $Alist) 
+          (add-atom  &self 
+            (type-restriction  $F $Alist))) fail)))
+
+  (= (read-type-restriction  () $_ ())  True)
+  (= (read-type-restriction (Cons  $V $R) $N (Cons  $T $R1))  
+    (repeat nl 
+      (write 'Please enter the type at argument position ') 
+      (write $N) 
+      (write  : ) 
+      (det-if-then-else 
+        (, 
+          (read $TN) 
+          (atom $TN)) 
+        (det-if-then-else 
+          (or 
+            (, 
+              (=.. $H 
+                (:: $TN $_)) 
+              (get-clause $_ $H $_ $_ type)) 
+            (member $TN 
+              (:: atom number atomic))) 
           (=.. $T 
-            (:: $TN $V)))) fail)
-    (is $N1 
-      (+ $N 1))
-    (read-type-restriction $R $N1 $R1))
+            (:: $TN $V)) 
+          (, 
+            (read-type-definition $TN) 
+            (=.. $T 
+              (:: $TN $V)))) fail) 
+      (is $N1 
+        (+ $N 1)) 
+      (read-type-restriction $R $N1 $R1)))
 
 
 ;
@@ -2104,49 +2100,42 @@
 
 
   (= (read-type-definition $TN)  
-    (nl)
-    (write 'Type ')
-    (write $TN)
-    (write ' is undefined. Enter a definition (y/n)? ')
-    (read $A)
-    (det-if-then-else 
-      (== $A y) 
-      (read-type-def $TN) 
+    (nl 
+      (write 'Type ') 
+      (write $TN) 
+      (write ' is undefined. Enter a definition (y/n)? ') 
+      (read $A) 
       (det-if-then-else 
-        (== $A n) fail 
-        (, 
-          (nl) 
-          (write 'Please enter y or n') 
-          (read-type-definition $TN)))))
+        (== $A y) 
+        (read-type-def $TN) 
+        (det-if-then-else 
+          (== $A n) fail 
+          (, nl 
+            (write 'Please enter y or n') 
+            (read-type-definition $TN))))))
 
 
   (= (read-type-def $TN)  
-    (nl)
-    (write 'Please enter the definition of ')
-    (write $TN)
-    (write ' in clausal form. Stop by entering stop.')
-    (nl)
-    (repeat)
-    (read $A)
-    (det-if-then-else 
-      (or 
-        (, 
-          (= $A 
-            (= $H  $_)) 
-          (=.. $H 
-            (:: $_ $_))) 
-        (=.. $A 
-          (:: $_ $_))) 
-      (, 
-        (store-clause $A $_ type $_) 
-        (nl) 
-        (fail)) 
+    (nl 
+      (write 'Please enter the definition of ') 
+      (write $TN) 
+      (write ' in clausal form. Stop by entering stop.') nl repeat 
+      (read $A) 
       (det-if-then-else 
-        (== $A stop) True 
+        (or 
+          (, 
+            (= $A 
+              (= $H  $_)) 
+            (=.. $H 
+              (:: $_ $_))) 
+          (=.. $A 
+            (:: $_ $_))) 
         (, 
-          (nl) 
-          (write 'Please enter a clause or stop') 
-          (fail)))))
+          (store-clause $A $_ type $_) nl fail) 
+        (det-if-then-else 
+          (== $A stop) True 
+          (, nl 
+            (write 'Please enter a clause or stop') fail)))))
 
 ;
 ; ***********************************************************************
@@ -2190,18 +2179,18 @@
 ; ***********************************************************************
 
 
-  (= (verify-types)  
+  (= verify-types  
     (findall 
       (, $M $A) 
       (type-restriction $M $A) $TSet)
     (verify-types $TSet))
 
-  (= (verify_types  ())  True)
+  (= (verify-types  ())  True)
   (= (verify-types (Cons  (, $M $A) $R))  
     (verify-types $R)
     (verify-types $A $M $A))
 
-  (= (verify_types  () $_ $_)  True)
+  (= (verify-types  () $_ $_)  True)
   (= (verify-types (Cons  $H $R) $M $A)  
     (verify-types $R $M $A)
     (=.. $H 
@@ -2213,16 +2202,15 @@
           (:: $T $_)) 
         (known $ID $H1 $B1 $CL $_ $E) 
         (delete-clause $ID) 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (:  kb 
             (known  $ID $H1 $B1 $CL type $E)))) $Tlist)
     (det-if-then-else 
       (or 
         (\== $Tlist Nil) 
         (member $T 
-          (:: is-symbol number symbolic))) True 
-      (, 
-        (nl) 
+          (:: atom number atomic))) True 
+      (, nl 
         (write 'The type ') 
         (write $T) 
         (write ' is undefined in ') 
@@ -2231,25 +2219,18 @@
           (, $M1 $A1)) 
         (numbervars 
           (, $M1 $A1) 0 $_) 
-        (write (type-restriction $M1 $A1)) 
-        (nl) 
-        (show-kb-types) 
-        (repeat) 
-        (nl) 
+        (write (type-restriction $M1 $A1)) nl show-kb-types repeat nl 
         (write 'Do you want to replace ') 
         (write $T) 
         (write ' in ') 
         (write (type-restriction $M1 $A1)) 
-        (write ' (y/n)?') 
-        (nl) 
+        (write ' (y/n)?') nl 
         (read $An) 
         (det-if-then-else 
           (== $An y) 
           (, 
-            (remove-is-symbol  &self 
-              (type_restriction  $M $A)) 
-            (repeat) 
-            (nl) 
+            (remove-atom  &self 
+              (type-restriction  $M $A)) repeat nl 
             (write 'Enter the name of the type replacing ') 
             (write $T) 
             (write : ) 
@@ -2264,24 +2245,21 @@
                   (get-clause $_ $H1 $_ $_ $_) 
                   (, 
                     (vrt $A $T $T1 $A2) 
-                    (add-is-symbol  &self 
-                      (type_restriction  $M $A2))) 
-                  (, 
-                    (nl) 
+                    (add-atom  &self 
+                      (type-restriction  $M $A2))) 
+                  (, nl 
                     (write 'The type ') 
                     (write $T1) 
                     (write ' is undefined.') 
                     (vrt1 $T1)))) fail)) 
           (det-if-then-else 
             (== $An n) 
-            (, 
-              (nl) 
+            (, nl 
               (write 'Then you have to define ') 
               (write $T) 
               (read-type-def $T)) 
             (, 
-              (write 'Please enter y or n') 
-              (fail)))))))
+              (write 'Please enter y or n') fail))))))
 
 
   (= (vrt  () $_ $_ ())  True)
@@ -2298,17 +2276,17 @@
 
 
   (= (vrt1 $T1)  
-    (nl)
-    (write 'Do you want to define it (y/n)? ')
-    (read $Bn)
-    (det-if-then-else 
-      (== $Bn y) 
-      (read-type-def $T1) 
+    (nl 
+      (write 'Do you want to define it (y/n)? ') 
+      (read $Bn) 
       (det-if-then-else 
-        (== $Bn n) fail 
-        (, 
-          (write 'Please enter y or n') 
-          (vrt1 $T1)))))
+        (== $Bn y) 
+        (read-type-def $T1) 
+        (det-if-then-else 
+          (== $Bn n) fail 
+          (, 
+            (write 'Please enter y or n') 
+            (vrt1 $T1))))))
                             
                    
 

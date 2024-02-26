@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dctg_reprod $_212842 sre_dna/dctg_reprod.pl sre_dna/dctg_reprod.metta)
+;                                           (convert-to-metta-file  dctg_reprod $_322592 sre_dna/dctg_reprod.pl sre_dna/dctg_reprod.metta)
 
 ;
 ; DCTG based GP reproduction operators: crossover & mutation
@@ -74,8 +74,7 @@
 
 
   (= (do-crossover 0 $_ $_ $_ $_ $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (do-crossover $_ $Parent1 $N1 $Parent2 $Child1 $Child2)  
     (my-random $N1 $K1)
     (select-subtree $Parent1 $K1 $_ $Child1 $Subtree1 $Subtree2 $NodeName)
@@ -132,7 +131,7 @@
       (+ $NumNodes2 1)))
   (= (count-nodes (node $_ $Children $ID) $Type $NumNodes)  
     ( (== $Type internal) 
-      (with_self  
+      (with-self  
         (fast *) 
         (dctg-rule-info $_ $ID $_ $_ nonterminal)) 
       (set-det) 
@@ -141,7 +140,7 @@
         (+ $NumNodes2 1))))
   (= (count-nodes (node $_ $Children $ID) $Type $NumNodes)  
     ( (== $Type leaf) 
-      (with_self  
+      (with-self  
         (fast *) 
         (dctg-rule-info $_ $ID $_ $_ terminal)) 
       (set-det) 
@@ -149,7 +148,7 @@
       (is $NumNodes 
         (+ $NumNodes2 1))))
   (= (count-nodes (node $_ $Children $ID) $NodeName $NumNodes)  
-    ( (with_self  
+    ( (with-self  
         (fast *) 
         (dctg-rule-info $NodeName $ID $_ $_ $_)) 
       (set-det) 
@@ -159,10 +158,10 @@
   (= (count-nodes (node $_ $Children $_) $NodeName $NumNodes)  
     (set-det)
     (count-children-nodes $Children $NodeName $NumNodes))
-  (= (count_nodes  $_ $_ 0)  True)
+  (= (count-nodes  $_ $_ 0)  True)
 
 
-  (= (count_children_nodes  () $_ 0)  True)
+  (= (count-children-nodes  () $_ 0)  True)
   (= (count-children-nodes (Cons  $Node $Rest) $NodeName $NumNodes)  
     (count-nodes $Node $NodeName $NumNodes2)
     (count-children-nodes $Rest $NodeName $NumNodes3)
@@ -215,18 +214,18 @@
   (= (select-subtree (node $_ $Kids $ID) 1 0 $NewParent (node $NodeName $Kids $ID) $NewParent $NodeName)  
     ( (or 
         (var $NodeName) 
-        (with_self  
+        (with-self  
           (fast *) 
           (dctg-rule-info $NodeName $ID $_ $_ $_))) 
       (set-det) 
-      (with_self  
+      (with-self  
         (fast *) 
         (dctg-rule-info $NodeName $ID $_ $_ $_))))
 ; ; cases 1, 2
   (= (select-subtree (node $Name $Kids $ID) $K $K2 (node $Name $Kids2 $ID) $Subtree $Hole $NodeName)  
     (or 
       (var $NodeName) 
-      (with_self  
+      (with-self  
         (fast *) 
         (dctg-rule-info $NodeName $ID $_ $_ $_)))
     (set-det)
@@ -238,7 +237,7 @@
     (set-det)
     (select-subtree-children $Kids $K $K2 $Kids2 $Subtree $Hole $NodeName))
 ; ; case 4
-  (= (select_subtree  $Node $K $K $Node $_ $_ $_)  True) ;
+  (= (select-subtree  $Node $K $K $Node $_ $_ $_)  True) ;
 ; case 5
 
 ;
@@ -257,7 +256,7 @@
       (select-subtree-children $T $K3 $K2 $T2 $Subtree $Hole $Name)))
 
 
-  (= (debug-crossover)  
+  (= debug-crossover  
     (dctg-root-P $Root)
     (writel (:: 'Generate tree 1...' nl))
     (generate-tree $Root full 6 $_ $P1 $_)
@@ -275,7 +274,7 @@
     (prettyprint $C2))
 
 
-  (= (debug-crossover2)  
+  (= debug-crossover2  
     (generate-tree sentence grow 10 $_ $P1 $_)
     (generate-tree sentence grow 10 $_ $P2 $_)
     (crossover $P1 $P2 $C1 $C2)
@@ -320,8 +319,7 @@
 
 
   (= (do-mutation 0 $_ $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (do-mutation $_ $Parent $Child)  
     (prob-terminal-mutation-P $PT)
     (not (== $PT no))
@@ -362,7 +360,7 @@
 ; ;writel(['Try countdown... ', Tries2, nl]),
 
 
-  (= (debug-mutation)  
+  (= debug-mutation  
     (dctg-root-P $Root)
     (generate-tree $Root full 6 $_ $Parent $_)
     (mutation $Parent $Child)
@@ -402,7 +400,7 @@
 
 
   (= (verification (node $Name $Kids $ID) $UserArgs $Expr)  
-    ( (with_self  
+    ( (with-self  
         (fast *) 
         (dctg-rule-info $_ $ID $Call $_ $_)) 
       (=.. $Call 
@@ -431,8 +429,7 @@
 ; ;writel(['verify_tree: Call=', Call, 'node = ', N, ID, nl]),
 ; ;writel(['verify_tree: Body= ', Body, 'Kids=', Kids,nl]),
   (= (verify-tree $_ $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
 ; ;writel(['verify_tree: failed', nl]),
 	
 

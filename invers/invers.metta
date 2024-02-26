@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  invers $_141654 invers/invers.pl invers/invers.metta)
+;                                           (convert-to-metta-file  invers $_346892 invers/invers.pl invers/invers.metta)
 
   !(dynamic (/ flat 1))
 ; /******************************************************************/
@@ -183,7 +183,7 @@
 ; /********************************************************************/
 
 
-  (= (dropping_condition_intersection  () $_ ())  True)
+  (= (dropping-condition-intersection  () $_ ())  True)
   (= (dropping-condition-intersection (Cons  $X $R) $Y (Cons  $X $Z))  
     (member $X1 $Y)
     (not (not (= $X $X1)))
@@ -323,7 +323,7 @@
   (= (flat-assertion $Name $Term)  
     ( (=.. $NewRelation 
         (:: $Name $Term)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (flat  $NewRelation)) 
       (set-det)))
 
@@ -353,7 +353,7 @@
         (:: $OldTerm) $NewArgs) 
       (=.. $NewRelation 
         (Cons  $Name1 $NewArgs)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (flat  $NewRelation))))
 
 
@@ -448,60 +448,51 @@
 
 
   (= (step-3-1 (:: $ClauseHead) $Vars $Alpha $Resolvent1BodyRest $Subst1 $Resolvent2BodyRest $Subst2 (:: $R1 $R2 $R3))  
-    (gensym $Name P)
-    (=.. $X 
-      (Cons  $Name $Vars))
-    (subst 
-      (:: $X) $Subst1 
-      (:: $X1))
-    (subst 
-      (:: $X) $Subst2 
-      (:: $X2))
-    (join $X1 $Resolvent1BodyRest $QR1)
-    (join $X2 $Resolvent2BodyRest $QR2)
-    (copy $QR1 $NQR1)
-    (copy $QR2 $NQR2)
-    (numbervars $NQR1 0 $_)
-    (numbervars $NQR2 0 $_)
-    (nl)
-    (write ' Predicate invention')
-    (nl)
-    (nl)
-    (tab 3)
-    (write $NQR1)
-    (nl)
-    (tab 3)
-    (write $NQR2)
-    (nl)
-    (nl)
-    (write ' Has this predicate a meaning (y/n)? ')
-    (read $Answer)
-    (nl)
-    (or 
-      (, 
-        (= $Answer n) 
-        (set-det) 
-        (fail)) 
-      (, 
-        (= $Answer y) 
-        (set-det)))
-    (write ' How shall I name the predicate ? ')
-    (read $NewName)
-    (nl)
-    (=.. $NP 
-      (Cons  $NewName $Vars))
-    (subst 
-      (:: $NP) $Subst1 
-      (:: $NP1))
-    (subst 
-      (:: $NP) $Subst2 
-      (:: $NP2))
-    (join $NP1 $Resolvent1BodyRest $R1)
-    (join $NP2 $Resolvent2BodyRest $R2)
-    (append 
-      (:: $NP) $Alpha $ClauseBody)
-    (join $ClauseHead $ClauseBody $R3)
-    (set-det))
+    ( (gensym $Name P) 
+      (=.. $X 
+        (Cons  $Name $Vars)) 
+      (subst 
+        (:: $X) $Subst1 
+        (:: $X1)) 
+      (subst 
+        (:: $X) $Subst2 
+        (:: $X2)) 
+      (join $X1 $Resolvent1BodyRest $QR1) 
+      (join $X2 $Resolvent2BodyRest $QR2) 
+      (copy $QR1 $NQR1) 
+      (copy $QR2 $NQR2) 
+      (numbervars $NQR1 0 $_) 
+      (numbervars $NQR2 0 $_) nl 
+      (write ' Predicate invention') nl nl 
+      (tab 3) 
+      (write $NQR1) nl 
+      (tab 3) 
+      (write $NQR2) nl nl 
+      (write ' Has this predicate a meaning (y/n)? ') 
+      (read $Answer) nl 
+      (or 
+        (, 
+          (= $Answer n) 
+          (set-det) fail) 
+        (, 
+          (= $Answer y) 
+          (set-det))) 
+      (write ' How shall I name the predicate ? ') 
+      (read $NewName) nl 
+      (=.. $NP 
+        (Cons  $NewName $Vars)) 
+      (subst 
+        (:: $NP) $Subst1 
+        (:: $NP1)) 
+      (subst 
+        (:: $NP) $Subst2 
+        (:: $NP2)) 
+      (join $NP1 $Resolvent1BodyRest $R1) 
+      (join $NP2 $Resolvent2BodyRest $R2) 
+      (append 
+        (:: $NP) $Alpha $ClauseBody) 
+      (join $ClauseHead $ClauseBody $R3) 
+      (set-det)))
     
 
   (= (intra-construction2 $Resolvent1 $Resolvent2 $InducedClauses)  
@@ -526,56 +517,47 @@
     
 
   (= (step-3-2 $ClauseHead $Vars $Alpha $Resolvent1BodyRest $Subst1 $Resolvent2BodyRest $Subst2 (:: $R1 $R2 $R3))  
-    (gensym $Name P)
-    (=.. $X 
-      (Cons  $Name $Vars))
-    (subst 
-      (:: $X) $Subst1 $X1)
-    (subst 
-      (:: $X) $Subst2 $X2)
-    (unflatten $X1 $Resolvent1BodyRest $QR1)
-    (unflatten $X2 $Resolvent2BodyRest $QR2)
-    (copy $QR1 $NQR1)
-    (copy $QR2 $NQR2)
-    (numbervars $NQR1 0 $_)
-    (numbervars $NQR2 0 $_)
-    (nl)
-    (write ' Predicate invention')
-    (nl)
-    (nl)
-    (tab 3)
-    (write $NQR1)
-    (nl)
-    (tab 3)
-    (write $NQR2)
-    (nl)
-    (nl)
-    (write ' Has this predicate a meaning (y/n)? ')
-    (read $Answer)
-    (nl)
-    (or 
-      (, 
-        (= $Answer n) 
-        (set-det) 
-        (fail)) 
-      (, 
-        (= $Answer y) 
-        (set-det)))
-    (write ' How shall I name the predicate ? ')
-    (read $NewName)
-    (nl)
-    (=.. $NP 
-      (Cons  $NewName $Vars))
-    (subst 
-      (:: $NP) $Subst1 $NP1)
-    (subst 
-      (:: $NP) $Subst2 $NP2)
-    (unflatten $NP1 $Resolvent1BodyRest $R1)
-    (unflatten $NP2 $Resolvent2BodyRest $R2)
-    (append 
-      (:: $NP) $Alpha $ClauseBody)
-    (unflatten $ClauseHead $ClauseBody $R3)
-    (set-det))
+    ( (gensym $Name P) 
+      (=.. $X 
+        (Cons  $Name $Vars)) 
+      (subst 
+        (:: $X) $Subst1 $X1) 
+      (subst 
+        (:: $X) $Subst2 $X2) 
+      (unflatten $X1 $Resolvent1BodyRest $QR1) 
+      (unflatten $X2 $Resolvent2BodyRest $QR2) 
+      (copy $QR1 $NQR1) 
+      (copy $QR2 $NQR2) 
+      (numbervars $NQR1 0 $_) 
+      (numbervars $NQR2 0 $_) nl 
+      (write ' Predicate invention') nl nl 
+      (tab 3) 
+      (write $NQR1) nl 
+      (tab 3) 
+      (write $NQR2) nl nl 
+      (write ' Has this predicate a meaning (y/n)? ') 
+      (read $Answer) nl 
+      (or 
+        (, 
+          (= $Answer n) 
+          (set-det) fail) 
+        (, 
+          (= $Answer y) 
+          (set-det))) 
+      (write ' How shall I name the predicate ? ') 
+      (read $NewName) nl 
+      (=.. $NP 
+        (Cons  $NewName $Vars)) 
+      (subst 
+        (:: $NP) $Subst1 $NP1) 
+      (subst 
+        (:: $NP) $Subst2 $NP2) 
+      (unflatten $NP1 $Resolvent1BodyRest $R1) 
+      (unflatten $NP2 $Resolvent2BodyRest $R2) 
+      (append 
+        (:: $NP) $Alpha $ClauseBody) 
+      (unflatten $ClauseHead $ClauseBody $R3) 
+      (set-det)))
     
 
   (= (subst  () $_ ())  True)
@@ -602,7 +584,7 @@
     (subst $Xs $Subst $Ys))
 
 
-  (= (inv_subst  () $_ ())  True)
+  (= (inv-subst  () $_ ())  True)
   (= (inv-subst (Cons  $X $Xs) $Subst (Cons  $Y $Ys))  
     (member 
       (/ $U $V) $Subst)
@@ -622,7 +604,7 @@
     (inv-subst $Xs $Subst $Ys))
 
 
-  (= (union_v  () $X $X)  True)
+  (= (union-v  () $X $X)  True)
 ; /******************************************************************/
 ; /* Some set theoretical predicates, variables are not unified */
 ; /******************************************************************/
@@ -635,7 +617,7 @@
     (union-v $R $Y $Z))
 
 
-  (= (intersection_v  () $_ ())  True)
+  (= (intersection-v  () $_ ())  True)
   (= (intersection-v (Cons  $X $R) $Y (Cons  $X $Z))  
     (member $U $Y)
     (== $U $X)
@@ -660,7 +642,7 @@
     (set-det))
   (= (subtract-v (Cons  $X $Xs) $Ys $Zs)  
     (subtract-v $Xs $Ys $Zs))
-  (= (subtract_v  () $Xs $Xs)  True)
+  (= (subtract-v  () $Xs $Xs)  True)
 
 
   (= (delete-v $X (Cons  $Y $Ys) $Ys)  
@@ -674,12 +656,12 @@
     ( (dynamic $VAR 1) 
       (=.. $P1 
         (:: $VAR $N)) 
-      (remove-is-symbol  &self $P1) 
+      (remove-atom  &self $P1) 
       (is $X 
         (+ $N 1)) 
       (=.. $P2 
         (:: $VAR $X)) 
-      (add-is-symbol  &self $P2) 
+      (add-atom  &self $P2) 
       (set-det)))
 ; /******************************************************************/
 ; /* Creation of unique identifiers */
@@ -688,7 +670,7 @@
     ( (dynamic $VAR 1) 
       (=.. $P 
         (:: $VAR 1)) 
-      (add-is-symbol  &self $P)))
+      (add-atom  &self $P)))
 
 
   (= (gensym $SYM $N)  
@@ -699,15 +681,14 @@
   (= (copy $A $B)  
     (or 
       (, 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (internal  $A)) 
-        (remove-is-symbol  &self 
+        (remove-atom  &self 
           (internal  $B)) 
         (set-det)) 
       (, 
-        (remove-is-symbol  &self 
-          (internal  $_)) 
-        (fail))))
+        (remove-atom  &self 
+          (internal  $_)) fail)))
 ; /******************************************************************/
 ; /* Making a copy of the variables occuring in a MeTTa term */
 ; /******************************************************************/
@@ -789,12 +770,11 @@
 
 
   (= (findbag $X $G $_)  
-    ( (add-is-symbol  &self 
-        (yk_found  mark)) 
+    ( (add-atom  &self 
+        (yk-found  mark)) 
       (call $G) 
-      (add-is-symbol  &self 
-        (yk_found  $X)) 
-      (fail)))
+      (add-atom  &self 
+        (yk-found  $X)) fail))
 ; /******************************************************************/
 ; /* We cannot use bagof/3 since it reverses the output list order !*/
 ; /******************************************************************/            
@@ -806,33 +786,24 @@
     (yk-getnext $X)
     (yk-collect-found 
       (Cons  $X $Acc) $L))      
-  (= (yk_collect_found  $X $X)  True)                        
+  (= (yk-collect-found  $X $X)  True)                        
                                                
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  invers/invers.pl 614 33 26398))
 
 
 
-  (= (help)  
-    (write 'Load example calls with command: [Filename].')
-    (nl)
-    (write 'Run example with command: test1(X).')
-    (nl)
-    (write 'Run example with command: test2(X).')
-    (nl)
-    (write 'Run example with command: test3(X).')
-    (nl)
-    (write 'Run example with command: test4(X).')
-    (nl)
-    (write 'Run example with command: test5(X).')
-    (nl)
-    (write 'Run example with command: test6(X).')
-    (nl)
-    (write 'Run example with command: test7(X).')
-    (nl)
-    (write 'Run example with command: test8(X).')
-    (nl))
+  (= help  
+    ( (write 'Load example calls with command: [Filename].') nl 
+      (write 'Run example with command: test1(X).') nl 
+      (write 'Run example with command: test2(X).') nl 
+      (write 'Run example with command: test3(X).') nl 
+      (write 'Run example with command: test4(X).') nl 
+      (write 'Run example with command: test5(X).') nl 
+      (write 'Run example with command: test6(X).') nl 
+      (write 'Run example with command: test7(X).') nl 
+      (write 'Run example with command: test8(X).') nl))
 ; /******************************************************************/
 ; /* instvars instantiates variables by a '_'(<Number>) structure. */
 ; /* Unfortunately a pretty print will result in uglier terms in */

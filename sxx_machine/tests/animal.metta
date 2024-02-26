@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  animal $_266014 sxx_machine/tests/animal.pl sxx_machine/tests/animal.metta)
+;                                           (convert-to-metta-file  animal $_50992 sxx_machine/tests/animal.pl sxx_machine/tests/animal.metta)
 
   (= (animal  goat)  True)
   (= (animal  elephant)  True)

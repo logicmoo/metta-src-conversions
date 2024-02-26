@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  advisors $_188052 metagame/play/advisors.pl metagame/play/advisors.metta)
+;                                           (convert-to-metta-file  advisors $_486236 metagame/play/advisors.pl metagame/play/advisors.metta)
 ;
 ; ============================================================
 ;
@@ -224,30 +224,28 @@
     (random-non-losing $Moves $Move $SIn $SOut)
     (set-det))
   (= (random-cautious-move $Move $SIn $SOut)  
-    (print-resign-notice)
-    (random-move $Move $SIn $SOut))
+    (print-resign-notice (random-move $Move $SIn $SOut)))
 
 
-  (= (print-resign-notice)  
+  (= print-resign-notice  
     (format "\nA cautious player would resign now ... \nbut perhaps my opponent won't see it!\n" Nil))
 
 
-  (= (print-forced-notice)  
+  (= print-forced-notice  
     (format "Forced choice: only 1 legal move~n" Nil))
 
 
-  (= (print-rushed-notice)  
+  (= print-rushed-notice  
     (format "Rushed choice: no time to think!~n" Nil))
 
 
-  (= (print-forced-or-lost-notice)  
+  (= print-forced-or-lost-notice  
     (format "Forced choice: only 1 legal move (or all others lose!)~n" Nil))
 
 
   (= (random-non-losing (:: $Move) $Move $SIn $SOut)  
-    (set-det)
-    (print-forced-or-lost-notice)
-    (legal $Move $SIn $SOut))
+    ( (set-det) print-forced-or-lost-notice 
+      (legal $Move $SIn $SOut)))
   (= (random-non-losing $Moves $Move $SIn $SOut)  
     (random-select $Move1 $Moves $RestMoves)
     (nl-or-next $Move1 $RestMoves $Move $SIn $SOut))

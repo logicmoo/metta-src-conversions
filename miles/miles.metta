@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  miles $_459330 miles/miles.pl miles/miles.metta)
+;                                           (convert-to-metta-file  miles $_361744 miles/miles.pl miles/miles.metta)
 
 
   !(ensure-loaded dmiles)
@@ -33,5 +33,5 @@
 
   !((remove-all-atoms  &self 
       (:  interpreter 
-        (depth_bound  $_))) (add-is-symbol  &self (:  interpreter (depth_bound  10))))
+        (depth-bound  $_))) (add-atom  &self (:  interpreter (depth-bound  10))))
 

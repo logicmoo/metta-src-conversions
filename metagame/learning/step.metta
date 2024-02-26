@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  step $_322156 metagame/learning/step.pl metagame/learning/step.metta)
+;                                           (convert-to-metta-file  step $_27416 metagame/learning/step.pl metagame/learning/step.metta)
 ;
 ; ============================================================
 ;
@@ -281,8 +281,7 @@
 ; his pieces at us and force us to absorb the value of them.
 
   (= (forced-remove $Player $Owner)  
-    (current-game-must-capture)
-    (\== $Player $Owner))
+    (current-game-must-capture (\== $Player $Owner)))
 
 ;
 ; In this case, the player has no choice but to accept the loss of material.
@@ -518,7 +517,7 @@
 
 
 
-  (= (print-static-matrix)  
+  (= print-static-matrix  
     (print-static-matrix $Piece $Player $StatVal))
 
   (= (print-static-matrix $Piece $Player $StatVal)  
@@ -527,8 +526,7 @@
       (, 
         (piece-player-static $Piece $Player $StatVal) 
         (format "~p: ~p -> ~p~n" 
-          (:: $Player $Piece $StatVal)) 
-        (fail)) True))
+          (:: $Player $Piece $StatVal)) fail) True))
 
 
   (= (pps $Player $Piece $StatVal)  

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sxx_compiler $_425594 sxx_machine/sxx_compiler.pl sxx_machine/sxx_compiler.metta)
+;                                           (convert-to-metta-file  sxx_compiler $_214090 sxx_machine/sxx_compiler.pl sxx_machine/sxx_compiler.metta)
 
   (= (append  () $L $L)  True)
   (= (append (Cons  $X $L1) $L2 (Cons  $X $L3))  
@@ -14,18 +14,17 @@
 
 
   (= (comp $File)  
-    (see $File)
-    (file-name-extension $BName $_ $File)
-    (= $InProg Nil)
-    (readprogram $BName $InProg $Prog)
-    (set-det)
-    (seen)
-    (makename 
-      (:: tcomp- $BName) $Dir)
-    (make-directory-path $Dir)
-    (set-det)
-    (gencode $Dir $Prog)
-    (set-det))
+    ( (see $File) 
+      (file-name-extension $BName $_ $File) 
+      (= $InProg Nil) 
+      (readprogram $BName $InProg $Prog) 
+      (set-det) seen 
+      (makename 
+        (:: tcomp- $BName) $Dir) 
+      (make-directory-path $Dir) 
+      (set-det) 
+      (gencode $Dir $Prog) 
+      (set-det)))
 ; ; close(File) ,
 
 
@@ -50,9 +49,9 @@
       (predicate-property $H built-in))
     (set-det))
   (= (local-side-efs $_ $Call)  
-    (call (add-is-symbol  &self $Call))
+    (call (add-atom  &self $Call))
     (set-det))
-  (= (local_side_efs  $_ $Clause)  True)
+  (= (local-side-efs  $_ $Clause)  True)
 
   (= (readprogram $BName $In $Out)  
     (read $Clause)
@@ -159,8 +158,7 @@
 
 
   (= (wr (wr nl))  
-    (set-det)
-    (nl))
+    ( (set-det) nl))
   (= (wr $Atom)  
     (atomic $Atom)
     (set-det)
@@ -196,32 +194,31 @@
 
 
   (= (gencodeforpred $Package $Pred)  
-    (= $Pred 
-      (Cons  
-        (= $H  $_) $_))
-    (legacy-functor $H $N $A)
-    (is $AA 
-      (- $A 1))
-    (makename 
-      (:: pred- $N - $AA) $ClassName)
-    (makename 
-      (:: $Package / $ClassName .java) $FileName)
-    (setof $F 
-      (^ $Pred 
-        (continuationof $Pred $F)) $Conts)
-    (setof $F 
-      (^ $Pred 
-        (stringof $Pred $F)) $AllStrings)
-    (mysetof $F 
-      (^ $Pred 
-        (intof $Pred $F)) $AllInts)
-    (= $Strings 
-      (Cons  cut $AllStrings))
-    (tell $FileName)
-    (prelude $Pred)
-    (writel (:: 'class /* Pred */' $ClassName ' extends Code' (wr nl) {  (wr nl) (declforeachclause $Pred 1 $ClassName) (declforeachcontinuation $Conts $N $A) (declforeachstring $Strings 0) (declforeachint $AllInts) 'public static Code entry-code = new ' $ClassName (); (wr nl) 'public void Init(Prolog mach)' (wr nl) {  (initforeachcontinuation $Conts $N $A) } (wr nl) 'public int Arity() { return ' $AA  ; } (wr nl) 'public Code Exec(Prolog mach)' (wr nl) '{ Term aregs[] = {' (aregarray $AA) } ; (wr nl) 'mach.CreateChoicePoint(aregs) ;' (wr nl) 'return cl1.Exec(mach) ;' (wr nl) } (wr nl) } (wr nl) (wr nl)))
-    (genpredcode $Pred last $ClassName $_ $Strings)
-    (told))
+    ( (= $Pred 
+        (Cons  
+          (= $H  $_) $_)) 
+      (legacy-functor $H $N $A) 
+      (is $AA 
+        (- $A 1)) 
+      (makename 
+        (:: pred- $N - $AA) $ClassName) 
+      (makename 
+        (:: $Package / $ClassName .java) $FileName) 
+      (setof $F 
+        (^ $Pred 
+          (continuationof $Pred $F)) $Conts) 
+      (setof $F 
+        (^ $Pred 
+          (stringof $Pred $F)) $AllStrings) 
+      (mysetof $F 
+        (^ $Pred 
+          (intof $Pred $F)) $AllInts) 
+      (= $Strings 
+        (Cons  cut $AllStrings)) 
+      (tell $FileName) 
+      (prelude $Pred) 
+      (writel (:: 'class /* Pred */' $ClassName ' extends Code' (wr nl) {  (wr nl) (declforeachclause $Pred 1 $ClassName) (declforeachcontinuation $Conts $N $A) (declforeachstring $Strings 0) (declforeachint $AllInts) 'public static Code entry-code = new ' $ClassName (); (wr nl) 'public void Init(Prolog mach)' (wr nl) {  (initforeachcontinuation $Conts $N $A) } (wr nl) 'public int Arity() { return ' $AA  ; } (wr nl) 'public Code Exec(Prolog mach)' (wr nl) '{ Term aregs[] = {' (aregarray $AA) } ; (wr nl) 'mach.CreateChoicePoint(aregs) ;' (wr nl) 'return cl1.Exec(mach) ;' (wr nl) } (wr nl) } (wr nl) (wr nl))) 
+      (genpredcode $Pred last $ClassName $_ $Strings) told))
 ; ;close(FileName) .
 
 
@@ -248,7 +245,7 @@
     (is $Amin1 
       (- $Arity 1))
     (arg $Arity $Head 
-      ($cont $Arity))
+      (%cont $Arity))
     (writel (:: '/* helper */class ' $ClassName -- $N ' extends ' $ClassName (wr nl) { (wr nl) 'public Code Exec(Prolog mach)' (wr nl) {  (det-if-then-else (= $Last last) (write 'mach.RemoveChoice() ;') (, (is $M (+ $N 1)) (writel (:: mach.FillAlternative(cl $M ) ;)))) (wr nl) 'Term local-aregs[] = mach.Areg ;' (wr nl) 'Term continuation = local-aregs[' $Amin1 ] ; (wr nl) (decl-deref-args $Amin2) (mynumbervars $Clause 1 $NumbVars) (det-if-then-else (> $NumbVars 1) (declvars $NumbVars) True) (gets $Head $Strings) (puts $Body $Strings) 'mach.CUTB = mach.CurrentChoice ;' (wr nl) (nullifyaregs $Clause) 'return ' (bodycont $Clause $Name $Arity)  ; (wr nl) } (wr nl) } (wr nl) (wr nl))))
 
 
@@ -263,10 +260,8 @@
 
 
   (= (nullify 0 $_)  
-    (set-det)
-    (write 'null ;')
-    (nl)
-    (fail))
+    ( (set-det) 
+      (write 'null ;') nl fail))
   (= (nullify $N $K)  
     (is $L 
       (- $K 1))
@@ -280,10 +275,10 @@
     (var $Var)
     (set-det)
     (= $Var 
-      ($VAR $I $_))
+      (%VAR $I $_))
     (is $O 
       (+ $I 1)))
-  (= (mynumbervars ($VAR $_ $_) $I $O)  
+  (= (mynumbervars (%VAR $_ $_) $I $O)  
     (set-det)
     (= $I $O))
   (= (mynumbervars $A $I $O)  
@@ -360,10 +355,10 @@
 ; continuation is replaced by '$cont'(arity)
 
 
-  (= (constructterm ($cont $_) $_)  
+  (= (constructterm (%cont $_) $_)  
     (set-det)
     (writel (:: continuation)))
-  (= (constructterm ($VAR $N $T) $_)  
+  (= (constructterm (%VAR $N $T) $_)  
     (set-det)
     (det-if-then-else 
       (var $T) 
@@ -555,9 +550,8 @@
 
 
   (= (strings1 $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (strings1 (, $A $_) $F)  
     (strings1 $A $F))
   (= (strings1 (, $_ $B) $F)  
@@ -578,17 +572,15 @@
 
 
   (= (strings $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (strings $A $F)  
     (atom $A)
     (set-det)
     (= $F $A))
   (= (strings $A $_)  
-    (atomic $A)
-    (set-det)
-    (fail))
+    ( (atomic $A) 
+      (set-det) fail))
   (= (strings $T $F)  
     (legacy-functor $T $N $_)
     (= $F $N))
@@ -611,17 +603,15 @@
 
 
   (= (ints $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (ints $A $F)  
     (integer $A)
     (set-det)
     (= $F $A))
   (= (ints $A $_)  
-    (atomic $A)
-    (set-det)
-    (fail))
+    ( (atomic $A) 
+      (set-det) fail))
   (= (ints $T $F)  
     (=.. $T 
       (Cons  $_ $Args))
@@ -676,29 +666,21 @@
 
 
   (= (prelude $Pred)  
-    (prelude)
-    (write 
+    (prelude 
+      (write 
 /*
-)
-    (w-cl $Pred)
-    (write 
+)     (w-cl $Pred) 
+      (write 
 */
-))
-  (= (prelude)  
-    (write '// Generated code file - by dmiles')
-    (nl)
-    (fail))
-  (= (prelude)  
-    (write '// Copyright August 16, 1996,2018 LOGICMOO, KUL and CUM')
-    (nl)
-    (fail))
-  (= (prelude)  
-    (write '// Authors: Douglas R. Miles, Bart Demoen and Paul Tarau
+)))
+  (= prelude  
+    ( (write '// Generated code file - by dmiles') nl fail))
+  (= prelude  
+    ( (write '// Copyright August 16, 1996,2018 LOGICMOO, KUL and CUM') nl fail))
+  (= prelude  
+    ( (write '// Authors: Douglas R. Miles, Bart Demoen and Paul Tarau
 import SxxMachine.*;
-')
-    (nl)
-    (nl)
-    (fail))
+') nl nl fail))
   (= prelude  True)
 
 ;

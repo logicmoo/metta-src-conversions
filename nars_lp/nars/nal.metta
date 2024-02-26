@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  nal $_36328 nars_lp/nars/nal.pl nars_lp/nars/nal.metta)
+;                                           (convert-to-metta-file  nal $_148722 nars_lp/nars/nal.pl nars_lp/nars/nal.metta)
 ;
 ; nal.pl
 ;

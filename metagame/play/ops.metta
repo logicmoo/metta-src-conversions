@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ops $_355000 metagame/play/ops.pl metagame/play/ops.metta)
+;                                           (convert-to-metta-file  ops $_282438 metagame/play/ops.pl metagame/play/ops.metta)
 ;
 ; ============================================================
 ;

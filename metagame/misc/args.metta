@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  args $_348376 metagame/misc/args.pl metagame/misc/args.metta)
+;                                           (convert-to-metta-file  args $_74358 metagame/misc/args.pl metagame/misc/args.metta)
 ;
 ; ============================================================
 ;
@@ -32,8 +32,7 @@
           (functor $T2 $F $A) 
           (functor $T1 $F $A)) 
         (, 
-          (format "Error in same_functor: Both terms variables!~n" Nil) 
-          (fail)))))
+          (format "Error in same_functor: Both terms variables!~n" Nil) fail))))
 
 ;
 ; SAME_FUNCTOR(?T1,?T2,?A)
@@ -57,8 +56,7 @@
           (functor $T2 $F $A) 
           (functor $T1 $F $A)) 
         (, 
-          (format "Error in same_functor: Both terms variables!~n" Nil) 
-          (fail)))))
+          (format "Error in same_functor: Both terms variables!~n" Nil) fail))))
 
 
 ;
@@ -147,9 +145,8 @@
         (, 
           (format user-error '~N! Instantiation fault in argument ~w of ~q/~w~n! Goal: ~p~n' 
             (:: 2 path-arg 3 
-              (path-arg $Path $Term $SubTerm))) 
-          (fail)))))
-  (= (path_arg  () $Term $Term)  True)
+              (path-arg $Path $Term $SubTerm))) fail))))
+  (= (path-arg  () $Term $Term)  True)
   (= (path-arg (Cons  $Head $Tail) $Term $SubTerm)  
     (det-if-then-else 
       (integer $Head) 
@@ -166,8 +163,7 @@
           (format user-error '~N! Type failure in argument ~w of ~q/~w~n! Goal: ~p~n' 
             (:: 1 path-arg 3 
               (path-arg 
-                (Cons  $Head $Tail) $Term $SubTerm))) 
-          (fail)))))
+                (Cons  $Head $Tail) $Term $SubTerm))) fail))))
 ; /* otherwise */
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  arch2_1 $_207516 arch2/arch2_1.pl arch2/arch2_1.metta)
+;                                           (convert-to-metta-file  arch2_1 $_305800 arch2/arch2_1.pl arch2/arch2_1.metta)
 
   (= (example  (+  (object  ($A $B $C) ((support  $A $C) (support  $B $C) (isa  $A rectangle) (isa  $B rectangle) (isa  $C rectangle)))))  True)
   (= (example  (-  (object  ($A $B $C) ((support  $A $C) (support  $B $C) (touch  $A $B) (isa  $A rectangle) (isa  $B rectangle) (isa  $C rectangle)))))  True)

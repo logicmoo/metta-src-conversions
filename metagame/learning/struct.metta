@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  struct $_119626 metagame/learning/struct.pl metagame/learning/struct.metta)
+;                                           (convert-to-metta-file  struct $_315442 metagame/learning/struct.pl metagame/learning/struct.metta)
 ;
 ; ============================================================
 ;
@@ -12,7 +12,7 @@
 ; building all tables.
 
 
-  (= (build-tables)  
+  (= build-tables  
     (new-empty-state $State)
     (build-tables $State))
 ; ; for testing
@@ -21,79 +21,76 @@
     (runtime (build-tables $State $Tables)))
 
   (= (build-tables $State $T)  
-    (anal-table $T)
-    (promsq-matrix $T $PromSqMatrix)
-    (promotion-matrix $T $PromMatrix)
-    (prom-distance-matrix $T $PromDistMatrix)
-    (transition-matrix $T $TransMatrix)
-    (mobility-matrix $T $MobMatrix)
-    (eventual-matrix $T $EventualMatrix)
-    (distance-matrix $T $DistMatrix)
-    (distance-table $T $DistTable)
-    (active-advisor-table $T $Advisors)
-    (static-matrix $T $StatMatrix)
-    (compile-basic-tables)
-    (tracing-anal-format tables "Building <active advisor> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-advisor-table $Advisors))
-    (tracing-anal-format tables "Building <promotion transition> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-promotion-matrix $PromMatrix))
-    (tracing-anal-format tables "Building <promotion distance> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-prom-distance-matrix $PromMatrix $PromDistMatrix))
-    (tracing-anal-format tables "Building <transition> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-transition-matrix $TransMatrix $State))
-    (tracing-anal-format tables "Building <mobility> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-mobility-matrix $TransMatrix $MobMatrix))
-    (tracing-anal-format tables "Building <distance> matrices ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-distance-matrix $TransMatrix $DistMatrix))
-    (tracing-anal-format tables "Building <distance> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-distance-table $DistMatrix $DistTable))
-    (tracing-anal-format tables "Building <eventual mobility> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-eventual-matrix $DistMatrix $EventualMatrix))
-    (tracing-anal-format tables "Building <promotion square distance> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-promsq-matrix $DistTable $PromSqMatrix))
-    (tracing-anal-format tables "Building <independent piece value> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-static-matrix $StatMatrix $T))
-    (tracing-anal-format tables "Tables completed!~n" Nil)
-    (save-tables $T))
+    ( (anal-table $T) 
+      (promsq-matrix $T $PromSqMatrix) 
+      (promotion-matrix $T $PromMatrix) 
+      (prom-distance-matrix $T $PromDistMatrix) 
+      (transition-matrix $T $TransMatrix) 
+      (mobility-matrix $T $MobMatrix) 
+      (eventual-matrix $T $EventualMatrix) 
+      (distance-matrix $T $DistMatrix) 
+      (distance-table $T $DistTable) 
+      (active-advisor-table $T $Advisors) 
+      (static-matrix $T $StatMatrix) compile-basic-tables 
+      (tracing-anal-format tables "Building <active advisor> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-advisor-table $Advisors)) 
+      (tracing-anal-format tables "Building <promotion transition> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-promotion-matrix $PromMatrix)) 
+      (tracing-anal-format tables "Building <promotion distance> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-prom-distance-matrix $PromMatrix $PromDistMatrix)) 
+      (tracing-anal-format tables "Building <transition> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-transition-matrix $TransMatrix $State)) 
+      (tracing-anal-format tables "Building <mobility> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-mobility-matrix $TransMatrix $MobMatrix)) 
+      (tracing-anal-format tables "Building <distance> matrices ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-distance-matrix $TransMatrix $DistMatrix)) 
+      (tracing-anal-format tables "Building <distance> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-distance-table $DistMatrix $DistTable)) 
+      (tracing-anal-format tables "Building <eventual mobility> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-eventual-matrix $DistMatrix $EventualMatrix)) 
+      (tracing-anal-format tables "Building <promotion square distance> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-promsq-matrix $DistTable $PromSqMatrix)) 
+      (tracing-anal-format tables "Building <independent piece value> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-static-matrix $StatMatrix $T)) 
+      (tracing-anal-format tables "Tables completed!~n" Nil) 
+      (save-tables $T)))
 
 
 
 
 
-  (= (clear-tables)  
+  (= clear-tables  
     (remove-all-atoms  &self 
-      (advice_tables  $_)))
+      (advice-tables  $_)))
 
 
   (= (save-tables $Tables)  
-    ( (clear-tables) (add-is-symbol  &self (advice_tables  $Tables))))
+    (clear-tables (add-atom  &self (advice-tables  $Tables))))
 
 
   (= (dump-tables $File)  
     (with-output-file $File write dump-tables))
 
-  (= (dump-tables)  
+  (= dump-tables  
     (listing (/ advice-tables 1)))
 
 
-  (= (load-tables)  
+  (= load-tables  
     (read (advice-tables $Tables))
     (save-tables $Tables)) 
 
   (= (load-tables $File)  
-    (see $File)
-    (load-tables)
-    (seen))
+    ( (see $File) load-tables seen))
 
 
   (= (find-advice-tables-if $T)  
@@ -117,17 +114,16 @@
 ; without the real analysis.
 
 
-  (= (build-dummy-tables)  
+  (= build-dummy-tables  
     (build-dummy-tables $State $Tables))
 
   (= (build-dummy-tables $State $Tables)  
-    (anal-table $T)
-    (active-advisor-table $T $Advisors)
-    (compile-basic-tables)
-    (tracing-anal-format tables "Building <active advisor> tables ...~n" Nil)
-    (tracing-anal-timing tables 
-      (build-advisor-table $Advisors))
-    (save-tables $T))
+    ( (anal-table $T) 
+      (active-advisor-table $T $Advisors) compile-basic-tables 
+      (tracing-anal-format tables "Building <active advisor> tables ...~n" Nil) 
+      (tracing-anal-timing tables 
+        (build-advisor-table $Advisors)) 
+      (save-tables $T)))
 	
 
 
@@ -244,8 +240,8 @@
 
 
 
-  (= (add-portray-anal-table)  
-    ( (anal-table $T) (add-is-symbol  &self (:-  (portray  $T) (portray_anal_table  $T)))))
+  (= add-portray-anal-table  
+    ( (anal-table $T) (add-atom  &self (:-  (portray  $T) (portray-anal-table  $T)))))
 
 
   (= (portray-anal-table $T)  
@@ -272,12 +268,12 @@
     (\== $Status off))
 
 
-  (= (advisor_number  threat 1)  True)
-  (= (advisor_number  prom 2)  True)
-  (= (advisor_number  dynamic_mobility 3)  True)
+  (= (advisor-number  threat 1)  True)
+  (= (advisor-number  prom 2)  True)
+  (= (advisor-number  dynamic_mobility 3)  True)
 
 
-  (= (number_of_advisors  3)  True)
+  (= (number-of-advisors  3)  True)
 
 
   (= (build-advisor-table $T)  
@@ -294,11 +290,9 @@
 ; ================================================================================
 
 
-  (= (build-top)  
-    (build-tables))
+  (= build-top  build-tables)
 
 
-  (= (showstatic-top)  
-    (print-static-matrix))
+  (= showstatic-top  print-static-matrix)
 
 

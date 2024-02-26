@@ -1,8 +1,8 @@
-;                                           (convert_to_metta_file  arch1 $_448468 arch1/arch1.pl arch1/arch1.metta)
+;                                           (convert-to-metta-file  arch1 $_452508 arch1/arch1.pl arch1/arch1.metta)
 
   (= (process-stored-inputs $ConceptName)  
     (or 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (concept  $ConceptName $_)) True)
     (set-det)
     (process-stored-inputs-body $ConceptName))
@@ -52,26 +52,25 @@
 
 
   (= (process-stored-inputs-body $ConceptName)  
-    (msgs (:: nl 'Processing stored inputs for ' $ConceptName  ...))
-    (input $ID $Type $ConceptName $Input)
-    (msgs (:: nl 'Input ' $ID :  $Type nl $Input))
-    (process-example $Type $ConceptName $Input)
-    (concept $ConceptName $Concept)
-    (concept-template $Concept $Template)
-    (concept-constraints $Concept $Constraints)
-    (msgs (:: nl 'New Concept Definition is:' nl '--- Template:' nl $Template nl '--- Constraints:' nl $Constraints nl))
-    (fail))
+    ( (msgs (:: nl 'Processing stored inputs for ' $ConceptName  ...)) 
+      (input $ID $Type $ConceptName $Input) 
+      (msgs (:: nl 'Input ' $ID :  $Type nl $Input)) 
+      (process-example $Type $ConceptName $Input) 
+      (concept $ConceptName $Concept) 
+      (concept-template $Concept $Template) 
+      (concept-constraints $Concept $Constraints) 
+      (msgs (:: nl 'New Concept Definition is:' nl '--- Template:' nl $Template nl '--- Constraints:' nl $Constraints nl)) fail))
   (= (process-stored-inputs-body $_)  
     (msgs (:: nl 'No more inputs. Done.')))
 
 
 
   (= (process-example example $ConceptName $Example)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (concept  $ConceptName $Definition)) 
       (set-det) 
       (generalize $Example $Definition $NewDefinition) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (concept  $ConceptName $NewDefinition)) 
       (set-det)))
 ; /******************************************************************/
@@ -95,16 +94,16 @@
   (= (process-example example $ConceptName $Example)  
     ( (set-det) 
       (initial-generalization $Example $InitialDefinition) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (concept  $ConceptName $InitialDefinition))))
 ; /* no concept yet - this is the initial input. Perform */
 ; /* special initial generalization on it */
   (= (process-example near-miss $ConceptName $Example)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (concept  $ConceptName $Definition)) 
       (set-det) 
       (specialize $Example $Definition $NewDefinition) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (concept  $ConceptName $NewDefinition)) 
       (set-det)))
 ; /* process it */
@@ -263,7 +262,7 @@
     (mark-as $Mark $Rest $RestMarked))
 
 
-  (= (concept_p  (concept  $_ $_ $_))  True)
+  (= (concept-p  (concept  $_ $_ $_))  True)
 ; /***********************************************************************/
 ; /* The evolving concept definition is represented by two lists of facts*/
 ; /* (which may contain symbolic vars "var(...)"). The first list is the */
@@ -291,19 +290,19 @@
 ; /* The following predicates give access to the parts of a concept: */
 ; /***********************************************************************/
 
-  (= (concept_name  (concept  $Name $_ $_) $Name)  True)
+  (= (concept-name  (concept  $Name $_ $_) $Name)  True)
 
-  (= (concept_template  (concept  $_ $Template $_) $Template)  True)
+  (= (concept-template  (concept  $_ $Template $_) $Template)  True)
 
-  (= (concept_constraints  (concept  $_ $_ $Constraints) $Constraints)  True)
+  (= (concept-constraints  (concept  $_ $_ $Constraints) $Constraints)  True)
 
 
-  (= (alter_concept_constraints  (concept  $N $T $_) $C (concept  $N $T $C))  True)
+  (= (alter-concept-constraints  (concept  $N $T $_) $C (concept  $N $T $C))  True)
 ; /***********************************************************************/
 ; /* The following predicates alternate parts of a concept: */
 ; /***********************************************************************/
 
-  (= (alter_concept_template  (concept  $N $_ $C) $T (concept  $N $T $C))  True)
+  (= (alter-concept-template  (concept  $N $_ $C) $T (concept  $N $T $C))  True)
 
 
   (= (concept-equal-p (concept $Name $Template1 $Constraints1) (concept $Name $Template2 $Constraints2))  
@@ -328,10 +327,9 @@
 
 
   (= (print-concepts $Concepts)  
-    (member $Concept $Concepts)
-    (print-concept $Concept)
-    (fail))
-  (= (print_concepts  $_)  True)
+    ( (member $Concept $Concepts) 
+      (print-concept $Concept) fail))
+  (= (print-concepts  $_)  True)
 
 
   (= (is-member $Example $Concept $Decision)  
@@ -369,7 +367,7 @@
 ; /* (incl. constraints) are met */
 ; /* check if all non-necessary conditions were */
 ; /* matched also */
-  (= (is_member  $_ $_ no)  True)
+  (= (is-member  $_ $_ no)  True)
 
 
   (= (match $Concept $Ex $OldBL $NewBL $PL $ML $AL)  
@@ -400,7 +398,7 @@
 ; /* represented as in "arch_1.pro". Concept may contain facts with */
 ; /* symbolic variables as arguments ("var(<varname>)"), all other */
 ; /* symbols are treated as constants. No guarantee if you call match */
-; /* with expressions that contain unbound (PROLOG-) variables. */
+; /* with expressions that contain unbound (MeTTa-) variables. */
 ; /* OldBindingList is the list of bindings (list of [var|value] */
 ; /* pairs) to respect when performing the match. The constraints of */
 ; /* Concept are handled properly (they do not "consume" parts in the */
@@ -748,7 +746,7 @@
 ; /* don't have the same length. */
 ; /********************************************************************/
   (= (count-differences-p (Cons  $First1 $Rest1) (Cons  $First2 $Rest2) $OldBL $NewBL $RestN)  
-    (atom-match-p $First1 $First2 $OldBL $BL)
+    (symbol-match-p $First1 $First2 $OldBL $BL)
     (set-det)
     (count-differences-p $Rest1 $Rest2 $BL $NewBL $RestN))
 ; /* those two matched - compute differences for tail of list */
@@ -764,8 +762,8 @@
 ; /* with incorrectly bound vars) */
 
 
-  (= (atom-match-p $O1 $O2 $OldBL $NewBL)  
-    (atom-match-p1 $O1 $O2 $OldBL $NewBL)
+  (= (symbol-match-p $O1 $O2 $OldBL $NewBL)  
+    (symbol-match-p1 $O1 $O2 $OldBL $NewBL)
     (unique-binding-p $NewBL))
 ; /********************************************************************/
 ; /* */
@@ -784,7 +782,7 @@
 ; /********************************************************************/
 
 
-  (= (atom-match-p1 (var $VarName1) (var $VarName2) $OldBL $NewBL)  
+  (= (symbol-match-p1 (var $VarName1) (var $VarName2) $OldBL $NewBL)  
     (set-det)
     (get-binding $VarName1 $OldBL $BL $Binding1)
     (get-binding $VarName2 $BL $NewBL $Binding2)
@@ -792,15 +790,15 @@
 ; /* matching two variables - give them a MeTTa variable */
 ; /* as binding, so when one of them gets matched later on, */
 ; /* that binding is propagated */
-  (= (atom-match-p1 $Const (var $VarName) $OldBL $NewBL)  
+  (= (symbol-match-p1 $Const (var $VarName) $OldBL $NewBL)  
     (set-det)
     (get-binding $VarName $OldBL $NewBL $Const))
 ; /* we require bindings to be unique (one part in object A */
 ; /* can match only one part in object B */
-  (= (atom-match-p1 (var $VarName) $Const $OldBL $NewBL)  
+  (= (symbol-match-p1 (var $VarName) $Const $OldBL $NewBL)  
     (set-det)
     (get-binding $VarName $OldBL $NewBL $Const))
-  (= (symbol_match_p1  $Const $Const $BL $BL)  True)
+  (= (symbol-match-p1  $Const $Const $BL $BL)  True)
 
 
   (= (get-binding $Key Nil (:: (Cons  $Key $Value)) $Value)  
@@ -815,7 +813,7 @@
 ; /* */
 ; /********************************************************************/
 ; /* Value is the binding for Key in BindingList (first occurence). If*/
-; /* key is not bound in BindingList, a PROLOG variable is returned */
+; /* key is not bound in BindingList, a MeTTa variable is returned */
 ; /* as Value. If the binding list is empty, Key doesn't have a value*/
 ; /* yet, add it (as an unbound variable) */
 ; /********************************************************************/
@@ -833,7 +831,7 @@
 
 
 
-  (= (get_variable_p  $Value (Cons  (Cons  $Variable $Value) $_) $Variable)  True)
+  (= (get-variable-p  $Value ([|]  ([|]  $Variable $Value) $_) $Variable)  True)
 ; /********************************************************************/
 ; /* */
 ; /* call : get_variable_p(+Value,+BindingList,-Variable) */
@@ -852,7 +850,7 @@
 
 
 
-  (= (unique_binding_p  ())  True)
+  (= (unique-binding-p  ())  True)
 ; /********************************************************************/
 ; /* */
 ; /* call : unique_binding_p(BindingList) */
@@ -1100,9 +1098,9 @@
   (= (find-or-create-common-ancestor $Class1 $Class2 $Ancestor)  
     ( (set-det) 
       (concat $Class1 $Class2 $Ancestor) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (ako  $Class1 $Ancestor)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (ako  $Class2 $Ancestor))))
 ; /* create a new name */
 ; /* and record its relation to existing classes */
@@ -1193,8 +1191,7 @@
 
 
   (= (msg nl)  
-    (set-det)
-    (nl))
+    ( (set-det) nl))
   (= (msg (nl $N))  
     (set-det)
     (repeat $N nl))
@@ -1259,10 +1256,10 @@
   (= (remove-duplicates-result $First $RestResult $RestResult $EqualP)  
     (member $First $RestResult $EqualP)
     (set-det))
-  (= (remove_duplicates_result  $First $RestResult (Cons  $First $RestResult) $_)  True)
+  (= (remove-duplicates-result  $First $RestResult ([|]  $First $RestResult) $_)  True)
 
 
-  (= (list_sort  () () $_)  True)
+  (= (list-sort  () () $_)  True)
 ; /********************************************************************/
 ; /* */
 ; /* call : list_sort(+List,-SortedList,+ComparisonPredicate) */
@@ -1287,10 +1284,10 @@
     (call $P)
     (set-det)
     (list-sort1 $X $L $M $O))
-  (= (list_sort1  $X $L (Cons  $X $L) $_)  True)
+  (= (list-sort1  $X $L ([|]  $X $L) $_)  True)
 
 
-  (= (get_best  () () $_)  True)
+  (= (get-best  () () $_)  True)
 ; /********************************************************************/
 ; /* */
 ; /* call : get_best(+SortedList,-Best,+OrderP) */
@@ -1303,7 +1300,7 @@
 ; /* get_best returns the elements with the top score in SortedList */
 ; /* (which must be sorted according to OrderP). */
 ; /********************************************************************/
-  (= (get_best  ($Single) ($Single) $_)  True)
+  (= (get-best  ($Single) ($Single) $_)  True)
   (= (get-best (Cons  $First (Cons  $Second $_)) (:: $First) $ComparisonP)  
     (=.. $Call 
       (:: $ComparisonP $First $Second))
@@ -1317,7 +1314,7 @@
 ; /* keep looking */
 
 
-  (= (enumerate  (Cons  $Head $Tail) $Head $Tail)  True)
+  (= (enumerate  ([|]  $Head $Tail) $Head $Tail)  True)
 ; /********************************************************************/
 ; /* */
 ; /* call : enumerate(!List,?Head,?Rest) */
@@ -1399,10 +1396,9 @@
 
 
   (= (member $_ $List $_)  
-    (var $List)
-    (set-det)
-    (is $List Nil)
-    (fail))
+    ( (var $List) 
+      (set-det) 
+      (is $List Nil) fail))
 ; /********************************************************************/
 ; /* */
 ; /* call : member(Element,List,EqualP) */
@@ -1427,12 +1423,11 @@
 
 
   (= (findbag $X $G $_)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (found  mark)) 
       (call $G) 
-      (add-is-symbol  &self 
-        (found  $X)) 
-      (fail)))                            
+      (add-atom  &self 
+        (found  $X)) fail))                            
   (= (findbag $_ $_ $L)  
     (collect-found Nil $L))                                     
                                                               
@@ -1441,10 +1436,10 @@
     (getnext $X)
     (collect-found 
       (Cons  $X $L) $L1))                      
-  (= (collect_found  $L $L)  True)                                        
+  (= (collect-found  $L $L)  True)                                        
                                                               
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  arch1/arch1.pl 1339 30 68638))
                 
 
@@ -1458,11 +1453,9 @@
     (union $R $Y $Z))
 
 
-  (= (help)  
-    (write 'Load data set with command: [Filename].')
-    (nl)
-    (write 'Start arch1   with command: process-stored-inputs(ConceptName).')
-    (nl))
+  (= help  
+    ( (write 'Load data set with command: [Filename].') nl 
+      (write 'Start arch1   with command: process-stored-inputs(ConceptName).') nl))
    
 
   !(help *)

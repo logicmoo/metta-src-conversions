@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  paths $_17564 metagame/learning/paths.pl metagame/learning/paths.metta)
+;                                           (convert-to-metta-file  paths $_161912 metagame/learning/paths.pl metagame/learning/paths.metta)
 ;
 ; ============================================================
 ;
@@ -54,7 +54,7 @@
     (> $N 0))
 
 
-  (= (path_dist1  $Piece $Player $SqF $SqF 0 $Left $S)  True)
+  (= (path-dist1  $Piece $Player $SqF $SqF 0 $Left $S)  True)
   (= (path-dist1 $Piece $Player $SqF $SqT $N $Max $S)  
     (> $Max 0)
     (\== $SqF $SqT)
@@ -178,7 +178,7 @@
       (path $Level) $Status))
 
 
-  (= (silent-path)  
+  (= silent-path  
     (set-path-verbosity ordering off)
     (set-path-verbosity value off)
     (set-path-verbosity resources off)
@@ -186,10 +186,10 @@
     (set-path-verbosity iteration off))
 
 
-  (= (trace-path-squares)  
+  (= trace-path-squares  
     (set-path-verbosity squares on)) 
 
-  (= (trace-path-ordering)  
+  (= trace-path-ordering  
     (set-path-verbosity ordering on)) 
 
 

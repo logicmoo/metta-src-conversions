@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  controller $_422396 metagame/play/controller.pl metagame/play/controller.metta)
+;                                           (convert-to-metta-file  controller $_276606 metagame/play/controller.pl metagame/play/controller.metta)
 ;
 ; ============================================================
 ;
@@ -108,11 +108,11 @@
 ;
 ; to get an assignment, and record it.
 
-  (= (get-if-random-assignment)  
-    (current-random-setup-game)
-    (set-det)
-    (get-random-assignment $Assignment)
-    (set-random-assignment $Assignment))
+  (= get-if-random-assignment  
+    (current-random-setup-game 
+      (set-det) 
+      (get-random-assignment $Assignment) 
+      (set-random-assignment $Assignment)))
   (= get_if_random_assignment  True)
 
 ;
@@ -120,7 +120,7 @@
 
   (= (set-random-assignment $Assignment)  
     ( (remove-all-atoms  &self 
-        (random_assignment  $_)) (add-is-symbol  &self (random_assignment  $Assignment))))
+        (random-assignment  $_)) (add-atom  &self (random-assignment  $Assignment))))
 
 
 ;
@@ -139,8 +139,7 @@
 ; of a particular game.
 
 
-  (= (start)  
-    (start-controller))
+  (= start  start-controller)
 
 
   (= (start-top $PosName)  
@@ -151,16 +150,15 @@
 
 
 
-  (= (start-controller)  
-    (get-current-game)
-    (get-initial-state $SIn)
-    (initialize-history $SIn)
-    (start-controller $SIn))  
+  (= start-controller  
+    (get-current-game 
+      (get-initial-state $SIn) 
+      (initialize-history $SIn) 
+      (start-controller $SIn)))  
 
 
   (= (get-initial-state $SIn)  
-    (get-if-random-assignment)
-    (start-game $SIn))
+    (get-if-random-assignment (start-game $SIn)))
 	
 
 ;
@@ -181,12 +179,10 @@
 ; Gets a random assignment if necessary for that game.
 
   (= (start-controller $SIn)  
-    (format "~nInitial Position:~n" Nil)
-    (print-state $SIn)
-    (linebreak)
-    (reset-clock)
-    (controller $SIn $_)
-    (set-det))
+    ( (format "~nInitial Position:~n" Nil) 
+      (print-state $SIn) linebreak reset-clock 
+      (controller $SIn $_) 
+      (set-det)))
 ; ; initialize_checkpoints(SIn),
 ; ; new
 
@@ -258,21 +254,18 @@
 ; players get timed correctly also!
 
   (= (choose-or-resign $Chooser $Role $SIn $SOut)  
-    (realtime-success 
-      (choose $Chooser $Role $Move $SIn $SOut) $Time)
-    (set-det)
-    (adjust-player-clock $Role $Time)
-    (add-state-to-history $Move $SOut)
-    (restore-parameters))
+    ( (realtime-success 
+        (choose $Chooser $Role $Move $SIn $SOut) $Time) 
+      (set-det) 
+      (adjust-player-clock $Role $Time) 
+      (add-state-to-history $Move $SOut) restore-parameters))
 ; ; realtime_success(choose(Chooser,Role,SIn,SOut),Time), !,
   (= (choose-or-resign $Chooser $Role $SIn $_)  
-    (opposite-role $Role $OppRole)
-    (role-chooser $OppRole $OppChooser)
-    (format "~n~p, as ~p, failed to select a legal move.~nThus, ~p, as ~p, is declared the Winner!~n" 
-      (:: $Chooser $Role $OppChooser $OppRole))
-    (checkpoint-state final $SIn)
-    (restore-parameters)
-    (fail))
+    ( (opposite-role $Role $OppRole) 
+      (role-chooser $OppRole $OppChooser) 
+      (format "~n~p, as ~p, failed to select a legal move.~nThus, ~p, as ~p, is declared the Winner!~n" 
+        (:: $Chooser $Role $OppChooser $OppRole)) 
+      (checkpoint-state final $SIn) restore-parameters fail))
 	
 
 ;
@@ -289,20 +282,19 @@
 ; Querying is disabled when parameter CONTINUOUS = yes.
 
 
-  (= (continuous)  
+  (= continuous  
     (parameter continuous yes))
 
 
-  (= (set-continuous)  
+  (= set-continuous  
     (set-parameter continuous yes))
 
-  (= (set-stepping)  
+  (= set-stepping  
     (set-parameter continuous no))
 
 
   (= (should-continue $SIn)  
-    (continuous)
-    (set-det))
+    (continuous (set-det)))
   (= (should-continue $SIn)  
     (ask-continue y))
 
@@ -369,12 +361,12 @@
 ; for the opponent.
 
   (= (initialize-player-move $Role)  
-    (save-parameters)
-    (role-file $Role $File)
-    (det-if-then-else 
-      (member $File 
-        (:: none Nil)) True 
-      (load-player-eval $File)))
+    (save-parameters 
+      (role-file $Role $File) 
+      (det-if-then-else 
+        (member $File 
+          (:: none Nil)) True 
+        (load-player-eval $File))))
 
 ;
 ; Assert a list of parameters only if that's what is defined for
@@ -420,9 +412,8 @@
 
 
   (= (load-player-eval-file $Name)  
-    (find-eval-file $Name $File)
-    (save-parameters)
-    (compile $File))
+    ( (find-eval-file $Name $File) save-parameters 
+      (compile $File)))
 	
 ;
 ; -------------------------------------------------------------------------
@@ -432,8 +423,8 @@
     (parameter $Param $Chooser))
 
 
-  (= (player_method_parameter  player player_method)  True)
-  (= (player_method_parameter  opponent opponent_method)  True)
+  (= (player-method-parameter  player player_method)  True)
+  (= (player-method-parameter  opponent opponent_method)  True)
 
 
   (= (role-file $Role $File)  
@@ -447,8 +438,8 @@
 
 
 
-  (= (player_file_parameter  player player_file)  True)
-  (= (player_file_parameter  opponent opponent_file)  True)
+  (= (player-file-parameter  player player_file)  True)
+  (= (player-file-parameter  opponent opponent_file)  True)
 
 ;
 ; Human mode is operative when one of the players is a human
@@ -459,7 +450,7 @@
 ;
 ; assumes it has the correct information to begin with.
 
-  (= (human-mode)  
+  (= human-mode  
     (det-if-then 
       (role-chooser $Role human) True)) 
 
@@ -496,26 +487,26 @@
 ; 
 
   (= (adjust-player-clock $Player $Time)  
-    ( (remove-is-symbol  &self 
-        (time_used  $Player $TOld)) 
+    ( (remove-atom  &self 
+        (time-used  $Player $TOld)) 
       (is $TNew 
         (+ $TOld $Time)) 
-      (add-is-symbol  &self 
-        (time_used  $Player $TNew))))
+      (add-atom  &self 
+        (time-used  $Player $TNew))))
 
 ;
 ; RESET_CLOCK
 ;
 ; Sets both players' elapsed times to 0 (to be used at the start of each game).
 
-  (= (reset-clock)  
+  (= reset-clock  
     (reset-player-clock player)
     (reset-player-clock opponent))
 
 
   (= (reset-player-clock $Player)  
     ( (remove-all-atoms  &self 
-        (time_used  $Player $_)) (add-is-symbol  &self (time_used  $Player 0))))
+        (time-used  $Player $_)) (add-atom  &self (time-used  $Player 0))))
 
 
 ;
@@ -523,7 +514,7 @@
 ;
 ; Prints time used and left for each player.
 
-  (= (print-clock)  
+  (= print-clock  
     (format "~*c~n" 
       (:: 40 45))
     (format "Clock times (in seconds):~n" Nil)
@@ -601,11 +592,10 @@
 ;
 ; Nullify time limits for both players.
 
-  (= (clock-unlimit)  
-    (set-parameter game-time-limit 99999999)
-    (set-parameter move-time-limit 99999999)
-    (set-parameter move-horizon 1)
-    (reset-clock))
+  (= clock-unlimit  
+    ( (set-parameter game-time-limit 99999999) 
+      (set-parameter move-time-limit 99999999) 
+      (set-parameter move-horizon 1) reset-clock))
 
 
 ;
@@ -659,9 +649,9 @@
 
   (= (record-game-outcome $O)  
     ( (remove-all-atoms  &self 
-        (recorded_game_outcome  $O)) 
-      (add-is-symbol  &self 
-        (recorded_game_outcome  $O)) 
+        (recorded-game-outcome  $O)) 
+      (add-atom  &self 
+        (recorded-game-outcome  $O)) 
       (write-outcome $O)))
 
 
@@ -680,6 +670,6 @@
 ;
 ; to purge temporary data from their state, if necessary.
 
-  (= (cleanup_state  $S $S)  True)
+  (= (cleanup-state  $S $S)  True)
 
 

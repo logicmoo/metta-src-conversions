@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dmiles $_341450 miles/dmiles.pl miles/dmiles.metta)
+;                                           (convert-to-metta-file  dmiles $_308608 miles/dmiles.pl miles/dmiles.metta)
 
   !(use-module (library logicmoo-utils))
 
@@ -9,7 +9,7 @@
   (= (ensure-loaded-if-exists $X)  
     (det-if-then-else 
       (exists-source $X) 
-      (with_self  
+      (with-self  
         (system *) 
         (ensure-loaded $X)) 
       (dmsg (ensure-loaded-if-exists $X))))
@@ -17,20 +17,20 @@
   (= (use-module-if-exists $X)  
     (det-if-then-else 
       (exists-source $X) 
-      (with_self  
+      (with-self  
         (system *) 
         (use-module $X)) 
       (dmsg (use-module-if-exists $X))))
   (= (use-module-if-exists $X $Y)  
     (det-if-then-else 
       (exists-source $X) 
-      (with_self  
+      (with-self  
         (system *) 
         (use-module $X $Y)) 
       (dmsg (use-module-if-exists $X $Y))))
 
 
-  !((prolog-load-context directory $Dir) (add-is-symbol  &self (file_search_path  home $Dir)))
+  !((prolog-load-context directory $Dir) (add-atom  &self (file-search-path  home $Dir)))
 ; ;;;;set appropriately!
 
 
@@ -45,8 +45,7 @@
 
 
   (= (nonmember $Arg (Cons  $Arg $_))  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (nonmember $Arg (Cons  $_ $Tail))  
     (set-det)
     (nonmember $Arg $Tail))
@@ -79,18 +78,17 @@
 ; prints Do you want an extended trace [yes]? _
 
   (= (ask-chars $Label $S $E $Answer)  
-    (repeat)
-    (format '~N~w: ?' 
-      (:: $Label))
-    (read-line-to-string-echo current-input $Answer)
-    (atom-length $Answer $Len)
-    (det-if-then-else 
-      (between $S $E $Len) 
-      (set-det) 
-      (, 
-        (format "~NPlease enter between ~w and ~w characters.~n" 
-          (:: $S $E)) 
-        (fail))))
+    (repeat 
+      (format '~N~w: ?' 
+        (:: $Label)) 
+      (read-line-to-string-echo current-input $Answer) 
+      (symbol-length $Answer $Len) 
+      (det-if-then-else 
+        (between $S $E $Len) 
+        (set-det) 
+        (, 
+          (format "~NPlease enter between ~w and ~w characters.~n" 
+            (:: $S $E)) fail))))
 ; /* ask_chars(+Prompt, +MinLength, +MaxLength, -Answer) writes Prompt to the terminal, and reads a line of characters from it. This response must contain between MinLength and MaxLength characters inclusive, otherwise the question will be repeated until an answer of satisfactory length is obtained. Leading and/or trailing layout characters are retained in the result, and are counted when determining the length of the answer. The list of character codes read is unified with Answer. Note that a colon and a space (: ) are added to the Prompt, so don't add such punctuation yourself. The end-user can find out what sort of input is required by typing a line that starts with a question mark. Therefore it is not possible to read such a line as data. See prompted_line/2 in library(prompt). Examples: | ?- ask_chars('Label', 1, 8, Answer). Label: 213456789 Please enter between 1 and 8 characters. Do not add a full stop unless it is part of the answer. Label: four Answer = "four" | ?- ask_chars('Heading', 1, 30, Answer). Heading: ? Please enter between 1 and 30 characters. Do not add a full stop unless it is part of the answer. Heading: three leading spaces Answer = " three leading spaces" */
 
 
@@ -107,49 +105,48 @@
 ; subseq(X,Y,Z):- ord_union(X,Y).
 
 
-  (= ($list-skel $V)  
-    (var $V)
-    (set-det)
-    (fail))
-  (= (%list_skel  ())  True)
-  (= ($list-skel (Cons  $_ $L))  
-    ($list-skel $L))
+  (= (%list-skel $V)  
+    ( (var $V) 
+      (set-det) fail))
+  (= (%list-skel  ())  True)
+  (= (%list-skel (Cons  $_ $L))  
+    (%list-skel $L))
 
 ;
 ; subseq(Sequence1, SubSequence2, Complement):-
 
   (= (subseq $AB $A $B)  
-    ($list-skel $AB)
+    (%list-skel $AB)
     (set-det)
-    ($subseq $AB $A $B))
+    (%subseq $AB $A $B))
   (= (subseq $AB $A $B)  
-    ($list-skel $A)
-    ($list-skel $B)
+    (%list-skel $A)
+    (%list-skel $B)
     (set-det)
-    ($subseq $AB $A $B))
+    (%subseq $AB $A $B))
   (= (subseq $AB $A $B)  
     (throw ('instantiation error' $AB $A)))
 
 
   (= (%subseq  () () ())  True)
-  (= ($subseq (Cons  $X $AB) $A (Cons  $X $B))  
-    ($subseq $AB $A $B))
-  (= ($subseq (Cons  $X $AB) (Cons  $X $A) $B)  
-    ($subseq $AB $A $B))
+  (= (%subseq (Cons  $X $AB) $A (Cons  $X $B))  
+    (%subseq $AB $A $B))
+  (= (%subseq (Cons  $X $AB) (Cons  $X $A) $B)  
+    (%subseq $AB $A $B))
 
 
   (= (subseq0 $AB $A)  
-    ($list-skel $AB)
+    (%list-skel $AB)
     (set-det)
-    ($subseq $AB $A $_))
+    (%subseq $AB $A $_))
   (= (subseq0 $AB $A)  
     (throw ('instantiation error' $AB $A)))
 
 
   (= (subseq1 $AB $A)  
-    ($list-skel $AB)
+    (%list-skel $AB)
     (set-det)
-    ($subseq $AB $A $_)
+    (%subseq $AB $A $_)
     (\== $A $AB))
   (= (subseq1 $AB $A)  
     (throw ('instantiation error' $AB $A)))
@@ -161,9 +158,8 @@
 
 
   (= (save-predicates $List $Filename)  
-    (tell $Filename)
-    (listing $List)
-    (told))
+    ( (tell $Filename) 
+      (listing $List) told))
 
 ;
 ; basics
@@ -183,11 +179,11 @@
 
 
   (= (do-full-kb $KB)  
-    (clear-kb)
-    (init-kb $KB)
-    (forall 
-      (nth-clause do-full-kb1 $Index $_) 
-      (do-full-kb $_ $Index)))
+    (clear-kb 
+      (init-kb $KB) 
+      (forall 
+        (nth-clause do-full-kb1 $Index $_) 
+        (do-full-kb $_ $Index))))
 
   (= (do-full-kb $KB $Index)  
     (nth-clause do-full-kb1 $Index $Ref)
@@ -195,7 +191,7 @@
     (do-full-kb $KB $Index $Goal))
 
   (= (do-full-kb $KB $Index $Goal)  
-    (once (, (ignore (, (nonvar $KB) (clear-kb) (init-kb $KB))) (format ~N=================== Nil) (format '~N======= Nth: ~w  ~p  =======' (:: $Index $Goal)) (format ~N===================~n Nil) (show-kb) (catch (do-full-call-each $Goal) $E (, (dumpST) (throw $E))) (show-kb) (format '~N==== DONE: ~w ========~n~n' (:: $Index)))))
+    (once (, (ignore (, (nonvar $KB) clear-kb (init-kb $KB))) (format ~N=================== Nil) (format '~N======= Nth: ~w  ~p  =======' (:: $Index $Goal)) (format ~N===================~n Nil) show-kb (catch (do-full-call-each $Goal) $E (, dumpST (throw $E))) show-kb (format '~N==== DONE: ~w ========~n~n' (:: $Index)))))
 
 
   (= (do-full-call-each (, $G1 $G2))  
@@ -217,19 +213,11 @@
     (notrace (ignore (catch $G $_ True))))
 
 
-  (= (do-full-kb1)  
-    (argument-types)
-    (show-kb)
-    (complete-chk)
-    (ip $A)
-    (clause-heads)
-    (eval-examples)
-    (show-kb)
-    (complete-chk)
-    (correct-chk)
-    (fp $A)
-    (refinement $ID $_)
-    (flatten-kb))
+  (= do-full-kb1  
+    (argument-types show-kb complete-chk 
+      (ip $A) clause-heads eval-examples show-kb complete-chk correct-chk 
+      (fp $A) 
+      (refinement $ID $_) flatten-kb))
 ; ;; Antwort: no
 ; ;; gibt alle unabgedeckten Bsple zur"uck
 ; ;; geht jetzt gut
@@ -239,14 +227,13 @@
 ; ;; Spezialisierungen dieser Klausel (in einer Liste)    ;
 ; ; kb funktionsfrei machen
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (intra-construct1 1 2 $A $B $C) 
       (det-if-then 
         (, 
           (show-clauses (:: 1 2 $A $B $C)) 
-          (g2-op 1 2 $A $B $C) 
-          (show-kb) 
+          (g2-op 1 2 $A $B $C) show-kb 
           (identify 4 3 $J)) 
         (det-if-then 
           (, 
@@ -258,7 +245,7 @@
               (:: 4 5 10) $A $BB))))))
 ; ;; stellt Fragen
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (, 
         (intra-construct1 10 11 $A $B $C) 
@@ -269,12 +256,11 @@
         (elem-saturate 5 1 $I) 
         (saturate 5 $I 10) 
         (most-spec-v 5 $I $J) 
-        (inv-derivate 5 $J) 
-        (show-kb) 
+        (inv-derivate 5 $J) show-kb 
         (lgg 7 9 $J)) 
       (show-clause $J)))
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (nr-lgg 7 9 $J) 
       (, 
@@ -284,7 +270,7 @@
         (store-clause $_ $CL1 nrlgg $I) 
         (show-clause $I))))
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (gen-msg 5 6 $J 10) 
       (det-if-then 
@@ -293,13 +279,13 @@
           (gti 8 9 $J)) 
         (show-clause $J))))
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (rlgg 5 6 $J) 
       (show-clause $J)))
 
 
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (lgg 1 2 $J) 
       (det-if-then 
@@ -367,7 +353,7 @@
 
 ;
 ; Dann teste:
-  (= (do-full-kb1)  
+  (= do-full-kb1  
     (det-if-then 
       (absorb $ID1 $ID2 $J) 
       (det-if-then 
@@ -379,8 +365,7 @@
             (show-clause $J1) 
             (saturate $ID1 $J2 5)) 
           (, 
-            (show-clause $J2) 
-            (unflatten-kb) 
+            (show-clause $J2) unflatten-kb 
             (set-det))))))
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  run $_244270 sxx_machine/bench/run.pl sxx_machine/bench/run.metta)
+;                                           (convert-to-metta-file  run $_493560 sxx_machine/bench/run.pl sxx_machine/bench/run.metta)
 
   !(style-check (- singleton))
 
@@ -7,39 +7,39 @@
     (run current-output $F))
 
   (= (run $S $F)  
-    (compile-programs)
-    (format $S '~p~t~18| ~t~w~25| ~t~w~32|~n' 
-      (:: Program Time GC))
-    (format $S ~`=t~32|~n Nil)
-    (= $Total 
-      (total 0 0 0))
-    (forall 
-      (program $P $N $F) 
-      (run-program $P $N $S $Total))
-    (= $Total 
-      (total $Count $Time $GC))
-    (is $AvgT 
-      (/ $Time $Count))
-    (is $AvgGC 
-      (/ $GC $Count))
-    (format $S '~t~w~18| ~t~3f~25| ~t~3f~32|~n' 
-      (:: average $AvgT $AvgGC)))
+    (compile-programs 
+      (format $S '~p~t~18| ~t~w~25| ~t~w~32|~n' 
+        (:: Program Time GC)) 
+      (format $S ~`=t~32|~n Nil) 
+      (= $Total 
+        (total 0 0 0)) 
+      (forall 
+        (program $P $N $F) 
+        (run-program $P $N $S $Total)) 
+      (= $Total 
+        (total $Count $Time $GC)) 
+      (is $AvgT 
+        (/ $Time $Count)) 
+      (is $AvgGC 
+        (/ $GC $Count)) 
+      (format $S '~t~w~18| ~t~3f~25| ~t~3f~32|~n' 
+        (:: average $AvgT $AvgGC))))
 
 
   !(det-if-then-else 
     (file-search-path bench $_) True 
     (, 
       (prolog-load-context directory $Dir) 
-      (add-is-symbol  &self 
-        (file_search_path  bench $Dir))))
+      (add-atom  &self 
+        (file-search-path  bench $Dir))))
 
 
-  (= (compile-programs)  
+  (= compile-programs  
     (style-check (- singleton))
     (forall 
       (program $P $_) 
       (load-files 
-        (with_self  $P 
+        (with-self  $P 
           (bench $P)) 
         (:: 
           (silent True) 
@@ -116,39 +116,34 @@
     (=:= $N 0)
     (set-det))
   (= (ntimes-dummy $N)  
-    (not-not-dummy)
-    (set-det)
-    (is $N1 
-      (- $N 1))
-    (ntimes-dummy $N1))
+    (not-not-dummy 
+      (set-det) 
+      (is $N1 
+        (- $N 1)) 
+      (ntimes-dummy $N1)))
 
 
   (= (not-not-top $M)  
-    (not-top $M)
-    (set-det)
-    (fail))
-  (= (not_not_top  $_)  True)
+    ( (not-top $M) 
+      (set-det) fail))
+  (= (not-not-top  $_)  True)
 
 
   (= (not-top $M)  
-    ( (with_self  $M 
-        (top)) 
-      (set-det) 
-      (fail)))
-  (= (not_top  $_)  True)
+    ( (with-self  $M top) 
+      (set-det) fail))
+  (= (not-top  $_)  True)
 
 
-  (= (not-not-dummy)  
-    (not-dummy)
-    (set-det)
-    (fail))
+  (= not-not-dummy  
+    (not-dummy 
+      (set-det) fail))
   (= not_not_dummy  True)
 
 
-  (= (not-dummy)  
-    (dummy)
-    (set-det)
-    (fail))
+  (= not-dummy  
+    (dummy 
+      (set-det) fail))
   (= not_dummy  True)
 
 
@@ -164,7 +159,7 @@
 ; test runs for about 1 second.
 
 
-  (= (tune-counts)  
+  (= tune-counts  
     (forall 
       (program $P $_) 
       (, 
@@ -226,7 +221,7 @@
 
 
   (= (run-interleaved $F)  
-    ( (compile-programs) 
+    (compile-programs 
       (findall 
         (- $N $P) 
         (program $P $N $F) $Pairs) 
@@ -235,41 +230,39 @@
       (seq-clause $Sequence $Body) 
       (remove-all-atoms  &self rni) 
       (assert 
-        (= (rni)  $Body) $Ref) 
-      (garbage-collect) 
+        (= rni  $Body) $Ref) garbage-collect 
       (time rni) 
       (erase $Ref)))
 
 
-  (= (-->  (seq_interleaved  ()) !)  True)
-  (= (-->  (seq_interleaved  $Pairs) (,  (seq_interleaved  $Pairs $Rest) (seq_interleaved  $Rest)))  True)
+  (= (-->  (seq-interleaved  ()) !)  True)
+  (= (-->  (seq-interleaved  $Pairs) (,  (seq-interleaved  $Pairs $Rest) (seq-interleaved  $Rest)))  True)
 
-  (= (-->  (seq_interleaved  () ()) ())  True)
-  (= (-->  (seq_interleaved  (Cons  (-  1 $P) $T0) $T) (,  ! (,  ($P) (seq_interleaved  $T0 $T))))  True)
-  (= (-->  (seq_interleaved  (Cons  (-  $N $P) $T0) (Cons  (-  $N1 $P) $T)) (,  ($P) (,  {(is  $N1 (-  $N 1)) } (seq_interleaved  $T0 $T))))  True)
+  (= (-->  (seq-interleaved  () ()) ())  True)
+  (= (-->  (seq-interleaved  ([|]  (-  1 $P) $T0) $T) (,  ! (,  ($P) (seq-interleaved  $T0 $T))))  True)
+  (= (-->  (seq-interleaved  ([|]  (-  $N $P) $T0) ([|]  (-  $N1 $P) $T)) (,  ($P) (,  {(is  $N1 (-  $N 1)) } (seq-interleaved  $T0 $T))))  True)
 
 
-  (= (seq_clause  () true)  True)
-  (= (seq-clause (Cons  $H $T) (, (with_self  (not (not $H)) (top)) $G))  
+  (= (seq-clause  () true)  True)
+  (= (seq-clause (Cons  $H $T) (, (with-self  (not (not $H)) top) $G))  
     (seq-clause $T $G))
 
 
   (= (run-non-interleaved $F)  
-    (compile-programs)
-    (findall 
-      (- $N $P) 
-      (program $P $N $F) $Pairs)
-    (phrase 
-      (seq-non-interleaved $Pairs) $Sequence)
-    (seq-clause $Sequence $Body)
-    (assert 
-      (= (rni)  $Body) $Ref)
-    (garbage-collect)
-    (time rni)
-    (erase $Ref))
+    (compile-programs 
+      (findall 
+        (- $N $P) 
+        (program $P $N $F) $Pairs) 
+      (phrase 
+        (seq-non-interleaved $Pairs) $Sequence) 
+      (seq-clause $Sequence $Body) 
+      (assert 
+        (= rni  $Body) $Ref) garbage-collect 
+      (time rni) 
+      (erase $Ref)))
 
 
-  (= (-->  (seq_non_interleaved  ()) ())  True)
-  (= (-->  (seq_non_interleaved  (Cons  (-  0 $_) $T)) (,  ! (seq_non_interleaved  $T)))  True)
-  (= (-->  (seq_non_interleaved  (Cons  (-  $N $P) $T)) (,  ($P) (,  {(is  $N1 (-  $N 1)) } (seq_non_interleaved  (Cons  (-  $N1 $P) $T)))))  True)
+  (= (-->  (seq-non-interleaved  ()) ())  True)
+  (= (-->  (seq-non-interleaved  ([|]  (-  0 $_) $T)) (,  ! (seq-non-interleaved  $T)))  True)
+  (= (-->  (seq-non-interleaved  ([|]  (-  $N $P) $T)) (,  ($P) (,  {(is  $N1 (-  $N 1)) } (seq-non-interleaved  ([|]  (-  $N1 $P) $T)))))  True)
 

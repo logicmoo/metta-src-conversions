@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex6 $_413462 miles/examples/ex6.pl miles/examples/ex6.metta)
+;                                           (convert-to-metta-file  ex6 $_13580 miles/examples/ex6.pl miles/examples/ex6.metta)
 
 
 
@@ -16,8 +16,8 @@
     (vulture $X))
 
 
-  (= (ex  (has_wings  tweety) +)  True)
-  (= (ex  (has_beak  tweety) +)  True)
+  (= (ex  (has-wings  tweety) +)  True)
+  (= (ex  (has-beak  tweety) +)  True)
 
 
 

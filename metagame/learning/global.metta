@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  global $_183060 metagame/learning/global.pl metagame/learning/global.metta)
+;                                           (convert-to-metta-file  global $_316216 metagame/learning/global.pl metagame/learning/global.metta)
 ;
 ; ============================================================
 ;
@@ -281,7 +281,7 @@
 ;
 ; 
 
-  (= (effect_val  remove $Player $PieceV $Val 0 $Position $Tables)  True)
+  (= (effect-val  remove $Player $PieceV $Val 0 $Position $Tables)  True)
   (= (effect-val (possess $Possessor) $Player $PieceV $LVal $EValue $Position $Tables)  
     (estimate-possess-value $Possessor $PieceV $LVal $EValue $Position $Tables))
 

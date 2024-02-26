@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dominate $_206796 metagame/learning/dominate.pl metagame/learning/dominate.metta)
+;                                           (convert-to-metta-file  dominate $_325298 metagame/learning/dominate.pl metagame/learning/dominate.metta)
 ;
 ; ============================================================
 ;
@@ -130,12 +130,12 @@
 ; /* dominate_value(PieceA,SqA,PieceV,SqV,Goal,Value,Pos,Tables) :- game_player_has_goal(_,Player,Goal), eradicate_goal(Goal,Opponent,_Type), eradicate_goal(Goal,Descr), opposite_role(Player,Opponent), dominate_val1(PieceA,Player,SqA,PieceV,SqV,Descr,Value,Pos,Tables). dominate_val1(PieceA,Player,SqA,PieceV,SqV,Descr,Value,Pos,Tables) :- blank_state_if(Pos), on(PieceV,_,SqV,Pos), matches(Descr,PieceV), closest_attack(PieceA,SqA,_SqI,PieceV,SqV,Dist,_State,Tables), distance_value(Dist,Val), negate_for_player(Player,Val,Value). */
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  metagame/learning/dominate.pl 158 13 5055))
   
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  metagame/learning/dominate.pl 163 13 5214))
 
 
@@ -173,7 +173,7 @@
       (square 4 2) $PV $SV $Goal $Val $S))
 
 
-  (= (test3)  
+  (= test3  
     (setof 
       (, $A $B $C $D $E) 
       (^ $S 
@@ -181,7 +181,7 @@
     (ppl $Sets))
 
 
-  (= (test4)  
+  (= test4  
     (setof 
       (, $D $A $E $B) 
       (^ 
@@ -192,7 +192,7 @@
 
 
 
-  (= (test5)  
+  (= test5  
     (setof 
       (, $D $A $E $B) 
       (^ 
@@ -224,14 +224,14 @@
 ; Grouped attacks gives us: [Targ-[Attack^TargSq^AttackSq|RestAttacks]|RestTargs]
 
 
-  (= (group_attacks  () ())  True)
+  (= (group-attacks  () ())  True)
   (= (group-attacks (Cons  (- $T $As) $Rest) (Cons  (- $T $GroupedAs) $GRest))  
     (do-graph $As $Grouped1)
     (group-targsq $Grouped1 $GroupedAs)
     (group-attacks $Rest $GRest))
 
 
-  (= (group_targsq  () ())  True)
+  (= (group-targsq  () ())  True)
   (= (group-targsq (Cons  (- $A $Sqs) $Rest) (Cons  (- $A $GroupedSqs) $GRest))  
     (do-graph $Sqs $GroupedSqs)
     (group-targsq $Rest $GRest))

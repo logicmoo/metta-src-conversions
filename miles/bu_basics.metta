@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  bu_basics $_475122 miles/bu_basics.pl miles/bu_basics.metta)
+;                                           (convert-to-metta-file  bu_basics $_294070 miles/bu_basics.pl miles/bu_basics.metta)
 ;
 ; MODULE bu_basics EXPORTS
 
@@ -138,46 +138,46 @@
 ; ***********************************************************************
 
 
-  (= (process_new_literals  () $_)  True)
+  (= (process-new-literals  () $_)  True)
 
 
-  (= (process-new-literals (Cons  (with_self  Nil $Proof) $Rest) $Flag)  
+  (= (process-new-literals (Cons  (with-self  Nil $Proof) $Rest) $Flag)  
     (process-new-literals $Rest $Flag))
 
-  (= (process-new-literals (Cons  (with_self  (/ $L new-body) $Proof) $Rest) $Flag)  
+  (= (process-new-literals (Cons  (with-self  (/ $L new-body) $Proof) $Rest) $Flag)  
     (body $L $_ $_)
     (set-det)
     (process-new-literals $Rest $Flag))
 
-  (= (process-new-literals (Cons  (with_self  (/ $L new-head) $Proof) $Rest) $Flag)  
+  (= (process-new-literals (Cons  (with-self  (/ $L new-head) $Proof) $Rest) $Flag)  
     (head $L $_ $_)
     (set-det)
     (process-new-literals $Rest $Flag))
 
-  (= (process-new-literals (Cons  (with_self  (/ $L $_) $Proof) $Rest) $Flag)  
+  (= (process-new-literals (Cons  (with-self  (/ $L $_) $Proof) $Rest) $Flag)  
     (contains-duplicates $Proof)
     (set-det)
     (process-new-literals $Rest $Flag))
 ; ;;eigentlich ein Filter: jedem Literal
 ; ;;im Parent entspricht eines in der Resolvente
 
-  (= (process-new-literals (Cons  (with_self  (/ $L new-head) $Proof) $Rest) 1)  
+  (= (process-new-literals (Cons  (with-self  (/ $L new-head) $Proof) $Rest) 1)  
     ( (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $L new 0)) 
       (annotate $Proof) 
       (process-new-literals $Rest $_)))
 
-  (= (process-new-literals (Cons  (with_self  (/ $L new-body) $Proof) $Rest) 1)  
-    ( (add-is-symbol  &self 
+  (= (process-new-literals (Cons  (with-self  (/ $L new-body) $Proof) $Rest) 1)  
+    ( (add-atom  &self 
         (body  $L new 0)) 
       (annotate $Proof) 
       (process-new-literals $Rest $_)))
 
 ;
 ; for backtracking
-  (= (process-new-literals (Cons  (with_self  (/ $L new-body) $Proof) $Rest) $Flag)  
-    ( (remove-is-symbol  &self 
+  (= (process-new-literals (Cons  (with-self  (/ $L new-body) $Proof) $Rest) $Flag)  
+    ( (remove-atom  &self 
         (body  $L new 0)) (process-new-literals $Rest $Flag)))
 
 
@@ -220,19 +220,19 @@
   (= (annotate  ())  True)
 
   (= (annotate (Cons  (:: $L body) $Rest))  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (body  $L $OldNew $I)) 
       (is $J 
         (+ $I 1)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $L $OldNew $J)) 
       (annotate $Rest)))
   (= (annotate (Cons  (:: $L head) $Rest))  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (head  $L $OldNew $I)) 
       (is $J 
         (+ $I 1)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $L $OldNew $J)) 
       (annotate $Rest)))
 
@@ -283,7 +283,7 @@
 ; ***********************************************************************
 
 
-  (= (abs-process-proofs (Cons  (Cons  (with_self  $Head (p)) $_) $MoreHeads) $NewHead)  
+  (= (abs-process-proofs (Cons  (Cons  (with-self  $Head p) $_) $MoreHeads) $NewHead)  
     (body $Head $_ $_)
     (set-det)
     (abs-process-proofs $MoreHeads $NewHead))
@@ -295,12 +295,12 @@
 ; ;;eigentlich ein Filter: jedem Literal
 ; ;;im Parent entspricht eines in der Resolvente
 
-  (= (abs-process-proofs (Cons  (Cons  (with_self  $Head (p)) $Proof) $MoreHeads) $Head)  
+  (= (abs-process-proofs (Cons  (Cons  (with-self  $Head p) $Proof) $MoreHeads) $Head)  
     (retract-body-literals $Proof))
 
 ;
 ; For Backtracking
-  (= (abs-process-proofs (Cons  (Cons  (with_self  $Head (p)) $Proof) $MoreHeads) $NewHead)  
+  (= (abs-process-proofs (Cons  (Cons  (with-self  $Head p) $Proof) $MoreHeads) $NewHead)  
     (assert-body $Proof)
     (abs-process-proofs $MoreHeads $NewHead))
 
@@ -348,25 +348,25 @@
 ; ***********************************************************************
 
 
-  (= (ident-process-proofs (Cons  (:: (with_self  (/ $Head new-head) $_)) $MoreHeads) $NewHead)  
+  (= (ident-process-proofs (Cons  (:: (with-self  (/ $Head new-head) $_)) $MoreHeads) $NewHead)  
     (head $Head $_ $_)
     (set-det)
     (ident-process-proofs $MoreHeads $NewHead))
 ; ;
 
-  (= (ident-process-proofs (Cons  (:: (with_self  (/ $_ $_) $Proof)) $MoreHeads) $NewHead)  
+  (= (ident-process-proofs (Cons  (:: (with-self  (/ $_ $_) $Proof)) $MoreHeads) $NewHead)  
     (contains-duplicates $Proof)
     (set-det)
     (ident-process-proofs $MoreHeads $NewHead))
 ; ;;eigentlich ein Filter: jedem Literal
 ; ;;im Parent entspricht eines in der Resolvente
 
-  (= (ident-process-proofs (Cons  (:: (with_self  (/ $Head new-head) $Proof)) $MoreHeads) $Head)  
+  (= (ident-process-proofs (Cons  (:: (with-self  (/ $Head new-head) $Proof)) $MoreHeads) $Head)  
     (retract-literals $Proof))
 
 ;
 ; for backtracking
-  (= (ident-process-proofs (Cons  (:: (with_self  (/ $Head new-head) $Proof)) $MoreHeads) $NewHead)  
+  (= (ident-process-proofs (Cons  (:: (with-self  (/ $Head new-head) $Proof)) $MoreHeads) $NewHead)  
     (assert-literals $Proof)
     (ident-process-proofs $MoreHeads $NewHead))
 ; ; write('new kb'),nl,subsume_mngr:show_heads,subsume_mngr:show_bodies,nl,
@@ -415,28 +415,28 @@
 ; ***********************************************************************
 
 
-  (= (g1-process-proofs (Cons  (with_self  Nil $_) $R) $Lit)  
+  (= (g1-process-proofs (Cons  (with-self  Nil $_) $R) $Lit)  
     (g1-process-proofs $R $Lit))
 
-  (= (g1-process-proofs (Cons  (with_self  (/ $Head new-head) $_) $MoreHeads) $Lit)  
+  (= (g1-process-proofs (Cons  (with-self  (/ $Head new-head) $_) $MoreHeads) $Lit)  
     (head $Head $_ $_)
     (set-det)
     (g1-process-proofs $MoreHeads $Lit))
 
 
-  (= (g1-process-proofs (Cons  (with_self  (/ $Body new-body) $_) $MoreHeads) $Lit)  
+  (= (g1-process-proofs (Cons  (with-self  (/ $Body new-body) $_) $MoreHeads) $Lit)  
     (body $Body $_ $_)
     (set-det)
     (g1-process-proofs $MoreHeads $Lit))
 
-  (= (g1-process-proofs (Cons  (with_self  (/ $_ $_) $Proof) $MoreHeads) $Lit)  
+  (= (g1-process-proofs (Cons  (with-self  (/ $_ $_) $Proof) $MoreHeads) $Lit)  
     (contains-duplicates $Proof)
     (set-det)
     (g1-process-proofs $MoreHeads $Lit))
 ; ;;eigentlich ein Filter: jedem Literal
 ; ;;im Parent entspricht eines in der Resolvente
 
-  (= (g1-process-proofs (Cons  (with_self  (/ $Lit $S0) $Proof) $MoreHeads) (with_self  $Lit $S))  
+  (= (g1-process-proofs (Cons  (with-self  (/ $Lit $S0) $Proof) $MoreHeads) (with-self  $Lit $S))  
     (det-if-then-else 
       (= $S0 new-head) 
       (= $S p) 
@@ -445,7 +445,7 @@
 
 ;
 ; for backtracking
-  (= (g1-process-proofs (Cons  (with_self  (/ $_ $_) $Proof) $MoreHeads) $Lit)  
+  (= (g1-process-proofs (Cons  (with-self  (/ $_ $_) $Proof) $MoreHeads) $Lit)  
     (assert-literals $Proof)
     (g1-process-proofs $MoreHeads $Lit))
 ; ; write('new kb'),nl,subsume_mngr:show_heads,subsume_mngr:show_bodies,nl,
@@ -490,22 +490,22 @@
 
 
 
-  (= (assert_absorptions  () $F)  True)
-  (= (assert-absorptions (Cons  (Cons  (with_self  $Head (p)) $_) $MoreHeads) $F)  
+  (= (assert-absorptions  () $F)  True)
+  (= (assert-absorptions (Cons  (Cons  (with-self  $Head p) $_) $MoreHeads) $F)  
     (body $Head $OldNew $Count)
     (set-det)
     (assert-absorptions $MoreHeads $F))
 
-  (= (assert-absorptions (Cons  (Cons  (with_self  $Head (p)) $Proof) $MoreHeads) 1)  
-    ( (add-is-symbol  &self 
+  (= (assert-absorptions (Cons  (Cons  (with-self  $Head p) $Proof) $MoreHeads) 1)  
+    ( (add-atom  &self 
         (body  $Head new 0)) 
       (annotate-redundancy $Proof) 
       (assert-absorptions $MoreHeads 1)))
 
 ;
 ; For Backtracking
-  (= (assert-absorptions (Cons  (Cons  (with_self  $Head (p)) $Proof) $MoreHeads) $_)  
-    (remove-is-symbol  &self 
+  (= (assert-absorptions (Cons  (Cons  (with-self  $Head p) $Proof) $MoreHeads) $_)  
+    (remove-atom  &self 
       (body  $Head new 0)))
 
 
@@ -545,13 +545,13 @@
 ; ***********************************************************************
 
 
-  (= (annotate_redundancy  ())  True)
-  (= (annotate-redundancy (Cons  (with_self  $L $_) $More))  
-    ( (remove-is-symbol  &self 
+  (= (annotate-redundancy  ())  True)
+  (= (annotate-redundancy (Cons  (with-self  $L $_) $More))  
+    ( (remove-atom  &self 
         (body  $L $OldNew $I)) 
       (is $J 
         (+ $I 1)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $L $OldNew $J)) 
       (annotate-redundancy $More)))
 
@@ -595,28 +595,28 @@
   (= (assert-body-randomly Nil)  
     (set-det))
 
-  (= (assert-body-randomly (Cons  (with_self  $H (p)) $More))  
+  (= (assert-body-randomly (Cons  (with-self  $H p) $More))  
     (head $H $_ $_)
     (set-det)
     (assert-body-randomly $More))
 
-  (= (assert-body-randomly (Cons  (with_self  $H (p)) $More))  
-    ( (add-is-symbol  &self 
+  (= (assert-body-randomly (Cons  (with-self  $H p) $More))  
+    ( (add-atom  &self 
         (head  $H $_ $_)) (assert-body-randomly $More)))
 
-  (= (assert-body-randomly (Cons  (with_self  $L $_) $More))  
+  (= (assert-body-randomly (Cons  (with-self  $L $_) $More))  
     (body $L $_ $_)
     (set-det)
     (assert-body-randomly $More))
 
-  (= (assert-body-randomly (Cons  (with_self  $L $_) $More))  
-    ( (maybe) 
-      (add-is-symbol  &self 
+  (= (assert-body-randomly (Cons  (with-self  $L $_) $More))  
+    (maybe 
+      (add-atom  &self 
         (body  $L old 0)) 
       (assert-body-randomly $More)))
 
-  (= (assert-body-randomly (Cons  (with_self  $L $_) $More))  
-    ( (add-is-symbol  &self 
+  (= (assert-body-randomly (Cons  (with-self  $L $_) $More))  
+    ( (add-atom  &self 
         (body  $L old 0)) (assert-body-randomly $More)))
 
 ;
@@ -656,27 +656,27 @@
 
 
   (= (addtolist (Cons  $L $IST))  
-    ( (remove-is-symbol  &self 
-        (id_list  $List1)) 
+    ( (remove-atom  &self 
+        (id-list  $List1)) 
       (append $List1 
         (Cons  $L $IST) $List2) 
-      (add-is-symbol  &self 
-        (id_list  $List2)) 
+      (add-atom  &self 
+        (id-list  $List2)) 
       (set-det)))
   (= (addtolist $Id)  
-    ( (remove-is-symbol  &self 
-        (id_list  $List1)) 
-      (add-is-symbol  &self 
-        (id_list  
-          (Cons  $Id $List1))) 
+    ( (remove-atom  &self 
+        (id-list  $List1)) 
+      (add-atom  &self 
+        (id-list  
+          ([|]  $Id $List1))) 
       (set-det)))
   (= (addtolist (Cons  $L $IST))  
-    ( (add-is-symbol  &self 
-        (id_list  
-          (Cons  $L $IST))) (set-det)))
+    ( (add-atom  &self 
+        (id-list  
+          ([|]  $L $IST))) (set-det)))
   (= (addtolist $Id)  
-    ( (add-is-symbol  &self 
-        (id_list  
+    ( (add-atom  &self 
+        (id-list  
           ($Id))) (set-det)))
 
 
@@ -719,8 +719,8 @@
 
 
   (= (getlist $List)  
-    (remove-is-symbol  &self 
-      (id_list  $List)))
+    (remove-atom  &self 
+      (id-list  $List)))
 
 
 ;
@@ -761,9 +761,9 @@
 ; ***********************************************************************
 
 
-  (= (cover_assert_assumptions  ())  True)
-  (= (cover-assert-assumptions (Cons  (with_self  $L $_) $More))  
-    ( (add-is-symbol  &self 
+  (= (cover-assert-assumptions  ())  True)
+  (= (cover-assert-assumptions (Cons  (with-self  $L $_) $More))  
+    ( (add-atom  &self 
         (assumption  $L $_ $_)) (cover-assert-assumptions $More)))
 
 
@@ -804,7 +804,7 @@
 ; ***********************************************************************
 
 
-  (= (clear-mngr)  
+  (= clear-mngr  
     ( (remove-all-atoms  &self 
         (head  $_ $_ $_)) (remove-all-atoms  &self (body  $_ $_ $_))))
 
@@ -845,10 +845,10 @@
 ; ***********************************************************************
 
  
-  (= (retract-body-literals (Cons  (with_self  $L $_) $More))  
-    ( (remove-is-symbol  &self 
+  (= (retract-body-literals (Cons  (with-self  $L $_) $More))  
+    ( (remove-atom  &self 
         (body  $L $_ $_)) (retract-body-literals $More)))
-  (= (retract_body_literals  ())  True)
+  (= (retract-body-literals  ())  True)
 
 
 ;
@@ -889,14 +889,14 @@
 ; ***********************************************************************
 
 
-  (= (retract_literals  ())  True)
+  (= (retract-literals  ())  True)
   (= (retract-literals (Cons  (:: $L head) $Rest))  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (head  $L $_ $_)) 
       (set-det) 
       (retract-literals $Rest)))
   (= (retract-literals (Cons  (:: $L body) $Rest))  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (body  $L $_ $_)) 
       (set-det) 
       (retract-literals $Rest)))
@@ -942,14 +942,14 @@
 ; ***********************************************************************
 
 
-  (= (assert_literals  ())  True)
+  (= (assert-literals  ())  True)
   (= (assert-literals (Cons  (:: $L head) $Rest))  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (head  $L $_ $_)) 
       (set-det) 
       (assert-literals $Rest)))
   (= (assert-literals (Cons  (:: $L body) $Rest))  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (body  $L $_ $_)) 
       (set-det) 
       (assert-literals $Rest)))
@@ -1000,28 +1000,27 @@
   (= (assert-clause $C)  
     (assert-clause1 $C))
   (= (assert-clause $_)  
-    (clear-mngr)
-    (set-det)
-    (fail)) ;
+    (clear-mngr 
+      (set-det) fail)) ;
 ; on backtracking
 
  
-  (= (assert_clause1  ())  True)
+  (= (assert-clause1  ())  True)
   (= (assert-clause1 (Cons  $H $T))  
     (assert-clause1 $H)
     (assert-clause1 $T))
-  (= (assert-clause1 (with_self  $H (p)))  
+  (= (assert-clause1 (with-self  $H p))  
     (head $H $_ $_))
-  (= (assert-clause1 (with_self  $H (p)))  
-    (add-is-symbol  &self 
+  (= (assert-clause1 (with-self  $H p))  
+    (add-atom  &self 
       (head  $H old 0)))
-  (= (assert-clause1 (with_self  $H $S))  
+  (= (assert-clause1 (with-self  $H $S))  
     (member $S 
       (:: n r))
     (body $H $_ $_))
-  (= (assert-clause1 (with_self  $H $S))  
+  (= (assert-clause1 (with-self  $H $S))  
     ( (member $S 
-        (:: n r)) (add-is-symbol  &self (body  $H old 0))))
+        (:: n r)) (add-atom  &self (body  $H old 0))))
 
 
 ;
@@ -1062,13 +1061,13 @@
 ; ***********************************************************************
 
  
-  (= (assert_body  ())  True)
+  (= (assert-body  ())  True)
   (= (assert-body (Cons  $H $T))  
     (assert-body $H)
     (assert-body $T))
-  (= (assert-body (with_self  $H $S))  
+  (= (assert-body (with-self  $H $S))  
     ( (member $S 
-        (:: n r)) (add-is-symbol  &self (body  $H old 0))))
+        (:: n r)) (add-atom  &self (body  $H old 0))))
 
 
 ;
@@ -1111,17 +1110,17 @@
 ; ***********************************************************************
 
  
-  (= (assert_body_unique  ())  True)
+  (= (assert-body-unique  ())  True)
   (= (assert-body-unique (Cons  $H $T))  
     (assert-body-unique $H)
     (assert-body-unique $T))
-  (= (assert-body-unique (with_self  $H $S))  
+  (= (assert-body-unique (with-self  $H $S))  
     (member $S 
       (:: n r))
     (body $H $_ $_))
-  (= (assert-body-unique (with_self  $H $S))  
+  (= (assert-body-unique (with-self  $H $S))  
     ( (member $S 
-        (:: n r)) (add-is-symbol  &self (body  $H old 0))))
+        (:: n r)) (add-atom  &self (body  $H old 0))))
 
 
 
@@ -1163,18 +1162,16 @@
 ; ***********************************************************************
 
  
-  (= (reset-counts)  
-    ( (remove-is-symbol  &self 
+  (= reset-counts  
+    ( (remove-atom  &self 
         (body  $L $O $_)) 
-      (add-is-symbol  &self 
-        (body  $L $O 0)) 
-      (fail)))
-  (= (reset-counts)  
-    ( (remove-is-symbol  &self 
+      (add-atom  &self 
+        (body  $L $O 0)) fail))
+  (= reset-counts  
+    ( (remove-atom  &self 
         (head  $L $O $_)) 
-      (add-is-symbol  &self 
-        (head  $L $O 0)) 
-      (fail)))
+      (add-atom  &self 
+        (head  $L $O 0)) fail))
   (= reset_counts  True)
 
 ;
@@ -1215,13 +1212,13 @@
 ; ***********************************************************************
 
 
-  (= (subs-build-clause (Cons  (with_self  $H (p)) $Body))  
-    ( (remove-is-symbol  &self 
+  (= (subs-build-clause (Cons  (with-self  $H p) $Body))  
+    ( (remove-atom  &self 
         (head  $H $_ $_)) 
       (subs-build-clause $Body) 
       (set-det)))
-  (= (subs-build-clause (Cons  (with_self  $L (n)) $Body))  
-    ( (remove-is-symbol  &self 
+  (= (subs-build-clause (Cons  (with-self  $L n) $Body))  
+    ( (remove-atom  &self 
         (body  $L $_ $_)) (subs-build-clause $Body)))
   (= (subs-build-clause Nil)  
     (set-det))
@@ -1269,16 +1266,16 @@
 ; ***********************************************************************
 
 
-  (= (sat-build-clause $H $B (Cons  (with_self  $H (p)) $B1))  
+  (= (sat-build-clause $H $B (Cons  (with-self  $H p) $B1))  
     (sat-build-body $B $B1))
 
-  (= (sat_build_body  () ())  True)
-  (= (sat-build-body (Cons  $L $B) (Cons  (with_self  $L (n)) $B1))  
+  (= (sat-build-body  () ())  True)
+  (= (sat-build-body (Cons  $L $B) (Cons  (with-self  $L n) $B1))  
     (body $L $_ 0)
     (set-det)
     (sat-build-body $B $B1))
 ; ; nonredundant literal
-  (= (sat-build-body (Cons  $L $B) (Cons  (with_self  $L (r)) $B1))  
+  (= (sat-build-body (Cons  $L $B) (Cons  (with-self  $L r) $B1))  
     (sat-build-body $B $B1))
 ; ; (probably) superfluos literal
 
@@ -1368,11 +1365,11 @@
 ; ***********************************************************************
 
 
-  (= (msg-build-heads (Cons  (with_self  $H (p)) $More))  
-    ( (remove-is-symbol  &self 
+  (= (msg-build-heads (Cons  (with-self  $H p) $More))  
+    ( (remove-atom  &self 
         (head  $H $F $I)) 
       (msg-build-heads $More) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $H $F $I))))
   (= (msg-build-heads Nil)  
     (set-det))
@@ -1418,8 +1415,8 @@
 ; ***********************************************************************
 
 
-  (= (msg-build-body (Cons  (with_self  $H $Sign) $More))  
-    ( (remove-is-symbol  &self 
+  (= (msg-build-body (Cons  (with-self  $H $Sign) $More))  
+    ( (remove-atom  &self 
         (body  $H $F $I)) 
       (det-if-then-else 
         (= $I 0) 
@@ -1427,7 +1424,7 @@
         (= $Sign r)) 
       (msg-build-body $More) 
       (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $H $F $I))))
 
   (= (msg-build-body Nil)  
@@ -1470,12 +1467,12 @@
 ; ***********************************************************************
 
 
-  (= (idev-build-clause1 (Cons  (with_self  $H (p)) $More))  
-    ( (remove-is-symbol  &self 
+  (= (idev-build-clause1 (Cons  (with-self  $H p) $More))  
+    ( (remove-atom  &self 
         (head  $H $F 0)) 
       (set-det) 
       (idev-build-body $More) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $H $F 0))))
 ; ; the head is unique !
 
@@ -1515,8 +1512,8 @@
 ; ***********************************************************************
 
 
-  (= (idev-build-body (Cons  (with_self  $H $Sign) $More))  
-    ( (remove-is-symbol  &self 
+  (= (idev-build-body (Cons  (with-self  $H $Sign) $More))  
+    ( (remove-atom  &self 
         (body  $H $F $I)) 
       (det-if-then-else 
         (= $I 0) 
@@ -1524,7 +1521,7 @@
         (= $Sign r)) 
       (idev-build-body $More) 
       (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $H $F $I))))
 
   (= (idev-build-body Nil)  
@@ -1570,7 +1567,7 @@
 ; ***********************************************************************
 
 
-  (= (idev-build-clause $PrefHead (Cons  (with_self  $H (p)) $More))  
+  (= (idev-build-clause $PrefHead (Cons  (with-self  $H p) $More))  
     (idev-build-head $PrefHead $H)
     (idev-build-body $More)
     (set-det))
@@ -1616,10 +1613,10 @@
 
 
   (= (idev-build-head $PrefHead $PrefHead)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (head  $PrefHead $F $N)) 
       (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $PrefHead $F $N))))
 
   (= (idev-build-head $_ $Head)  
@@ -1670,12 +1667,12 @@
 ; ***********************************************************************
 
 
-  (= (ident-build-body (Cons  (with_self  $L (n)) $Rest))  
-    ( (remove-is-symbol  &self 
+  (= (ident-build-body (Cons  (with-self  $L n) $Rest))  
+    ( (remove-atom  &self 
         (body  $L $_ 0)) 
       (set-det) 
       (ident-build-body $Rest) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $L old 0))))    ;
 ; for backtracking
   (= (ident-build-body Nil)  
@@ -1721,15 +1718,15 @@
 ; ***********************************************************************
 
 
-  (= (g1-build-clause (with_self  $L (p)) (Cons  (with_self  $L (p)) $Body))  
+  (= (g1-build-clause (with-self  $L p) (Cons  (with-self  $L p) $Body))  
     (ident-build-body $Body)
     (set-det))
-  (= (g1-build-clause (with_self  $L (n)) (Cons  (with_self  $H (p)) (Cons  (with_self  $L (n)) $Body)))  
+  (= (g1-build-clause (with-self  $L n) (Cons  (with-self  $H p) (Cons  (with-self  $L n) $Body)))  
     ( (ident-build-body $Body) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (head  $H $_ 0)) 
       (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (head  $L old 0))))   
 
 
@@ -1770,12 +1767,12 @@
 
 
 
-  (= (abs-build-body (Cons  (with_self  $L (n)) $Rest))  
-    ( (remove-is-symbol  &self 
+  (= (abs-build-body (Cons  (with-self  $L n) $Rest))  
+    ( (remove-atom  &self 
         (body  $L $F $I)) 
       (set-det) 
       (abs-build-body $Rest) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (body  $L $F $I))))
   (= (abs-build-body Nil)  
     (set-det))

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  commands $_424050 index/commands.pl index/commands.metta)
+;                                           (convert-to-metta-file  commands $_126778 index/commands.pl index/commands.metta)
 
   (= (keyword1  save '   	save in Prolog database')  True)
 ; /* commands */
@@ -54,10 +54,9 @@
     (set-det)
     (commands $OutICs $PosOut $NegOut))
   (= (commands $InICs $PosIn $NegIn)  
-    (write no)
-    (nl)
-    (set-det)
-    (commands $InICs $PosIn $NegIn))
+    ( (write no) nl 
+      (set-det) 
+      (commands $InICs $PosIn $NegIn)))
 
 
   (= (do-command (save $X) $ICs $Pos $Neg $ICs $Pos $Neg)  
@@ -149,13 +148,12 @@
 
 
   (= (count-command $Filter $ICs $Pos $Neg)  
-    (get-list $Filter $ICs $Pos $Neg $List $Text)
-    (length $List $N)
-    (write-list (:: 'There are ' $N ' ' $Text .))
-    (nl))
+    ( (get-list $Filter $ICs $Pos $Neg $List $Text) 
+      (length $List $N) 
+      (write-list (:: 'There are ' $N ' ' $Text .)) nl))
 
 
-  (= (del_command  all $ICs $Pos $Neg () () ())  True)
+  (= (del-command  all $ICs $Pos $Neg () () ())  True)
   (= (del-command (ics $F) $InICs $Pos $Neg $OutICs $Pos $Neg)  
     (filter $InICs $F $Deleted $OutICs))
   (= (del-command (pos $Rel) $ICs $PosIn $Neg $ICs $PosOut $Neg)  
@@ -163,7 +161,7 @@
   (= (del-command (neg $Rel) $ICs $Pos $NegIn $ICs $Pos $NegOut)  
     (filter $NegIn $Rel $Deleted $NegOut))
   (= (del-command (rel $R) $ICs $PosIn $NegIn $ICs $PosOut $NegOut)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (rel  $R $AList)) 
       (filter $PosIn $Rel $_ $PosOut) 
       (filter $NegIn $Rel $_ $NegOut)))
@@ -174,8 +172,8 @@
 
   (= (add-command (ics $DisplayIC) $ICs $Pos $Neg (Cons  $IC $ICs) $Pos $Neg)  
     (display $IC $DisplayIC))
-  (= (add_command  (pos  $Tuple) $ICs $Pos $Neg $ICs (Cons  $Tuple $Pos) $Neg)  True)
-  (= (add_command  (neg  $Tuple) $ICs $Pos $Neg $ICs $Pos (Cons  $Tuple $Neg))  True)
+  (= (add-command  (pos  $Tuple) $ICs $Pos $Neg $ICs ([|]  $Tuple $Pos) $Neg)  True)
+  (= (add-command  (neg  $Tuple) $ICs $Pos $Neg $ICs $Pos ([|]  $Tuple $Neg))  True)
   (= (add-command (rel $R $AList) $ICs $Pos $Neg $ICs $Pos $Neg)  
     (new-rel $R $AList))
   (= (add-command (calc $Rel) $InICs $PosIn $Neg (Cons  (proc $Rel) $OutICs) $PosOut $Neg)  
@@ -214,25 +212,25 @@
   (= (help-command commands)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (keyword1 $W $T) $L)
     (show-list Commands $L))
   (= (help-command filters)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (keyword2 $W $T) $L)
     (show-list Filters $L))
   (= (help-command switches)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (switch $W $T) $L)
     (show-list Switches $L))
   (= (help-command levels)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (level $W $T) $L)
     (show-list Levels $L))
   (= (help-command $_)  
@@ -265,23 +263,21 @@
     (rel $R $Attrs)
     (set-det))
   (= (new-rel $R $Attrs)  
-    (rel $R $A)
-    (set-det)
-    (write 'Error: relation name already in use')
-    (nl)
-    (fail))
+    ( (rel $R $A) 
+      (set-det) 
+      (write 'Error: relation name already in use') nl fail))
   (= (new-rel $R $Attrs)  
-    (add-is-symbol  &self 
+    (add-atom  &self 
       (rel  $R $Attrs)))
 
 
   (= (ask-proc $Rel)  
     ( (prompt-read clause $Clause) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (proc  $Rel $Clause)) 
       (set-det) 
       (ask-proc $Rel)))
-  (= (ask_proc  $Rel)  True)
+  (= (ask-proc  $Rel)  True)
 
 
   (= (get-pos $Rel $Pos)  
@@ -333,38 +329,33 @@
       (det-if-then-else 
         (= $Answer keep) 
         (, 
-          (write ' is satisfied') 
-          (nl)) 
+          (write ' is satisfied') nl) 
         (det-if-then-else 
           (= $Answer 
             (keep $E)) 
           (, 
-            (write-list (:: ' looks promising: ' $E)) 
-            (nl)) 
+            (write-list (:: ' looks promising: ' $E)) nl) 
           (det-if-then 
             (= $Answer 
               (ignore $E)) 
             (, 
-              (write-list (:: ' has low confirmation: ' $E)) 
-              (nl)))))))
+              (write-list (:: ' has low confirmation: ' $E)) nl))))))
 
 
   (= (switch $X)  
     ( (switch $X $T) 
-      (remove-is-symbol  &self 
-        (switched_on  $X)) 
+      (remove-atom  &self 
+        (switched-on  $X)) 
       (set-det) 
-      (write-list (:: $X ' is now off.')) 
-      (nl)))
+      (write-list (:: $X ' is now off.')) nl))
   (= (switch $X)  
     ( (switch $X $T) 
       (set-det) 
-      (add-is-symbol  &self 
-        (switched_on  $X)) 
-      (write-list (:: $X ' is now on.')) 
-      (nl)))
+      (add-atom  &self 
+        (switched-on  $X)) 
+      (write-list (:: $X ' is now on.')) nl))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/commands.pl 251 28 7757))
 
 
@@ -380,17 +371,16 @@
       (, 
         (or 
           (, 
-            (remove-is-symbol  &self 
-              (level_set  $Level $V)) 
+            (remove-atom  &self 
+              (level-set  $Level $V)) 
             (set-det)) True) 
-        (add-is-symbol  &self 
-          (level_set  $Level $Value))) 
+        (add-atom  &self 
+          (level-set  $Level $Value))) 
       (det-if-then 
         (= $Rest Nil) 
         (, 
           (get-level $Level $L) 
-          (write (= $Level $L)) 
-          (nl)))))
+          (write (= $Level $L)) nl))))
   (= (set $_)  
     (setof0 
       (= $L $V) 
@@ -434,7 +424,5 @@
             (>= $Value $Lower)) 
           (det-if-then otherwise 
             (, 
-              (write-list (:: 'Wrong level: ' (= $Level $L))) 
-              (nl) 
-              (break)))))))
+              (write-list (:: 'Wrong level: ' (= $Level $L))) nl break))))))
 

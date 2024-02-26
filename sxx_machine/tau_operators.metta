@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tau_operators $_34720 sxx_machine/tau_operators.pl sxx_machine/tau_operators.metta)
+;                                           (convert-to-metta-file  tau_operators $_446228 sxx_machine/tau_operators.pl sxx_machine/tau_operators.metta)
 
   !(op 1170 xfx :-)
   !(op 1170 xfx -->)

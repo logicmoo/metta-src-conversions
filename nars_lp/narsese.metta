@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  narsese $_283334 nars_lp/narsese.pl nars_lp/narsese.metta)
+;                                           (convert-to-metta-file  narsese $_363212 nars_lp/narsese.pl nars_lp/narsese.metta)
 ;
 ; Non-Axiomatic Logic in MeTTa
 ;

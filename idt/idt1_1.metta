@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  idt1_1 $_245168 idt/idt1_1.pl idt/idt1_1.metta)
+;                                           (convert-to-metta-file  idt1_1 $_451770 idt/idt1_1.pl idt/idt1_1.metta)
 
   (= (classes  (x y))  True)
 

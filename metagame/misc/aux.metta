@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  aux $_458836 metagame/misc/aux.pl metagame/misc/aux.metta)
+;                                           (convert-to-metta-file  aux $_187446 metagame/misc/aux.pl metagame/misc/aux.metta)
 ;
 ; ============================================================
 ;
@@ -138,14 +138,12 @@
 ; Print mulitple line feeds (arg1 of them).
 
 
-  (= (mnl 1)  
-    (nl))
+  (= (mnl 1)  nl)
   (= (mnl $N)  
-    (> $N 1)
-    (nl)
-    (is $N1 
-      (- $N 1))
-    (mnl $N1))
+    ( (> $N 1) nl 
+      (is $N1 
+        (- $N 1)) 
+      (mnl $N1)))
 
 
 ;
@@ -165,15 +163,13 @@
     (ppl $L $Ind)
     (set-det))
   (= (ppl (Cons  $H $L) $Ind)  
-    (space $Ind)
-    (print $H)
-    (nl)
-    (ppl $L $Ind)
-    (set-det))
+    ( (space $Ind) 
+      (print $H) nl 
+      (ppl $L $Ind) 
+      (set-det)))
   (= (ppl $A $Ind)  
-    (space $Ind)
-    (print $A)
-    (nl))
+    ( (space $Ind) 
+      (print $A) nl))
 
 
 ;
@@ -193,15 +189,13 @@
     (pwl $L $Ind)
     (set-det))
   (= (pwl (Cons  $H $L) $Ind)  
-    (space $Ind)
-    (write $H)
-    (nl)
-    (pwl $L $Ind)
-    (set-det))
+    ( (space $Ind) 
+      (write $H) nl 
+      (pwl $L $Ind) 
+      (set-det)))
   (= (pwl $A $Ind)  
-    (space $Ind)
-    (write $A)
-    (nl))
+    ( (space $Ind) 
+      (write $A) nl))
 
 
 
@@ -211,24 +205,22 @@
 ; Using the predicate name 'space' causes the compiler to crash --Barney
 
 
-  (= (space)  
+  (= space  
     (write ' '))
   (= (space  0)  True)
-  (= (space 1)  
-    (space))
+  (= (space 1)  space)
   (= (space $N)  
-    (> $N 1)
-    (space)
-    (is $N1 
-      (- $N 1))
-    (space $N1))
+    ( (> $N 1) space 
+      (is $N1 
+        (- $N 1)) 
+      (space $N1)))
 
 ;
 ; Cons an element into a list.
 
 
   (= (cons  $E () ($E))  True)
-  (= (cons  $E (Cons  $H $T) (Cons  $E (Cons  $H $T)))  True)
+  (= (cons  $E ([|]  $H $T) ([|]  $E ([|]  $H $T)))  True)
 
 ;
 ; "Snoc" an element into the end of a list.
@@ -244,8 +236,8 @@
 ; Cons an element into a list, unless the element is itself a null list.
 
 
-  (= (f_cons  () $L $L)  True)
-  (= (f_cons  $E (Cons  $H $T) (Cons  $E (Cons  $H $T)))  True)
+  (= (f-cons  () $L $L)  True)
+  (= (f-cons  $E ([|]  $H $T) ([|]  $E ([|]  $H $T)))  True)
 
  
 
@@ -254,7 +246,7 @@
 ; Append the reverse of arg1 to arg2 to give arg3.
 
 
-  (= (rev_append  () $L $L)  True)
+  (= (rev-append  () $L $L)  True)
   (= (rev-append (Cons  $H $T) $L $R)  
     (rev-append $T 
       (Cons  $H $L) $R))
@@ -266,7 +258,7 @@
 ; Fails if arg1 is not a member of arg2.
 
 
-  (= (extract  $Elt (Cons  $Elt $Tail) $Tail)  True)
+  (= (extract  $Elt ([|]  $Elt $Tail) $Tail)  True)
   (= (extract $Elt (Cons  $Head $Tail) (Cons  $Head $List))  
     (extract $Elt $Tail $List))
 
@@ -288,7 +280,7 @@
 ; Culled entities go into arg3; everything else goes into arg4.
 
 
-  (= (cull_funct  $Funct () () ())  True)
+  (= (cull-funct  $Funct () () ())  True)
   (= (cull-funct $Funct (Cons  $H0 $T0) (Cons  $H0 $T1) $R)  
     (functor $H0 $Funct $_)
     (cull-funct $Funct $T0 $T1 $R))
@@ -303,7 +295,7 @@
 ; split_list(c,[a,b,c,d,e],[a,b],[d,e]).
 
 
-  (= (split_list  $Elt (Cons  $Elt $Tail) () $Tail)  True)
+  (= (split-list  $Elt ([|]  $Elt $Tail) () $Tail)  True)
   (= (split-list $Elt (Cons  $Head $Tail0) (Cons  $Head $Tail1) $Tail)  
     (split-list $Elt $Tail0 $Tail1 $Tail))
 
@@ -323,7 +315,7 @@
 ; get_nth is like nth, but can be used with arg2 uninstantiated
 
 
-  (= (get_nth  1 (Cons  $Head $_) $Head)  True)
+  (= (get-nth  1 ([|]  $Head $_) $Head)  True)
   (= (get-nth $P (Cons  $_ $Tail) $Elt)  
     (get-nth $P1 $Tail $Elt)
     (is $P 
@@ -407,7 +399,7 @@
 
 
   (= (-->  (flatten  ()) !)  True)
-  (= (-->  (flatten  (Cons  $Head $Tail)) (,  ! (,  (flatten  $Head) (flatten  $Tail))))  True)
+  (= (-->  (flatten  ([|]  $Head $Tail)) (,  ! (,  (flatten  $Head) (flatten  $Tail))))  True)
   (= (-->  (flatten  $Other) ($Other))  True)
 ; ; { Other ~= [], Other ~= [_|_] },
 
@@ -423,7 +415,7 @@
       (lastsuffix $Prefix $M) 
       (is $N 
         (+ $M 1)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (flag  
           (gensym  $Prefix) $N)) 
       (concat $Prefix $N $V) 
@@ -442,7 +434,7 @@
 
 
   (= (lastsuffix $Prefix $M)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (flag  
           (gensym  $Prefix) $M)) (set-det)))
   (= (lastsuffix  $Prefix 0)  True)
@@ -452,7 +444,7 @@
 ; Set all gensym suffixes back to 1.
 
 
-  (= (reset-gensym)  
+  (= reset-gensym  
     (remove-all-atoms  &self 
       (flag  
         (gensym  $Prefix) $M)))
@@ -526,8 +518,7 @@
         (atom $N1) 
         (concat $N1 $N2 $N3) 
         (, 
-          (format "Error, uninstantiated args in bi_concat~n" Nil) 
-          (fail)))))
+          (format "Error, uninstantiated args in bi_concat~n" Nil) fail))))
 
 
   (= (bi-concat-list (:: $A) $A)  
@@ -552,9 +543,8 @@
   (= (ynp no n $Goal)  
     (set-det))
   (= (ynp $Resp $RespVal $Goal)  
-    (write 'Please respond with y or n.')
-    (nl)
-    (call $Goal))
+    ( (write 'Please respond with y or n.') nl 
+      (call $Goal)))
 
 
 ;
@@ -616,8 +606,7 @@
     (or 
       (, 
         (call $Generator) 
-        (call $Goal) 
-        (fail)) True))
+        (call $Goal) fail) True))
 
 
 
@@ -632,7 +621,7 @@
 ; /* In sicstus lists library, but not in Quintus, so now put in quintus-version. ; remove_duplicates(+List, ?Pruned) ; is true when Pruned is like List but with all *identical* duplicate ; elements removed. remove_duplicates([], []). remove_duplicates([Head|Tail1], [Head|Tail2]) :- delete(Tail1, Head, Residue), remove_duplicates(Residue, Tail2). */
 ; ;;; remove_test_duplicates(List,Test,Clean) ;;; Test is of the form: ;;; test(CALL,Pat1,Pat2), ;;; where CALL uses Pat1 & 2.. ;;; ;;; EX: ;;; remove_test_duplicates([f(a,b),f(b,c),f(a,d),f(g,a),f(b,a)], ;;; test((Pat1 = f(A,_),Pat2 = f(A,_)),Pat1,Pat2),Clean). ;;; Pat1 = f(a,d), ;;; A = a, ;;; Pat2 = f(a,b), ;;; Clean = [f(a,b),f(b,c),f(g,a),f(b,a)]
 
-  (= (remove_test_duplicates  () $_ $_ ())  True)
+  (= (remove-test-duplicates  () $_ $_ ())  True)
   (= (remove-test-duplicates (Cons  $H $T) $Test_Call $Seen $Clean)  
     (= $Test_Call 
       (test $Test $Pattern1 $Pattern2))
@@ -711,8 +700,7 @@
 
 
   (= (writeln $Arg)  
-    (write $Arg)
-    (nl))
+    ( (write $Arg) nl))
 
 
 ;
@@ -725,7 +713,7 @@
     (append $A1 $B1 $R))
   (= (reduce-list Nil Nil)  
     (set-det))
-  (= (reduce_list  $X ($X))  True)
+  (= (reduce-list  $X ($X))  True)
 
 
 ;
@@ -800,12 +788,12 @@
 ;
 ; pair_list([1,2,3],[a,b,c],[1-a,2-b,3-c])
 
-  (= (pair_list  () () ())  True)
+  (= (pair-list  () () ())  True)
   (= (pair-list (Cons  $A $As) (Cons  $B $Bs) (Cons  (- $A $B) $Rest))  
     (pair-list $As $Bs $Rest))
 
 
-  (= (rev_pair_list  () ())  True)
+  (= (rev-pair-list  () ())  True)
   (= (rev-pair-list (Cons  (- $A $AV) $RestA) (Cons  (- $AV $A) $RestB))  
     (rev-pair-list $RestA $RestB))
 
@@ -987,7 +975,7 @@
   (= (ensure-list $List1 $List1)  
     (is-list $List1)
     (set-det))
-  (= (ensure_list  $_ ())  True)
+  (= (ensure-list  $_ ())  True)
 
 
   (= (delete-all-assoc $P $L $L2)  
@@ -997,7 +985,7 @@
     (delete $L 
       (- $P $V1) $L1)
     (delete-all-assoc $P $L1 $L2))
-  (= (delete_all_assoc  $_ $L $L)  True)
+  (= (delete-all-assoc  $_ $L $L)  True)
 
 ;
 ; ============================================================================

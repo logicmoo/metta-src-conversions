@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  rul_ex $_255318 miles/gencon_instances/rul_ex.pl miles/gencon_instances/rul_ex.metta)
+;                                           (convert-to-metta-file  rul_ex $_377848 miles/gencon_instances/rul_ex.pl miles/gencon_instances/rul_ex.metta)
 ;
 ; ;; use init_kb('gilppi_instances/rul_ex.pl',type) for loading
 ;

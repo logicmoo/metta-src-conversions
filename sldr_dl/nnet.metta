@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  nnet $_20494 sldr_dl/nnet.pl sldr_dl/nnet.metta)
+;                                           (convert-to-metta-file  nnet $_110874 sldr_dl/nnet.pl sldr_dl/nnet.metta)
 
   !(:: (matrix *))
 
@@ -59,23 +59,22 @@
 
   (= (layer-init $Name $InDim $OutDim $Act (:: $S1 $S2))  
     ( (remove-all-atoms  &self 
-        (weight_matrix  $Name $_)) 
+        (weight-matrix  $Name $_)) 
       (remove-all-atoms  &self 
-        (bias_vector  $Name $_)) 
+        (bias-vector  $Name $_)) 
       (remove-all-atoms  &self 
         (activation  $Name $_)) 
       (rand-matrix $OutDim $InDim 
         (:: $S1 $S2) $W) 
-      (add-is-symbol  &self 
-        (weight_matrix  $Name $W)) 
+      (add-atom  &self 
+        (weight-matrix  $Name $W)) 
       (rand-vector $OutDim 
         (:: $S1 $S2) $B) 
-      (add-is-symbol  &self 
-        (bias_vector  $Name $B)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
+        (bias-vector  $Name $B)) 
+      (add-atom  &self 
         (activation  $Name $Act)) 
-      (print (:: layer $Name has been initialised)) 
-      (nl) 
+      (print (:: layer $Name has been initialised)) nl 
       (set-det)))
 
   
@@ -194,9 +193,9 @@
       (bias-vector $Name $B) 
       (activation $Name $Act) 
       (remove-all-atoms  &self 
-        (layer_input  $Name $_)) 
-      (add-is-symbol  &self 
-        (layer_input  $Name $In)) 
+        (layer-input  $Name $_)) 
+      (add-atom  &self 
+        (layer-input  $Name $In)) 
       (transpose $In $InT) 
       (mat-mult-mat $W $InT $X) 
       (transpose $X $XT) 
@@ -205,9 +204,9 @@
       (maplist 
         (vec-act $Act) $ZT $Y) 
       (remove-all-atoms  &self 
-        (layer_output  $Name $_)) 
-      (add-is-symbol  &self 
-        (layer_output  $Name $Y)) 
+        (layer-output  $Name $_)) 
+      (add-atom  &self 
+        (layer-output  $Name $Y)) 
       (nnet-forward $LayerList $Y $Out) 
       (set-det)))
 ; ; Y = Act(W * In + B)
@@ -251,29 +250,29 @@
       (transpose $BDiff $BDT) 
       (maplist sumlist $BDT $BGrad) 
       (remove-all-atoms  &self 
-        (layer_bias_grad  $Name $_)) 
-      (add-is-symbol  &self 
-        (layer_bias_grad  $Name $BGrad)) 
+        (layer-bias-grad  $Name $_)) 
+      (add-atom  &self 
+        (layer-bias-grad  $Name $BGrad)) 
       (layer-input $Name $In) 
       (mat-mult-mat $BDT $In $WGrad) 
       (remove-all-atoms  &self 
-        (layer_weight_grad  $Name $_)) 
-      (add-is-symbol  &self 
-        (layer_weight_grad  $Name $WGrad)) 
+        (layer-weight-grad  $Name $_)) 
+      (add-atom  &self 
+        (layer-weight-grad  $Name $WGrad)) 
       (mat-mult-mat $BDiff $W $InDiff) 
       (nnet-backward $L1 $InDiff $LRate) 
       (mat-mult-const $WGrad $LRate $DW) 
       (mat-add-mat $W $DW $WNew) 
       (remove-all-atoms  &self 
-        (weight_matrix  $Name $_)) 
-      (add-is-symbol  &self 
-        (weight_matrix  $Name $WNew)) 
+        (weight-matrix  $Name $_)) 
+      (add-atom  &self 
+        (weight-matrix  $Name $WNew)) 
       (vec-mult-const $BGrad $LRate $DB) 
       (vec-add-vec $B $DB $BNew) 
       (remove-all-atoms  &self 
-        (bias_vector  $Name $_)) 
-      (add-is-symbol  &self 
-        (bias_vector  $Name $BNew)) 
+        (bias-vector  $Name $_)) 
+      (add-atom  &self 
+        (bias-vector  $Name $BNew)) 
       (set-det)))
 ; ; Next Layer.
 ; ; Update.
@@ -292,17 +291,16 @@
 
 
   (= (printerr $X)  
-    (is $Y 
-      (* $X 1000000))
-    (round $Y $Z)
-    (is $R 
-      (/ $Z 1000000))
-    (print $R)
-    (nl)
-    (set-det))
+    ( (is $Y 
+        (* $X 1000000)) 
+      (round $Y $Z) 
+      (is $R 
+        (/ $Z 1000000)) 
+      (print $R) nl 
+      (set-det)))
 
 
-  (= (try)  
+  (= try  
     (= $NumHid 32)
     (layer-init try1 4 $NumHid relu 
       (:: -0.2 0.2))

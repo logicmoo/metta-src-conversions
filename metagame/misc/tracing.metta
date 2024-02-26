@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tracing $_98416 metagame/misc/tracing.pl metagame/misc/tracing.metta)
+;                                           (convert-to-metta-file  tracing $_393504 metagame/misc/tracing.pl metagame/misc/tracing.metta)
 ;
 ; ============================================================
 ;
@@ -52,7 +52,7 @@
 
   (= (set-tracing $Module $Status)  
     ( (remove-all-atoms  &self 
-        (%tracing  $Module $Status1)) (add-is-symbol  &self (%tracing  $Module $Status))))
+        (%tracing  $Module $Status1)) (add-atom  &self (%tracing  $Module $Status))))
 
 ;
 ; SET_TRACING(Module,Component,Status)
@@ -92,14 +92,14 @@
 
 
   (= (tracing-module $Module)  
-    ($tracing $Module on))
+    (%tracing $Module on))
 
 
   (= (traced-modules $Modules)  
     (setof $M 
       (tracing-module $M) $Modules)
     (set-det))
-  (= (traced_modules  ())  True)
+  (= (traced-modules  ())  True)
 
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  newpred $_27198 miles/newpred.pl miles/newpred.metta)
+;                                           (convert-to-metta-file  newpred $_430880 miles/newpred.pl miles/newpred.metta)
 ;
 ; MODULE newpred EXPORTS
   !(module newpred 
@@ -282,8 +282,8 @@
 ; ***********************************************************************
 
 
-  (= (clause_instances  () $_ $_ $_ $_ ())  True)
-  (= (clause-instances (Cons  (with_self  $ID $Ex) $R) $IDC $H $B $Vars (Cons  $Vars1 $R1))  
+  (= (clause-instances  () $_ $_ $_ $_ ())  True)
+  (= (clause-instances (Cons  (with-self  $ID $Ex) $R) $IDC $H $B $Vars (Cons  $Vars1 $R1))  
     (clause-instances $R $IDC $H $B $Vars $R1)
     (copy-term 
       (, $H $B $Vars) 
@@ -295,7 +295,7 @@
     (body-instances $Bodies $B1))
 
 
-  (= (body_instances  () $_)  True)
+  (= (body-instances  () $_)  True)
   (= (body-instances (Cons  $B $R) $B1)  
     (body-instances $R $B1)
     (body-inst $B $B1))
@@ -353,7 +353,7 @@
 ; ***********************************************************************
 
 
-  (= (reduce_newpred_args  () $Vars $PVars $NVars $Vars $PVars $NVars)  True)
+  (= (reduce-newpred-args  () $Vars $PVars $NVars $Vars $PVars $NVars)  True)
   (= (reduce-newpred-args (Cons  $X $R) $Vars $P $N $Vars2 $P2 $N2)  
     (remove-arg $X $Vars $Vars1 $P $P1 $N $N1)
     (intersection $P1 $N1 Nil)
@@ -378,7 +378,7 @@
     (rem-arg $X $R $R1 $Pos0 $Pos1))
 
 
-  (= (rem_ins  () $_ ())  True)
+  (= (rem-ins  () $_ ())  True)
   (= (rem-ins (Cons  $V $R) $Pos (Cons  $V1 $R1))  
     (rem-i $V 1 $Pos $V1)
     (rem-ins $R $Pos $R1))
@@ -424,7 +424,7 @@
 ; ***********************************************************************
 
 
-  (= (make_newp_ex  () $_ ())  True)
+  (= (make-newp-ex  () $_ ())  True)
   (= (make-newp-ex (Cons  $V $R) $X (Cons  $N $R1))  
     (=.. $N 
       (Cons  $X $V))
@@ -462,7 +462,7 @@
 ; ***********************************************************************
 
 
-  (= (make_type_restriction  () $_ ())  True)
+  (= (make-type-restriction  () $_ ())  True)
   (= (make-type-restriction (Cons  $X $R) $TVars (Cons  $T $R1))  
     (make-type-restriction $R $TVars $R1)
     (mtr $X $TVars $TN)
@@ -470,7 +470,7 @@
       (:: $TN $X)))
 
 
-  (= (mtr $X (Cons  (with_self  $Y $T) $_) $T)  
+  (= (mtr $X (Cons  (with-self  $Y $T) $_) $T)  
     (== $X $Y)
     (set-det))
   (= (mtr $X (Cons  $_ $R) $T)  

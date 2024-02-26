@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  arrive $_85810 metagame/learning/arrive.pl metagame/learning/arrive.metta)
+;                                           (convert-to-metta-file  arrive $_198764 metagame/learning/arrive.pl metagame/learning/arrive.metta)
 ;
 ; ============================================================
 ;
@@ -72,7 +72,7 @@
 ;
 ; For now we'll set it to 1, and use a parameter to control it.
 
-  (= (arrive_goal_value  $Piece 1)  True)
+  (= (arrive-goal-value  $Piece 1)  True)
 
 ;
 ; The likelihood of getting a piece to a square decreases
@@ -124,7 +124,7 @@
   (= (approx-path-distance $Sq $Piece $SqT $Dist $Tables)  
     (square-piece-distance $Sq $Piece $SqT $Dist $Tables)
     (set-det))
-  (= (approx_path_distance  $Sq $Piece $SqT 10 $Tables)  True)
+  (= (approx-path-distance  $Sq $Piece $SqT 10 $Tables)  True)
 
 
 ;
@@ -159,10 +159,10 @@
 ;
 ; from the square!
 
-  (= (clear_occupier  empty $_ 0)  True)
+  (= (clear-occupier  empty $_ 0)  True)
   (= (clear-occupier (piece $Type $Player) $Player 1)  
     (set-det))
-  (= (clear_occupier  (piece  $Type $Player) $Opponent 5)  True)
+  (= (clear-occupier  (piece  $Type $Player) $Opponent 5)  True)
 
 
 

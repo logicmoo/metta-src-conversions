@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  stat $_381116 metagame/state/stat.pl metagame/state/stat.metta)
+;                                           (convert-to-metta-file  stat $_386992 metagame/state/stat.pl metagame/state/stat.metta)
 ;
 ; ============================================================
 ;
@@ -79,10 +79,9 @@
 
 
   (= (stat $A 0)  
-    (var $A)
-    (write "~n Warning: Error in Stat routine, Variable!")
-    (nl)
-    (set-det))
+    ( (var $A) 
+      (write "~n Warning: Error in Stat routine, Variable!") nl 
+      (set-det)))
 
   (= (stat (, $A $B) $S)  
     (set-det)
@@ -163,11 +162,11 @@
 	
 
 
-  (= (change_goal  (add  $Pred))  True)
-  (= (change_goal  (del  $Pred))  True)
+  (= (change-goal  (add  $Pred))  True)
+  (= (change-goal  (del  $Pred))  True)
 
 
-  (= (test_goal  (true  $Pred))  True)
+  (= (test-goal  (true  $Pred))  True)
 
 	                 
 ;
@@ -176,9 +175,8 @@
 ; Stativity Analysis
 
 
-  (= (stativity-analysis)  
-    (initialize-stats 0)
-    (interpret-stativity))
+  (= stativity-analysis  
+    ( (initialize-stats 0) interpret-stativity))
 
 
 ;
@@ -190,44 +188,35 @@
 
 
   (= (initialize-stats $InitVal)  
-    (reset-stat)
-    (theory-clause $GIn $Body)
-    (variablized-goal $GIn $VGIn)
-    (det-if-then-else 
-      (stativity $VGIn $Stat) 
+    (reset-stat 
+      (theory-clause $GIn $Body) 
+      (variablized-goal $GIn $VGIn) 
       (det-if-then-else 
-        (= $Stat $InitVal) True 
-        (format "Error: Some stat entry not reset properly~n" Nil)) 
-      (add-is-symbol  &self 
-        (stativity  $VGIn $InitVal)))
-    (fail))
-  (= (initialize_stats  $_)  True) 
+        (stativity $VGIn $Stat) 
+        (det-if-then-else 
+          (= $Stat $InitVal) True 
+          (format "Error: Some stat entry not reset properly~n" Nil)) 
+        (add-atom  &self 
+          (stativity  $VGIn $InitVal))) fail))
+  (= (initialize-stats  $_)  True) 
 
 
-  (= (interpret-stativity)  
-    (tracing-format 
-      (stat 1) "Starting an iteration of stativity interpretation~n" Nil)
-    (do-analysis)
-    (loop-if-changed))
+  (= interpret-stativity  
+    ( (tracing-format 
+        (stat 1) "Starting an iteration of stativity interpretation~n" Nil) do-analysis loop-if-changed))
 
 
-  (= (loop-if-changed)  
-    ( (remove-is-symbol  &self changed) 
-      (set-det) 
-      (interpret-stativity)))
-  (= (loop-if-changed)  
+  (= loop-if-changed  
+    ( (remove-atom  &self changed) 
+      (set-det) interpret-stativity))
+  (= loop-if-changed  
     (tracing-format 
       (stat 1) "Reached fixed point, interpretation has ended.~n" Nil))
 	
 
 
-  (= (do-analysis)  
-    (clear-changed)
-    (or 
-      (, 
-        (analysis-item $Item) 
-        (analyze-item $Item) 
-        (fail)) True))
+  (= do-analysis  
+    (clear-changed (or (, (analysis-item $Item) (analyze-item $Item) fail) True)))
 
 
   (= (analysis-item (= $Goal  $Body))  
@@ -247,30 +236,28 @@
     (set-det))
   (= (update-assumption $P $Stat)  
     ( (variablized-goal $P $VP) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (stativity  $VP $StatOld)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (stativity  $VP $Stat)) 
       (tracing-format 
         (stat 2) "Procedure <~p> changed stativity from <~p> to <~p>~n" 
-        (:: $P $StatOld $Stat)) 
-      (note-changed)))
+        (:: $P $StatOld $Stat)) note-changed))
 
 
 
 
-  (= (note-changed)  
-    (changed)
-    (set-det))
-  (= (note-changed)  
+  (= note-changed  
+    (changed (set-det)))
+  (= note-changed  
     ( (tracing-format 
-        (stat 2) "Initial stativity changed this iteration~n" Nil) (add-is-symbol  &self changed)))	
+        (stat 2) "Initial stativity changed this iteration~n" Nil) (add-atom  &self changed)))	
 
 
-  (= (clear-changed)  
+  (= clear-changed  
     (remove-all-atoms  &self changed))
 
-  (= (reset-stat)  
+  (= reset-stat  
     (remove-all-atoms  &self 
       (stativity  $_ $_)))
 
@@ -290,7 +277,7 @@
     (set-tracing 
       (stat $Level) $Status))
 
-  (= (silent-stat)  
+  (= silent-stat  
     (set-stat-verbosity 1 off)
     (set-stat-verbosity 2 off)) 
 

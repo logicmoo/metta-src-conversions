@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  chesstalk $_193886 metagame/comms/chesstalk.pl metagame/comms/chesstalk.metta)
+;                                           (convert-to-metta-file  chesstalk $_134802 metagame/comms/chesstalk.pl metagame/comms/chesstalk.metta)
 ;
 ; ============================================================
 ;
@@ -24,7 +24,7 @@
   !(ensure-loaded (library pipes))
 
 
-  (= (create)  
+  (= create  
     (global chessprog $Prog)
     (create $Prog))
 
@@ -55,15 +55,14 @@
   (= (tellm $S)  
     (tell-chess $S))
 
-  (= (seem)  
-    (see-chess))
+  (= seem  see-chess)
 
 
   (= (tell-chess $Statement)  
     (tell-outstream $Statement))
 
 
-  (= (see-chess)  
+  (= see-chess  
     (global instream $I)
     (set-input $I))
 
@@ -71,7 +70,7 @@
   (= (morph-setup-file $File)  
     (global handicap $File)
     (set-det))
-  (= (morph_setup_file  morphstart)  True)
+  (= (morph-setup-file  morphstart)  True)
 
 
 ;
@@ -101,11 +100,9 @@
           (print-choice $Move $SIn $SOut) 
           (, 
             (format "Strange string: ~w~n" 
-              (:: $MoveString)) 
-            (fail)))) 
+              (:: $MoveString)) fail))) 
       (, 
-        (set-input $OldStream) 
-        (fail))))
+        (set-input $OldStream) fail)))
 
 
 
@@ -113,7 +110,7 @@
     (should-init $Role $SIn)
     (set-det)
     (init-chess $Role $SIn))
-  (= (init_chess_if  $Role $SIn)  True)
+  (= (init-chess-if  $Role $SIn)  True)
 
 
 ;
@@ -137,30 +134,29 @@
 
 
   (= (update-chess $Role $SIn)  
-    (init-chess-if $Role $SIn)
-    (det-if-then-else 
-      (last-move $Move) 
-      (, 
-        (meta-to-chess $Move $ChMove) 
-        (format "To Chess: I played ~w~n" 
-          (:: $ChMove)) 
-        (= $ChMove $TellMove) 
-        (tell-chess (:: $TellMove))) True)
-    (tell-chess-move))
+    ( (init-chess-if $Role $SIn) 
+      (det-if-then-else 
+        (last-move $Move) 
+        (, 
+          (meta-to-chess $Move $ChMove) 
+          (format "To Chess: I played ~w~n" 
+            (:: $ChMove)) 
+          (= $ChMove $TellMove) 
+          (tell-chess (:: $TellMove))) True) tell-chess-move))
 ; ; ( N < 2 -> init_chess(Role,SIn) ; true),
 
 
   (= tell_chess_move  True)
 
 
-  (= (flush-chess)  
+  (= flush-chess  
     (global chessprog $Prog)
     (flush-prog $Prog))
 
 
   (= (flush-prog gnu)  
     (tell-chess (:: bd)))
-  (= (flush_prog  morph)  True)
+  (= (flush-prog  morph)  True)
 
 
 ;
@@ -170,8 +166,7 @@
 ;
 ; So Don't tell chess anything.
 
-  (= (chess-prompt $Player)  
-    (flush-chess))
+  (= (chess-prompt $Player)  flush-chess)
 ;
 ; player_color(Player,Color),
 ;
@@ -233,18 +228,18 @@
     (get0 $D))
 
 
-  (= (player_indent  $_ "")  True)
+  (= (player-indent  $_ "")  True)
 
 
   (= (chess-to-meta $A $B)  
     (chess-to-meta $B $A Nil))
 
 
-  (= (-->  (chess_to_meta  ()) ())  True)
-  (= (-->  (chess_to_meta  (Cons  $XM (Cons  $YM $Sqs))) (,  ($X) (,  ($Y) (,  {(chess_conv_square  $X $Y $XM $YM) } (chess_rest  $Sqs)))))  True)
+  (= (-->  (chess-to-meta  ()) ())  True)
+  (= (-->  (chess-to-meta  ([|]  $XM ([|]  $YM $Sqs))) (,  ($X) (,  ($Y) (,  {(chess-conv-square  $X $Y $XM $YM) } (chess-rest  $Sqs)))))  True)
 
-  (= (-->  (chess_rest  ()) ())  True)
-  (= (-->  (chess_rest  $Sqs) (,  () (chess_to_meta  $Sqs)))  True)
+  (= (-->  (chess-rest  ()) ())  True)
+  (= (-->  (chess-rest  $Sqs) (,  () (chess-to-meta  $Sqs)))  True)
 
 
 
@@ -280,17 +275,17 @@
 
 
 
-  (= (-->  (chess_notation  $M) (,  (prelims  $M $Pre) (chess_main  $Pre ())))  True)
+  (= (-->  (chess-notation  $M) (,  (prelims  $M $Pre) (chess-main  $Pre ())))  True)
 
 
 ;
 ; CONSIDER_PROMOTE
-  (= (-->  (chess_consider_promote  (Cons  $T $Sel) $Rest) (,  (chess_attempt_promote  $T) (chess_select_promote  $Sel $Rest)))  True)
+  (= (-->  (chess-consider-promote  ([|]  $T $Sel) $Rest) (,  (chess-attempt-promote  $T) (chess-select-promote  $Sel $Rest)))  True)
 
 
-  (= (-->  (chess_select_promote  (Cons  (promote_select  $Square $OldPiece $OldPiece) $Rest) $Rest) ())  True)
-  (= (-->  (chess_select_promote  (Cons  (promote_select  $Square $OldPiece $NewPiece) $Rest) $Rest) (,  {(,  (\==  $OldPiece $NewPiece) (,  (piece_struct_name  $NewPiece $Name) (,  (name  $Name (Cons  $NewC $_)) (name  $NewL ($NewC))))) } ($NewL)))  True)
-  (= (-->  (chess_select_promote  $Rest $Rest) ())  True)
+  (= (-->  (chess-select-promote  ([|]  (promote-select  $Square $OldPiece $OldPiece) $Rest) $Rest) ())  True)
+  (= (-->  (chess-select-promote  ([|]  (promote-select  $Square $OldPiece $NewPiece) $Rest) $Rest) (,  {(,  (\==  $OldPiece $NewPiece) (,  (piece-struct-name  $NewPiece $Name) (,  (name  $Name ([|]  $NewC $_)) (name  $NewL ($NewC))))) } ($NewL)))  True)
+  (= (-->  (chess-select-promote  $Rest $Rest) ())  True)
 
 
 
@@ -302,20 +297,20 @@
 ; --> [promote,'(',5,',',1,')',white,piece3,';']
 ;
 ; Unless it promotes, it isn't mentioned in the notation.
-  (= (-->  (chess_attempt_promote  (try_promote  $Square $OldPiece ())) ())  True)
-  (= (-->  (chess_attempt_promote  (try_promote  $Square $OldPiece $OldPiece)) ())  True)
+  (= (-->  (chess-attempt-promote  (try-promote  $Square $OldPiece ())) ())  True)
+  (= (-->  (chess-attempt-promote  (try-promote  $Square $OldPiece $OldPiece)) ())  True)
 
 
 ;
 ; MAIN
 ;
 ; Repeated Transfers, followed by possible player promotion.
-  (= (-->  (chess_main  $In $Out) (,  (chess_first_transfer  $In $First) (,  (chess_continued_transfers  $First $T) (chess_consider_promote  $T $Out))))  True)
+  (= (-->  (chess-main  $In $Out) (,  (chess-first-transfer  $In $First) (,  (chess-continued-transfers  $First $T) (chess-consider-promote  $T $Out))))  True)
 
 
 ;
 ; TRANSFERS
-  (= (-->  (chess_transfers  $In $Out) (,  (chess_transfer  $In $T) (chess_continued_transfers  $T $Out)))  True)
+  (= (-->  (chess-transfers  $In $Out) (,  (chess-transfer  $In $T) (chess-continued-transfers  $T $Out)))  True)
 
 ;
 ; CONTINUED_TRANSFERS
@@ -323,9 +318,9 @@
 ; Either no more transfers, or ';' and more transfers.
 ;
 ; Could tighten this rule: can't continue unless did a movement.
-  (= (-->  (chess_continued_transfers  $In $In) ())  True)
-  (= (-->  (chess_continued_transfers  (Cons  end_continues $Rest) $Rest) ())  True)
-  (= (-->  (chess_continued_transfers  $In $Out) (chess_transfers  $In $Out))  True)
+  (= (-->  (chess-continued-transfers  $In $In) ())  True)
+  (= (-->  (chess-continued-transfers  ([|]  end_continues $Rest) $Rest) ())  True)
+  (= (-->  (chess-continued-transfers  $In $Out) (chess-transfers  $In $Out))  True)
 
 
 ;
@@ -336,9 +331,9 @@
 ; --> [white,piece6,'(',5,',',1,')',->,'(',4,',',1,')',x,'(',4,',',1,')']
 ;
 ; 
-  (= (-->  (chess_transfer  (Cons  $Move $Capture) $Rest) (,  (chess_moving  $Move) (chess_capture  $Capture $Rest)))  True)
+  (= (-->  (chess-transfer  ([|]  $Move $Capture) $Rest) (,  (chess-moving  $Move) (chess-capture  $Capture $Rest)))  True)
 
-  (= (-->  (chess_first_transfer  (Cons  $Move $Capture) $Rest) (,  (chess_first_moving  $Move) (chess_capture  $Capture $Rest)))  True)
+  (= (-->  (chess-first-transfer  ([|]  $Move $Capture) $Rest) (,  (chess-first-moving  $Move) (chess-capture  $Capture $Rest)))  True)
 
 
 ;
@@ -347,32 +342,32 @@
 ; moving(move(piece(piece1,opponent),opponent,square(1,6),square(2,4)),S,[]).
 ;
 ; S = [black,piece1,'(',1,',',6,')',->,'(',2,',',4,')']
-  (= (-->  (chess_first_moving  (move  $Piece $Player $From $To)) (,  (chess_square  $From) (chess_square  $To)))  True)
+  (= (-->  (chess-first-moving  (move  $Piece $Player $From $To)) (,  (chess-square  $From) (chess-square  $To)))  True)
 
-  (= (-->  (chess_moving  (move  $Piece $Player $From $To)) (chess_square  $To))  True)
+  (= (-->  (chess-moving  (move  $Piece $Player $From $To)) (chess-square  $To))  True)
 
 
 
-  (= (-->  (chess_capture  $In $Out) (chess_null_capture  $In $Out))  True)
-  (= (-->  (chess_capture  $In $Out) (chess_real_capture  $In $Out))  True)
+  (= (-->  (chess-capture  $In $Out) (chess-null-capture  $In $Out))  True)
+  (= (-->  (chess-capture  $In $Out) (chess-real-capture  $In $Out))  True)
 
-  (= (-->  (chess_null_capture  $X $X) ())  True)
+  (= (-->  (chess-null-capture  $X $X) ())  True)
 
-  (= (-->  (chess_real_capture  (Cons  $C $Cs) $Rest) (,  (chess_simp_capture  $C) (chess_capture  $Cs $Rest)))  True)
+  (= (-->  (chess-real-capture  ([|]  $C $Cs) $Rest) (,  (chess-simp-capture  $C) (chess-capture  $Cs $Rest)))  True)
 
-  (= (-->  (chess_simp_capture  $M) (chess_remove  $M))  True)
-  (= (-->  (chess_simp_capture  $M) (chess_possess  $M))  True)
+  (= (-->  (chess-simp-capture  $M) (chess-remove  $M))  True)
+  (= (-->  (chess-simp-capture  $M) (chess-possess  $M))  True)
 
 ;
 ; REMOVE
-  (= (-->  (chess_remove  (capture  remove $Caps)) ())  True)
+  (= (-->  (chess-remove  (capture  remove $Caps)) ())  True)
 
 ;
 ; POSSESS
-  (= (-->  (chess_possess  (capture  (possess  $Player) $Caps)) ())  True)
+  (= (-->  (chess-possess  (capture  (possess  $Player) $Caps)) ())  True)
 
 
-  (= (-->  (chess_square  $Sq) (,  {(square  $Sq $X $Y) } (,  ($Col) (,  {(nth_letter  $X $Col) } (number  $Y)))))  True)
+  (= (-->  (chess-square  $Sq) (,  {(square  $Sq $X $Y) } (,  ($Col) (,  {(nth-letter  $X $Col) } (number  $Y)))))  True)
 
 	
 ;
@@ -384,8 +379,7 @@
 
 
 
-  (= (create-top)  
-    (create))
+  (= create-top  create)
 
 
 
@@ -421,32 +415,31 @@
     (tell-chess (:: .)))
 
 
-  (= (init_prog  morph $Role $SIn)  True)
+  (= (init-prog  morph $Role $SIn)  True)
 
 ;
 ; Careful when letting gnu play white in typical startup chess
 ;
 ; positions, as he thinks kings can castle!
   (= (init-prog gnu $Role $S)  
-    (global handicap $H)
-    (> $H 0)
-    (set-det)
-    (tell-chess (:: 1))
-    (tell-chess (:: new))
-    (setup-gnu $S)
-    (set-gnu-depth)
-    (init-gnu-role $Role))
+    ( (global handicap $H) 
+      (> $H 0) 
+      (set-det) 
+      (tell-chess (:: 1)) 
+      (tell-chess (:: new)) 
+      (setup-gnu $S) set-gnu-depth 
+      (init-gnu-role $Role)))
 
 
 
-  (= (set-gnu-depth)  
+  (= set-gnu-depth  
     (det-if-then-else 
       (global depth $D) 
       (set-gnu-depth $D) True))
 
   (= (set-gnu-depth $DNum)  
     (number-chars $DNum $Chars)
-    (atom-chars $D $Chars)
+    (symbol-chars $D $Chars)
     (tell-chess (:: depth))
     (tell-chess (:: $D)))
 

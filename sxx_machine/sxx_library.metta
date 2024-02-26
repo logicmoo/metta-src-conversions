@@ -1,40 +1,32 @@
-;                                           (convert_to_metta_file  sxx_library $_430506 sxx_machine/sxx_library.pl sxx_machine/sxx_library.metta)
+;                                           (convert-to-metta-file  sxx_library $_221086 sxx_machine/sxx_library.pl sxx_machine/sxx_library.metta)
 
-  (= (toplevel)  
-    (top)
-    (fail))
-  (= (toplevel)  
-    (toplevel))
+  (= toplevel  
+    (top fail))
+  (= toplevel  toplevel)
 
 
-  (= (top)  
-    (write ?- )
-    (vread $Goal $Vars)
-    !$Goal
-    (writevars $Vars)
-    (write Yes)
-    (nl)
-    (notmore)
-    (set-det)
-    (fail))
+  (= top  
+    ( (write ?- ) 
+      (vread $Goal $Vars) 
+      !$Goal 
+      (writevars $Vars) 
+      (write Yes) nl notmore 
+      (set-det) fail))
 
-  (= (top)  
-    (top))
+  (= top  top)
 
 
-  (= (notmore)  
-    (write 'more? ')
-    (get0 $X)
-    (noteq $X 10)
-    (set-det)
-    (untilend $X)
-    (fail))
+  (= notmore  
+    ( (write 'more? ') 
+      (get0 $X) 
+      (noteq $X 10) 
+      (set-det) 
+      (untilend $X) fail))
   (= notmore  True)
 
 
   (= (noteq $X $X)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (noteq  $_ $_)  True)
 
 
@@ -47,11 +39,9 @@
 
   (= (writevars  ())  True)
   (= (writevars (Cons  (= $Var $Name) $R))  
-    (write $Name)
-    (write  = )
-    (write $Var)
-    (nl)
-    (fail))
+    ( (write $Name) 
+      (write  = ) 
+      (write $Var) nl fail))
   (= (writevars (Cons  $_ $R))  
     (writevars $R))
 
@@ -99,20 +89,18 @@
 
 
   (= (time $Goal)  
-    (cputime $T1)
-    !$Goal
-    (cputime $T2)
-    (is $T 
-      (- $T2 $T1))
-    (write $T)
-    (nl))
+    ( (cputime $T1) 
+      !$Goal 
+      (cputime $T2) 
+      (is $T 
+        (- $T2 $T1)) 
+      (write $T) nl))
 
 
 
   (= !$G  
-    (var $G)
-    (set-det)
-    (fail))
+    ( (var $G) 
+      (set-det) fail))
   (= !(, $G $B)  
     (set-det)
     !$G
@@ -165,9 +153,8 @@
     (findall2 $X $Goal $L $Handle))
 
   (= (findall2 $X $Goal $L $Handle)  
-    !$Goal
-    (addfindall $X $Handle)
-    (fail))
+    ( !$Goal 
+      (addfindall $X $Handle) fail))
   (= (findall2 $X $Goal $L $Handle)  
     (retrievefindall $L $Handle))
 
@@ -186,13 +173,13 @@
     (type-of $X $A)
     (atomic2 $A))
 
-  (= (atomic2 is-symbol)  
+  (= (atomic2 atom)  
     (set-det))
   (= (atomic2  integer)  True)
 
 
   (= (atom $X)  
-    (type-of $X is-symbol))
+    (type-of $X atom))
 
 
   (= (integer $X)  
@@ -282,9 +269,8 @@
 
 
   (= (not $G)  
-    !$G
-    (set-det)
-    (fail))
+    ( !$G 
+      (set-det) fail))
   (= (not  $_)  True)
 
 
@@ -297,8 +283,7 @@
     !$G)
 
 
-  (= (execpendinggoals Nil)  
-    (execcontinuation))
+  (= (execpendinggoals Nil)  execcontinuation)
   (= (execpendinggoals (Cons  $G $R))  
     !$G
     (execpendinggoals $R))

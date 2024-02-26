@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  prom $_490622 metagame/learning/prom.pl metagame/learning/prom.metta)
+;                                           (convert-to-metta-file  prom $_156286 metagame/learning/prom.pl metagame/learning/prom.metta)
 ;
 ; ============================================================
 ;
@@ -218,7 +218,7 @@
 
 
 
-  (= (testp)  
+  (= testp  
     (checkpoint init $S)
     (get-advices $A $S)
     (ppl $A))
@@ -304,7 +304,7 @@
     (map-player-table promotion-matrix Nil $Matrix))
 
 
-  (= (print-promotion-matrix)  
+  (= print-promotion-matrix  
     (print-promotion-matrix $Piece $Player $PieceT))
 
   (= (print-promotion-matrix $Piece $Player $PieceT)  
@@ -313,8 +313,7 @@
       (, 
         (piece-player-promotion $Piece $Player $PieceT) 
         (format "~p: ~p -> ~p~n" 
-          (:: $Player $Piece $PieceT)) 
-        (fail)) True))
+          (:: $Player $Piece $PieceT)) fail) True))
 ; ; format("matrix[~p][~p] = ~p~n",[Piece,Player,PieceT]),
 
 
@@ -460,7 +459,7 @@
 
 
 
-  (= (print-prom-distance-matrix)  
+  (= print-prom-distance-matrix  
     (print-prom-distance-matrix $_ $_ $_))
 
   (= (print-prom-distance-matrix $Piece $Player $PieceT)  
@@ -469,8 +468,7 @@
       (, 
         (piece-player-prom-distance $Piece $Player $PieceT $Dist) 
         (format "~p: ~p -> ~p <~p>~n" 
-          (:: $Player $Piece $PieceT $Dist)) 
-        (fail)) True))
+          (:: $Player $Piece $PieceT $Dist)) fail) True))
 ; ; format("matrix[~p][~p] = ~p~n",[Piece,Player,PieceT]),
 
 
@@ -547,7 +545,7 @@
   (= (square-promsq $Sq $SqI $Piece $PieceI $DTable (/ $SqTIs $Dist))  
     (nearest-promotion-squares $Piece $PieceI $Player $Sq $SqI $SqTs $SqTIs $DTable $Dist)
     (set-det))
-  (= (square_promsq  $Sq $SqI $Piece $PieceI $DTable $Ignore)  True)
+  (= (square-promsq  $Sq $SqI $Piece $PieceI $DTable $Ignore)  True)
 
 
 
@@ -608,7 +606,7 @@
 ;
 ; 
 
-  (= (print-promsq-matrix)  
+  (= print-promsq-matrix  
     (print-promsq-matrix $_ $_))
 
   (= (print-promsq-matrix $Sq $Piece)  
@@ -617,8 +615,7 @@
       (, 
         (square-piece-promsq $Sq $Piece $SqT $Dist) 
         (format "matrix[~p][~p] = ~p (~p)~n" 
-          (:: $Sq $Piece $SqT $Dist)) 
-        (fail)) True))
+          (:: $Sq $Piece $SqT $Dist)) fail) True))
 
 
 

@@ -1,10 +1,10 @@
-;                                           (convert_to_metta_file  zebra $_181428 sxx_machine/bench/zebra.pl sxx_machine/bench/zebra.metta)
+;                                           (convert-to-metta-file  zebra $_460668 sxx_machine/bench/zebra.pl sxx_machine/bench/zebra.metta)
 ;
 ; Where does the zebra live?
 ;
 ; Puzzle solution written by Claude Sammut.
 
-  (= (top)  
+  (= top  
     (houses $Houses)
     (member 
       (house red english $_ $_ $_) $Houses)
@@ -51,26 +51,25 @@
   (= (houses  ((house  $_ $_ $_ $_ $_) (house  $_ $_ $_ $_ $_) (house  $_ $_ $_ $_ $_) (house  $_ $_ $_ $_ $_) (house  $_ $_ $_ $_ $_)))  True)
 
 
-  (= (right_of  $A $B (Cons  $B (Cons  $A $_)))  True)
+  (= (right-of  $A $B ([|]  $B ([|]  $A $_)))  True)
   (= (right-of $A $B (Cons  $_ $Y))  
     (right-of $A $B $Y))
 
 
-  (= (next_to  $A $B (Cons  $A (Cons  $B $_)))  True)
-  (= (next_to  $A $B (Cons  $B (Cons  $A $_)))  True)
+  (= (next-to  $A $B ([|]  $A ([|]  $B $_)))  True)
+  (= (next-to  $A $B ([|]  $B ([|]  $A $_)))  True)
   (= (next-to $A $B (Cons  $_ $Y))  
     (next-to $A $B $Y))
 
 
-  (= (member  $X (Cons  $X $_))  True)
+  (= (member  $X ([|]  $X $_))  True)
   (= (member $X (Cons  $_ $Y))  
     (member $X $Y))
 
 
   (= (print-houses (Cons  $A $B))  
-    (set-det)
-    (write $A)
-    (nl)
-    (print-houses $B))
-  (= (print_houses  ())  True)
+    ( (set-det) 
+      (write $A) nl 
+      (print-houses $B)))
+  (= (print-houses  ())  True)
 

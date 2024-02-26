@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  multagnt $_234414 multagnt/multagnt.pl multagnt/multagnt.metta)
+;                                           (convert-to-metta-file  multagnt $_301436 multagnt/multagnt.pl multagnt/multagnt.metta)
 
   !(dynamic (/ parent 2))
 ; /******************************************************************/
@@ -43,19 +43,15 @@
   !(op 998 xfx <-)
 
 
-  (= (diagnosis)  
-    (init)
-    (get-teacher teacher)
-    (nl)
-    (nl)
-    (get-learner)
-    (locate-error))
+  (= diagnosis  
+    (init 
+      (get-teacher teacher) nl nl get-learner locate-error))
 ; /******************************************************************/
 ; /* User Interface */
 ; /******************************************************************/
  
 
-  (= (init)  
+  (= init  
     (abolish db-entry 3)
     (abolish def-theory 2)
     (multifile (/ db-entry 3))
@@ -71,27 +67,22 @@
   !(:: (learner1 *))
 
 
-  (= (locate-error)  
-    (repeat)
-    (mode $Mode)
-    (generate-error $Mode))
+  (= locate-error  
+    (repeat 
+      (mode $Mode) 
+      (generate-error $Mode)))
  
 
   (= (generate-error manual)  
-    (repeat)
-    (get-question $Question)
-    (process-question $Question)
-    (exit-manual)
-    (set-det)
-    (exit))
+    (repeat 
+      (get-question $Question) 
+      (process-question $Question) exit-manual 
+      (set-det) exit))
   (= (generate-error auto)  
-    (select-question $Question)
-    (process-question $Question)
-    (exit-auto)
-    (set-det)
-    (exit))
-  (= (generate-error $_)  
-    (exit))
+    ( (select-question $Question) 
+      (process-question $Question) exit-auto 
+      (set-det) exit))
+  (= (generate-error $_)  exit)
  
 
   (= (process-question $Question)  
@@ -101,67 +92,51 @@
       (<- $Question $Answer) $FaultyStep)
     (set-det))
   (= (process-question $Question)  
-    (write ' *** The teacher cannot answer the question: ')
-    (write $Question)
-    (nl))
+    ( (write ' *** The teacher cannot answer the question: ') 
+      (write $Question) nl))
  
 
   (= (output-error $Tl $Tt (<- $Question $Answer) $FaultyStep)  
-    (nl)
-    (write ' Result of Diagnosis:')
-    (nl)
-    (write  --------------------)
-    (nl)
-    (nl)
-    (write ' The query is:       ')
-    (write $Question)
-    (nl)
-    (write ' Teachers answer is: ')
-    (out-answer $Answer)
-    (nl)
-    (write ' Learners theory:    ')
-    (write $Tl)
-    (nl)
-    (write ' Teachers theory:    ')
-    (write $Tt)
-    (nl)
-    (write ' Faulty Steps:       ')
-    (out-faulty $FaultyStep)
-    (nl)
-    (set-det))
+    (nl 
+      (write ' Result of Diagnosis:') nl 
+      (write  --------------------) nl nl 
+      (write ' The query is:       ') 
+      (write $Question) nl 
+      (write ' Teachers answer is: ') 
+      (out-answer $Answer) nl 
+      (write ' Learners theory:    ') 
+      (write $Tl) nl 
+      (write ' Teachers theory:    ') 
+      (write $Tt) nl 
+      (write ' Faulty Steps:       ') 
+      (out-faulty $FaultyStep) nl 
+      (set-det)))
 
 
   (= (out-faulty Nil)  
-    (write 'no faulty step')
-    (nl))
+    ( (write 'no faulty step') nl))
   (= (out-faulty $Steps)  
-    (out-step $Steps)
-    (nl))
+    ( (out-step $Steps) nl))
  
 
-  (= (out-step Nil)  
-    (nl))
+  (= (out-step Nil)  nl)
   (= (out-step (Cons  $Step $Steps))  
-    (write                      )
-    (write $Step)
-    (nl)
-    (write $Steps))
+    ( (write                      ) 
+      (write $Step) nl 
+      (write $Steps)))
  
 
   (= (out-answer Nil)  
-    (write True)
-    (nl))
+    ( (write True) nl))
   (= (out-answer $Ans)  
     (out-ans $Ans))
  
 
-  (= (out-ans Nil)  
-    (nl))
+  (= (out-ans Nil)  nl)
   (= (out-ans (Cons  (val $Var $Val) $T))  
-    (write (= $Var $Val))
-    (nl)
-    (write                      )
-    (out-ans $T))
+    ( (write (= $Var $Val)) nl 
+      (write                      ) 
+      (out-ans $T)))
  
 
   (= (select-question $Question)  
@@ -169,21 +144,17 @@
     (yes-no yes confirm $Reply)
     (= $Reply yes))
   (= (select-question $_)  
-    (write ' no more questions')
-    (nl)
-    (set-det)
-    (fail))
+    ( (write ' no more questions') nl 
+      (set-det) fail))
  
 
   (= (generate-question $Question)  
-    (db-entry 
-      (with_self  
-        (teacher *) $_) $Question $_)
-    (make-ground-term $Question)
-    (nl)
-    (write ' Question generated: ')
-    (write $Question)
-    (nl))
+    ( (db-entry 
+        (with-self  
+          (teacher *) $_) $Question $_) 
+      (make-ground-term $Question) nl 
+      (write ' Question generated: ') 
+      (write $Question) nl))
  
 
   (= (get-question $Question)  
@@ -192,26 +163,24 @@
  
 
   (= (mode auto)  
-    (nl)
-    (nl)
-    (yes-no yes ' Do you want the system to generate questions ? ' $Reply)
-    (nl)
-    (= $Reply yes)
-    (set-det))
+    (nl nl 
+      (yes-no yes ' Do you want the system to generate questions ? ' $Reply) nl 
+      (= $Reply yes) 
+      (set-det)))
   (= (mode  manual)  True)
  
 
-  (= (exit-manual)  
+  (= exit-manual  
     (yes-no no ' Exit manual mode ? ' $Reply)
     (= $Reply yes))
  
 
-  (= (exit-auto)  
+  (= exit-auto  
     (yes-no no ' Exit auto mode ? ' $Reply)
     (= $Reply yes))
  
 
-  (= (exit)  
+  (= exit  
     (yes-no no ' Quit ? ' $Reply)
     (= $Reply yes))
  
@@ -224,33 +193,31 @@
     (more-knowledge $Reply2 $FileList))
  
 
-  (= (load_knowledge_base  no $_)  True)
+  (= (load-knowledge-base  no $_)  True)
   (= (load-knowledge-base yes $File)  
-    (nl)
-    (consult $File)
-    (nl)
-    (set-det))
+    (nl 
+      (consult $File) nl 
+      (set-det)))
  
 
-  (= (more_knowledge  no (Cons  $_ $_))  True)
+  (= (more-knowledge  no ([|]  $_ $_))  True)
   (= (more-knowledge no Nil)  
-    (write ' *** You have not load any knowledge base yet !')
-    (nl)
-    (more-knowledge yes Nil))
+    ( (write ' *** You have not load any knowledge base yet !') nl 
+      (more-knowledge yes Nil)))
   (= (more-knowledge yes $FileList)  
-    (repeat)
-    (ask-file ' Please input the filename of the KB: ' $File)
-    (not-loaded $File $FileList $Load)
-    (load-knowledge-base $Load $File)
-    (knowledge-base-list $Load $FileList $File $NewList)
-    (yes-no no ' Do you want to consult more KBs ? ' $Reply)
-    (more-knowledge $Reply $NewList))
+    (repeat 
+      (ask-file ' Please input the filename of the KB: ' $File) 
+      (not-loaded $File $FileList $Load) 
+      (load-knowledge-base $Load $File) 
+      (knowledge-base-list $Load $FileList $File $NewList) 
+      (yes-no no ' Do you want to consult more KBs ? ' $Reply) 
+      (more-knowledge $Reply $NewList)))
  
 
   (= (not-loaded $File $List no)  
     (member $File $List)
     (set-det))
-  (= (not_loaded  $_ $_ yes)  True)
+  (= (not-loaded  $_ $_ yes)  True)
 
 ;
 ; yesno(Question):- yesno(Question,no).
@@ -259,33 +226,32 @@
 
 
   (= (yes-no $Default $Message $Reply)  
-    (repeat)
-    (write ' ')
-    (write $Message)
-    (det-if-then-else 
-      (== $Default yes) 
-      (write ' (Yes/no) ') 
-      (write ' (yes/No) '))
-    (get-single-char $In)
-    (det-if-then-else 
-      (= 
-        (:: $In) 
-        (:: 101)) 
-      (, 
-        (set-det) 
-        (halt 4)) 
+    (repeat 
+      (write ' ') 
+      (write $Message) 
+      (det-if-then-else 
+        (== $Default yes) 
+        (write ' (Yes/no) ') 
+        (write ' (yes/No) ')) 
+      (get-single-char $In) 
       (det-if-then-else 
         (= 
           (:: $In) 
-          (:: 97)) 
+          (:: 101)) 
         (, 
           (set-det) 
-          (abort)) 
+          (halt 4)) 
         (det-if-then-else 
-          (= $In 13) 
-          (= $Reply $Default) 
-          (reply $In $Reply))))
-    (set-det))
+          (= 
+            (:: $In) 
+            (:: 97)) 
+          (, 
+            (set-det) abort) 
+          (det-if-then-else 
+            (= $In 13) 
+            (= $Reply $Default) 
+            (reply $In $Reply)))) 
+      (set-det)))
  
 
   (= (reply $Reply yes)  
@@ -297,23 +263,22 @@
  
 
   (= (ask-file $Message $File)  
-    (repeat)
-    (write ' ')
-    (write $Message)
-    (read-in $File)
-    (set-det))
+    (repeat 
+      (write ' ') 
+      (write $Message) 
+      (read-in $File) 
+      (set-det)))
  
 
-  (= (knowledge_base_list  yes $List $File (Cons  $File $List))  True)
-  (= (knowledge_base_list  no $List $_ $List)  True)
+  (= (knowledge-base-list  yes $List $File ([|]  $File $List))  True)
+  (= (knowledge-base-list  no $List $_ $List)  True)
  
 
   (= (no-knowledge Nil)  
-    (write ' *** You have not load any knowledge base yet !')
-    (nl))
+    ( (write ' *** You have not load any knowledge base yet !') nl))
  
 
-  (= (get-learner)  
+  (= get-learner  
     (ask-file ' Please input the filename for the learner KB: ' $File)
     (load-knowledge-base yes $File)
     (knowledge-base-list yes Nil $File $List)
@@ -321,12 +286,12 @@
     (more-knowledge $Reply $List))
  
 
-  (= (can-do (with_self  (learner *) $Tl) (with_self  (teacher *) $Tt) $Question $TeachersAnswer)  
+  (= (can-do (with-self  (learner *) $Tl) (with-self  (teacher *) $Tt) $Question $TeachersAnswer)  
     (demo 
-      (with_self  
+      (with-self  
         (learner *) $Tl) $Question $LearnersAnswer)
     (can-do-1 
-      (with_self  
+      (with-self  
         (teacher *) $Tt) $Question $TeachersAnswer $LearnersAnswer))
 ; /******************************************************************/
 ; /* Brazdil's predicates for evaluating the behavior of "LEARNER" */
@@ -340,32 +305,28 @@
     (demo $Teacher $TeachersAnswer $LearnersAnswer))
  
 
-  (= (cannot-do (with_self  (learner *) $Tl) (with_self  (teacher *) $Tt) $Question $TeachersAnswer)  
-    (not (demo (with_self  (learner *) $Tl) $Question $LearnersAnswer))
+  (= (cannot-do (with-self  (learner *) $Tl) (with-self  (teacher *) $Tt) $Question $TeachersAnswer)  
+    (not (demo (with-self  (learner *) $Tl) $Question $LearnersAnswer))
     (demo 
-      (with_self  
+      (with-self  
         (teacher *) $Tt) $Question $TeachersAnswer))
   (= (cannot-do $Learner $Teacher $Question $_)  
-    (can-do $Learner $Teacher $Question $_)
-    (set-det)
-    (fail))
-  (= (cannot-do (with_self  (learner *) $Tl) (with_self  (teacher *) $Tt) $Question $TeachersAnswer)  
+    ( (can-do $Learner $Teacher $Question $_) 
+      (set-det) fail))
+  (= (cannot-do (with-self  (learner *) $Tl) (with-self  (teacher *) $Tt) $Question $TeachersAnswer)  
     (demo 
-      (with_self  
+      (with-self  
         (learner *) $Tl) $Question $_)
     (demo 
-      (with_self  
+      (with-self  
         (teacher *) $Tt) $Question $TeachersAnswer))
 ; ; It seems that the condition LearnersAnswer <> TeachersAnswer is missing !
  
 
   (= (what-cannot-do $_ $_ (<- $Q $_) $_ $_)  
-    (not (all-ground-term $Q))
-    (nl)
-    (write ' *** You asked a non ground question !')
-    (nl)
-    (set-det)
-    (fail))
+    ( (not (all-ground-term $Q)) nl 
+      (write ' *** You asked a non ground question !') nl 
+      (set-det) fail))
   (= (what-cannot-do $Ls $Ts (<- $Q $A) $FaultyStep $FaultyStep)  
     (can-do $Ls $Ts $Q $A))
   (= (what-cannot-do $Ls $Ts (<- $Q $A) $F1 (Cons  (<- $Q $A) $F1))  
@@ -383,11 +344,11 @@
     (not (demo-trace2 $Ls $Ts $Q $A $_)))
  
 
-  (= (faulty_step  $Q $A $F1 $F1 (Cons  (<-  $Q $A) $F1))  True)
-  (= (faulty_step  $Q $A $F1 $F3 $F3)  True)
+  (= (faulty-step  $Q $A $F1 $F1 ([|]  (<-  $Q $A) $F1))  True)
+  (= (faulty-step  $Q $A $F1 $F3 $F3)  True)
  
 
-  (= (what_cannot_do_list  $_ $_ () $F $F)  True)
+  (= (what-cannot-do-list  $_ $_ () $F $F)  True)
   (= (what-cannot-do-list $Ls $Ts (Cons  $Step1 $RestSteps) $F1 $F3)  
     (what-cannot-do $Ls $Ts $Step1 $F1 $F2)
     (what-cannot-do-list $Ls $Ts $RestSteps $F2 $F3))
@@ -463,7 +424,7 @@
 ; /******************************************************************/
  
 
-  (= (trace_list  () ())  True)
+  (= (trace-list  () ())  True)
   (= (trace-list (Cons  $SubGoal $Rest) (Cons  (<- $SubGoal $_) $Steps))  
     (trace-list $Rest $Steps))
  
@@ -509,9 +470,8 @@
     (set-det)
     (call $G))
   (= (show $_ $G)  
-    (predicate-property $G unknown)
-    (dynamic $G)
-    (fail))
+    ( (predicate-property $G unknown) 
+      (dynamic $G) fail))
   (= (show $_ $G)  
     (not (==  (= $G $_) (get-atoms  &self)))
     (call $G)
@@ -523,13 +483,11 @@
     (var $Y)
     (set-det))
   (= (is-value $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (is-value $_ $Y)  
-    (var $Y)
-    (set-det)
-    (fail))
+    ( (var $Y) 
+      (set-det) fail))
   (= (is-value $X $X)  
     (atomic $X)
     (set-det))
@@ -548,7 +506,7 @@
     (is-value $ArgsX $ArgsY))
  
 
-  (= (copy_vars  (variable  $G) ($G) $G2 ($G2))  True)
+  (= (copy-vars  (variable  $G) ($G) $G2 ($G2))  True)
 ; /******************************************************************/
 ; /* Variable handling procedures */
 ; /******************************************************************/
@@ -575,14 +533,14 @@
       (Cons  $F $Args2)))
  
 
-  (= (copy_vars_list  () $LVars $LVars () $LVars2 $LVars2)  True)
+  (= (copy-vars-list  () $LVars $LVars () $LVars2 $LVars2)  True)
   (= (copy-vars-list (Cons  $A $As) $PV $LV (Cons  $A2 $A2s) $PV2 $LV2)  
     (copy-vars $A $AVL $A2 $AVL2)
     (join-vars $AVL $PV $PVplus $AVL2 $PV2 $PV2plus)
     (copy-vars-list $As $PVplus $LV $A2s $PV2plus $LV2))
  
 
-  (= (join_vars  () $PV $PV () $PV2 $PV2)  True)
+  (= (join-vars  () $PV $PV () $PV2 $PV2)  True)
   (= (join-vars (Cons  $X $AVL) $PVin $PVout (Cons  $X2 $AVL2) $PV2in $PV2out)  
     (twin-member $X $PVin $X2 $PV2in)
     (join-vars $AVL $PVin $PVout $AVL2 $PV2in $PV2out))
@@ -592,7 +550,7 @@
       (Cons  $X2 $PV2in) $PV2out))
  
 
-  (= (twin_member  $Var (Cons  $Var $_) $Val (Cons  $Val $_))  True)
+  (= (twin-member  $Var ([|]  $Var $_) $Val ([|]  $Val $_))  True)
   (= (twin-member $Var (Cons  $_ $Tail1) $Val (Cons  $_ $Tail2))  
     (twin-member $Var $Tail1 $Val $Tail2))
  
@@ -612,10 +570,10 @@
 ; /* with its value in LVars2, to form a list of substituitions of */
 ; /* the form val(<var>,<term>). */
 ; /******************************************************************/
-  (= (link_vals  () () ())  True)
+  (= (link-vals  () () ())  True)
  
 
-  (= (set_vars  $Goal () $Goal)  True)
+  (= (set-vars  $Goal () $Goal)  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : set_vars(+Goal1,+Cond,-Goal2) */
@@ -654,9 +612,8 @@
  
 
   (= (all-ground-term $Variable)  
-    (var $Variable)
-    (set-det)
-    (fail))
+    ( (var $Variable) 
+      (set-det) fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : all_ground_term(+Term) */
@@ -685,29 +642,25 @@
  
 
   (= (check-goal $Goal)  
-    (not (all-ground-term $Goal))
-    (write ' *** Only ground terms in goal allowed !')
-    (set-det)
-    (fail))
+    ( (not (all-ground-term $Goal)) 
+      (write ' *** Only ground terms in goal allowed !') 
+      (set-det) fail))
   (= (check-goal $Goal)  
-    (not (proper-variable $Goal))
-    (write ' *** <name> of any variable(<name>) should be symbolic ground !')
-    (set-det)
-    (fail))
-  (= (check_goal  $_)  True)
+    ( (not (proper-variable $Goal)) 
+      (write ' *** <name> of any variable(<name>) should be atomic ground !') 
+      (set-det) fail))
+  (= (check-goal  $_)  True)
  
 
   (= (proper-variable $Atom)  
     (atomic $Atom)
     (set-det))
   (= (proper-variable (variable $Name))  
-    (not (atomic $Name))
-    (write ' *** variable(')
-    (write $Name)
-    (write ') not symbolic')
-    (nl)
-    (set-det)
-    (fail))
+    ( (not (atomic $Name)) 
+      (write ' *** variable(') 
+      (write $Name) 
+      (write ') not atomic') nl 
+      (set-det) fail))
   (= (proper-variable (Cons  $Head $Tail))  
     (set-det)
     (proper-variable $Head)
@@ -719,21 +672,18 @@
  
 
   (= (check-conditions $Cond)  
-    (not (all-ground-term $Cond))
-    (write ' *** Only ground terms in conditions allowed !')
-    (set-det)
-    (fail))
+    ( (not (all-ground-term $Cond)) 
+      (write ' *** Only ground terms in conditions allowed !') 
+      (set-det) fail))
   (= (check-conditions $Cond)  
-    (not (proper-format $Cond))
-    (write ' *** Conditions should be either an uninstanziated variable')
-    (nl)
-    (write '     or a list of structures, val(variable(<name>),<value>) !')
-    (set-det)
-    (fail))
-  (= (check_conditions  $_)  True)
+    ( (not (proper-format $Cond)) 
+      (write ' *** Conditions should be either an uninstanziated variable') nl 
+      (write '     or a list of structures, val(variable(<name>),<value>) !') 
+      (set-det) fail))
+  (= (check-conditions  $_)  True)
  
 
-  (= (proper_format  ())  True)
+  (= (proper-format  ())  True)
   (= (proper-format (Cons  (val (variable $Atom) $_) $Tail))  
     (atomic $Atom)
     (proper-format $Tail))
@@ -752,11 +702,10 @@
     (atomic $Atom)
     (set-det))
   (= (make-ground-term $D $_)  
-    (== $D 0)
-    (format user-error ~N~q~n 
-      (:: (make-ground-term $D $_)))
-    (set-det)
-    (fail))
+    ( (== $D 0) 
+      (format user-error ~N~q~n 
+        (:: (make-ground-term $D $_))) 
+      (set-det) fail))
   (= (make-ground-term $D (Cons  $Head $Tail))  
     (set-det)
     (is $D2 
@@ -775,7 +724,7 @@
     (make-ground-term $D2 $Args))
  
 
-  (= (no_new_values  ())  True)
+  (= (no-new-values  ())  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : no_new_values(+List) */
@@ -810,9 +759,8 @@
  
 
   (= (same-var dummy $Y)  
-    (var $Y)
-    (set-det)
-    (fail))
+    ( (var $Y) 
+      (set-det) fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : same_var(+Var1,+Var2) */
@@ -829,7 +777,7 @@
     (var $Y))
  
 
-  (= (digits_of_next_sym  "1")  True)
+  (= (digits-of-next-sym  "1")  True)
 ; /******************************************************************/
 ; /* Miscelenous predicates */
 ; /******************************************************************/
@@ -841,10 +789,10 @@
       (append "sym" $RLN $LS) 
       (name $X $LS) 
       (inc-digits $LN $LN2) 
-      (remove-is-symbol  &self 
-        (digits_of_next_sym  $LN)) 
-      (add-is-symbol  &self 
-        (digits_of_next_sym  $LN2))))
+      (remove-atom  &self 
+        (digits-of-next-sym  $LN)) 
+      (add-atom  &self 
+        (digits-of-next-sym  $LN2))))
  
 
   (= (inc-digits (Cons  $D1 $LDT) (Cons  $D2 $LDT))  
@@ -853,7 +801,7 @@
       (+ $D1 1)))
   (= (inc-digits (Cons  $_ $LDT) (Cons  48 $LDT2))  
     (inc-digits $LDT $LDT2))
-  (= (inc_digits  () (49))  True)
+  (= (inc-digits  () (49))  True)
  
 
   (= (revzap (Cons  $H $T) $V $R)  
@@ -870,9 +818,9 @@
  
 
   (= (ignore-space $C)  
-    (repeat)
-    (get0 $C)
-    (non-space $C))
+    (repeat 
+      (get0 $C) 
+      (non-space $C)))
  
 
   (= (rcl  10 ())  True)
@@ -896,18 +844,15 @@
  
 
   (= (non-space $C)  
-    (space $C)
-    (set-det)
-    (fail))
+    ( (space $C) 
+      (set-det) fail))
   (= (non-space 10)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (non-space $C)  
     (proper-char $C))
   (= (non-space $_)  
-    (put 7)
-    (set-det)
-    (fail))
+    ( (put 7) 
+      (set-det) fail))
  
 
   (= (space  32)  True)
@@ -928,7 +873,7 @@
   (= (delete-space (Cons  $S $T) $L)  
     (space $S)
     (delete-space $T $L))
-  (= (delete_space  $L $L)  True)
+  (= (delete-space  $L $L)  True)
 
 
   (= (reverse  () ())  True)

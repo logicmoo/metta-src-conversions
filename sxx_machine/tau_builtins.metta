@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tau_builtins $_361144 sxx_machine/tau_builtins.pl sxx_machine/tau_builtins.metta)
+;                                           (convert-to-metta-file  tau_builtins $_194264 sxx_machine/tau_builtins.pl sxx_machine/tau_builtins.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -40,8 +40,8 @@
 ; /* '$builtin_meta_predicates'(undo, 1, [:]). '$builtin_meta_predicates'(undo1, 1, [:]). '$builtin_meta_predicates'(redo_each_call, 3, [:,:,:]). '$builtin_meta_predicates'(one_of_or_else, 3, [:,:,:]). */
 
   (= (undo1 $Term)  
-    ($get-current-B $Cut)
-    ($meta-call $Term user $Cut 0 interpret))	
+    (%get-current-B $Cut)
+    (%meta-call $Term user $Cut 0 interpret))	
 
 
   (= (redo-each-call $EachSetup $Call $EachCleanup)  

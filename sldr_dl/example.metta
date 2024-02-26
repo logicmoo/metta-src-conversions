@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  example $_339368 sldr_dl/example.pl sldr_dl/example.metta)
+;                                           (convert-to-metta-file  example $_419394 sldr_dl/example.pl sldr_dl/example.metta)
 
 
 
@@ -74,44 +74,42 @@
       (:: layer1 layer2 layer3 layer4 layer5 layer6)))
 
 
-  (= (run-main)  
-    (init-search-time)
-    (nnet-definition $NNet)
-    (rule-set $RS $NR)
-    (symbol-set $SS $NS)
-    (= $LM 
-      (method 
-        (learning 100 0.01) 
-        (input 2 2) 
-        (output 7)))
-    (= $RM 
-      (method reasoning 
-        (input 2 2) 
-        (output 7)))
-    (= $G1 
-      (:: (- (:: female lucy))))
-    (dnn-sl-resolution $G1 
-      (:: $RS $NR) 
-      (:: $SS $NS) $NNet $LM 100 $_)
-    (= $G2 
-      (:: (- (:: mother lucy bob))))
-    (dnn-sl-resolution $G2 
-      (:: $RS $NR) 
-      (:: $SS $NS) $NNet $LM 100 $_)
-    (= $G3 
-      (:: 
-        (- (:: mother lucy bob)) 
-        (- (:: female lucy))))
-    (dnn-sl-resolution $G3 
-      (:: $RS $NR) 
-      (:: $SS $NS) $NNet $LM 100 $_)
-    (= $G4 
-      (:: (- (:: parent lucy bob))))
-    (dnn-sl-resolution $G4 
-      (:: $RS $NR) 
-      (:: $SS $NS) $NNet $RM 100 $Path4)
-    (nl)
-    (print-by-line $Path4)
-    (nl))
+  (= run-main  
+    (init-search-time 
+      (nnet-definition $NNet) 
+      (rule-set $RS $NR) 
+      (symbol-set $SS $NS) 
+      (= $LM 
+        (method 
+          (learning 100 0.01) 
+          (input 2 2) 
+          (output 7))) 
+      (= $RM 
+        (method reasoning 
+          (input 2 2) 
+          (output 7))) 
+      (= $G1 
+        (:: (- (:: female lucy)))) 
+      (dnn-sl-resolution $G1 
+        (:: $RS $NR) 
+        (:: $SS $NS) $NNet $LM 100 $_) 
+      (= $G2 
+        (:: (- (:: mother lucy bob)))) 
+      (dnn-sl-resolution $G2 
+        (:: $RS $NR) 
+        (:: $SS $NS) $NNet $LM 100 $_) 
+      (= $G3 
+        (:: 
+          (- (:: mother lucy bob)) 
+          (- (:: female lucy)))) 
+      (dnn-sl-resolution $G3 
+        (:: $RS $NR) 
+        (:: $SS $NS) $NNet $LM 100 $_) 
+      (= $G4 
+        (:: (- (:: parent lucy bob)))) 
+      (dnn-sl-resolution $G4 
+        (:: $RS $NR) 
+        (:: $SS $NS) $NNet $RM 100 $Path4) nl 
+      (print-by-line $Path4) nl))
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  g2_ops $_234856 miles/g2_ops.pl miles/g2_ops.metta)
+;                                           (convert-to-metta-file  g2_ops $_436946 miles/g2_ops.pl miles/g2_ops.metta)
 ;
 ; MODULE g2_ops EXPORTS
 
@@ -203,7 +203,7 @@
     (get-clause $IDC2 $_ $_ $C2 $_)
     (set-det)
     (lgti $C1 $C2 $G $S1 $S2 $Bound)
-    (once (, (relevant-vars3 $C1 $C2 $G $S1 $S2 $Vars) (=.. $NewLit (Cons  $NewPred $Vars)) (append $G (:: (with_self  $NewLit (n))) $A) (copy-term (, $C1 $G $S1 $NewLit) (, $C11 $G11 $S11 $NewLit11)) (skolemize (, $C11 $G11 $S11 $NewLit11) $Phi1 (, $C12 $G12 $S12 $NewLit12)) (replace $G12 $S12 $G13 $S12) (replace (:: $NewLit12) $S12 (:: $NewLit13) $S12) (subtract $C12 $G13 $B1BodyS) (= $B1S (Cons  (with_self  $NewLit13 (p)) $B1BodyS)) (deskolemize $B1S $Phi1 $B1) (copy-term (, $C2 $G $S2 $NewLit) (, $C21 $G21 $S21 $NewLit21)) (skolemize (, $C21 $G21 $S21 $NewLit21) $Phi2 (, $C22 $G22 $S22 $NewLit22)) (replace $G22 $S22 $G23 $S22) (replace (:: $NewLit22) $S22 (:: $NewLit23) $S22) (subtract $C22 $G23 $B2BodyS) (= $B2S (Cons  (with_self  $NewLit23 (p)) $B2BodyS)) (deskolemize $B2S $Phi2 $B2) (store-clause $_ $A ic $IDA) (store-clause $_ $B1 ic $IDB1) (store-clause $_ $B2 ic $IDB2))))
+    (once (, (relevant-vars3 $C1 $C2 $G $S1 $S2 $Vars) (=.. $NewLit (Cons  $NewPred $Vars)) (append $G (:: (with-self  $NewLit n)) $A) (copy-term (, $C1 $G $S1 $NewLit) (, $C11 $G11 $S11 $NewLit11)) (skolemize (, $C11 $G11 $S11 $NewLit11) $Phi1 (, $C12 $G12 $S12 $NewLit12)) (replace $G12 $S12 $G13 $S12) (replace (:: $NewLit12) $S12 (:: $NewLit13) $S12) (subtract $C12 $G13 $B1BodyS) (= $B1S (Cons  (with-self  $NewLit13 p) $B1BodyS)) (deskolemize $B1S $Phi1 $B1) (copy-term (, $C2 $G $S2 $NewLit) (, $C21 $G21 $S21 $NewLit21)) (skolemize (, $C21 $G21 $S21 $NewLit21) $Phi2 (, $C22 $G22 $S22 $NewLit22)) (replace $G22 $S22 $G23 $S22) (replace (:: $NewLit22) $S22 (:: $NewLit23) $S22) (subtract $C22 $G23 $B2BodyS) (= $B2S (Cons  (with-self  $NewLit23 p) $B2BodyS)) (deskolemize $B2S $Phi2 $B2) (store-clause $_ $A ic $IDA) (store-clause $_ $B1 ic $IDB1) (store-clause $_ $B2 ic $IDB2))))
 ; ; G is common generalization
 ; ;;; ITOU - like
 ; ; build clause in center top
@@ -283,7 +283,7 @@
     (get-clause $IDC2 $_ $_ $C2 $_)
     (set-det)
     (lgti $C1 $C2 $G $S1 $S2 $Bound)
-    (once (, (relevant-vars2 $C1 $C2 $G $S1 $S2 $Vars) (=.. $NewLit (Cons  $NewPred $Vars)) (append $G (:: (with_self  $NewLit (n))) $A) (copy-term (, $C1 $G $S1 $NewLit) (, $C11 $G11 $S11 $NewLit11)) (skolemize (, $C11 $G11 $S11 $NewLit11) $Phi1 (, $C12 $G12 $S12 $NewLit12)) (replace $G12 $S12 $G13 $S12) (replace (:: $NewLit12) $S12 (:: $NewLit13) $S12) (subtract $C12 $G13 $B1BodyS) (= $B1S (Cons  (with_self  $NewLit13 (p)) $B1BodyS)) (deskolemize $B1S $Phi1 $B1) (copy-term (, $C2 $G $S2 $NewLit) (, $C21 $G21 $S21 $NewLit21)) (skolemize (, $C21 $G21 $S21 $NewLit21) $Phi2 (, $C22 $G22 $S22 $NewLit22)) (replace $G22 $S22 $G23 $S22) (replace (:: $NewLit22) $S22 (:: $NewLit23) $S22) (subtract $C22 $G23 $B2BodyS) (= $B2S (Cons  (with_self  $NewLit23 (p)) $B2BodyS)) (deskolemize $B2S $Phi2 $B2) (store-clause $_ $A ic $IDA) (store-clause $_ $B1 ic $IDB1) (store-clause $_ $B2 ic $IDB2))))
+    (once (, (relevant-vars2 $C1 $C2 $G $S1 $S2 $Vars) (=.. $NewLit (Cons  $NewPred $Vars)) (append $G (:: (with-self  $NewLit n)) $A) (copy-term (, $C1 $G $S1 $NewLit) (, $C11 $G11 $S11 $NewLit11)) (skolemize (, $C11 $G11 $S11 $NewLit11) $Phi1 (, $C12 $G12 $S12 $NewLit12)) (replace $G12 $S12 $G13 $S12) (replace (:: $NewLit12) $S12 (:: $NewLit13) $S12) (subtract $C12 $G13 $B1BodyS) (= $B1S (Cons  (with-self  $NewLit13 p) $B1BodyS)) (deskolemize $B1S $Phi1 $B1) (copy-term (, $C2 $G $S2 $NewLit) (, $C21 $G21 $S21 $NewLit21)) (skolemize (, $C21 $G21 $S21 $NewLit21) $Phi2 (, $C22 $G22 $S22 $NewLit22)) (replace $G22 $S22 $G23 $S22) (replace (:: $NewLit22) $S22 (:: $NewLit23) $S22) (subtract $C22 $G23 $B2BodyS) (= $B2S (Cons  (with-self  $NewLit23 p) $B2BodyS)) (deskolemize $B2S $Phi2 $B2) (store-clause $_ $A ic $IDA) (store-clause $_ $B1 ic $IDB1) (store-clause $_ $B2 ic $IDB2))))
 ; ; G is common generalization
 ; ;;; CIGOL - like
 ; ; build clause in center top
@@ -376,14 +376,10 @@
         (, 
           (confirm 
             (:: $A $B1 $B2) $L) 
-          (delete-all (:: $C1 $C2)) 
-          (nl) 
+          (delete-all (:: $C1 $C2)) nl 
           (write 'Resolvent clauses deleted.')) 
-        (, 
-          (nl) 
-          (write 'G2: No compression achieved.') 
-          (nl) 
-          (fail))) 
+        (, nl 
+          (write 'G2: No compression achieved.') nl fail)) 
       (delete-clause $A)))
 ; ; Clgg = A\{L}
 ; ; heuristic proc.
@@ -498,18 +494,13 @@
         (, 
           (confirm 
             (Cons  $A $BB) $N) 
-          (delete-all $CC) 
-          (nl) 
+          (delete-all $CC) nl 
           (write 'Resolvent clauses deleted.')) 
-        (, 
-          (nl) 
-          (write 'G2: No compression achieved.') 
-          (nl) 
-          (fail))) 
+        (, nl 
+          (write 'G2: No compression achieved.') nl fail)) 
       (, 
         (delete-all $BB) 
-        (delete-clause $A) 
-        (fail))))
+        (delete-clause $A) fail)))
 
 	
 
@@ -569,17 +560,15 @@
 ; ************************************************************************
 
 
-  (= (not-unary (:: (with_self  $_ (p))))  
-    (nl)
-    (write 'No compression achievable.')
-    (set-det)
-    (fail))
-  (= (not-unary (:: (with_self  (True *) (p)) $_))  
-    (nl)
-    (write 'No compression achievable.')
-    (set-det)
-    (fail))
-  (= (not_unary  $_)  True)
+  (= (not-unary (:: (with-self  $_ p)))  
+    (nl 
+      (write 'No compression achievable.') 
+      (set-det) fail))
+  (= (not-unary (:: (with-self  True p) $_))  
+    (nl 
+      (write 'No compression achievable.') 
+      (set-det) fail))
+  (= (not-unary  $_)  True)
 	
 
 ;
@@ -678,11 +667,11 @@
 ; ************************************************************************
 
 
-  (= (buildparentA (Cons  (with_self  (True *) (p)) $Rest) $L (Cons  (with_self  $L (p)) $Rest))  
+  (= (buildparentA (Cons  (with-self  True p) $Rest) $L (Cons  (with-self  $L p) $Rest))  
     (set-det))
   (= (buildparentA $List $L $Alist)  
     (append $List 
-      (:: (with_self  $L (n))) $Alist)
+      (:: (with-self  $L n)) $Alist)
     (set-det))
 
 
@@ -730,6 +719,5 @@
     (det-if-then-else 
       (< $Cnew $Cold) True 
       (, 
-        (delete-all $New_cl) 
-        (fail))))
+        (delete-all $New_cl) fail)))
 

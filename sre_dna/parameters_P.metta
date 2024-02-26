@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  parameters_P $_141870 sre_dna/parameters_P.pl sre_dna/parameters_P.metta)
+;                                           (convert-to-metta-file  parameters_P $_322066 sre_dna/parameters_P.pl sre_dna/parameters_P.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -153,113 +153,113 @@
 
 
 
-  (= (wd_P  /pack/narsese/prolog/sre_dna/)  True)
+  (= (wd-P  /pack/narsese/prolog/sre_dna/)  True)
 
 
-  (= (fitness_func_P  reg_gram_1.pl)  True)
+  (= (fitness-func-P  reg_gram_1.pl)  True)
 
-  (= (dctg_file_P  sre3.pl)  True)
+  (= (dctg-file-P  sre3.pl)  True)
 
 
-  (= (population_size_P  750 500)  True)	;
+  (= (population-size-P  750 500)  True)	;
 ; <-- 750, 500
 
-  (= (cull_method_P  elite)  True)		;
+  (= (cull-method-P  elite)  True)		;
 ; <-- tournament
 
-  (= (max_runs_P  1 solution 50)  True)	;
+  (= (max-runs-P  1 solution 50)  True)	;
 ; <-- 5, solution, 35
 
-  (= (prob_grow_P  0.5)  True)		;
+  (= (prob-grow-P  0.5)  True)		;
 ; <-- 0.25
 
-  (= (prob_crossover_P  0.9)  True)        ;
+  (= (prob-crossover-P  0.9)  True)        ;
 ; <-- 0.90
 
-  (= (reprod_P  3)  True) 			;
+  (= (reprod-P  3)  True) 			;
 ; <-- 3
 
-  (= (prob_internal_crossover_P  0.9)  True) ;
+  (= (prob-internal-crossover-P  0.9)  True) ;
 ; <-- 0.90 or no
 
-  (= (prob_terminal_mutation_P  0.75)  True) ;
+  (= (prob-terminal-mutation-P  0.75)  True) ;
 ; <-- 0.75 or no
 
-  (= (max_depth_P  10 17)  True)		;
+  (= (max-depth-P  10 17)  True)		;
 ; <-- 6, 17
 
-  (= (error_tolerance_P  0)  True)		;
+  (= (error-tolerance-P  0)  True)		;
 ; <-- 0.000001
 
-  (= (tournament_size_P  4 4)  True)	;
+  (= (tournament-size-P  4 4)  True)	;
 ; <-- 2, 3
 
-  (= (lamarckian_P  0.0 10 best 0.1)  True) ;
+  (= (lamarckian-P  0.0 10 best 0.1)  True) ;
 ; <-- 0.25, 10, best, 0.20; (0.0,...) = off
 ;
 ; lamarckian_P(0.25, 10, best, 0.20).
 
-  (= (unique_population_P  yes)  True)	;
+  (= (unique-population-P  yes)  True)	;
 ; <-- no
 
-  (= (trace_limit_P  0 0)  True)		;
+  (= (trace-limit-P  0 0)  True)		;
 ; <-- (40, 90)
 
-  (= (rep_limit_P  2)  True)			;
+  (= (rep-limit-P  2)  True)			;
 ; <-- 3
 
-  (= (max_string_length_P  20)  True)	;
+  (= (max-string-length-P  20)  True)	;
 ; <-- 10
 
-  (= (seed_P  random (,  $_ (,  $_ $_)))  True)	;
+  (= (seed-P  random (,  $_ (,  $_ $_)))  True)	;
 ; <-- random, (_,_,_)
 
-  (= (popn_dump_P  no)  True)			;
+  (= (popn-dump-P  no)  True)			;
 ; <-- no
 
-  (= (gen_type_P  steadystate)  True)	;
+  (= (gen-type-P  steadystate)  True)	;
 ; <-- steadystate
 
-  (= (evaluator_reset_P  generate_testset 100)  True)	;
+  (= (evaluator-reset-P  generate_testset 100)  True)	;
 ; <-- no
 
-  (= (reprod_verif_P  no)  True)		;
+  (= (reprod-verif-P  no)  True)		;
 ; <-- yes
 
-  (= (user_args_P  ())  True)			;
+  (= (user-args-P  ())  True)			;
 ; <-- eg. [], [_] or [_|_] if arity 0, 1 or 2
 
-  (= (dctg_root_P  expr)  True)		;
+  (= (dctg-root-P  expr)  True)		;
 ; 
 
-  (= (dctg_override_P  () ())  True)	;
+  (= (dctg-override-P  () ())  True)	;
 ; <-- [], []
 
-  (= (mutation_range_P  0.1)  True) 		;
+  (= (mutation-range-P  0.1)  True) 		;
 ; <-- was 0.025
 
-  (= (sre_mintestcnt_P  2)  True)		;
+  (= (sre-mintestcnt-P  2)  True)		;
 ; <-- 2
 
-  (= (gen_set_size_P  1000)  True)		;
+  (= (gen-set-size-P  1000)  True)		;
 ; <-- 250
 
-  (= (min_grammar_prob_P  0.0001)  True)	;
+  (= (min-grammar-prob-P  0.0001)  True)	;
 ; <-- 1.0e-4
 
-  (= (min_skip_prob_P  0.0001)  True)	;
+  (= (min-skip-prob-P  0.0001)  True)	;
 ; <-- 1.0e-4
 
-  (= (unique_guards_P  no)  True)		;
+  (= (unique-guards-P  no)  True)		;
 ; <-- yes
 
-  (= (elite_migrate_P  0 no)  True)		;
+  (= (elite-migrate-P  0 no)  True)		;
 ; <-- 10
 
-  (= (negsetsize_P  30)  True)			;
+  (= (negsetsize-P  30)  True)			;
 ; <-- 75
 
-  (= (eval_with_ID_P  no)  True)		;
+  (= (eval-with-ID-P  no)  True)		;
 ; <-- no
 
 

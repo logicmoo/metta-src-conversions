@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  menus $_63808 metagame/misc/menus.pl metagame/misc/menus.metta)
+;                                           (convert-to-metta-file  menus $_316968 metagame/misc/menus.pl metagame/misc/menus.metta)
 ;
 ; ============================================================
 ;

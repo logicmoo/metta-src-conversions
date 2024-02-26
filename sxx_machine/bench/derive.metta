@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  derive $_283666 sxx_machine/bench/derive.pl sxx_machine/bench/derive.metta)
+;                                           (convert-to-metta-file  derive $_460194 sxx_machine/bench/derive.pl sxx_machine/bench/derive.metta)
 ;
 ; generated: 25 October 1989
 ;
@@ -17,13 +17,11 @@
 ; symbolic derivative of (x+1)*((^(x,2)+2)*(^(x,3)+3))
 
 
-  (= (top)  
-    (ops8)
-    (log10)
-    (divide10))
+  (= top  
+    (ops8 log10 divide10))
 
 
-  (= (ops8)  
+  (= ops8  
     (d 
       (* 
         (+ x 1) 
@@ -33,11 +31,11 @@
           (+ 
             (^ x 3) 3))) x $_))
 
-  (= (log10)  
+  (= log10  
     (d 
       (log (log (log (log (log (log (log (log (log (log x)))))))))) x $_))
 
-  (= (divide10)  
+  (= divide10  
     (d 
       (/ 
         (/ 

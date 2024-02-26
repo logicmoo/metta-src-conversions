@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  div_utils $_303102 miles/div_utils.pl miles/div_utils.metta)
+;                                           (convert-to-metta-file  div_utils $_202890 miles/div_utils.pl miles/div_utils.metta)
 ;
 ; MODULE div_utils EXPORTS
 
@@ -184,7 +184,7 @@
 ; ***********************************************************************
 
 
-  (= (sort_by_length  () $L $L)  True)
+  (= (sort-by-length  () $L $L)  True)
   (= (sort-by-length (Cons  $IXS $R) $L $L2)  
     (insert-by-length $IXS $L $L1)
     (sort-by-length $R $L1 $L2))
@@ -196,7 +196,7 @@
     (> $N $N1)
     (set-det)
     (insert-by-length $X $R $R1))
-  (= (insert_by_length  $X $L (Cons  $X $L))  True)
+  (= (insert-by-length  $X $L ([|]  $X $L))  True)
 
 
 ;
@@ -368,7 +368,7 @@
 ; ***********************************************************************
 
 
-  (= (effaceall  $A (Cons  $A $L) $L)  True)
+  (= (effaceall  $A ([|]  $A $L) $L)  True)
   (= (effaceall $A (Cons  $B $L) (Cons  $B $M))  
     (effaceall $A $L $M))
 
@@ -411,7 +411,7 @@
 ; ***********************************************************************
 
 
-  (= (best  (Cons  $X $_) $X)  True)
+  (= (best  ([|]  $X $_) $X)  True)
   (= (best (Cons  $_ $R) $X)  
     (best $R $X))
 
@@ -454,7 +454,7 @@
 ; ***********************************************************************
 
 
-  (= (buildpar2  (:  $Elem1 p) $List2 (Cons  (:  $Elem1 p) $List2))  True)
+  (= (buildpar2  (:  $Elem1 p) $List2 ([|]  (:  $Elem1 p) $List2))  True)
   (= (buildpar2 $ResLit $List2 $Parent2)  
     (append $List2 
       (:: $ResLit) $Parent2))
@@ -673,16 +673,13 @@
     (set-det)
     (det-if-then-else 
       (member 
-        (with_self  $PrefHead 
-          (p)) $GenClause) 
+        (with-self  $PrefHead p) $GenClause) 
       (= $Head $PrefHead) 
       (member 
-        (with_self  $Head 
-          (p)) $GenClause))
+        (with-self  $Head p) $GenClause))
     (= $HornClause 
       (Cons  
-        (with_self  $Head 
-          (p)) $Body)))
+        (with-self  $Head p) $Body)))
 ; ; if preferred head is among
 ; ; candidates, select it.
 ; ; Else select first candidate.
@@ -728,12 +725,12 @@
 
 
 
-  (= (extract_body  () ())  True)
-  (= (extract-body (Cons  (with_self  $L (n)) $Rest) (Cons  (with_self  $L (n)) $Rest1))  
+  (= (extract-body  () ())  True)
+  (= (extract-body (Cons  (with-self  $L n) $Rest) (Cons  (with-self  $L n) $Rest1))  
     (extract-body $Rest $Rest1))
-  (= (extract-body (Cons  (with_self  $L (r)) $Rest) (Cons  (with_self  $L (r)) $Rest1))  
+  (= (extract-body (Cons  (with-self  $L r) $Rest) (Cons  (with-self  $L r) $Rest1))  
     (extract-body $Rest $Rest1))
-  (= (extract-body (Cons  (with_self  $_ (p)) $Rest) $Rest1)  
+  (= (extract-body (Cons  (with-self  $_ p) $Rest) $Rest1)  
     (extract-body $Rest $Rest1))
 
 
@@ -777,8 +774,8 @@
   (= (list-to-struct (Cons  $A (Cons  $B $Rest)) (, $A $Rest1))  
     (list-to-struct 
       (Cons  $B $Rest) $Rest1))
-  (= (list_to_struct  ($A) $A)  True)
-  (= (list_to_struct  () true)  True)
+  (= (list-to-struct  ($A) $A)  True)
+  (= (list-to-struct  () true)  True)
 
 
 ;
@@ -821,22 +818,22 @@
 ; ***********************************************************************
 
 
-  (= (clist-to-prolog (Cons  (with_self  $A (p)) (Cons  $B $Rest)) (= $A  $Rest1))  
+  (= (clist-to-prolog (Cons  (with-self  $A p) (Cons  $B $Rest)) (= $A  $Rest1))  
     (set-det)
     (clist-to-prolog 
       (Cons  $B $Rest) $Rest1))
-  (= (clist-to-prolog (:: (with_self  $A (p))) (= $A  True))  
+  (= (clist-to-prolog (:: (with-self  $A p)) (= $A  True))  
     (set-det))
-  (= (clist-to-prolog (Cons  (with_self  $A (n)) (Cons  $B $Rest)) (, $A $Rest1))  
+  (= (clist-to-prolog (Cons  (with-self  $A n) (Cons  $B $Rest)) (, $A $Rest1))  
     (set-det)
     (clist-to-prolog 
       (Cons  $B $Rest) $Rest1))
-  (= (clist-to-prolog (:: (with_self  $A (n))) $A)  
+  (= (clist-to-prolog (:: (with-self  $A n)) $A)  
     (set-det))
-  (= (clist-to-prolog (Cons  (with_self  $A (r)) (Cons  $B $Rest)) (, $A $Rest1))  
+  (= (clist-to-prolog (Cons  (with-self  $A r) (Cons  $B $Rest)) (, $A $Rest1))  
     (clist-to-prolog 
       (Cons  $B $Rest) $Rest1))
-  (= (clist_to_prolog  ((:  $A r)) $A)  True)
+  (= (clist-to-prolog  ((:  $A r)) $A)  True)
 
 
 ;
@@ -875,7 +872,7 @@
 ; ***********************************************************************
 
 
-  (= (append_all  () ())  True)
+  (= (append-all  () ())  True)
   (= (append-all (Cons  $P $R) $R2)  
     (append-all $R $R1)
     (append $P $R1 $R2))
@@ -1012,7 +1009,7 @@
 ; ***********************************************************************
 
 
-  (= (identical_make_unique  () ())  True)
+  (= (identical-make-unique  () ())  True)
   (= (identical-make-unique (Cons  $X $R) $R1)  
     (contains-var $X $R)
     (set-det)
@@ -1059,7 +1056,7 @@
 ; ***********************************************************************
 
 
-  (= (remove_v  $_ () ())  True)
+  (= (remove-v  $_ () ())  True)
   (= (remove-v $T (Cons  $T1 $R) $R1)  
     (identical-member $T1 $T)
     (set-det)
@@ -1107,7 +1104,7 @@
 ; ***********************************************************************
 
 
-  (= (remove_variant  $_ () ())  True)
+  (= (remove-variant  $_ () ())  True)
   (= (remove-variant $T (Cons  $T1 $R) $R1)  
     (variant-mem $T1 $T)
     (set-det)
@@ -1152,7 +1149,7 @@
 ; ***********************************************************************
 
 
-  (= (make_unique  () ())  True)
+  (= (make-unique  () ())  True)
   (= (make-unique (Cons  $X $R) $R1)  
     (variant-mem $X $R)
     (set-det)
@@ -1244,14 +1241,14 @@
 ; ***********************************************************************
 
 
-  (= (different_predicates  () ())  True)
+  (= (different-predicates  () ())  True)
   (= (different-predicates (Cons  $E $R) (Cons  (Cons  $E $Es) $R2))  
     (functor $E $F $N)
     (diff-predicates $R $R1 $Es $F $N)
     (different-predicates $R1 $R2))
 
 
-  (= (diff_predicates  () () () $_ $_)  True)
+  (= (diff-predicates  () () () $_ $_)  True)
   (= (diff-predicates (Cons  $E $R) $R2 $Es2 $_ 0)  
     (set-det)
     (diff-predicates $R $R1 $Es1 $_ 0)
@@ -1319,7 +1316,7 @@
 ; ***********************************************************************
 
 
-  (= (nth_arg  () $_ ())  True)
+  (= (nth-arg  () $_ ())  True)
   (= (nth-arg (Cons  $F $R) $N (Cons  $Argn $R1))  
     (arg $N $F $Argn)
     (nth-arg $R $N $R1))
@@ -1465,19 +1462,19 @@
 ; ***********************************************************************
 
 
-  (= (body2list $B (Cons  (with_self  $L1 (n)) $RestL))  
+  (= (body2list $B (Cons  (with-self  $L1 n) $RestL))  
     (functor $B , 2)
     (arg 1 $B $L1)
     (arg 2 $B $RestB)
     (body2list $RestB $RestL))
-  (= (body2list $B (:: (with_self  $B (n))))  
+  (= (body2list $B (:: (with-self  $B n)))  
     (set-det))
-  (= (body2list $B (Cons  (with_self  $L1 (r)) $RestL))  
+  (= (body2list $B (Cons  (with-self  $L1 r) $RestL))  
     (functor $B , 2)
     (arg 1 $B $L1)
     (arg 2 $B $RestB)
     (body2list $RestB $RestL))
-  (= (body2list $B (:: (with_self  $B (r))))  
+  (= (body2list $B (:: (with-self  $B r)))  
     (set-det))
 
 
@@ -1524,7 +1521,7 @@
     (> $I $J)
     (set-det)
     (insert-unique $I $R $R1))
-  (= (insert_unique  $I $L (Cons  $I $L))  True)
+  (= (insert-unique  $I $L ([|]  $I $L))  True)
 
 
 
@@ -1565,9 +1562,9 @@
 ;
 ; ***********************************************************************
 
-  (= (insert-unique $I $A Nil (:: (with_self  $I (:: $A))))  
+  (= (insert-unique $I $A Nil (:: (with-self  $I (:: $A))))  
     (set-det))
-  (= (insert-unique $I $A (Cons  (with_self  $I $A1) $R) (Cons  (with_self  $I (Cons  $A $A1)) $R))  
+  (= (insert-unique $I $A (Cons  (with-self  $I $A1) $R) (Cons  (with-self  $I (Cons  $A $A1)) $R))  
     (set-det))
   (= (insert-unique $I $A (Cons  $J $R) (Cons  $J $R1))  
     (insert-unique $I $A $R $R1))
@@ -1897,6 +1894,5 @@
     (is $L 
       (+ $L1 $LU)))
   (= (sum-of-logs $U $O $_)  
-    (> $U $O)
-    (set-det)
-    (fail))
+    ( (> $U $O) 
+      (set-det) fail))

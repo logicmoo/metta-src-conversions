@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ebg $_176472 ebg/ebg.pl ebg/ebg.metta)
+;                                           (convert-to-metta-file  ebg $_334970 ebg/ebg.pl ebg/ebg.metta)
 
   (= (prove-1 (, $HEAD $REST))  
     (set-det)
@@ -42,10 +42,10 @@
 ; /* properties : backtrackable */
 ; /* */
 ; /******************************************************************/
-; /* prove_1 implements a PROLOG meta-interpreter, which succeds if */
-; /* GOAL is deducible from a PROLOG program. */
+; /* prove_1 implements a MeTTa meta-interpreter, which succeds if */
+; /* GOAL is deducible from a MeTTa program. */
 ; /* In opposite to the literature the last clause is necessary to */
-; /* handle PROLOG built-in predicates corret. */
+; /* handle MeTTa built-in predicates corret. */
 ; /******************************************************************/
   (= (prove-1 $FACT)  
     (==  
@@ -75,9 +75,9 @@
 ; /* */
 ; /******************************************************************/
 ; /* prove_2 is the extention of prove_1 to deliver the PROOF for */
-; /* the GOAL, if GOAL is deducible from a PROLOG program. */
+; /* the GOAL, if GOAL is deducible from a MeTTa program. */
 ; /* In opposite to the literature the last clause is necessary to */
-; /* handle PROLOG built-in predicates corret. */
+; /* handle MeTTa built-in predicates corret. */
 ; /* On backtracking it gives the next possible prove. */
 ; /******************************************************************/
   (= (prove-2 $FACT (:: $FACT))  
@@ -113,9 +113,9 @@
 ; /* */
 ; /******************************************************************/
 ; /* prove_3 is an extention of prove_2 to deliver generalized */
-; /* PROOFS for the GOAL, if GOAL is deducible from a pure PROLOG */
+; /* PROOFS for the GOAL, if GOAL is deducible from a pure MeTTa */
 ; /* program. */
-; /* The call 'not (not clause(FACT,true))' is a special PROLOG */
+; /* The call 'not (not clause(FACT,true))' is a special MeTTa */
 ; /* trick, which succeds if 'clause(FACT,true)' holds, without */
 ; /* instanciating GOAL. */
 ; /* A sublist of length 1 in the PROOF denotes a fact, which has */
@@ -124,7 +124,7 @@
 ; /* On backtracking it gives the next possible prove path. */
 ; /******************************************************************/
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 124 8 6850))
 
   (= (prove-3 $GOAL $PROOF)  
@@ -136,7 +136,7 @@
       (append 
         (:: $GOAL) 
         (:: $PREM_PROOF) $PROOF)))
-  (= (prove_3  $GOAL ($GOAL))  True)
+  (= (prove-3  $GOAL ($GOAL))  True)
 
 
   (= (prove-4 (or $HEAD $REST) $PROOF)  
@@ -157,7 +157,7 @@
 ; /******************************************************************/
 ; /* prove_4 is an extention of prove_3 to delivers the generalized */
 ; /* FACTS that must be true for a proof of GOAL, if GOAL is */
-; /* deducible from a pure PROLOG program. */
+; /* deducible from a pure MeTTa program. */
 ; /* With this predicat a partial evaluation of the theory according*/
 ; /* to the GOAL is possible */
 ; /* On backtracking it gives the next partial evaluation. */
@@ -168,14 +168,14 @@
     (prove-4 $REST $REST_PROOF)
     (append $HEAD_PROOF $REST_PROOF $PROOF))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 155 8 8557))
  
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 157 8 8632))
 
-  (= (prove_4  $GOAL ($GOAL))  True)
+  (= (prove-4  $GOAL ($GOAL))  True)
 
 
   (= (prove-5 (, $HEAD $REST) (Cons  $PROOF_HEAD $PROOF_REST) $LIST)  
@@ -197,14 +197,14 @@
 ; /******************************************************************/
 ; /* prove_5 is a combination of prove_3 and prove_4 to delivers the*/
 ; /* generalized FACTS that must be true for a proof of GOAL and the*/
-; /* proof path, if GOAL is deducible from a pure PROLOG program. */
+; /* proof path, if GOAL is deducible from a pure MeTTa program. */
 ; /* So one can get the information which predicates must be */
 ; /* instantiated to a particular prove path. */
 ; /* On backtracking it gives the next possible prove path and the */
 ; /* predicats that must be instanciated. */
 ; /******************************************************************/
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 187 8 10387))
 
   (= (prove-5 $GOAL (:: $GOAL $PROOF) $LIST)  
@@ -213,7 +213,7 @@
         (get-atoms  &self)) 
       (not (== $PREMISSES True)) 
       (prove-5 $PREMISSES $PROOF $LIST)))
-  (= (prove_5  $GOAL ($GOAL) ($GOAL))  True)
+  (= (prove-5  $GOAL ($GOAL) ($GOAL))  True)
 
 
   (= (prove-6 (, $HEAD $REST) (, $GEN_HEAD $GEN_REST) $LIST)  
@@ -236,7 +236,7 @@
 ; /* prove_6 is an extention of prove_4 to handle the operationality*/
 ; /* criterion mentioned by Mitchell/Keller/Kedar-Cabelli (1986). */
 ; /* It delivers the generalized FACTS that must be true for a */
-; /* paticular proof of GOAL1, if GOAL1 is deducible from a PROLOG */
+; /* paticular proof of GOAL1, if GOAL1 is deducible from a MeTTa */
 ; /* program. */
 ; /* On backtracking it gives the next possible prove path. */
 ; /******************************************************************/
@@ -244,7 +244,7 @@
     (operational $GOAL)
     (set-det))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 218 8 12142))
 
 
@@ -254,14 +254,14 @@
 ; /* */
 ; /* call : listify (LIST,PREMISSES) */
 ; /* */
-; /* arguments : LIST = normal PROLOG list */
-; /* PREMISSES = normal PROLOG and-concatenated */
+; /* arguments : LIST = normal MeTTa list */
+; /* PREMISSES = normal MeTTa and-concatenated */
 ; /* premisse_list */
 ; /* */
 ; /* properties : backtrackable, symmetric */
 ; /* */
 ; /******************************************************************/
-; /* listify builds a PROLOG and-cocatenated premisse list out of */
+; /* listify builds a MeTTa and-cocatenated premisse list out of */
 ; /* every normal list, respecively vice versa. */
 ; /* One predicat must be instantiated. */
 ; /******************************************************************/
@@ -270,20 +270,20 @@
 
 
   (= (copy $TERM1 $TERM2)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (internal  $TERM1)) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (internal  $TERM2)) 
       (set-det)))
 ; /******************************************************************/
 ; /* */
 ; /* call : copy (+TERM1,-TERM2) */
 ; /* */
-; /* arguments : TERM1 = normal PROLOG term */
-; /* TERM2 = normal PROLOG term */
+; /* arguments : TERM1 = normal MeTTa term */
+; /* TERM2 = normal MeTTa term */
 ; /* */
 ; /******************************************************************/
-; /* copy makes copy's of every PROLOG-Term, with the special */
+; /* copy makes copy's of every MeTTa-Term, with the special */
 ; /* database trick to ensure that new variables are generated in */
 ; /* the output term. */
 ; /******************************************************************/
@@ -298,20 +298,20 @@
 ; /* */
 ; /* call : operational (+TERM) */
 ; /* */
-; /* arguments : TERM = normal PROLOG term */
+; /* arguments : TERM = normal MeTTa term */
 ; /* */
 ; /******************************************************************/
 ; /* operational is an predicat for the decision of operaionality */
 ; /* in EBL-based algorithms. It's definition must be changed */
 ; /* depending on the operationality criterion's of a particular */
 ; /* implementation. */
-; /* The first clause ensures that normal PROLOG facts are */
+; /* The first clause ensures that normal MeTTa facts are */
 ; /* operational. */
 ; /* The second clause is a check for built-in predicats which are */
 ; /* not defined, but can be evaluated. */
 ; /******************************************************************/
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  ebg/ebg.pl 277 8 15501))
 
 
@@ -339,9 +339,8 @@
 ; /******************************************************************/
 
 
-  (= (help)  
-    (write 'Load example theories and start EBG with command: [Filename].')
-    (nl))
+  (= help  
+    ( (write 'Load example theories and start EBG with command: [Filename].') nl))
 
 
   !(help *)

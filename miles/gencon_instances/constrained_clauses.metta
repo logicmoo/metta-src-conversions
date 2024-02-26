@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  constrained_clauses $_197668 miles/gencon_instances/constrained_clauses.pl miles/gencon_instances/constrained_clauses.metta)
+;                                           (convert-to-metta-file  constrained_clauses $_305888 miles/gencon_instances/constrained_clauses.pl miles/gencon_instances/constrained_clauses.metta)
 ;
 ; MODULE constrained_clauses EXPORTS
 
@@ -129,57 +129,53 @@
 ; ***********************************************************************
 
 
-  (= (learn-constrained)  
+  (= learn-constrained  
     (gilppi ccinitialize ccstop-c ccquality-c ccupdate ccselect ccadd ccfilter ccone-of ccspec ccgen ccl-newp ccoutput))
 
 
 
-  (= (ccinitialize (:: (, (with_self  $HL (with_self  (:: $S1 $S2) $HL)) (active))))  
-    (heads $HL)
-    (store-clauses $HL hypo)
-    (eval-examples)
-    (findall 
-      (, $ID $H $B $CL $E) 
-      (, 
-        (get-clause $ID $H $B $CL hypo) 
-        (get-evaluation $ID $E) 
-        (delete-clause $ID)) $S1)
-    (findall 
-      (, $ID1 $M1 $T1) 
-      (remove-is-symbol  &self 
-        (prooftrees  $ID1 $M1 $T1)) $S2))
+  (= (ccinitialize (:: (, (with-self  $HL (with-self  (:: $S1 $S2) $HL)) active)))  
+    ( (heads $HL) 
+      (store-clauses $HL hypo) eval-examples 
+      (findall 
+        (, $ID $H $B $CL $E) 
+        (, 
+          (get-clause $ID $H $B $CL hypo) 
+          (get-evaluation $ID $E) 
+          (delete-clause $ID)) $S1) 
+      (findall 
+        (, $ID1 $M1 $T1) 
+        (remove-atom  &self 
+          (prooftrees  $ID1 $M1 $T1)) $S2)))
 
 
-  (= (ccinitialize-newp (:: (, (with_self  $PS (with_self  (:: $S1 $S2) $PS)) (active))))  
-    (heads $HL)
-    (store-clauses $HL hypo)
-    (eval-examples)
-    (findall 
-      (= $H0  $B0) 
-      (get-clause $_ $H0 $B0 $_ hypo) $PS)
-    (findall 
-      (, $ID $H $B $CL $E) 
-      (, 
-        (get-clause $ID $H $B $CL hypo) 
-        (get-evaluation $ID $E) 
-        (delete-clause $ID)) $S1)
-    (findall 
-      (, $ID1 $M1 $T1) 
-      (remove-is-symbol  &self 
-        (prooftrees  $ID1 $M1 $T1)) $S2))
+  (= (ccinitialize-newp (:: (, (with-self  $PS (with-self  (:: $S1 $S2) $PS)) active)))  
+    ( (heads $HL) 
+      (store-clauses $HL hypo) eval-examples 
+      (findall 
+        (= $H0  $B0) 
+        (get-clause $_ $H0 $B0 $_ hypo) $PS) 
+      (findall 
+        (, $ID $H $B $CL $E) 
+        (, 
+          (get-clause $ID $H $B $CL hypo) 
+          (get-evaluation $ID $E) 
+          (delete-clause $ID)) $S1) 
+      (findall 
+        (, $ID1 $M1 $T1) 
+        (remove-atom  &self 
+          (prooftrees  $ID1 $M1 $T1)) $S2)))
 
 
-  (= (ccstop_c  ($_))  True)
+  (= (ccstop-c  ($_))  True)
 
 
 
-  (= (ccquality-c (with_self  $_ (with_self  (:: $SC $SP) $_)))  
+  (= (ccquality-c (with-self  $_ (with-self  (:: $SC $SP) $_)))  
     (sclauses $SC)
     (sprooftrees $SP)
     (det-if-then-else 
-      (, 
-        (complete-chk) 
-        (correct-chk)) True fail))
+      (, complete-chk correct-chk) True fail))
 
 
   (= (ccupdate  $L $L)  True)
@@ -187,13 +183,13 @@
 
   (= (sclauses  ())  True)
   (= (sclauses (Cons  (, $ID $H $B $CL $E) $R))  
-    ( (sclauses $R) (add-is-symbol  &self (:  kb (known  $ID $H $B $CL hypo $E)))))
+    ( (sclauses $R) (add-atom  &self (:  kb (known  $ID $H $B $CL hypo $E)))))
 
 
   (= (sprooftrees Nil)  
     (change-evaluated yes))
   (= (sprooftrees (Cons  (, $ID $M $T) $R))  
-    ( (sprooftrees $R) (add-is-symbol  &self (:  interpreter (prooftrees  $ID $M $T)))))   
+    ( (sprooftrees $R) (add-atom  &self (:  interpreter (prooftrees  $ID $M $T)))))   
 
 
 
@@ -203,7 +199,7 @@
     (select-passive $Partial_Sols $PS))
 
 
-  (= (select_active  (Cons  (,  $PS active) $R) $PS (Cons  (,  $PS passive) $R))  True)
+  (= (select-active  ([|]  (,  $PS active) $R) $PS ([|]  (,  $PS passive) $R))  True)
   (= (select-active (Cons  $P $R) $PS (Cons  $P $R1))  
     (select-active $R $PS $R1))
 
@@ -215,25 +211,24 @@
 
 
   (= (candidates  () $PSS $PSS)  True)
-  (= (candidates (Cons  (, (with_self  $PS (with_self  (:: $SC $SP) $Hist)) $_) $R) $PSS $PSS2)  
-    (candidates $R $PSS $PSS1)
-    (sclauses $SC)
-    (sprooftrees $SP)
-    (det-if-then-else complete-chk 
-      (, 
-        (covered-neg-examples $N) 
-        (length $N $NN) 
-        (ccins 
-          (- $NN 
-            (with_self  $PS 
-              (with_self  
-                (:: $SC $SP) $Hist))) $PSS1 $PSS2)) 
-      (= $PSS1 $PSS2))
-    (clear-evaluation)
-    (findall $ID 
-      (, 
-        (get-clause $ID $_ $_ $_ hypo) 
-        (delete-clause $ID)) $_))
+  (= (candidates (Cons  (, (with-self  $PS (with-self  (:: $SC $SP) $Hist)) $_) $R) $PSS $PSS2)  
+    ( (candidates $R $PSS $PSS1) 
+      (sclauses $SC) 
+      (sprooftrees $SP) 
+      (det-if-then-else complete-chk 
+        (, 
+          (covered-neg-examples $N) 
+          (length $N $NN) 
+          (ccins 
+            (- $NN 
+              (with-self  $PS 
+                (with-self  
+                  (:: $SC $SP) $Hist))) $PSS1 $PSS2)) 
+        (= $PSS1 $PSS2)) clear-evaluation 
+      (findall $ID 
+        (, 
+          (get-clause $ID $_ $_ $_ hypo) 
+          (delete-clause $ID)) $_)))
 
 
   (= (ccins (- $N $PS) (Cons  (- $N1 $PS1) $R) (Cons  (- $N1 $PS1) $R1))  
@@ -241,7 +236,7 @@
     (set-det)
     (ccins 
       (- $N $PS) $R $R1))
-  (= (ccins  $X $L (Cons  $X $L))  True)
+  (= (ccins  $X $L ([|]  $X $L))  True)
 
 
   (= (ccadd $Partial_Sols $PSL $Partial_Sols1)  
@@ -258,7 +253,7 @@
 
 
   (= (ccfilter1  $X () ($X))  True)
-  (= (ccfilter1 (, (with_self  $PS (with_self  $DB $Hist)) $M) (Cons  (, (with_self  $PS1 (with_self  $DB1 $Hist1)) $M1) $R) (Cons  (, (with_self  $PS1 (with_self  $DB1 $Hist1)) $M1) $R1))  
+  (= (ccfilter1 (, (with-self  $PS (with-self  $DB $Hist)) $M) (Cons  (, (with-self  $PS1 (with-self  $DB1 $Hist1)) $M1) $R) (Cons  (, (with-self  $PS1 (with-self  $DB1 $Hist1)) $M1) $R1))  
     (det-if-then-else 
       (, 
         (= $M $M1) 
@@ -266,8 +261,8 @@
       (= $R1 $R) 
       (ccfilter1 
         (, 
-          (with_self  $PS 
-            (with_self  $DB $Hist)) $M) $R $R1)))
+          (with-self  $PS 
+            (with-self  $DB $Hist)) $M) $R $R1)))
 
 
   (= (ccone-of $_ $M)  
@@ -276,7 +271,7 @@
       (= $M gen)))
 
 
-  (= (ccspec (with_self  $_ (with_self  $_ $Hist)) $PSL)  
+  (= (ccspec (with-self  $_ (with-self  $_ $Hist)) $PSL)  
     (ccspec1 $Hist $PSL)
     (write-l $PSL)
     (findall $ID 
@@ -285,46 +280,41 @@
 
 
   (= (ccspec1 $Hist $PSL)  
-    (covered-neg-examples $NIDs)
-    (fp-hyp $OR)
-    (best $OR 
-      (with_self  $I $_))
-    (get-clause $I $H $B $_ hypo)
-    (get-evaluation $I 
-      (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_))
-    (\== $Pos Nil)
-    (clause-terms 
-      (= $H  $B) $Terms)
-    (types-of $Terms 
-      (= $H  $B) $TTerms)
-    (refinement-add-body-literal 
-      (= $H  $B) $TTerms $CL)
-    (length $CL $CLl)
-    (nl)
-    (write 'no refs: ')
-    (write $CLl)
-    (nl)
-    (nl)
-    (check-refinements $CL $NIDs $I $Hist 
-      (= $H  $B) $PSL))
+    ( (covered-neg-examples $NIDs) 
+      (fp-hyp $OR) 
+      (best $OR 
+        (with-self  $I $_)) 
+      (get-clause $I $H $B $_ hypo) 
+      (get-evaluation $I 
+        (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_)) 
+      (\== $Pos Nil) 
+      (clause-terms 
+        (= $H  $B) $Terms) 
+      (types-of $Terms 
+        (= $H  $B) $TTerms) 
+      (refinement-add-body-literal 
+        (= $H  $B) $TTerms $CL) 
+      (length $CL $CLl) nl 
+      (write 'no refs: ') 
+      (write $CLl) nl nl 
+      (check-refinements $CL $NIDs $I $Hist 
+        (= $H  $B) $PSL)))
 
 
   (= (check-refinements $CL $NIDs $I $Hist $C $PSL)  
-    (delete-clause $I)
-    (clear-evaluation)
-    (check-refinements $CL $NIDs $I $Hist $PSL)
-    (store-clause $C $_ hypo $I)
-    (set-det))
+    ( (delete-clause $I) clear-evaluation 
+      (check-refinements $CL $NIDs $I $Hist $PSL) 
+      (store-clause $C $_ hypo $I) 
+      (set-det)))
 
-  (= (check_refinements  () $_ $_ $_ ())  True)
+  (= (check-refinements  () $_ $_ $_ ())  True)
   (= (check-refinements (Cons  $C $R) $NID $I $Hist $PSL2)  
     (det-if-then-else 
       (, 
         (constrained $C) 
         (not (clause-in $C $Hist $_))) 
       (, 
-        (store-clause $C $_ hypo $I) 
-        (eval-examples) 
+        (store-clause $C $_ hypo $I) eval-examples 
         (get-evaluation $I 
           (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_)) 
         (covered-neg-examples $NID1) 
@@ -343,19 +333,17 @@
                 (get-evaluation $ID $E)) $S1) 
             (findall 
               (, $ID1 $M1 $T1) 
-              (remove-is-symbol  &self 
+              (remove-atom  &self 
                 (prooftrees  $ID1 $M1 $T1)) $S2) 
             (= $PSL2 
               (Cons  
                 (, 
-                  (with_self  $PS 
-                    (with_self  
+                  (with-self  $PS 
+                    (with-self  
                       (:: $S1 $S2) 
-                      (Cons  $C $Hist))) 
-                  (active)) $PSL1))) 
+                      (Cons  $C $Hist))) active) $PSL1))) 
           (, 
-            (= $PSL2 $PSL1) 
-            (clear-evaluation))) 
+            (= $PSL2 $PSL1) clear-evaluation)) 
         (delete-clause $I)) 
       (= $PSL2 $PSL1))
     (check-refinements $R $NID $I $Hist $PSL1))
@@ -409,7 +397,7 @@
             (= $H1  $B1) $R1)))))
 
 
-  (= (c_in  () ())  True)
+  (= (c-in  () ())  True)
   (= (c-in (Cons  $L $R) $B)  
     (remove-v 
       (:: $L) $B $B1)
@@ -417,7 +405,7 @@
     (c-in $R $B1))
 
 
-  (= (clause_variants  () ())  True)
+  (= (clause-variants  () ())  True)
   (= (clause-variants (Cons  $C $R) $CL)  
     (clause-in $C $CL $CL1)
     (clause-variants $R $CL1))
@@ -430,38 +418,37 @@
     (subset $L1 $L2))
 
 
-  (= (ccgen (with_self  $_ (with_self  $_ $Hist)) (:: (, (with_self  $PS (with_self  (:: $S1 $S2) $Hist)) (active))))  
-    (covered-pos-examples $Cov)
-    (findall 
-      (with_self  $ID1 $E1) 
-      (, 
-        (member $ID1 $Cov) 
-        (get-example $ID1 $E1 $_)) $Cov1)
-    (get-clause $ID $H $B $_ hypo)
-    (mysetof 
-      (with_self  $IDE $H) 
-      (get-example $IDE $H +) $PH)
-    (remove-v $Cov1 $PH $P1)
-    (\== $P1 Nil)
-    (ccgen2 $ID $H $B $PH $B1)
-    (store-clause 
-      (= $H  $B1) $_ hypo $_)
-    (eval-examples)
-    (findall 
-      (, $ID2 $H2 $B2 $CL2 $E2) 
-      (, 
-        (get-clause $ID2 $H2 $B2 $CL2 hypo) 
-        (get-evaluation $ID2 $E2)) $S1)
-    (findall 
-      (, $ID3 $M3 $T3) 
-      (remove-is-symbol  &self 
-        (prooftrees  $ID3 $M3 $T3)) $S2)
-    (findall 
-      (= $H4  $B4) 
-      (, 
-        (get-clause $ID4 $H4 $B4 $_ hypo) 
-        (delete-clause $ID4)) $PS)
-    (write-l (:: (, (with_self  $PS (with_self  (:: $S1 $S2) $Hist)) (active)))))
+  (= (ccgen (with-self  $_ (with-self  $_ $Hist)) (:: (, (with-self  $PS (with-self  (:: $S1 $S2) $Hist)) active)))  
+    ( (covered-pos-examples $Cov) 
+      (findall 
+        (with-self  $ID1 $E1) 
+        (, 
+          (member $ID1 $Cov) 
+          (get-example $ID1 $E1 $_)) $Cov1) 
+      (get-clause $ID $H $B $_ hypo) 
+      (mysetof 
+        (with-self  $IDE $H) 
+        (get-example $IDE $H +) $PH) 
+      (remove-v $Cov1 $PH $P1) 
+      (\== $P1 Nil) 
+      (ccgen2 $ID $H $B $PH $B1) 
+      (store-clause 
+        (= $H  $B1) $_ hypo $_) eval-examples 
+      (findall 
+        (, $ID2 $H2 $B2 $CL2 $E2) 
+        (, 
+          (get-clause $ID2 $H2 $B2 $CL2 hypo) 
+          (get-evaluation $ID2 $E2)) $S1) 
+      (findall 
+        (, $ID3 $M3 $T3) 
+        (remove-atom  &self 
+          (prooftrees  $ID3 $M3 $T3)) $S2) 
+      (findall 
+        (= $H4  $B4) 
+        (, 
+          (get-clause $ID4 $H4 $B4 $_ hypo) 
+          (delete-clause $ID4)) $PS) 
+      (write-l (:: (, (with-self  $PS (with-self  (:: $S1 $S2) $Hist)) active)))))
 
 
   (= (ccgen2 $ID $H $B $PH $B1)  
@@ -477,27 +464,26 @@
 
 
   (= (ccgen3  () $_ $_ $_ ())  True)
-  (= (ccgen3 (Cons  (with_self  $L $M) $R) $ID $H $PH $B)  
-    (ccgen3 $R $ID $H $PH $B1)
-    (store-clause 
-      (= $H  $L) $_ hypo $ID)
-    (eval-examples)
-    (get-evaluation $ID 
-      (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_))
-    (delete-clause $ID)
-    (det-if-then-else 
-      (remove-v $Pos $PH Nil) 
-      (= $B 
-        (Cons  
-          (with_self  $L $M) $B1)) 
-      (= $B $B1)))
+  (= (ccgen3 (Cons  (with-self  $L $M) $R) $ID $H $PH $B)  
+    ( (ccgen3 $R $ID $H $PH $B1) 
+      (store-clause 
+        (= $H  $L) $_ hypo $ID) eval-examples 
+      (get-evaluation $ID 
+        (evaluation $_ $_ $Pos $_ $_ $_ $_ $_ $_)) 
+      (delete-clause $ID) 
+      (det-if-then-else 
+        (remove-v $Pos $PH Nil) 
+        (= $B 
+          (Cons  
+            (with-self  $L $M) $B1)) 
+        (= $B $B1))))
    
 
 
-  (= (ccl-newp (with_self  $_ (with_self  $_ $Hist)) (:: (, (with_self  $PS (with_self  (:: $S1 $S2) $Hist)) (active))) $Initialize $Stop_C $Quality_C $Update $Select $Add $Filter $One_of $Spec $Gen $L_newp $Output)  
+  (= (ccl-newp (with-self  $_ (with-self  $_ $Hist)) (:: (, (with-self  $PS (with-self  (:: $S1 $S2) $Hist)) active)) $Initialize $Stop_C $Quality_C $Update $Select $Add $Filter $One_of $Spec $Gen $L_newp $Output)  
     ( (fp-hyp $OR) 
       (best $OR 
-        (with_self  $I $_)) 
+        (with-self  $I $_)) 
       (get-clause $I $H $B $_ hypo) 
       (get-evaluation $I 
         (evaluation $_ $_ $Pos $_ $Neg $_ $_ $_ $_)) 
@@ -507,7 +493,7 @@
       (delete-old-ex $Elist) 
       (store-newp-ex $NPos $NNeg $IDL0) 
       (make-unique $IDL0 $IDL) 
-      (add-is-symbol  &self $NType) 
+      (add-atom  &self $NType) 
       (store-clause $NC $_ hypo $I) 
       (ccinitialize-newp $PSL) 
       (gilppi $PSL Nil $Initialize $Stop_C $Quality_C $Update $Select $Add $Filter $One_of $Spec $Gen $L_newp $Output) 
@@ -518,8 +504,7 @@
           (get-clause $ID0 $H0 $B0 $_ constrained-clause) 
           (delete-clause $ID0) 
           (store-clause 
-            (= $H0  $B0) $_ hypo $ID0)) $_) 
-      (eval-examples) 
+            (= $H0  $B0) $_ hypo $ID0)) $_) eval-examples 
       (findall 
         (, $ID3 $H3 $B3 $CL3 $E3) 
         (, 
@@ -527,7 +512,7 @@
           (get-evaluation $ID3 $E3)) $S1) 
       (findall 
         (, $ID1 $M1 $T1) 
-        (remove-is-symbol  &self 
+        (remove-atom  &self 
           (prooftrees  $ID1 $M1 $T1)) $S2) 
       (findall 
         (= $H2  $B2) 
@@ -540,16 +525,16 @@
     (get-example $ID $F $M)
     (delete-example $ID)
     (delete-old-ex $R))
-  (= (delete_old_ex  ())  True)
+  (= (delete-old-ex  ())  True)
 
 
-  (= (store_old_ex  ())  True)
+  (= (store-old-ex  ())  True)
   (= (store-old-ex (Cons  (ex $ID $F $M) $R))  
     (store-ex $F $M $ID)
     (store-old-ex $R))
 
 
-  (= (store_newp_ex  () () ())  True)
+  (= (store-newp-ex  () () ())  True)
   (= (store-newp-ex Nil (Cons  $F $R) (Cons  $ID $R1))  
     (store-ex $F - $ID)
     (store-newp-ex Nil $R $R1))
@@ -558,22 +543,16 @@
     (store-newp-ex $R $L $R1))
 
 
-  (= (ccoutput (:: (with_self  $CL (with_self  $_ $_))))  
-    (findall $ID 
-      (get-clause $ID $_ $_ $_ hypo) $IDL)
-    (delete-all $IDL)
-    (store-clauses $CL constrained-clause)
-    (nl)
-    (nl)
-    (write 'gilppi completed..........')
-    (nl)
-    (nl)
-    (show-kb))
+  (= (ccoutput (:: (with-self  $CL (with-self  $_ $_))))  
+    ( (findall $ID 
+        (get-clause $ID $_ $_ $_ hypo) $IDL) 
+      (delete-all $IDL) 
+      (store-clauses $CL constrained-clause) nl nl 
+      (write 'gilppi completed..........') nl nl show-kb))
 
 
 
-  (= (write-l (Cons  (, (with_self  $CL (with_self  $_ $_)) $_) $R))  
-    (write-list $CL)
-    (nl)
-    (write-l $R))
-  (= (write_l  ())  True)
+  (= (write-l (Cons  (, (with-self  $CL (with-self  $_ $_)) $_) $R))  
+    ( (write-list $CL) nl 
+      (write-l $R)))
+  (= (write-l  ())  True)

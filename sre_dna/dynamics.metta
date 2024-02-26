@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dynamics $_152978 sre_dna/dynamics.pl sre_dna/dynamics.metta)
+;                                           (convert-to-metta-file  dynamics $_271646 sre_dna/dynamics.pl sre_dna/dynamics.metta)
 ;
 ; ------------------------------------------------
 ;

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  main $_154800 index/main.pl index/main.metta)
+;                                           (convert-to-metta-file  main $_370140 index/main.pl index/main.metta)
 
   !(unknown $_ fail)
   !(no-style-check all)
@@ -14,14 +14,14 @@
   !(dynamic (/ level-set 2))
 
 
-  (= (switched_on  cwa)  True)
-  (= (switched_on  eval)  True)
-  (= (switched_on  debug)  True)
+  (= (switched-on  cwa)  True)
+  (= (switched-on  eval)  True)
+  (= (switched-on  debug)  True)
 
 
-  (= (level_set  acc (+  0.8))  True)
-  (= (level_set  conf (+  2))  True)
-  (= (level_set  split (/  0.5 0.1))  True)
+  (= (level-set  acc (+  0.8))  True)
+  (= (level-set  conf (+  2))  True)
+  (= (level-set  split (/  0.5 0.1))  True)
 
 
   !((compile utils) 
@@ -35,7 +35,7 @@
   !((compile inter) (compile commands))
 
 
-  (= (run)  
+  (= run  
     (commands Nil Nil Nil))
 
 

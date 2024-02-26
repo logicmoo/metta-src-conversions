@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  foil $_46614 foil/foil.pl foil/foil.metta)
+;                                           (convert-to-metta-file  foil $_234340 foil/foil.pl foil/foil.metta)
 
   !(ensure-loaded (library occurs))
 ; /*************************************************************************** FILE: FOIL.PL PROGRAMMER: John Zelle DATE: 2/10/92 DESCRIPTION: A MeTTa implementation of the FOIL (First Order Inductive Learning) algorithm for learning relational concept definitions. For backgound on the algorithm, see : Quinlan, J. R., "Learning Logical Definitions from Relations," in Machine Learning, 5, 1990. The version presented here is somewhat simplified in that it uses a much weaker test to constrain recursive predicates (a recursive call must contain vars not found in the head of of a clause, and may not introduce any unbound vars), and it does not incorporate encoding length restrictions to handle noisy data. There is also no post-processing of clauses to simplify learned definitions, although this would be relatively easy to add. This is a very simple implementation which recomputes tuple sets "on the fly". Don't expect it to run like the wind. LANGUAGE: Quintus MeTTa v. 3.1 MODIFIED: 3/30/92 (JMZ) Added determinate literals. See article: Quinlan, J. R., "Determinate Literals in Inductive Logic Programming," in Proceedings of the Eighth International Workshop in Machine Learning, 1991 INPUT FORM: The background knowledge for predicate induction is represented as "existential" predicates asserted in the module, foil_input. By existential is is meant that the definitions there must be fully constructive to avoid instantiation errors when running FOIL. EXAMPLE: Definition of "list" from Quinlan's paper. This is an example input file. After consulting this definition of the module foil_input, the definition of list can be learned by invoking: foil(list(_)). ---------------------------------------------------------------------- ;Background and tuples for learning definition of list. ; This heading should be on every file used to provide ; test data for FOIL :- module(foil_input, [foil_predicates/1, foil_use_negations/1, foil_det_lit_bound/1]). foil_predicates([ list/1, null/1, components/3 ]). foil_use_negations(false). ; Don't use negations of foil_predicates foil_det_lit_bound(0). ; Don't add any determinate literals ; In general, this is a depth limit on ; the search for determinate literals ; Definitions of background predicates null([]). components([a], a, []). components([b, [a], d], b, [[a], d]). components([[a],d], [a], [d]). components([d], d, []). components([e|f], e, f). list([]). list([a]). list([b, [a], d]). list([[a], d]). list([d]). --------------------------------------------------------------------------- ***************************************************************************/
@@ -23,8 +23,7 @@
 ;
 ; Pretty print a list of clauses.
 
-  (= (portray-clauses Nil)  
-    (nl))
+  (= (portray-clauses Nil)  nl)
   (= (portray-clauses (Cons  $H $T))  
     (portray-clause $H)
     (portray-clauses $T))
@@ -50,7 +49,7 @@
 
   (= (get-examples $Goal $Pos $Neg)  
     (findall $Goal 
-      (with_self  
+      (with-self  
         (foil-input *) $Goal) $Pos)
     (create-negatives $Pos $Neg))
 
@@ -67,7 +66,7 @@
 ; FOIL provided explicit negative examples.
   (= (foil $Goal $Negatives $Clauses)  
     (findall $Goal 
-      (with_self  
+      (with-self  
         (foil-input *) $Goal) $Positives)
     (foil-loop $Positives $Goal $Negatives Nil $Clauses))
 
@@ -144,7 +143,7 @@
 ;
 ; provides maximum info gain over the original clause.
 
-  (= (best_next_clause  () $_ $_ $_ $_ $_ $Clause $Clause)  True)
+  (= (best-next-clause  () $_ $_ $_ $_ $_ $Clause $Clause)  True)
   (= (best-next-clause (Cons  $L $Ls) $Nxs $Pxs $Clause $Info $Gain0 $Best0 $Best)  
     (add-literal $L $Clause $Best1)
     (compute-gain $Nxs $Pxs $Info $Best1 $Gain1)
@@ -283,11 +282,11 @@
       (findall $Vars 
         (, 
           (member $A $Xs) 
-          (not (not (with_self  (foil-input *) $B)))) $Tuples) 
+          (not (not (with-self  (foil-input *) $B)))) $Tuples) 
       (findall $Vars 
         (, 
           (member $A $Xs) 
-          (with_self  
+          (with-self  
             (foil-input *) $B)) $Tuples)))
 ; ; shortcut - only need 1 proof if no new variables.
 
@@ -298,7 +297,7 @@
     (findall $A 
       (, 
         (member $A $Xs) 
-        (not (not (with_self  (foil-input *) $B)))) $Xs1))
+        (not (not (with-self  (foil-input *) $B)))) $Xs1))
 
 ;
 ; Xs1 are the examples from Xs that cannot be proved with the clause.
@@ -307,7 +306,7 @@
     (findall $A 
       (, 
         (member $A $Xs) 
-        (not (with_self  (foil-input *) $B))) $Xs1))
+        (not (with-self  (foil-input *) $B))) $Xs1))
 
 ;
 ; ---------------------------------------------------------------------------
@@ -322,7 +321,7 @@
       (candidate-literal $A $OldVars $L) $Extensions))
 
 
-  (= (possible_unification  () () ())  True)
+  (= (possible-unification  () () ())  True)
   (= (possible-unification (Cons  $H $T) (Cons  $H $Result) (Cons  $H $Vars))  
     (possible-unification $T $Result $Vars))
   (= (possible-unification (Cons  $H $T) (Cons  $H $T1) $Vs)  
@@ -343,7 +342,7 @@
           (Cons  $E $List0) $List))))
 
 
-  (= (possible_new_vars  true $_ ())  True)
+  (= (possible-new-vars  true $_ ())  True)
   (= (possible-new-vars False $N $L)  
     (length $L $N))
   (= (possible-new-vars False $N $L)  
@@ -417,7 +416,7 @@
       (member 
         (/ $Pred $Arity) $PredSpecs) 
       (functor $Goal $Pred $Arity) 
-      (with_self  
+      (with-self  
         (foil-input *) $Goal) 
       (between 1 $Arity $ArgPos) 
       (arg $ArgPos $Goal $Term)))
@@ -457,8 +456,7 @@
 
 
   (= (binds-new-var (not $_) $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (binds-new-var $L $Vars)  
     (variables-in $L $LVars)
     (member $V $LVars)
@@ -466,23 +464,23 @@
     (set-det))
 
 
-  (= (determ_cover  () $_ $_)  True)
+  (= (determ-cover  () $_ $_)  True)
   (= (determ-cover (Cons  $T $Ts) $Lit $Vars)  
     (findall $Lit 
       (, 
         (= $Vars $T) 
-        (with_self  
+        (with-self  
           (foil-input *) $Lit)) 
       (:: $_))
     (determ-cover $Ts $Lit $Vars))
 
 
-  (= (determ_partial_cover  () $_ $_)  True)
+  (= (determ-partial-cover  () $_ $_)  True)
   (= (determ-partial-cover (Cons  $T $Ts) $Lit $Vars)  
     (findall $Lit 
       (, 
         (= $Vars $T) 
-        (with_self  
+        (with-self  
           (foil-input *) $Lit)) $Xs)
     (or 
       (= $Xs Nil) 
@@ -547,7 +545,7 @@
             (expand-by-var-chain $Bound1 $Havenots $Vars1 $As1 $As))))))
 
 
-  (= (partition_on_vars  () $_ () ())  True)
+  (= (partition-on-vars  () $_ () ())  True)
   (= (partition-on-vars (Cons  $C $Cs) $Vars $Hs $Hnots)  
     (det-if-then-else 
       (, 

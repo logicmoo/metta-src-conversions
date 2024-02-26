@@ -1,11 +1,10 @@
-;                                           (convert_to_metta_file  vs $_344246 vs/vs.pl vs/vs.metta)
+;                                           (convert-to-metta-file  vs $_263494 vs/vs.pl vs/vs.metta)
 
-  (= (learn)  
-    (writeln 'First positive example ?')
-    (read $POS_EX)
-    (nl)
-    (initialize $POS_EX $G $S)
-    (versionspace $G $S))
+  (= learn  
+    ( (writeln 'First positive example ?') 
+      (read $POS_EX) nl 
+      (initialize $POS_EX $G $S) 
+      (versionspace $G $S)))
 ; /******************************************************************/
 ; /* VS.PRO Last Modification: Fri Jan 14 19:28:27 1994 */
 ; /* Mitchell's bi-directional search strategy in the version space */
@@ -66,20 +65,18 @@
     (writeln 'The consistent generalization is : ')
     (writeln $CONCEPT))
   (= (versionspace $G $S)  
-    (writeln 'The G-set is : ')
-    (writeln $G)
-    (writeln 'The S-set is : ')
-    (writeln $S)
-    (nl)
-    (writeln 'Next example :')
-    (generate-ex $G $S $NEXT_EX)
-    (set-det)
-    (writeln $NEXT_EX)
-    (writeln 'Classification of the example ? [p/n]')
-    (read $CLASS)
-    (nl)
-    (adjust-versionspace $CLASS $NEXT_EX $G $S $NG $NS)
-    (versionspace $NG $NS))
+    ( (writeln 'The G-set is : ') 
+      (writeln $G) 
+      (writeln 'The S-set is : ') 
+      (writeln $S) nl 
+      (writeln 'Next example :') 
+      (generate-ex $G $S $NEXT_EX) 
+      (set-det) 
+      (writeln $NEXT_EX) 
+      (writeln 'Classification of the example ? [p/n]') 
+      (read $CLASS) nl 
+      (adjust-versionspace $CLASS $NEXT_EX $G $S $NG $NS) 
+      (versionspace $NG $NS)))
   (= (versionspace $G $S)  
     (writeln 'Impossible to generate relevant examples'))
   
@@ -153,7 +150,7 @@
 ; /* which do not cover the EXAMPLE */
 ; /******************************************************************/
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  vs/vs.pl 164 11 8582))
 
   (= (retain-s (Cons  $CONCEPT $S) $NS $EX)  
@@ -327,7 +324,7 @@
     (allcovers $REST $EX))
  
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  vs/vs.pl 334 11 18121))
 
 
@@ -389,7 +386,7 @@
     (covers $CONCEPT $EXAMPLE))
  
 
-  (= (least_generalization  () () ())  True)
+  (= (least-generalization  () () ())  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : least_generalization(+CONCEPT1,+EXAMPLE, */
@@ -461,12 +458,12 @@
     (max $T $E))
  
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  vs/vs.pl 468 11 25683))
 
  
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  vs/vs.pl 480 12 26336))
 
 
@@ -508,7 +505,7 @@
     (lge $F $X2 $L))
  
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  vs/vs.pl 530 11 28892))
 
  
@@ -519,14 +516,13 @@
  
 
   (= (writeln $X)  
-    (display $X)
-    (nl))
+    ( (display $X) nl))
 ; /******************************************************************/
 ; /* UTILITIES : comments are trivial */
 ; /******************************************************************/
  
 
-  (= (member  $X (Cons  $X $Y))  True)
+  (= (member  $X ([|]  $X $Y))  True)
   (= (member $X (Cons  $Y $Z))  
     (member $X $Z))
  
@@ -554,9 +550,8 @@
   (= (setofnil  $X $Y ())  True)
  
 
-  (= (help)  
-    (write ' Start VS with command: learn.')
-    (nl))
+  (= help  
+    ( (write ' Start VS with command: learn.') nl))
 
 
   !(help *)

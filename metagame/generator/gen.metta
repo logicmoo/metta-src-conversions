@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  gen $_397920 metagame/generator/gen.pl metagame/generator/gen.metta)
+;                                           (convert-to-metta-file  gen $_388700 metagame/generator/gen.pl metagame/generator/gen.metta)
 ;
 ; ============================================================
 ;
@@ -26,27 +26,23 @@
 
 
   (= (generate-game (game $Name $Board $PieceDefs $Goal $Constraints))  
-    (record-seed)
-    (new-game-name $Name)
-    (generate-board $Board)
-    (write 'Generated Board')
-    (nl)
-    (generate-pieces $Board $PieceDefs)
-    (write 'Generated Pieces')
-    (nl)
-    (generate-global-constraints $Constraints)
-    (write 'Generated Global Constraints')
-    (nl)
-    (generate-goal $Board $Goal)
-    (write 'Generated Goal ... And Game.')
-    (nl))
+    (record-seed 
+      (new-game-name $Name) 
+      (generate-board $Board) 
+      (write 'Generated Board') nl 
+      (generate-pieces $Board $PieceDefs) 
+      (write 'Generated Pieces') nl 
+      (generate-global-constraints $Constraints) 
+      (write 'Generated Global Constraints') nl 
+      (generate-goal $Board $Goal) 
+      (write 'Generated Goal ... And Game.') nl))
 
 
   (= (new-game-name $Name)  
     (gensym game $Name))
 
 
-  (= (reset-game-name)  
+  (= reset-game-name  
     (reset-gensym game))
 
 
@@ -239,7 +235,7 @@
   (= (collect-placements $In $Out)  
     (collect-placements $In Nil $Out))
 
-  (= (collect_placements  () $X $X)  True)
+  (= (collect-placements  () $X $X)  True)
   (= (collect-placements (Cons  (= $A $Elt) $Rest) $Current $New)  
     (collapse 
       (= $A $Elt) $Current $New1)
@@ -490,7 +486,7 @@
 
 ;
 ; generate_pieces(+PieceTypes,+Board,-PieceDefs)
-  (= (generate_pieces  () $_ ())  True)
+  (= (generate-pieces  () $_ ())  True)
   (= (generate-pieces (Cons  $P $Ps) $Board (Cons  $Def $Defs))  
     (generate-piece $P $Board $Def)
     (generate-pieces $Ps $Board $Defs))
@@ -529,7 +525,7 @@
     (choose-parameter movement-complexity)
     (set-det)
     (create-complex-movement $Board $MOut))
-  (= (complexify_movement  $_ $X ($X))  True)           
+  (= (complexify-movement  $_ $X ($X))  True)           
 
 
 
@@ -909,7 +905,7 @@
   (= (min-rides $Eq $Min)  
     (comparison $Eq eq $Min)
     (set-det))
-  (= (min_rides  $Eq 0)  True)
+  (= (min-rides  $Eq 0)  True)
 
 
 
@@ -960,7 +956,7 @@
 
   (= (generalize-piece specific $Board $Pieces)  
     (choose-general-piece-set $Board $Pieces))
-  (= (generalize_piece  any $Board any_piece)  True)
+  (= (generalize-piece  any $Board any_piece)  True)
 
 
 ;
@@ -1032,7 +1028,7 @@
     (sort $Items1 $Items))
 
 
-  (= (choose_conditionally_from_set1  () $_ ())  True)
+  (= (choose-conditionally-from-set1  () $_ ())  True)
   (= (choose-conditionally-from-set1 (Cons  $Item $Rest) $Goal (Cons  $Item $Items))  
     (det-if-then-else 
       (call $Goal) 
@@ -1050,7 +1046,7 @@
   (= (generalize-player specific $Board $Player)  
     (set-det)
     (random-player $Board $Player))
-  (= (generalize_player  any $Board any_player)  True)
+  (= (generalize-player  any $Board any_player)  True)
 
 
   (= (random-player $Board $Player)  
@@ -1103,7 +1099,7 @@
     (choose-parameter capture-complexity)
     (set-det)
     (create-complex-capture $Board $C1))
-  (= (complexify_capture  $_ $X ($X))  True)           
+  (= (complexify-capture  $_ $X ($X))  True)           
 
 
 
@@ -1468,7 +1464,7 @@
     (unsubsumed-goal $GIn $Board $GNew)
     (complexify-goal $Board 
       (Cons  $GNew $GIn) $G))
-  (= (complexify_goal  $_ $X $X)  True)           
+  (= (complexify-goal  $_ $X $X)  True)           
 
 
 ;
@@ -1489,7 +1485,7 @@
     (subsumed-goal $Goal $Goals $Board)
     (set-det)
     (unsubsumed-goal $Goals $Board $NewGoal))
-  (= (ensure_new_goal  $Goals $Board $Goal $Goal)  True)
+  (= (ensure-new-goal  $Goals $Board $Goal $Goal)  True)
 	
 ;
 ; -------------------------
@@ -1586,9 +1582,8 @@
 
 
   (= (free-different-member Nil $_ $_)  
-    (format "Error: no free squares for opponent arrival goal!~n" Nil)
-    (set-det)
-    (fail))
+    ( (format "Error: no free squares for opponent arrival goal!~n" Nil) 
+      (set-det) fail))
   (= (free-different-member (Cons  $S $Sqs) $Assigned $Sq)  
     (det-if-then-else 
       (member $S $Assigned) 
@@ -1674,7 +1669,7 @@
 
   (= (generalize-eradicate-piece specific $Board $Pieces)  
     (eradicate-piece-set $Board $Pieces))
-  (= (generalize_eradicate_piece  any $Board any_piece)  True)
+  (= (generalize-eradicate-piece  any $Board any_piece)  True)
 
 
 ;
@@ -1705,7 +1700,7 @@
 ; Removes all the goals in arg1 which are subsumed by
 ;
 ; a goal in arg2, given current board Board, resulting in arg4.
-  (= (remove_subsumed  () $_ $_ ())  True)
+  (= (remove-subsumed  () $_ $_ ())  True)
   (= (remove-subsumed (Cons  $Goal $Goals) $AllGoals $Board $Gs)  
     (subsumed-goal $Goal $AllGoals $Board)
     (set-det)
@@ -1805,7 +1800,7 @@
     (ord-subset $Sq2 $Sq1))
 
 
-  (= (type_contains  any_piece $_)  True)
+  (= (type-contains  any_piece $_)  True)
   (= (type-contains $Type1 $Type2)  
     (ord-subset $Type2 $Type1))
 
@@ -1897,10 +1892,10 @@
       (gen $Level) $Status))
 
 
-  (= (silent-gen)  
+  (= silent-gen  
     (all-gen off))
 
-  (= (loud-gen)  
+  (= loud-gen  
     (all-gen on))
 
 
@@ -1911,16 +1906,16 @@
     (set-gen-verbosity pieces $Status)) 
 
 
-  (= (trace-gen-subsume)  
+  (= trace-gen-subsume  
     (set-gen-verbosity subsume on)) 
 
-  (= (trace-gen-simplify)  
+  (= trace-gen-simplify  
     (set-gen-verbosity simplify on)) 
 
-  (= (trace-gen-goals)  
+  (= trace-gen-goals  
     (set-gen-verbosity goals on)) 
 
-  (= (trace-gen-pieces)  
+  (= trace-gen-pieces  
     (set-gen-verbosity pieces on)) 
 
 ;

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  randoms $_458004 metagame/misc/randoms.pl metagame/misc/randoms.metta)
+;                                           (convert-to-metta-file  randoms $_217230 metagame/misc/randoms.pl metagame/misc/randoms.metta)
 ;
 ; ============================================================
 ;
@@ -49,7 +49,7 @@
 ; RESET_RANDOM
 ;
 ; Ensures the random generator it is working.
-  (= (reset-random)  
+  (= reset-random  
     (random $_))
 
 
@@ -61,12 +61,12 @@
 ; ;; system can be exactly the same as a previous run.
 
 
-  (= (record-seed)  
+  (= record-seed  
     ( (seed $S) 
       (remove-all-atoms  &self 
-        (old_seed  $_)) 
-      (add-is-symbol  &self 
-        (old_seed  $S))))
+        (old-seed  $_)) 
+      (add-atom  &self 
+        (old-seed  $S))))
 
 
 ;
@@ -74,7 +74,7 @@
 ;
 ; Resets state to whichever was last recorded.
 
-  (= (recover-random)  
+  (= recover-random  
     (old-seed $S)
     (reset-random $S))
 
@@ -444,16 +444,14 @@
 
 
 
-  (= (test-sample)  
-    (repeat)
-    (sample 
-      (:: 
-        (- a 5) 
-        (- b 10) 
-        (- d 15)) $Choice)
-    (write $Choice)
-    (nl)
-    (fail))
+  (= test-sample  
+    (repeat 
+      (sample 
+        (:: 
+          (- a 5) 
+          (- b 10) 
+          (- d 15)) $Choice) 
+      (write $Choice) nl fail))
 
 
 ;

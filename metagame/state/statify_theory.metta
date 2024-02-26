@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  statify_theory $_22470 metagame/state/statify_theory.pl metagame/state/statify_theory.metta)
+;                                           (convert-to-metta-file  statify_theory $_34076 metagame/state/statify_theory.pl metagame/state/statify_theory.metta)
 ;
 ; ============================================================
 ;
@@ -46,8 +46,7 @@
 ;
 ; 
 
-  (= (compile-and-load-player)  
-    (state-compile-player))
+  (= compile-and-load-player  state-compile-player)
 	
 
 ;
@@ -71,28 +70,21 @@
 ;
 ; 
 
-  (= (state-compile-player)  
-    (compile-dynamic-preds)
-    (index-dynamic-preds)
-    (player-theory-load)
-    (player-theory-compile)
-    (theory-clear))
+  (= state-compile-player  
+    (compile-dynamic-preds index-dynamic-preds player-theory-load player-theory-compile theory-clear))
 
 
-  (= (player-theory-load)  
-    (format "Loading Theory: MetaGame~n" Nil)
-    (theory-clear)
-    (player-theory-files $Files)
-    (dl $Files))
+  (= player-theory-load  
+    ( (format "Loading Theory: MetaGame~n" Nil) theory-clear 
+      (player-theory-files $Files) 
+      (dl $Files)))
 
 
-  (= (player-theory-compile)  
-    (format "Compiling Theory: MetaGame~n" Nil)
-    (stativity-analysis)
-    (compile-player-files))
+  (= player-theory-compile  
+    ( (format "Compiling Theory: MetaGame~n" Nil) stativity-analysis compile-player-files))
 
 
-  (= (compile-player-files)  
+  (= compile-player-files  
     (theory-files $Files)
     (whenever 
       (member $File $Files) 
@@ -133,7 +125,7 @@
 ;
 ; 
 
-  (= (load-compiled-play-theory)  
+  (= load-compiled-play-theory  
     (player-compiled-files $Fs)
     (whenever 
       (member $F $Fs) 
@@ -164,28 +156,24 @@
 
 
   (= (state-compile-file $FileIn $FileOut)  
-    (format "Compiling theory file: ~w~n" 
-      (:: $FileIn))
-    (see $FileIn)
-    (tell $FileOut)
-    (compile-clauses)
-    (set-det)
-    (seen)
-    (told)
-    (format "Wrote compiled file: ~w~n" 
-      (:: $FileOut)))
+    ( (format "Compiling theory file: ~w~n" 
+        (:: $FileIn)) 
+      (see $FileIn) 
+      (tell $FileOut) compile-clauses 
+      (set-det) seen told 
+      (format "Wrote compiled file: ~w~n" 
+        (:: $FileOut))))
 ; ; don't know where nondet is.
 
 
-  (= (compile-clauses)  
+  (= compile-clauses  
     (det-if-then-else 
       (, 
         (read $ClauseIn) 
         (\== $ClauseIn end-of-file)) 
       (, 
         (compile-clause $ClauseIn $ClauseOut) 
-        (portray-clause $ClauseOut) 
-        (compile-clauses)) True))
+        (portray-clause $ClauseOut) compile-clauses) True))
 
 
 
@@ -218,7 +206,7 @@
 ; add_state(foo(a,b),A,B,1,GoalOut) --> GoalOut = foo(a,b,A).
 ;
 ; add_state(foo(a,b),A,B,2,GoalOut) --> GoalOut = foo(a,b,A,B).
-  (= (add_state  $GoalIn $SIn $SIn 0 $GoalIn)  True)
+  (= (add-state  $GoalIn $SIn $SIn 0 $GoalIn)  True)
   (= (add-state $GoalIn $SIn $SIn 1 $GoalOut)  
     (thread-in-state $GoalIn $SIn $GoalOut))
   (= (add-state $GoalIn $SIn $SOut 2 $GoalOut)  
@@ -249,29 +237,28 @@
 ;
 ; 
 
-  (= (dynamic_predicates  ((control  $Player) (on  $Piece $Square) (moved_onto  $Piece $Sq) (move_count  $L) (stage  $Stage) (effects  $Effect $Captures) (in_hand  $Piece $Player) (opponent_promotes  $OldPiece $Sq)))  True)
+  (= (dynamic-predicates  ((control  $Player) (on  $Piece $Square) (moved-onto  $Piece $Sq) (move-count  $L) (stage  $Stage) (effects  $Effect $Captures) (in-hand  $Piece $Player) (opponent-promotes  $OldPiece $Sq)))  True)
 ; ; empty(_Square),
 ; ; effect(_Effect),
 ; ; captured(_Piece,_Sq), ; opponent_displaces,
 
 
 
-  (= (compile-dynamic-preds)  
+  (= compile-dynamic-preds  
     (dynamic-preds-file $F)
     (compile-dynamics $F))
 
 
 
   (= (compile-dynamics $Dest)  
-    (format "~nCompiling Dynamic Predicates to theory file: ~w~n" 
-      (:: $Dest))
-    (tell $Dest)
-    (dynamic-predicates $Preds)
-    (compile-preds $Preds)
-    (told))
+    ( (format "~nCompiling Dynamic Predicates to theory file: ~w~n" 
+        (:: $Dest)) 
+      (tell $Dest) 
+      (dynamic-predicates $Preds) 
+      (compile-preds $Preds) told))
 
 
-  (= (compile_preds  ())  True)
+  (= (compile-preds  ())  True)
   (= (compile-preds (Cons  $H $T))  
     (make-state $H)
     (compile-preds $T))

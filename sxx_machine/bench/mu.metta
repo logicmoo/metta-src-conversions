@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  mu $_21788 sxx_machine/bench/mu.pl sxx_machine/bench/mu.metta)
+;                                           (convert-to-metta-file  mu $_204664 sxx_machine/bench/mu.pl sxx_machine/bench/mu.metta)
 ;
 ; generated: 9 November 1989
 ;
@@ -17,11 +17,10 @@
 ; prove "mu-math" theorem muiiu
 
 
-  (= (top)  
-    (mu))
+  (= top  mu)
 
 
-  (= (mu)  
+  (= mu  
     (theorem 
       (:: m u i i u) 5 $_)
     (set-det))
@@ -55,12 +54,12 @@
     (append $X $X $Y))
 
 
-  (= (rule3  (Cons  i (Cons  i (Cons  i $X))) (Cons  u $X))  True)
+  (= (rule3  ([|]  i ([|]  i ([|]  i $X))) ([|]  u $X))  True)
   (= (rule3 (Cons  $H $X) (Cons  $H $Y))  
     (rule3 $X $Y))
 
 
-  (= (rule4  (Cons  u (Cons  u $X)) $X)  True)
+  (= (rule4  ([|]  u ([|]  u $X)) $X)  True)
   (= (rule4 (Cons  $H $X) (Cons  $H $Y))  
     (rule4 $X $Y))
 

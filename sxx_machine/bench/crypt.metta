@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  crypt $_169110 sxx_machine/bench/crypt.pl sxx_machine/bench/crypt.metta)
+;                                           (convert-to-metta-file  crypt $_344978 sxx_machine/bench/crypt.pl sxx_machine/bench/crypt.metta)
 
 ;
 ; Cryptomultiplication:
@@ -28,7 +28,7 @@
 ; Written by Peter Van Roy
 
 
-  (= (top)  
+  (= top  
     (odd $A)
     (even $B)
     (even $C)

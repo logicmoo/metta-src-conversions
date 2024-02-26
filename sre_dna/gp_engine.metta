@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  gp_engine $_233400 sre_dna/gp_engine.pl sre_dna/gp_engine.metta)
+;                                           (convert-to-metta-file  gp_engine $_398708 sre_dna/gp_engine.pl sre_dna/gp_engine.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -27,10 +27,10 @@
 ; newindividual(ID_number, Fitness, Expression) (for separate gen)
 
 
-  (= (gp)  
-    ( (clean-up-1) 
-      (add-is-symbol  &self 
-        (best_so_far  $_ $_ 1000 $_)) 
+  (= gp  
+    (clean-up-1 
+      (add-atom  &self 
+        (best-so-far  $_ $_ 1000 $_)) 
       (max-runs-P $MaxRuns $RunType $_) 
       (set-det) 
       (meta-run-loop 1 $MaxRuns $RunType) 
@@ -46,26 +46,24 @@
     (writel (:: '--> Finished runs <--' nl nl))
     (set-det))
   (= (meta-run-loop $Run $MaxRuns $RunType)  
-    (=< $Run $MaxRuns)
-    (population-size-P $_ $PopSize)
-    (max-runs-P $_ $_ $MaxGen)
-    (writel (:: nl '---------------------  Run ' $Run  --------------------- nl))
-    (since-last-datime total retract $Hour $Minute $Sec)
-    (since-last-datime generation retract $_ $_ $_)
-    (do-the-run 0 $MaxGen $PopSize)
-    (write 'Dumping stats... ')
-    (dump-stats $Run)
-    (write done)
-    (nl)
-    (set-best-so-far $Run)
-    (det-if-then-else 
-      (, 
-        (== $RunType solution) 
-        (solved-run)) True 
-      (, 
-        (is $Run2 
-          (+ $Run 1)) 
-        (meta-run-loop $Run2 $MaxRuns $RunType))))
+    ( (=< $Run $MaxRuns) 
+      (population-size-P $_ $PopSize) 
+      (max-runs-P $_ $_ $MaxGen) 
+      (writel (:: nl '---------------------  Run ' $Run  --------------------- nl)) 
+      (since-last-datime total retract $Hour $Minute $Sec) 
+      (since-last-datime generation retract $_ $_ $_) 
+      (do-the-run 0 $MaxGen $PopSize) 
+      (write 'Dumping stats... ') 
+      (dump-stats $Run) 
+      (write done) nl 
+      (set-best-so-far $Run) 
+      (det-if-then-else 
+        (, 
+          (== $RunType solution) solved-run) True 
+        (, 
+          (is $Run2 
+            (+ $Run 1)) 
+          (meta-run-loop $Run2 $MaxRuns $RunType)))))
 ; ; gp_parameters
 ; ; gp_parameters
 
@@ -74,39 +72,34 @@
     (> $Gen $MaxGen)
     (set-det))
   (= (do-the-run $_ $_ $_)  
-    (solved-run)
-    (set-det))
+    (solved-run (set-det)))
   (= (do-the-run 0 $MaxGen $PopSize)  
-    ( (clean-up-2) 
-      (add-is-symbol  &self 
-        (best_in_run  $_ 1000 $_)) 
+    (clean-up-2 
+      (add-atom  &self 
+        (best-in-run  $_ 1000 $_)) 
       (writel (:: nl '********* Generation ' 0 ********* nl)) 
-      (evaluator-reset 0) 
-      (genesis) 
+      (evaluator-reset 0) genesis 
       (set-best-in-run 0) 
-      (print-tourn-stats 0) 
-      (garbage-collect) 
+      (print-tourn-stats 0) garbage-collect 
       (set-det) 
       (do-the-run 1 $MaxGen $PopSize)))
 ; ; dump_population(0),
   (= (do-the-run $Gen $MaxGen $PopSize)  
-    (writel (:: nl '********* Generation ' $Gen ********* nl))
-    (evaluator-reset $Gen)
-    (elite-migration 1 $StartSize)
-    (tournament-loop $StartSize $PopSize)
-    (rename-new-popn)
-    (det-if-then-else 
-      (, 
-        (lamarckian-P $P $_ $_ $_) 
-        (> $P 0)) 
-      (lamarckian-evolution $Gen) True)
-    (set-best-in-run $Gen)
-    (print-tourn-stats $Gen)
-    (is $Gen2 
-      (+ $Gen 1))
-    (garbage-collect)
-    (set-det)
-    (do-the-run $Gen2 $MaxGen $PopSize))
+    ( (writel (:: nl '********* Generation ' $Gen ********* nl)) 
+      (evaluator-reset $Gen) 
+      (elite-migration 1 $StartSize) 
+      (tournament-loop $StartSize $PopSize) rename-new-popn 
+      (det-if-then-else 
+        (, 
+          (lamarckian-P $P $_ $_ $_) 
+          (> $P 0)) 
+        (lamarckian-evolution $Gen) True) 
+      (set-best-in-run $Gen) 
+      (print-tourn-stats $Gen) 
+      (is $Gen2 
+        (+ $Gen 1)) garbage-collect 
+      (set-det) 
+      (do-the-run $Gen2 $MaxGen $PopSize)))
 ; ; new: May/00
 ; ; dump_population(Gen),
 
@@ -128,8 +121,7 @@
     (> $K $PopSize)
     (set-det))
   (= (tournament-loop $_ $_)  
-    (solved-run)
-    (set-det))
+    (solved-run (set-det)))
   (= (tournament-loop $K $PopSize)  
     (prob-crossover-P $PC)
     (maybe $PC)
@@ -183,13 +175,13 @@
   (= (select-random-IDs $Size $Size $_ $Result $Result)  
     (set-det))
   (= (select-random-IDs $N $Size $PopSize $SoFar $Result)  
-    (repeat)
-    (my-random $PopSize $K)
-    (not (member $K $SoFar))
-    (is $N2 
-      (+ $N 1))
-    (select-random-IDs $N2 $Size $PopSize 
-      (Cons  $K $SoFar) $Result))
+    (repeat 
+      (my-random $PopSize $K) 
+      (not (member $K $SoFar)) 
+      (is $N2 
+        (+ $N 1)) 
+      (select-random-IDs $N2 $Size $PopSize 
+        (Cons  $K $SoFar) $Result)))
 
 ;
 ; select the best or worst in tournament
@@ -248,13 +240,13 @@
   (= (add-individual $_ $Fitness $NewExpr)  
     ( (gen-type-P separate) 
       (set-det) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (newindividual  $_ $Fitness $NewExpr))))
   (= (add-individual $PopSize $Fitness $NewExpr)  
     ( (tournament-select worst $PopSize $ID $_) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (individual  $ID $_ $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (individual  $ID $Fitness $NewExpr))))
 
 ;
@@ -303,39 +295,37 @@
 ; succeed if solution criteria satisfied
 
 
-  (= (solved-run)  
+  (= solved-run  
     (best-in-run $_ $BFitness $_)
     (error-tolerance-P $Err)
     (=< $BFitness $Err)
     (set-det))
 	
 
-  (= (clean-up-1)  
-    ( (set-random-number-gen) 
+  (= clean-up-1  
+    (set-random-number-gen 
       (remove-all-atoms  &self 
-        (start_time  $_)) 
+        (start-time  $_)) 
       (remove-all-atoms  &self 
-        (best_so_far  $_ $_ $_ $_)) 
-      (garbage-collect) 
+        (best-so-far  $_ $_ $_ $_)) garbage-collect 
       (set-det)))
 
 
-  (= (clean-up-2)  
+  (= clean-up-2  
     ( (remove-all-atoms  &self 
-        (best_in_run  $_ $_ $_)) 
+        (best-in-run  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (gp_stats  $_ $_ $_ $_ $_ $_ $_)) 
+        (gp-stats  $_ $_ $_ $_ $_ $_ $_)) 
       (remove-all-atoms  &self 
         (individual  $_ $_ $_)) 
       (remove-all-atoms  &self 
         (newindividual  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (popn_size  $_)) 
+        (popn-size  $_)) 
       (remove-all-atoms  &self 
-        (popn_cnt  $_)) 
+        (popn-cnt  $_)) 
       (remove-all-atoms  &self 
-        (temp  $_)) 
-      (garbage-collect) 
+        (temp  $_)) garbage-collect 
       (set-det)))
 ; ; retractall(trace_count(_,_)),
 ; ; retractall(saved_trace(_)),
@@ -345,9 +335,8 @@
 ; for interactive exec...
 
 
-  (= (clean-up)  
-    (clean-up-1)
-    (clean-up-2))
+  (= clean-up  
+    (clean-up-1 clean-up-2))
 
 ;
 ; If evaluator_reset_P(Gen) is set to a routine name, then call it before
@@ -366,14 +355,13 @@
       (mod $G $N))
     (call $C)
     (set-det))
-  (= (evaluator_reset  $_)  True)
+  (= (evaluator-reset  $_)  True)
 
-  (= (rename-new-popn)  
+  (= rename-new-popn  
     ( (gen-type-P separate) 
       (set-det) 
       (remove-all-atoms  &self 
-        (individual  $_ $_ $_)) 
-      (renumber-population)))
+        (individual  $_ $_ $_)) renumber-population))
 ; /* evaluator_reset :- evaluator_reset_P(no), !. evaluator_reset :- evaluator_reset_P(C), call(C), !. evaluator_reset. */
 ; ; If a separate population scheme is being used, then rename the ; newindividual's to individuals, and give them ID numbers.
   (= rename_new_popn  True)
@@ -419,7 +407,7 @@
             (evaluator $E $V2)) 
           (write ?)) 
         (= $V $V2)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (newindividual  $K $V2 $E)) 
       (set-det) 
       (copy-elite $B $ReEval)))

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  xm $_54378 miles/xm.pl miles/xm.metta)
+;                                           (convert-to-metta-file  xm $_95656 miles/xm.pl miles/xm.metta)
 ;
 ; FILE xm.pl
 
@@ -55,14 +55,13 @@
 ; ***********************************************************************
 
 
-  (= (runtime-entry start)  
-    (xm))
+  (= (runtime-entry start)  xm)
 
 
   !(dynamic (, (/ listItems 1) (/ my-exit-loop 1) (/ toplevel 1)))
 
 
-  (= (my_exit_loop  no)  True)
+  (= (my-exit-loop  no)  True)
 
 
 
@@ -93,23 +92,20 @@
 
 
 
-  (= (xm)  
+  (= xm  
     (det-if-then-else 
       (toplevel $Widget) 
       (, 
         (= $XMiles $Widget) 
         (open xmProtocol.tmp write $F) 
         (recordz messages 
-          (file $F) $_) 
-        (updateEvaluationLabel) 
+          (file $F) $_) updateEvaluationLabel 
         (refreshKnowledgeList $Widget rules $Calldata) 
         (refreshKnowledgeList $Widget examples $Calldata)) 
-      (, 
-        (xtToolkitInitialize) 
+      (, xtToolkitInitialize 
         (xtInitialize X-MILES xMILES $XMiles) 
-        (add-is-symbol  &self 
-          (toplevel  $XMiles)) 
-        (clear-kb) 
+        (add-atom  &self 
+          (toplevel  $XMiles)) clear-kb 
         (xmCreateRowColumn $XMiles xMilesRow 
           (:: 
             (xmNorientation xmHORIZONTAL) 
@@ -142,10 +138,10 @@
     (det-if-then-else 
       (my-exit-loop yes) 
       (, 
-        (remove-is-symbol  &self 
-          (my_exit_loop  yes)) 
-        (add-is-symbol  &self 
-          (my_exit_loop  no))) 
+        (remove-atom  &self 
+          (my-exit-loop  yes)) 
+        (add-atom  &self 
+          (my-exit-loop  no))) 
       (, 
         (xtNextEvent $Event) 
         (xtDispatchEvent $Event) 
@@ -425,15 +421,13 @@
 
 
   (= (addKnowledgeListItems rules)  
-    (getNextId $Id)
-    (get-clause $Id $H $B $S $O)
-    (addRuleItem $Id $H $B $S $O)
-    (fail))
+    ( (getNextId $Id) 
+      (get-clause $Id $H $B $S $O) 
+      (addRuleItem $Id $H $B $S $O) fail))
   (= (addKnowledgeListItems examples)  
-    (getNextId $Id)
-    (get-example $Id $F $C)
-    (addExampleItem $Id $F $C)
-    (fail))
+    ( (getNextId $Id) 
+      (get-example $Id $F $C) 
+      (addExampleItem $Id $F $C) fail))
   (= (addKnowledgeListItems $_)  
     (set-det))
 
@@ -463,29 +457,27 @@
 
 
   (= (getNextId $Id)  
-    (id-count $MaxId)
-    (repeat)
-    (det-if-then-else 
-      (recorded knowledgeList 
-        (xm-id-count $I_old) $Ref) 
-      (, 
-        (erase $Ref) 
-        (is $Id 
-          (+ $I_old 1)) 
-        (recordz knowledgeList 
-          (xm-id-count $Id) $_)) 
-      (, 
-        (= $Id 1) 
-        (recordz knowledgeList 
-          (xm-id-count $Id) $_)))
-    (det-if-then-else 
-      (< $MaxId $Id) 
-      (, 
+    ( (id-count $MaxId) repeat 
+      (det-if-then-else 
         (recorded knowledgeList 
-          (xm-id-count $_) $Ref2) 
-        (erase $Ref2) 
-        (set-det) 
-        (fail)) otherwise))
+          (xm-id-count $I_old) $Ref) 
+        (, 
+          (erase $Ref) 
+          (is $Id 
+            (+ $I_old 1)) 
+          (recordz knowledgeList 
+            (xm-id-count $Id) $_)) 
+        (, 
+          (= $Id 1) 
+          (recordz knowledgeList 
+            (xm-id-count $Id) $_))) 
+      (det-if-then-else 
+        (< $MaxId $Id) 
+        (, 
+          (recorded knowledgeList 
+            (xm-id-count $_) $Ref2) 
+          (erase $Ref2) 
+          (set-det) fail) otherwise)))
 
 
 ;
@@ -575,7 +567,7 @@
       (, 
         (xmTextGetString $MinText $MinCP) 
         (proxtCharPtrToString $MinCP $MinStr) 
-        (atom-chars $MinStr $MinC) 
+        (symbol-chars $MinStr $MinC) 
         (number-chars $Min $MinC)))
     (det-if-then 
       (recorded rules 
@@ -583,7 +575,7 @@
       (, 
         (xmTextGetString $MaxText $MaxCP) 
         (proxtCharPtrToString $MaxCP $MaxStr) 
-        (atom-chars $MaxStr $MaxC) 
+        (symbol-chars $MaxStr $MaxC) 
         (number-chars $Max $MaxC)))
     (or 
       (recorded rules 
@@ -671,7 +663,7 @@
       (, 
         (xmTextGetString $MinText $MinCP) 
         (proxtCharPtrToString $MinCP $MinStr) 
-        (atom-chars $MinStr $MinC) 
+        (symbol-chars $MinStr $MinC) 
         (number-chars $Min $MinC)))
     (det-if-then 
       (recorded examples 
@@ -679,7 +671,7 @@
       (, 
         (xmTextGetString $MaxText $MaxCP) 
         (proxtCharPtrToString $MaxCP $MaxStr) 
-        (atom-chars $MaxStr $MaxC) 
+        (symbol-chars $MaxStr $MaxC) 
         (number-chars $Max $MaxC)))
     (or 
       (recorded examples 
@@ -698,10 +690,10 @@
       (knowledgeList $KL) $_)
     (number-chars $I $S1)
     (append $S1 " (" $S2)
-    (atom-chars $C $S3)
+    (symbol-chars $C $S3)
     (append $S2 $S3 $S4)
     (append $S4 "): " $S5)
-    (atom-chars $A5 $S5)
+    (symbol-chars $A5 $S5)
     (proxtStringToCharPtr $A5 $CP5)
     (xmStringCreateLtoR $CP5 $DCharset $XmS1)
     (xxmWriteToString 
@@ -761,9 +753,8 @@
 
 
   (= (refreshKnowledgeList $Widget $KindOfKnowledge $Calldata)  
-    (deleteKnowledgeListItems $KindOfKnowledge)
-    (addKnowledgeListItems $KindOfKnowledge)
-    (updateEvaluationLabel))
+    ( (deleteKnowledgeListItems $KindOfKnowledge) 
+      (addKnowledgeListItems $KindOfKnowledge) updateEvaluationLabel))
 
 
 ;
@@ -986,7 +977,7 @@
             (editing rules $Id) $_) 
           (number-chars $Id $IdCS) 
           (append "Editor     editing rule " $IdCS $LblCS) 
-          (atom-chars $LblAS $LblCS) 
+          (symbol-chars $LblAS $LblCS) 
           (proxtStringToCharPtr $LblAS $LblCP) 
           (xmStringCreate $LblCP $DCharset $LblS) 
           (xtSetValues $Label 
@@ -1005,7 +996,7 @@
             (editing examples $Id) $_) 
           (number-chars $Id $IdCS) 
           (append "Editor     editing example " $IdCS $LblCS) 
-          (atom-chars $LblAS $LblCS) 
+          (symbol-chars $LblAS $LblCS) 
           (proxtStringToCharPtr $LblAS $LblCP) 
           (xmStringCreate $LblCP $DCharset $LblS) 
           (xtSetValues $Label 
@@ -1264,10 +1255,9 @@
     (deleteKnowledge $Widget examples $CallData))
 
   (= (deleteKnowledge $_ $KindOfKnowledge $_)  
-    (writeMessage '% selected ')
-    (writeMessage $KindOfKnowledge)
-    (writelnMessage ' deleted.')
-    (updateEvaluationLabel))
+    ( (writeMessage '% selected ') 
+      (writeMessage $KindOfKnowledge) 
+      (writelnMessage ' deleted.') updateEvaluationLabel))
 
 
 ;
@@ -1510,34 +1500,33 @@
 
 
   (= (loadKnowledgeEnd $Widget $FileSelectionDialog $CallData)  
-    (xtUnmanageChild $FileSelectionDialog)
-    (xtRemoveCallback $FileSelectionDialog xmNokCallback loadKnowledgeEnd $FileSelectionDialog)
-    (xtRemoveCallback $FileSelectionDialog xmNcancelCallback cancelLoadFileSelect $FileSelectionDialog)
-    (sucheInListe 
-      (value $FileNameString) $CallData)
-    (proxtGetDefaultCharset $DCharset)
-    (xmStringGetLtoR $FileNameString $DCharset $FileNameCP $_)
-    (proxtCharPtrToString $FileNameCP $FileName)
-    (| 
-      (det-if-then 
-        (midstring $FileName $_ .qof 0) 
-        (, 
-          (consult-kb $FileName) 
-          (writeMessage ':- consult-kb(') 
-          (writeMessage $FileName) 
-          (writelnMessage ).))) 
-      (det-if-then otherwise 
-        (, 
-          (init-kb $FileName) 
-          (writeMessage ':- init-kb(') 
-          (writeMessage $FileName) 
-          (writelnMessage ).))))
-    (writeMessage '% file "')
-    (writeMessage $FileName)
-    (writelnMessage " consulted.)
-    (refreshKnowledgeList $Widget rules $Calldata)
-    (refreshKnowledgeList $Widget examples $Calldata)
-    (updateEvaluationLabel))
+    ( (xtUnmanageChild $FileSelectionDialog) 
+      (xtRemoveCallback $FileSelectionDialog xmNokCallback loadKnowledgeEnd $FileSelectionDialog) 
+      (xtRemoveCallback $FileSelectionDialog xmNcancelCallback cancelLoadFileSelect $FileSelectionDialog) 
+      (sucheInListe 
+        (value $FileNameString) $CallData) 
+      (proxtGetDefaultCharset $DCharset) 
+      (xmStringGetLtoR $FileNameString $DCharset $FileNameCP $_) 
+      (proxtCharPtrToString $FileNameCP $FileName) 
+      (| 
+        (det-if-then 
+          (midstring $FileName $_ .qof 0) 
+          (, 
+            (consult-kb $FileName) 
+            (writeMessage ':- consult-kb(') 
+            (writeMessage $FileName) 
+            (writelnMessage ).))) 
+        (det-if-then otherwise 
+          (, 
+            (init-kb $FileName) 
+            (writeMessage ':- init-kb(') 
+            (writeMessage $FileName) 
+            (writelnMessage ).)))) 
+      (writeMessage '% file "') 
+      (writeMessage $FileName) 
+      (writelnMessage " consulted.) 
+      (refreshKnowledgeList $Widget rules $Calldata) 
+      (refreshKnowledgeList $Widget examples $Calldata) updateEvaluationLabel))
 
 
 ;
@@ -1569,13 +1558,11 @@
 
 
   (= (clearAllKnowledge $Widget $ClientData $CallData)  
-    (deleteAllKnowledge $Widget rules $CallData)
-    (deleteAllKnowledge $Widget examples $CallData)
-    (clearEditor $_ $_ $_)
-    (writelnMessage ':- clear-kb.')
-    (writelnMessage '% knowledgebase cleared.')
-    (clear-kb)
-    (updateEvaluationLabel))
+    ( (deleteAllKnowledge $Widget rules $CallData) 
+      (deleteAllKnowledge $Widget examples $CallData) 
+      (clearEditor $_ $_ $_) 
+      (writelnMessage ':- clear-kb.') 
+      (writelnMessage '% knowledgebase cleared.') clear-kb updateEvaluationLabel))
 
 ;
 ; ************************************************************************
@@ -2054,35 +2041,21 @@
           (, $H $B) 0 $_) 
         (xxmWriteToString 
           (, 
-            (show-kb-clause $RuleNo $H $B $O) 
-            (nl) 
-            (write type-restriction:) 
-            (nl) 
-            (write $R) 
-            (nl)) $DCharset $XmS3) 
+            (show-kb-clause $RuleNo $H $B $O) nl 
+            (write type-restriction:) nl 
+            (write $R) nl) $DCharset $XmS3) 
         (xxmWriteToString 
-          (, 
-            (nl) 
-            (write evaluation:) 
-            (nl) 
-            (write $E1) 
-            (nl) 
-            (write $E2) 
-            (nl) 
-            (write $E3) 
-            (nl) 
-            (write $E4) 
-            (nl) 
-            (write $E5) 
-            (nl) 
-            (write $E6) 
-            (nl) 
-            (write $E7) 
-            (nl) 
-            (write $E8) 
-            (nl) 
-            (write $E9) 
-            (nl)) $DCharset $XmS4) 
+          (, nl 
+            (write evaluation:) nl 
+            (write $E1) nl 
+            (write $E2) nl 
+            (write $E3) nl 
+            (write $E4) nl 
+            (write $E5) nl 
+            (write $E6) nl 
+            (write $E7) nl 
+            (write $E8) nl 
+            (write $E9) nl) $DCharset $XmS4) 
         (xmStringConcat $XmS3 $XmS4 $XmS) 
         (xmCreateLabel $ExamineRC anyClause 
           (:: 
@@ -2090,7 +2063,7 @@
             (xmNlabelString $XmS) 
             (xmNlabelType xmSTRING)) $Label)) 
       (, 
-        (atom-chars $ASno "No rule selected!") 
+        (symbol-chars $ASno "No rule selected!") 
         (proxtStringToCharPtr $ASno $CPno) 
         (xmStringCreateLtoR $CPno $DCharset $XmSno) 
         (xmCreateLabel $ExamineRC anyClause 
@@ -2672,17 +2645,16 @@
 
 
   (= (setSelectedLabels $Label)  
-    (recorded current 
-      (clause $Id $Widget selected) $Ref)
-    (erase $Ref)
-    (get-clause $Id $H $B $CL $_)
-    (delete-clause $Id)
-    (store-clause $_ $CL $Label $Id)
-    (setSelectedLabels $Label)
-    (recorda current 
-      (clause $Id $Widget selected) $_)
-    (addRuleItem $Id $H $B $CL $Label)
-    (updateEvaluationLabel))
+    ( (recorded current 
+        (clause $Id $Widget selected) $Ref) 
+      (erase $Ref) 
+      (get-clause $Id $H $B $CL $_) 
+      (delete-clause $Id) 
+      (store-clause $_ $CL $Label $Id) 
+      (setSelectedLabels $Label) 
+      (recorda current 
+        (clause $Id $Widget selected) $_) 
+      (addRuleItem $Id $H $B $CL $Label) updateEvaluationLabel))
   (= (setSelectedLabels $_)  
     (set-det))
 
@@ -2792,17 +2764,16 @@
 
 
   (= (classChangeSelected $Widget $Classification $CallData)  
-    (recorded current 
-      (example $Id $Label selected) $Ref)
-    (erase $Ref)
-    (get-example $Id $Fact $_)
-    (delete-example $Id)
-    (store-ex $Fact $Classification $Id)
-    (classChangeSelected $Widget $Classification $CallData)
-    (recorda current 
-      (example $Id $Label selected) $_)
-    (addExampleItem $Id $Fact $Classification)
-    (updateEvaluationLabel))
+    ( (recorded current 
+        (example $Id $Label selected) $Ref) 
+      (erase $Ref) 
+      (get-example $Id $Fact $_) 
+      (delete-example $Id) 
+      (store-ex $Fact $Classification $Id) 
+      (classChangeSelected $Widget $Classification $CallData) 
+      (recorda current 
+        (example $Id $Label selected) $_) 
+      (addExampleItem $Id $Fact $Classification) updateEvaluationLabel))
   (= (classChangeSelected $_ $_ $_)  
     (set-det))
 
@@ -3023,7 +2994,7 @@
   (= (lowerDepth $Widget $DepthText $CallData)  
     (xmTextGetString $DepthText $OldDepthCP)
     (proxtCharPtrToString $OldDepthCP $OldDepthStr)
-    (atom-chars $OldDepthStr $OldDepthC)
+    (symbol-chars $OldDepthStr $OldDepthC)
     (number-chars $OldDepth $OldDepthC)
     (| 
       (det-if-then 
@@ -3033,7 +3004,7 @@
         (is $NewDepth 
           (- $OldDepth 1))))
     (number-chars $NewDepth $NewDepthC)
-    (atom-chars $NewDepthStr $NewDepthC)
+    (symbol-chars $NewDepthStr $NewDepthC)
     (proxtStringToCharPtr $NewDepthStr $NewDepthCP)
     (xmTextSetString $DepthText $NewDepthCP))
 
@@ -3073,7 +3044,7 @@
   (= (lowerID $Widget $IDText $CallData)  
     (xmTextGetString $IDText $OldIDCP)
     (proxtCharPtrToString $OldIDCP $OldIDStr)
-    (atom-chars $OldIDStr $OldIDC)
+    (symbol-chars $OldIDStr $OldIDC)
     (number-chars $OldID $OldIDC)
     (| 
       (det-if-then 
@@ -3083,7 +3054,7 @@
         (is $NewID 
           (- $OldID 1))))
     (number-chars $NewID $NewIDC)
-    (atom-chars $NewIDStr $NewIDC)
+    (symbol-chars $NewIDStr $NewIDC)
     (proxtStringToCharPtr $NewIDStr $NewIDCP)
     (xmTextSetString $IDText $NewIDCP))
 
@@ -3126,13 +3097,13 @@
         (= $KindOfKnowledge examples)))
     (xmTextGetString $MinText $OldMinCP)
     (proxtCharPtrToString $OldMinCP $OldMinStr)
-    (atom-chars $OldMinStr $OldMinC)
+    (symbol-chars $OldMinStr $OldMinC)
     (number-chars $OldMin $OldMinC)
     (recorded $KindOfKnowledge 
       (viewMax $MaxText) $_)
     (xmTextGetString $MaxText $MaxCP)
     (proxtCharPtrToString $MaxCP $MaxStr)
-    (atom-chars $MaxStr $MaxC)
+    (symbol-chars $MaxStr $MaxC)
     (number-chars $Max $MaxC)
     (| 
       (det-if-then 
@@ -3142,7 +3113,7 @@
         (is $NewMin 
           (- $OldMin 1))))
     (number-chars $NewMin $NewMinC)
-    (atom-chars $NewMinStr $NewMinC)
+    (symbol-chars $NewMinStr $NewMinC)
     (proxtStringToCharPtr $NewMinStr $NewMinCP)
     (xmTextSetString $MinText $NewMinCP))
 
@@ -3185,13 +3156,13 @@
         (= $KindOfKnowledge examples)))
     (xmTextGetString $MaxText $OldMaxCP)
     (proxtCharPtrToString $OldMaxCP $OldMaxStr)
-    (atom-chars $OldMaxStr $OldMaxC)
+    (symbol-chars $OldMaxStr $OldMaxC)
     (number-chars $OldMax $OldMaxC)
     (recorded $KindOfKnowledge 
       (viewMin $MinText) $_)
     (xmTextGetString $MinText $MinCP)
     (proxtCharPtrToString $MinCP $MinStr)
-    (atom-chars $MinStr $MinC)
+    (symbol-chars $MinStr $MinC)
     (number-chars $Min $MinC)
     (| 
       (det-if-then 
@@ -3201,7 +3172,7 @@
         (is $NewMax 
           (- $OldMax 1))))
     (number-chars $NewMax $NewMaxC)
-    (atom-chars $NewMaxStr $NewMaxC)
+    (symbol-chars $NewMaxStr $NewMaxC)
     (proxtStringToCharPtr $NewMaxStr $NewMaxCP)
     (xmTextSetString $MaxText $NewMaxCP))
 
@@ -3237,7 +3208,7 @@
   (= (raiseDepth $Widget $DepthText $CallData)  
     (xmTextGetString $DepthText $OldDepthCP)
     (proxtCharPtrToString $OldDepthCP $OldDepthStr)
-    (atom-chars $OldDepthStr $OldDepthC)
+    (symbol-chars $OldDepthStr $OldDepthC)
     (number-chars $OldDepth $OldDepthC)
     (| 
       (det-if-then 
@@ -3247,7 +3218,7 @@
         (is $NewDepth 
           (+ $OldDepth 1))))
     (number-chars $NewDepth $NewDepthC)
-    (atom-chars $NewDepthStr $NewDepthC)
+    (symbol-chars $NewDepthStr $NewDepthC)
     (proxtStringToCharPtr $NewDepthStr $NewDepthCP)
     (xmTextSetString $DepthText $NewDepthCP))
 
@@ -3283,7 +3254,7 @@
   (= (raiseID $Widget $IDText $CallData)  
     (xmTextGetString $IDText $OldIDCP)
     (proxtCharPtrToString $OldIDCP $OldIDStr)
-    (atom-chars $OldIDStr $OldIDC)
+    (symbol-chars $OldIDStr $OldIDC)
     (number-chars $OldID $OldIDC)
     (| 
       (det-if-then 
@@ -3293,7 +3264,7 @@
         (is $NewID 
           (+ $OldID 1))))
     (number-chars $NewID $NewIDC)
-    (atom-chars $NewIDStr $NewIDC)
+    (symbol-chars $NewIDStr $NewIDC)
     (proxtStringToCharPtr $NewIDStr $NewIDCP)
     (xmTextSetString $IDText $NewIDCP))
 
@@ -3335,13 +3306,13 @@
         (= $KindOfKnowledge examples)))
     (xmTextGetString $MinText $OldMinCP)
     (proxtCharPtrToString $OldMinCP $OldMinStr)
-    (atom-chars $OldMinStr $OldMinC)
+    (symbol-chars $OldMinStr $OldMinC)
     (number-chars $OldMin $OldMinC)
     (recorded $KindOfKnowledge 
       (viewMax $MaxText) $_)
     (xmTextGetString $MaxText $MaxCP)
     (proxtCharPtrToString $MaxCP $MaxStr)
-    (atom-chars $MaxStr $MaxC)
+    (symbol-chars $MaxStr $MaxC)
     (number-chars $Max $MaxC)
     (| 
       (det-if-then 
@@ -3351,7 +3322,7 @@
         (is $NewMin 
           (+ $OldMin 1))))
     (number-chars $NewMin $NewMinC)
-    (atom-chars $NewMinStr $NewMinC)
+    (symbol-chars $NewMinStr $NewMinC)
     (proxtStringToCharPtr $NewMinStr $NewMinCP)
     (xmTextSetString $MinText $NewMinCP))
 
@@ -3395,13 +3366,13 @@
         (= $KindOfKnowledge examples)))
     (xmTextGetString $MaxText $OldMaxCP)
     (proxtCharPtrToString $OldMaxCP $OldMaxStr)
-    (atom-chars $OldMaxStr $OldMaxC)
+    (symbol-chars $OldMaxStr $OldMaxC)
     (number-chars $OldMax $OldMaxC)
     (recorded $KindOfKnowledge 
       (viewMin $MinText) $_)
     (xmTextGetString $MinText $MinCP)
     (proxtCharPtrToString $MinCP $MinStr)
-    (atom-chars $MinStr $MinC)
+    (symbol-chars $MinStr $MinC)
     (number-chars $Min $MinC)
     (| 
       (det-if-then 
@@ -3411,7 +3382,7 @@
         (is $NewMax 
           (+ $OldMax 1))))
     (number-chars $NewMax $NewMaxC)
-    (atom-chars $NewMaxStr $NewMaxC)
+    (symbol-chars $NewMaxStr $NewMaxC)
     (proxtStringToCharPtr $NewMaxStr $NewMaxCP)
     (xmTextSetString $MaxText $NewMaxCP))
 
@@ -3455,7 +3426,7 @@
     (= $Length 0)
     (set-det)
     (number-chars $Id $IdChars)
-    (atom-chars $IdStr $IdChars)
+    (symbol-chars $IdStr $IdChars)
     (proxtStringToCharPtr $IdStr $IdCharPtr)
     (xmTextSetString $Text $IdCharPtr))
   (= (copyId $Id $Count)  
@@ -3717,43 +3688,41 @@
 
 
   (= (callFunction $Widget $Buttonname $CallData)  
-    (recorded learnfuncs 
-      (popedup $PopupShell) $Ref)
-    (erase $Ref)
-    (xtUnmanageChild $PopupShell)
-    (operatordef $Buttonname $Funcname $InOutPattern $InChecks $XOuts $Refresh)
-    (writeMessage :- )
-    (writeMessage $Funcname)
-    (| 
-      (det-if-then 
-        (= $InOutPattern Nil) 
-        (, 
-          (writelnMessage .) 
+    ( (recorded learnfuncs 
+        (popedup $PopupShell) $Ref) 
+      (erase $Ref) 
+      (xtUnmanageChild $PopupShell) 
+      (operatordef $Buttonname $Funcname $InOutPattern $InChecks $XOuts $Refresh) 
+      (writeMessage :- ) 
+      (writeMessage $Funcname) 
+      (| 
+        (det-if-then 
+          (= $InOutPattern Nil) 
+          (, 
+            (writelnMessage .) 
+            (= $Fails Nil) 
+            (= $Args Nil))) 
+        (det-if-then otherwise 
+          (, 
+            (writeMessage () 
+            (replaceXmVars $InOutPattern $InChecks $Args $Fails)))) flushErrorBuffer 
+      (| 
+        (det-if-then 
           (= $Fails Nil) 
-          (= $Args Nil))) 
-      (det-if-then otherwise 
-        (, 
-          (writeMessage () 
-          (replaceXmVars $InOutPattern $InChecks $Args $Fails))))
-    (flushErrorBuffer)
-    (| 
-      (det-if-then 
-        (= $Fails Nil) 
-        (, 
-          (=.. $F 
-            (Cons  $Funcname $Args)) 
-          (| 
-            (det-if-then 
-              (call $F) 
-              (, 
-                (writelnMessage '% yes') 
-                (outVars $Args $InOutPattern $XOuts) 
-                (refresh $Refresh))) 
-            (det-if-then otherwise 
-              (writelnMessage '% no'))))) 
-      (det-if-then otherwise 
-        (writelnMessage '% Error occured, function not executed!')))
-    (updateEvaluationLabel))
+          (, 
+            (=.. $F 
+              (Cons  $Funcname $Args)) 
+            (| 
+              (det-if-then 
+                (call $F) 
+                (, 
+                  (writelnMessage '% yes') 
+                  (outVars $Args $InOutPattern $XOuts) 
+                  (refresh $Refresh))) 
+              (det-if-then otherwise 
+                (writelnMessage '% no'))))) 
+        (det-if-then otherwise 
+          (writelnMessage '% Error occured, function not executed!'))) updateEvaluationLabel))
 
 
 ;
@@ -3795,7 +3764,7 @@
     (| 
       (det-if-then 
         (atom $Pat) 
-        (atom-chars $Pat $PatC)) 
+        (symbol-chars $Pat $PatC)) 
       (det-if-then otherwise 
         (= $PatC "constant")))
     (append "xmarg" 
@@ -3816,7 +3785,7 @@
             (argumentWidget depth $Text) $_) 
           (xmTextGetString $Text $ArgCP) 
           (proxtCharPtrToString $ArgCP $ArgStr) 
-          (atom-chars $ArgStr $ArgChars) 
+          (symbol-chars $ArgStr $ArgChars) 
           (| 
             (number-chars $Value $ArgChars) 
             (= $Value $ArgStr)) 
@@ -3844,7 +3813,7 @@
               (argumentWidget $N $Text) $_) 
             (xmTextGetString $Text $ArgCP) 
             (proxtCharPtrToString $ArgCP $ArgStr) 
-            (atom-chars $ArgStr $ArgChars) 
+            (symbol-chars $ArgStr $ArgChars) 
             (| 
               (number-chars $Value $ArgChars) 
               (= $Value $ArgStr)) 
@@ -3872,7 +3841,7 @@
                 (argumentWidget $N $Text) $_) 
               (xmTextGetString $Text $ArgCP) 
               (proxtCharPtrToString $ArgCP $ArgStr) 
-              (atom-chars $ArgStr $ArgChars) 
+              (symbol-chars $ArgStr $ArgChars) 
               (| 
                 (number-chars $Value $ArgChars) 
                 (= $Value $ArgStr)) 
@@ -3898,7 +3867,7 @@
                   (argumentWidget depth $Text) $_) 
                 (xmTextGetString $Text $ArgCP) 
                 (proxtCharPtrToString $ArgCP $ArgStr) 
-                (atom-chars $ArgStr $ArgChars) 
+                (symbol-chars $ArgStr $ArgChars) 
                 (= $InChecks 
                   (Cons  $IC $ICs)) 
                 (| 
@@ -3932,7 +3901,7 @@
                     (argumentWidget $N $Text) $_) 
                   (xmTextGetString $Text $ArgCP) 
                   (proxtCharPtrToString $ArgCP $ArgStr) 
-                  (atom-chars $ArgStr $ArgChars) 
+                  (symbol-chars $ArgStr $ArgChars) 
                   (= $InChecks 
                     (Cons  $IC $ICs)) 
                   (| 
@@ -3966,7 +3935,7 @@
                       (argumentWidget $N $Text) $_) 
                     (xmTextGetString $Text $ArgCP) 
                     (proxtCharPtrToString $ArgCP $ArgStr) 
-                    (atom-chars $ArgStr $ArgChars) 
+                    (symbol-chars $ArgStr $ArgChars) 
                     (= $InChecks 
                       (Cons  $IC $ICs)) 
                     (| 
@@ -3998,7 +3967,7 @@
                       (= $PatC 
                         (Cons  $_ $P1)) 
                       (append "X" $P1 $P2) 
-                      (atom-chars $P3 $P2) 
+                      (symbol-chars $P3 $P2) 
                       (writeMessage $P3) 
                       (= $Fail Nil) 
                       (= $Value variable) 
@@ -4063,7 +4032,7 @@
 
   (= (outVars  $_ $_ ())  True)
   (= (outVars (Cons  $Arg1 $Args) (Cons  $Pat $InOutPattern) $XOuts)  
-    (atom-chars $Pat $PatC)
+    (symbol-chars $Pat $PatC)
     (append "xmout" 
       (:: $_) $Outstr)
     (| 
@@ -4231,20 +4200,16 @@
 
 
   (= (popupViewRules $Widget $ClientData $CallData)  
-    (recorded rules 
-      (view dialog $VRDialog) $_)
-    (xtGetValues $Widget 
-      (:: (xmNwidth $Xs)))
-    (xtTranslateCoords $Widget $Xs 0 $X $Y)
-    (xtSetValues $VRDialog 
-      (:: 
-        (xmNx $X) 
-        (xmNy $Y)))
-    (xtManageChild $VRDialog)
-    (fillExistingLabels)
-    (fillViewedLabels)
-    (fillExistingClauseHeads)
-    (fillViewedClauseHeads))
+    ( (recorded rules 
+        (view dialog $VRDialog) $_) 
+      (xtGetValues $Widget 
+        (:: (xmNwidth $Xs))) 
+      (xtTranslateCoords $Widget $Xs 0 $X $Y) 
+      (xtSetValues $VRDialog 
+        (:: 
+          (xmNx $X) 
+          (xmNy $Y))) 
+      (xtManageChild $VRDialog) fillExistingLabels fillViewedLabels fillExistingClauseHeads fillViewedClauseHeads))
 
 
 
@@ -4321,18 +4286,16 @@
 
 
   (= (popupViewExamples $Widget $ClientData $CallData)  
-    (recorded examples 
-      (view dialog $VRDialog) $_)
-    (xtGetValues $Widget 
-      (:: (xmNwidth $Xs)))
-    (xtTranslateCoords $Widget $Xs 0 $X $Y)
-    (xtSetValues $VRDialog 
-      (:: 
-        (xmNx $X) 
-        (xmNy $Y)))
-    (xtManageChild $VRDialog)
-    (fillExistingExampleCHs)
-    (fillViewedExampleCHs))
+    ( (recorded examples 
+        (view dialog $VRDialog) $_) 
+      (xtGetValues $Widget 
+        (:: (xmNwidth $Xs))) 
+      (xtTranslateCoords $Widget $Xs 0 $X $Y) 
+      (xtSetValues $VRDialog 
+        (:: 
+          (xmNx $X) 
+          (xmNy $Y))) 
+      (xtManageChild $VRDialog) fillExistingExampleCHs fillViewedExampleCHs))
 
 
 ;
@@ -4359,7 +4322,7 @@
 ; ************************************************************************
 
 
-  (= (fillExistingLabels)  
+  (= fillExistingLabels  
     (recorded rules 
       (view exLabRC $ExLabRC) $_)
     (listLabels $LabelList)
@@ -4390,7 +4353,7 @@
 ; ************************************************************************
 
 
-  (= (fillViewedLabels)  
+  (= fillViewedLabels  
     (recorded rules 
       (view viewLabRC $ViewLabRC) $_)
     (recorded rules 
@@ -4422,7 +4385,7 @@
 ; ************************************************************************
 
 
-  (= (fillExistingClauseHeads)  
+  (= fillExistingClauseHeads  
     (recorded rules 
       (view exCHRC $ExCHRC) $_)
     (listClauseHeads $LabelList)
@@ -4453,7 +4416,7 @@
 ; ************************************************************************
 
 
-  (= (fillViewedClauseHeads)  
+  (= fillViewedClauseHeads  
     (recorded rules 
       (view viewCHRC $ViewCHRC) $_)
     (recorded rules 
@@ -4485,7 +4448,7 @@
 ; ************************************************************************
 
 
-  (= (fillExistingExampleCHs)  
+  (= fillExistingExampleCHs  
     (recorded examples 
       (view exCHRC $ExCHRC) $_)
     (listExampleCHs $LabelList)
@@ -4516,7 +4479,7 @@
 ; ************************************************************************
 
 
-  (= (fillViewedExampleCHs)  
+  (= fillViewedExampleCHs  
     (recorded examples 
       (view viewCHRC $ViewCHRC) $_)
     (recorded examples 
@@ -5153,11 +5116,10 @@
 
 
   (= (doEmptyKommando $Widget $KommandoText $CallData)  
-    (proxtStringToCharPtr '' $KommandoChrPtr)
-    (xmTextSetString $KommandoText $KommandoChrPtr)
-    (refreshKnowledgeList $Widget rules $Calldata)
-    (refreshKnowledgeList $Widget examples $Calldata)
-    (updateEvaluationLabel))
+    ( (proxtStringToCharPtr '' $KommandoChrPtr) 
+      (xmTextSetString $KommandoText $KommandoChrPtr) 
+      (refreshKnowledgeList $Widget rules $Calldata) 
+      (refreshKnowledgeList $Widget examples $Calldata) updateEvaluationLabel))
 
 
 ;
@@ -5193,12 +5155,11 @@
         (file $F) $Ref) 
       (erase $Ref) 
       (close $F) 
-      (write 'X-MILES korrekt beendet!') 
-      (nl) 
-      (remove-is-symbol  &self 
-        (my_exit_loop  no)) 
-      (add-is-symbol  &self 
-        (my_exit_loop  yes))))
+      (write 'X-MILES korrekt beendet!') nl 
+      (remove-atom  &self 
+        (my-exit-loop  no)) 
+      (add-atom  &self 
+        (my-exit-loop  yes))))
 
 
 ;
@@ -5390,7 +5351,7 @@
         (number $Message) 
         (, 
           (number-chars $Message $MsgChars) 
-          (atom-chars $MsgStr $MsgChars))) 
+          (symbol-chars $MsgStr $MsgChars))) 
       (det-if-then otherwise 
         (= $MsgStr $Message)))
     (| 
@@ -5438,13 +5399,13 @@
           (number-chars $Message $MsgChars) 
           (append $MsgChars 
             (:: 10) $MC) 
-          (atom-chars $MsgStr $MC))) 
+          (symbol-chars $MsgStr $MC))) 
       (det-if-then otherwise 
         (, 
-          (atom-chars $Message $MsgChars) 
+          (symbol-chars $Message $MsgChars) 
           (append $MsgChars 
             (:: 10) $MC) 
-          (atom-chars $MsgStr $MC))))
+          (symbol-chars $MsgStr $MC))))
     (| 
       (det-if-then 
         (recorded error 
@@ -5482,7 +5443,7 @@
 ; ************************************************************************
 
 
-  (= (flushErrorBuffer)  
+  (= flushErrorBuffer  
     (| 
       (det-if-then 
         (recorded error 
@@ -5524,7 +5485,7 @@
         (number $Message) 
         (, 
           (number-chars $Message $MsgChars) 
-          (atom-chars $MsgStr $MsgChars) 
+          (symbol-chars $MsgStr $MsgChars) 
           (proxtStringToCharPtr $MsgStr $MessageCharPtr))) 
       (| 
         (det-if-then 
@@ -5574,22 +5535,21 @@
           (number-chars $Message $MsgChars) 
           (append $MsgChars 
             (:: 10) $MC2) 
-          (atom-chars $MsgStr $MC2) 
+          (symbol-chars $MsgStr $MC2) 
           (proxtStringToCharPtr $MsgStr $MessageCharPtr))) 
       (| 
         (det-if-then 
           (atom $Message) 
           (, 
-            (atom-chars $Message $MsgChars) 
+            (symbol-chars $Message $MsgChars) 
             (append $MsgChars 
               (:: 10) $MC2) 
-            (atom-chars $MsgStr $MC2) 
+            (symbol-chars $MsgStr $MC2) 
             (proxtStringToCharPtr $MsgStr $MessageCharPtr))) 
         (det-if-then otherwise 
           (xxmWriteToCharPtr 
             (, 
-              (write $Message) 
-              (nl)) $MessageCharPtr))))
+              (write $Message) nl) $MessageCharPtr))))
     (xmTextGetLastPosition $MessageText $LastPos)
     (xmTextReplace $MessageText $LastPos $LastPos $MessageCharPtr)
     (xmTextScroll $MessageText 1)
@@ -5759,23 +5719,22 @@
 
 
   (= (addRule $Widget $ClientData $CallData)  
-    (recorded editor 
-      (textWidget $EditorText) $Ref)
-    (xmTextGetString $EditorText $RuleCP)
-    (xxmStringToTerm $RuleCP $_ $RuleTerm)
-    (proxtCharPtrToString $RuleCP $RulePString)
-    (span-left $RulePString "." $N)
-    (substring $RulePString $RuleString 0 $N $_)
-    (store-clause $RuleTerm $_ user $ID)
-    (writeMessage ':- store-clause(')
-    (writeMessage $RuleString)
-    (writeMessage ',-,user,')
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writelnMessage '% rule added.')
-    (updateEvaluationLabel)
-    (get-clause $ID $H $B $S $L)
-    (addRuleItem $ID $H $B $S $L))
+    ( (recorded editor 
+        (textWidget $EditorText) $Ref) 
+      (xmTextGetString $EditorText $RuleCP) 
+      (xxmStringToTerm $RuleCP $_ $RuleTerm) 
+      (proxtCharPtrToString $RuleCP $RulePString) 
+      (span-left $RulePString "." $N) 
+      (substring $RulePString $RuleString 0 $N $_) 
+      (store-clause $RuleTerm $_ user $ID) 
+      (writeMessage ':- store-clause(') 
+      (writeMessage $RuleString) 
+      (writeMessage ',-,user,') 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writelnMessage '% rule added.') updateEvaluationLabel 
+      (get-clause $ID $H $B $S $L) 
+      (addRuleItem $ID $H $B $S $L)))
 
 
 ;
@@ -5807,7 +5766,7 @@
     (addRuleItem $Id $H $B $S $L)
     (writeMessage '% rule ')
     (number-chars $Id $IdChars)
-    (atom-chars $IdString $IdChars)
+    (symbol-chars $IdString $IdChars)
     (writeMessage $IdString)
     (writelnMessage ' created.'))
 
@@ -5842,7 +5801,7 @@
     (toplevel $Shell)
     (xmCreateBulletinBoardDialog $Shell Newpreds Nil $NewpredDialog)
     (recordz newpreddialog 
-      (with_self  $ID $NewpredDialog) $_)
+      (with-self  $ID $NewpredDialog) $_)
     (xtManageChild $NewpredDialog)
     (xmCreateFrame $NewpredDialog 'Newpred Frame' Nil $NewpredFrame)
     (xtManageChild $NewpredFrame)
@@ -5924,20 +5883,19 @@
 
 
   (= (selectnpclause $Widget $_ $CallData)  
-    (recorded newpred 
-      (np $Widget $NC $Pos $Neg $TR notselected) $Ref)
-    (turnoff-other-selected)
-    (xtGetValues $Widget 
-      (:: 
-        (xmNbackground $B) 
-        (xmNforeground $F)))
-    (xtSetValues $Widget 
-      (:: 
-        (xmNbackground $F) 
-        (xmNforeground $B)))
-    (erase $Ref)
-    (recordz newpred 
-      (np $Widget $NC $Pos $Neg $TR selected) $_))
+    ( (recorded newpred 
+        (np $Widget $NC $Pos $Neg $TR notselected) $Ref) turnoff-other-selected 
+      (xtGetValues $Widget 
+        (:: 
+          (xmNbackground $B) 
+          (xmNforeground $F))) 
+      (xtSetValues $Widget 
+        (:: 
+          (xmNbackground $F) 
+          (xmNforeground $B))) 
+      (erase $Ref) 
+      (recordz newpred 
+        (np $Widget $NC $Pos $Neg $TR selected) $_)))
 
   (= (selectnpclause $Widget rules $CallData)  
     (recorded newpred 
@@ -5955,7 +5913,7 @@
       (np $Widget $NC $Pos $Neg $TR notselected) $_))
 
 
-  (= (turnoff-other-selected)  
+  (= turnoff-other-selected  
     (mysetof $Ref 
       (^ $Widget 
         (^ $NC 
@@ -5983,7 +5941,7 @@
 
   (= (addnorule $_ $_ $_)  
     (recorded newpreddialog 
-      (with_self  $_ $Widget) $Ref)
+      (with-self  $_ $Widget) $Ref)
     (erase $Ref)
     (mysetof $Ref1 
       (^ $X 
@@ -5999,7 +5957,7 @@
         (np $_ $NC $Pos $Neg $TR selected) $_) 
       (, 
         (recorded newpreddialog 
-          (with_self  $ID $Widget) $Ref0) 
+          (with-self  $ID $Widget) $Ref0) 
         (delete-clause $ID) 
         (store-clause $NC $_ newpred $ID) 
         (mysetof $P 
@@ -6012,7 +5970,7 @@
             (, 
               (member $N $Neg) 
               (store-ex $N - $NID))) $_) 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (:  kb $TR)) 
         (erase $Ref0) 
         (mysetof $Ref1 
@@ -6055,7 +6013,7 @@
     (toplevel $Shell)
     (xmCreateBulletinBoardDialog $Shell Specs Nil $SpecsDialog)
     (recordz specsdialog 
-      (with_self  $ID $SpecsDialog) $_)
+      (with-self  $ID $SpecsDialog) $_)
     (xtManageChild $SpecsDialog)
     (xmCreateFrame $SpecsDialog 'Specs Frame' Nil $SpecsFrame)
     (xtManageChild $SpecsFrame)
@@ -6137,20 +6095,19 @@
 
 
   (= (selectspecclause $Widget $_ $CallData)  
-    (recorded spec 
-      (np $Widget $NC notselected) $Ref)
-    (turnoff-other-selected-spec)
-    (xtGetValues $Widget 
-      (:: 
-        (xmNbackground $B) 
-        (xmNforeground $F)))
-    (xtSetValues $Widget 
-      (:: 
-        (xmNbackground $F) 
-        (xmNforeground $B)))
-    (erase $Ref)
-    (recordz spec 
-      (np $Widget $NC selected) $_))
+    ( (recorded spec 
+        (np $Widget $NC notselected) $Ref) turnoff-other-selected-spec 
+      (xtGetValues $Widget 
+        (:: 
+          (xmNbackground $B) 
+          (xmNforeground $F))) 
+      (xtSetValues $Widget 
+        (:: 
+          (xmNbackground $F) 
+          (xmNforeground $B))) 
+      (erase $Ref) 
+      (recordz spec 
+        (np $Widget $NC selected) $_)))
 
   (= (selectspecclause $Widget rules $CallData)  
     (recorded spec 
@@ -6168,7 +6125,7 @@
       (np $Widget $NC notselected) $_))
 
 
-  (= (turnoff-other-selected-spec)  
+  (= turnoff-other-selected-spec  
     (mysetof $Ref 
       (^ $Widget 
         (^ $NC 
@@ -6193,7 +6150,7 @@
 
   (= (addnospec $_ $_ $_)  
     (recorded specsdialog 
-      (with_self  $_ $Widget) $Ref)
+      (with-self  $_ $Widget) $Ref)
     (erase $Ref)
     (mysetof $Ref1 
       (^ $X 
@@ -6209,7 +6166,7 @@
         (np $_ $NC selected) $_) 
       (, 
         (recorded specsdialog 
-          (with_self  $ID $Widget) $Ref0) 
+          (with-self  $ID $Widget) $Ref0) 
         (delete-clause $ID) 
         (store-clause $NC $_ spec $ID) 
         (erase $Ref0) 
@@ -6280,7 +6237,7 @@
     (unselectAll $_ rules $_)
     (set-det)
     (writelnMessage '% resulting rules selected'))
-  (= (resultSelectRules (Cons  (with_self  $Id $_) $IdList))  
+  (= (resultSelectRules (Cons  (with-self  $Id $_) $IdList))  
     (resultSelectRules $IdList)
     (recorded current 
       (clause $Id $Widget notselected) $_)
@@ -6351,29 +6308,28 @@
 
 
   (= (changeRule $Widget $ClientData $CallData)  
-    (recorded editor 
-      (textWidget $EditorText) $Ref)
-    (recorded editor 
-      (editing rules $ID) $_)
-    (delete-clause $ID)
-    (xmTextGetString $EditorText $RuleCP)
-    (xxmStringToTerm $RuleCP $_ $RuleTerm)
-    (store-clause $RuleTerm $_ user $ID)
-    (proxtCharPtrToString $RuleCP $RulePString)
-    (span-left $RulePString "." $N)
-    (substring $RulePString $RuleString 0 $N $_)
-    (writeMessage ':- delete-clause(')
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writeMessage ':- store-clause(')
-    (writeMessage $RuleString)
-    (writeMessage ',-,user,')
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writelnMessage '% rule changed.')
-    (get-clause $ID $H $B $S $L)
-    (addRuleItem $ID $H $B $S $L)
-    (updateEvaluationLabel))
+    ( (recorded editor 
+        (textWidget $EditorText) $Ref) 
+      (recorded editor 
+        (editing rules $ID) $_) 
+      (delete-clause $ID) 
+      (xmTextGetString $EditorText $RuleCP) 
+      (xxmStringToTerm $RuleCP $_ $RuleTerm) 
+      (store-clause $RuleTerm $_ user $ID) 
+      (proxtCharPtrToString $RuleCP $RulePString) 
+      (span-left $RulePString "." $N) 
+      (substring $RulePString $RuleString 0 $N $_) 
+      (writeMessage ':- delete-clause(') 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writeMessage ':- store-clause(') 
+      (writeMessage $RuleString) 
+      (writeMessage ',-,user,') 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writelnMessage '% rule changed.') 
+      (get-clause $ID $H $B $S $L) 
+      (addRuleItem $ID $H $B $S $L) updateEvaluationLabel))
 
 
 ;
@@ -6407,23 +6363,22 @@
 
 
   (= (addExample $Widget $ClientData $CallData)  
-    (recorded editor 
-      (textWidget $EditorText) $Ref)
-    (xmTextGetString $EditorText $ExampleCP)
-    (xxmStringToTerm $ExampleCP $_ $ExampleTerm)
-    (store-ex $ExampleTerm ? $ID)
-    (proxtCharPtrToString $ExampleCP $ExamplePString)
-    (span-left $ExamplePString "." $N)
-    (substring $ExamplePString $ExampleString 0 $N $_)
-    (writeMessage ':- store-ex(')
-    (writeMessage $ExampleString)
-    (writeMessage ,?,)
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writelnMessage '% example added.')
-    (get-example $ID $F $C)
-    (addExampleItem $ID $F $C)
-    (updateEvaluationLabel))
+    ( (recorded editor 
+        (textWidget $EditorText) $Ref) 
+      (xmTextGetString $EditorText $ExampleCP) 
+      (xxmStringToTerm $ExampleCP $_ $ExampleTerm) 
+      (store-ex $ExampleTerm ? $ID) 
+      (proxtCharPtrToString $ExampleCP $ExamplePString) 
+      (span-left $ExamplePString "." $N) 
+      (substring $ExamplePString $ExampleString 0 $N $_) 
+      (writeMessage ':- store-ex(') 
+      (writeMessage $ExampleString) 
+      (writeMessage ,?,) 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writelnMessage '% example added.') 
+      (get-example $ID $F $C) 
+      (addExampleItem $ID $F $C) updateEvaluationLabel))
 
 
 ;
@@ -6455,30 +6410,29 @@
 
 
   (= (changeExample $Widget $ClientData $CallData)  
-    (recorded editor 
-      (textWidget $EditorText) $Ref)
-    (recorded editor 
-      (editing examples $ID) $_)
-    (get-example $ID $_ $C)
-    (delete-example $ID)
-    (xmTextGetString $EditorText $ExampleCP)
-    (xxmStringToTerm $ExampleCP $_ $ExampleTerm)
-    (proxtCharPtrToString $ExampleCP $ExamplePString)
-    (span-left $ExamplePString "." $N)
-    (substring $ExamplePString $ExampleString 0 $N $_)
-    (store-ex $ExampleTerm $C $ID)
-    (writeMessage ':- delete-example(')
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writeMessage ':- store-ex(')
-    (writeMessage $ExampleString)
-    (writeMessage ,?,)
-    (writeMessage $ID)
-    (writelnMessage ).)
-    (writelnMessage '% example changed.')
-    (get-example $ID $F $C)
-    (addExampleItem $ID $F $C)
-    (updateEvaluationLabel))
+    ( (recorded editor 
+        (textWidget $EditorText) $Ref) 
+      (recorded editor 
+        (editing examples $ID) $_) 
+      (get-example $ID $_ $C) 
+      (delete-example $ID) 
+      (xmTextGetString $EditorText $ExampleCP) 
+      (xxmStringToTerm $ExampleCP $_ $ExampleTerm) 
+      (proxtCharPtrToString $ExampleCP $ExamplePString) 
+      (span-left $ExamplePString "." $N) 
+      (substring $ExamplePString $ExampleString 0 $N $_) 
+      (store-ex $ExampleTerm $C $ID) 
+      (writeMessage ':- delete-example(') 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writeMessage ':- store-ex(') 
+      (writeMessage $ExampleString) 
+      (writeMessage ,?,) 
+      (writeMessage $ID) 
+      (writelnMessage ).) 
+      (writelnMessage '% example changed.') 
+      (get-example $ID $F $C) 
+      (addExampleItem $ID $F $C) updateEvaluationLabel))
 
 
 ;
@@ -6510,28 +6464,23 @@
 
 
   (= (xxmStringToTerm $S $Charset $T)  
-    (var $T)
-    (nonvar $S)
-    (proxtCharPtrToString $S $X1)
-    (tell xmTemporary)
-    (write $X1)
-    (nl)
-    (told)
-    (see xmTemporary)
-    (read $T)
-    (seen)
-    (set-det))
+    ( (var $T) 
+      (nonvar $S) 
+      (proxtCharPtrToString $S $X1) 
+      (tell xmTemporary) 
+      (write $X1) nl told 
+      (see xmTemporary) 
+      (read $T) seen 
+      (set-det)))
 
   (= (xxmStringToTerm $XmS $Charset $T)  
-    (var $XmS)
-    (nonvar $T)
-    (tell xmTemporary)
-    (write $T)
-    (told)
-    (see xmTemporary)
-    (xxmStringRead $XmS $Charset)
-    (seen)
-    (set-det))
+    ( (var $XmS) 
+      (nonvar $T) 
+      (tell xmTemporary) 
+      (write $T) told 
+      (see xmTemporary) 
+      (xxmStringRead $XmS $Charset) seen 
+      (set-det)))
 
 
 ;
@@ -6564,7 +6513,7 @@
 
   (= (xxmStringRead $S $Charset)  
     (stringRead 100 $S1)
-    (atom-chars $AS $S1)
+    (symbol-chars $AS $S1)
     (proxtStringToCharPtr $AS $CP)
     (xmStringCreateLtoR $CP $Charset $XmS)
     (| 
@@ -6608,7 +6557,7 @@
 
   (= (xxmStringAppendRead $S1 $S $Charset)  
     (stringRead 100 $S2)
-    (atom-chars $AS $S2)
+    (symbol-chars $AS $S2)
     (proxtStringToCharPtr $AS $CP)
     (xmStringCreateLtoR $CP $Charset $XmS)
     (xmStringConcat $S1 $XmS $XmS1)
@@ -6686,13 +6635,11 @@
 
 
   (= (xxmWriteToString $W $Charset $XmS)  
-    (tell xmTemporary)
-    (call $W)
-    (told)
-    (see xmTemporary)
-    (xxmStringRead $XmS $Charset)
-    (seen)
-    (set-det))
+    ( (tell xmTemporary) 
+      (call $W) told 
+      (see xmTemporary) 
+      (xxmStringRead $XmS $Charset) seen 
+      (set-det)))
 
 
 ;
@@ -6724,15 +6671,13 @@
 
 
   (= (xxmWriteToCharPtr $W $CP)  
-    (tell xmTemporary)
-    (call $W)
-    (told)
-    (see xmTemporary)
-    (stringRead 1023 $S)
-    (seen)
-    (atom-chars $AS $S)
-    (proxtStringToCharPtr $AS $CP)
-    (set-det))
+    ( (tell xmTemporary) 
+      (call $W) told 
+      (see xmTemporary) 
+      (stringRead 1023 $S) seen 
+      (symbol-chars $AS $S) 
+      (proxtStringToCharPtr $AS $CP) 
+      (set-det)))
 
 
 ;
@@ -6771,14 +6716,13 @@
             (number $D) 
             (number-chars $D $M1)) 
           (det-if-then otherwise 
-            (atom-chars $D $M1))) 
+            (symbol-chars $D $M1))) 
         (writeError % ) 
         (append "'" $M1 $M2) 
         (append $M2 "' is not between the range of 1 - 100!" $M3) 
-        (atom-chars $Message $M3) 
+        (symbol-chars $Message $M3) 
         (writelnError $Message) 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
 
 ;
@@ -6814,14 +6758,13 @@
             (number $Id) 
             (number-chars $Id $M1)) 
           (det-if-then otherwise 
-            (atom-chars $Id $M1))) 
+            (symbol-chars $Id $M1))) 
         (writeError % ) 
         (append "'" $M1 $M2) 
         (append $M2 "' is not an example id!" $M3) 
-        (atom-chars $Message $M3) 
+        (symbol-chars $Message $M3) 
         (writelnError $Message) 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
 
 ;
@@ -6857,14 +6800,13 @@
             (number $Id) 
             (number-chars $Id $M1)) 
           (det-if-then otherwise 
-            (atom-chars $Id $M1))) 
+            (symbol-chars $Id $M1))) 
         (writeError % ) 
         (append "'" $M1 $M2) 
         (append $M2 "' is not a rule id!" $M3) 
-        (atom-chars $Message $M3) 
+        (symbol-chars $Message $M3) 
         (writelnError $Message) 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
 
 ;
@@ -6902,13 +6844,12 @@
               (number $Id) 
               (number-chars $Id $M1)) 
             (det-if-then otherwise 
-              (atom-chars $Id $M1))) 
+              (symbol-chars $Id $M1))) 
           (writeError % ) 
           (append "'" $M1 $M2) 
           (append $M2 "' is not a rule id nor an example id!" $M3) 
-          (atom-chars $Message $M3) 
-          (writelnError $Message) 
-          (fail)))))
+          (symbol-chars $Message $M3) 
+          (writelnError $Message) fail))))
 
 
 ;
@@ -6937,7 +6878,7 @@
 ; ************************************************************************
 
 
-  (= (sucheInListe  $A (Cons  $A $_))  True)
+  (= (sucheInListe  $A ([|]  $A $_))  True)
   (= (sucheInListe  $_ ())  True)
   (= (sucheInListe $A (Cons  $_ $Rest))  
     (sucheInListe $A $Rest))
@@ -7008,7 +6949,7 @@
 ; ************************************************************************
 
 
-  (= (updateEvaluationLabel)  
+  (= updateEvaluationLabel  
     (recorded irene $Widget $_)
     (createEvaluationString $S)
     (proxtGetDefaultCharset $DCharset)

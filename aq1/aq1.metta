@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  aq1 $_111116 aq1/aq1.pl aq1/aq1.metta)
+;                                           (convert-to-metta-file  aq1 $_111116 aq1/aq1.pl aq1/aq1.metta)
 
   !(op 700 xfx ..)
 ; /******************************************************************/
@@ -14,7 +14,7 @@
 ; /* E-Mail: hoppet@cs.tu-berlin.de */
 ; /* 1986 */
 ; /* */
-; /* reference : AQ-PROLOG: A MeTTa Implementation of an */
+; /* reference : AQ-MeTTa: A MeTTa Implementation of an */
 ; /* Attribute-Based Learning System, Becker, J.M., */
 ; /* Reports of the Intelligent Systems Group, */
 ; /* Department of Computer Science, University of */
@@ -47,44 +47,39 @@
 ; /* */
 ; /* - The top-level Routines are modified slightly. */
 ; /* - Ambique named predicates are renamed. */
-; /* - Some special UNSW-PROLOG predicates are removed. */
+; /* - Some special UNSW-MeTTa predicates are removed. */
 ; /* - Dependant on the 'bagof' predicate some cut's were necessary*/
 ; /* - Some ambiguity concerning atom comparision was removed. */
 ; /* - The unused predicat 'pos_cover_or_events' was removed. */
 ; /* */
 ; /* In the whole programm a destinction between < and @<, > and @> */
-; /* etc. was introduced, which originates in DEC-10 PROLOG. */
+; /* etc. was introduced, which originates in DEC-10 MeTTa. */
 ; /* The <,>,=< and >= rever to arithmetric comparisions whereas */
 ; /* @<,@>,@=< and @>= rever to comparisions of atoms. Dependant on */
-; /* you're local PROLOG system you have eventually to introduce */
+; /* you're local MeTTa system you have eventually to introduce */
 ; /* them. */
 ; /******************************************************************/
 
 
   (= (data $FILENAME)  
-    (clear)
-    (nl)
-    (write '===> loading ')
-    (write $FILENAME)
-    (nl)
-    (see $FILENAME)
-    (repeat)
-    (read $X)
-    (or 
-      (, 
-        (= $X end-of-file) 
-        (seen) 
-        (add-is-symbol  &self 
-          (dataset  $FILENAME)) 
-        (set-det)) 
-      (, 
-        (process $X) 
-        (fail))))
+    (clear nl 
+      (write '===> loading ') 
+      (write $FILENAME) nl 
+      (see $FILENAME) repeat 
+      (read $X) 
+      (or 
+        (, 
+          (= $X end-of-file) seen 
+          (add-atom  &self 
+            (dataset  $FILENAME)) 
+          (set-det)) 
+        (, 
+          (process $X) fail))))
 ; /******************************************************************/
 ; /* */
 ; /* call : data (+FILENAME) */
 ; /* */
-; /* arguments : FILENAME = dependent on you're local PROLOG */
+; /* arguments : FILENAME = dependent on you're local MeTTa */
 ; /* */
 ; /* side effects: Removes a previous loaded dataset */
 ; /* */
@@ -94,31 +89,31 @@
 
 
   (= (process (domaintype $ATTR $D))  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (domaintype  $ATTR $D)) (set-det)))
   (= (process (valueset $ATTR $VALSET))  
     ( (qsort $VALSET $VALS) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (valueset  $ATTR $VALS)) 
       (set-det)))
   (= (process (range $ATTR $LOW $HIGH))  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (range  $ATTR $LOW $HIGH)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (subtyp  $ATTR integer)) 
       (set-det)))
   (= (process (order $ATTR $ORD))  
     ( (length $ORD $HIGH) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (order  $ATTR $ORD)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (range  $ATTR 1 $HIGH)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (subtyp  $ATTR symbolic)) 
       (set-det)))
   (= (process (structure $ATTR $STRUC))  
     ( (explodestruc $ATTR $STRUC) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (structure  $ATTR $STRUC)) 
       (set-det)))
   (= (process (classes $CLIST))  
@@ -129,29 +124,26 @@
     (storeevents $CLASS $ENCODEDEVENTS)
     (set-det))
   (= (process $X)  
-    (write '===> Invalid Data: ')
-    (nl)
-    (write $X)
-    (set-det))
+    ( (write '===> Invalid Data: ') nl 
+      (write $X) 
+      (set-det)))
 
 
   (= (storeclasses $CLIST)  
     ( (member $CLASSNAME $CLIST) 
-      (add-is-symbol  &self 
-        (class  $CLASSNAME)) 
-      (fail)))
+      (add-atom  &self 
+        (class  $CLASSNAME)) fail))
   (= (storeclasses  $_)  True)
 
 
   (= (storeevents $CLASS $EVENTLIST)  
     ( (member $EVENT $EVENTLIST) 
-      (add-is-symbol  &self 
-        (event  $CLASS $EVENT)) 
-      (fail)))
+      (add-atom  &self 
+        (event  $CLASS $EVENT)) fail))
   (= (storeevents  $_ $_)  True)
 
 
-  (= (clear)  
+  (= clear  
     ( (==  
         (= 
           (dataset  $X) true) 
@@ -164,12 +156,10 @@
       (abolish class 1) 
       (abolish event 2) 
       (abolish subtyp 2) 
-      (abolish ancest 3) 
-      (nl) 
+      (abolish ancest 3) nl 
       (write '===> Data ') 
       (write $X) 
-      (write ' deleted.') 
-      (nl) 
+      (write ' deleted.') nl 
       (abolish dataset 1)))
 ; /******************************************************************/
 ; /* */
@@ -181,19 +171,15 @@
   (= clear  True)
 
 
-  (= (listdata)  
-    ( (nl) 
+  (= listdata  
+    (nl 
       (==  
         (= 
           (dataset  $DATA_SET_NAME) true) 
         (get-atoms  &self)) 
       (write '===> Datenset ') 
       (write $DATA_SET_NAME) 
-      (write :) 
-      (nl) 
-      (printdomaininfo) 
-      (nl) 
-      (printevents) 
+      (write :) nl printdomaininfo nl printevents 
       (set-det)))
 ; /******************************************************************/
 ; /* */
@@ -204,7 +190,7 @@
 ; /******************************************************************/
 
 
-  (= (printdomaininfo)  
+  (= printdomaininfo  
     ( (==  
         (= 
           (domaintype  $VAR $DTYPE) true) 
@@ -213,13 +199,11 @@
       (write $VAR) 
       (write ' of type ') 
       (write $DTYPE) 
-      (write .) 
-      (nl) 
-      (fail)))
+      (write .) nl fail))
   (= printdomaininfo  True)
 
 
-  (= (printevents)  
+  (= printevents  
     ( (==  
         (= 
           (class  $CLASS) true) 
@@ -230,52 +214,32 @@
         (get-atoms  &self)) 
       (printcomplex $EVENT) 
       (write  ::> ) 
-      (write $CLASS) 
-      (nl) 
-      (fail)))
+      (write $CLASS) nl fail))
   (= printevents  True)
 
 
-  (= (start)  
-    (nl)
-    (write '===> Maximal number of Stars in the next run ?')
-    (nl)
-    (read $MAX_STAR)
-    (nl)
-    (nl)
-    (repeat)
-    (write '===> Which mode in the next run ?')
-    (nl)
-    (nl)
-    (write '      ic: Intersecting Covers')
-    (nl)
-    (write '      dc: Disjoint Covers')
-    (nl)
-    (write '      vl: VL mode (sequential)')
-    (nl)
-    (read $MODE)
-    (nl)
-    (abolish cover 2)
-    (nl)
-    (makecovers $MODE $MAX_STAR)
-    (showcovers)
-    (nl)
-    (nl)
-    (nl)
-    (write '===> You wanna try a different mode (yes,no) ?')
-    (nl)
-    (read $RETRY)
-    (nl)
-    (== $RETRY no)
-    (write '===> OK')
-    (nl)
-    (set-det))
+  (= start  
+    (nl 
+      (write '===> Maximal number of Stars in the next run ?') nl 
+      (read $MAX_STAR) nl nl repeat 
+      (write '===> Which mode in the next run ?') nl nl 
+      (write '      ic: Intersecting Covers') nl 
+      (write '      dc: Disjoint Covers') nl 
+      (write '      vl: VL mode (sequential)') nl 
+      (read $MODE) nl 
+      (abolish cover 2) nl 
+      (makecovers $MODE $MAX_STAR) showcovers nl nl nl 
+      (write '===> You wanna try a different mode (yes,no) ?') nl 
+      (read $RETRY) nl 
+      (== $RETRY no) 
+      (write '===> OK') nl 
+      (set-det)))
 ; /******************************************************************/
 ; /* */
 ; /* call : start */
 ; /* */
 ; /******************************************************************/
-; /* Start is the top-level loop of AQ-PROLOG. AQ can compute in */
+; /* Start is the top-level loop of AQ-MeTTa. AQ can compute in */
 ; /* three different modes ic: Intersecting Covers, dc: Disjoint */
 ; /* Covers and vl: VL mode (a sequential one). */
 ; /******************************************************************/
@@ -290,8 +254,7 @@
       (negevents $CLASS $ENEG) 
       (aq $EPOS $ENEG $EPOS $EPOS $MAX_STAR 
         (:: Nil) $COVER) 
-      (storecover $CLASS $COVER) 
-      (fail)))
+      (storecover $CLASS $COVER) fail))
   (= (makecovers ic $_)  
     (set-det))
   (= (makecovers dc $MAX_STAR)  
@@ -303,8 +266,7 @@
       (neg-cover-or-events $CLASS $ENEG) 
       (aq $EPOS $ENEG $EPOS $EPOS $MAX_STAR 
         (:: Nil) $COVER) 
-      (storecover $CLASS $COVER) 
-      (fail)))
+      (storecover $CLASS $COVER) fail))
   (= (makecovers dc $_)  
     (set-det))
   (= (makecovers vl $MAX_STAR)  
@@ -316,23 +278,19 @@
       (followingevents $CLASS $ENEG) 
       (aq $EPOS $ENEG $EPOS $EPOS $MAX_STAR 
         (:: Nil) $COVER) 
-      (storecover $CLASS $COVER) 
-      (fail)))
+      (storecover $CLASS $COVER) fail))
   (= (makecovers vl $_)  
     (set-det))
   (= (makecovers $X $_)  
-    (nl)
-    (write '===> ERROR - only the modes ic, dc or vl')
-    (write ' are valid !')
-    (nl)
-    (fail))
+    (nl 
+      (write '===> ERROR - only the modes ic, dc or vl') 
+      (write ' are valid !') nl fail))
 
 
   (= (storecover $CLASS $COVER)  
     ( (member $COMPLEX $COVER) 
-      (add-is-symbol  &self 
-        (cover  $CLASS $COMPLEX)) 
-      (fail)))
+      (add-atom  &self 
+        (cover  $CLASS $COMPLEX)) fail))
   (= (storecover  $_ $_)  True)
 
 
@@ -375,7 +333,7 @@
       (negcomp $CLASS $COMP) $NEG_COMPS)
     (set-det))
 ; /******************************************************************/
-; /* Against the AQ-PROLOG document the cut in neg_cover_or_events */
+; /* Against the AQ-MeTTa document the cut in neg_cover_or_events */
 ; /* is necessary to prevent backtracking, when the first clause of */
 ; /* makecovers fails. */
 ; /******************************************************************/
@@ -410,10 +368,9 @@
   (= (aq $_ $_ Nil $_ $_ $_ Nil)  
     (set-det))
   (= (aq $ELIST $FLIST $UN_COVERED Nil $MAX_STAR $BOUND $RESULT)  
-    (write '===> Please wait a moment ...')
-    (nl)
-    (set-det)
-    (aq $ELIST $FLIST $UN_COVERED $UN_COVERED $MAX_STAR $BOUND $RESULT))
+    ( (write '===> Please wait a moment ...') nl 
+      (set-det) 
+      (aq $ELIST $FLIST $UN_COVERED $UN_COVERED $MAX_STAR $BOUND $RESULT)))
   (= (aq $ELIST $FLIST $UN_COVERED $SEED_LIST $MAX_STAR $BOUND (Cons  $BEST $COVER))  
     (set-det)
     (first $SEED_LIST $SEED)
@@ -462,10 +419,10 @@
       (:: $COMP))
     (set-det))
 ; /******************************************************************/
-; /* DIS_OR_MULT was introduced, because in AQ-PROLOG the definition*/
-; /* of multiply is heavily dependant on UNSW-PROLOG. The definition*/
+; /* DIS_OR_MULT was introduced, because in AQ-MeTTa the definition*/
+; /* of multiply is heavily dependant on UNSW-MeTTa. The definition*/
 ; /* serves the purpose of a substitution for the '->' operator, */
-; /* which seems to be the IF-THEN-ELSE definition in UNSW-PROLOG. */
+; /* which seems to be the IF-THEN-ELSE definition in UNSW-MeTTa. */
 ; /******************************************************************/
   (= (dis-or-mult $COMP $PSTAR $_ $NEW)  
     (findset $A 
@@ -989,38 +946,32 @@
     (write $S))
 
 
-  (= (showcovers)  
+  (= showcovers  
     ( (==  
         (= 
           (class  $CLASS) true) 
         (get-atoms  &self)) 
-      (showcover $CLASS) 
-      (fail)))
+      (showcover $CLASS) fail))
   (= showcovers  True)
 
 
   (= (showcover $CLASS)  
-    ( (nl) 
-      (nl) 
+    (nl nl 
       (write '===> Cover of class ') 
       (write $CLASS) 
       (write :) 
-      (set-det) 
-      (nl) 
+      (set-det) nl 
       (==  
         (= 
           (cover  $CLASS $COVER) true) 
         (get-atoms  &self)) 
-      (printcomplex $COVER) 
-      (nl) 
-      (fail)))
+      (printcomplex $COVER) nl fail))
   (= (showcover  $_)  True)
 
 
   (= (printcomplex $COMPLEX)  
-    (member $SELECTOR $COMPLEX)
-    (printselector $SELECTOR)
-    (fail))
+    ( (member $SELECTOR $COMPLEX) 
+      (printselector $SELECTOR) fail))
   (= (printcomplex $_)  
     (set-det))
 
@@ -1180,7 +1131,7 @@
       (set-det)))
 
 
-  (= (at  $SYM (Cons  $SYM $X) $N $N)  True)
+  (= (at  $SYM ([|]  $SYM $X) $N $N)  True)
   (= (at $SYM (Cons  $_ $X) $N $I)  
     (is $J 
       (+ $I 1))
@@ -1190,7 +1141,7 @@
     (write '===> ERROR - symbol undeclared'))
 
 
-  (= (low  (Cons  (..  $L $H) $_) $L)  True)
+  (= (low  ([|]  (..  $L $H) $_) $L)  True)
 
 
   (= (highest  ((..  $L $H)) $H)  True)
@@ -1393,8 +1344,8 @@
           (ancest  $ATTR $LO_NODE $ALIST) true) 
         (get-atoms  &self)) (member $HI_NODE $ALIST)))
 ; /******************************************************************/
-; /* In AQ-PROLOG the procedure 'predecessor' is called 'ancestor'. */
-; /* Because in some (I think the most) PROLOG dialects a build-in */
+; /* In AQ-MeTTa the procedure 'predecessor' is called 'ancestor'. */
+; /* Because in some (I think the most) MeTTa dialects a build-in */
 ; /* predicate 'ancestor' exists, I preferred to rename it. */
 ; /******************************************************************/
   (= (supremum  $ATTR $X $X)  True)
@@ -1404,7 +1355,7 @@
     (==  
       (= 
         (ancest  $ATTR $NODE 
-          (Cons  $PARENT $_)) true) 
+          ([|]  $PARENT $_)) true) 
       (get-atoms  &self)))
 
 
@@ -1412,9 +1363,8 @@
     ( (allnodes $STRUCTUR_SPEC $NODE_LIST) 
       (member $NODE $NODE_LIST) 
       (predecessorlist $NODE $STRUCTUR_SPEC $ALIST) 
-      (add-is-symbol  &self 
-        (ancest  $ATTR $NODE $ALIST)) 
-      (fail)))
+      (add-atom  &self 
+        (ancest  $ATTR $NODE $ALIST)) fail))
   (= (explodestruc  $_ $_)  True)
 
 
@@ -1434,7 +1384,7 @@
     (set-det)
     (predecessorlist $P $STRUCTUR_SPEC $X))
 ; /******************************************************************/
-; /* In AQ-PROLOG the procedure 'predecessorlist' is called */
+; /* In AQ-MeTTa the procedure 'predecessorlist' is called */
 ; /* 'ancestorlist' Because I wanna be a little bit consistend in */
 ; /* the naming of predicates and 'ancestor' was already renamed */
 ; /* I preferred to rename this predicate too. */
@@ -1560,21 +1510,15 @@
     (sort $ZWERG $L))
 
 
-  (= (help)  
-    (nl)
-    (nl)
-    (write '===> AQ-PROLOG')
-    (nl)
-    (write '===> Load data with command: data(fn)')
-    (nl)
-    (write '===> Show data with command: listdata')
-    (nl)
-    (write '===> Start AQ  with command: start')
-    (nl)
-    (nl))
+  (= help  
+    (nl nl 
+      (write '===> AQ-PROLOG') nl 
+      (write '===> Load data with command: data(fn)') nl 
+      (write '===> Show data with command: listdata') nl 
+      (write '===> Start AQ  with command: start') nl nl))
 ; /******************************************************************/
 ; /* This is adopted from the Clocksin/Mellish definition of */
-; /* 'bagof', if you're local PROLOG system does not know 'findall' */
+; /* 'bagof', if you're local MeTTa system does not know 'findall' */
 ; /* you should use this definition. AQ is ensured to work correctly*/
 ; /* with this definition. In the case that your local MeTTa */
 ; /* dialect has 'findall' as built-in and AQ will give no result, */

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sxx_compiler_gen_static $_343926 sxx_machine/sxx_compiler_gen_static.pl sxx_machine/sxx_compiler_gen_static.metta)
+;                                           (convert-to-metta-file  sxx_compiler_gen_static $_135806 sxx_machine/sxx_compiler_gen_static.pl sxx_machine/sxx_compiler_gen_static.metta)
 
   (= (append  () $L $L)  True)
   (= (append (Cons  $X $L1) $L2 (Cons  $X $L3))  
@@ -19,23 +19,23 @@
 ;
 ; system_predicate('$builtin_member'(_,_)).
 
-  (= (system_predicate  (%erase  $_))  True)
-  (= (system_predicate  (%fast_write  $_))  True)
-  (= (system_predicate  (%fast_write  $_ $_))  True)
-  (= (system_predicate  (%call  $_ $_))  True)
-  (= (system_predicate  (mutex_lock_bt  $_))  True)
-  (= (system_predicate  (%set_exception  $_))  True)
-  (= (system_predicate  (%get_exception  $_))  True)
-  (= (system_predicate  (%get_current_B  $_))  True)
-  (= (system_predicate  (%compare0  $_ $_ $_))  True)
-  (= (system_predicate  (%compiled_predicate  $_ $_ $_))  True)
-  (= (system_predicate  (%compiled_predicate_or_builtin  $_ $_ $_))  True)
-  (= (system_predicate  (%hash_remove_first  $_ $_ $_))  True)
-  (= (system_predicate  (%hash_adda  $_ $_ $_))  True)
-  (= (system_predicate  (%hash_addz  $_ $_ $_))  True)
-  (= (system_predicate  (%read_token0  $_ $_ $_))  True)
-  (= (system_predicate  (%symbol_type0  $_ $_))  True)
-  (= (system_predicate  (%begin_sync  $_ $_))  True)
+  (= (system-predicate  (%erase  $_))  True)
+  (= (system-predicate  (%fast-write  $_))  True)
+  (= (system-predicate  (%fast-write  $_ $_))  True)
+  (= (system-predicate  (%call  $_ $_))  True)
+  (= (system-predicate  (mutex-lock-bt  $_))  True)
+  (= (system-predicate  (%set-exception  $_))  True)
+  (= (system-predicate  (%get-exception  $_))  True)
+  (= (system-predicate  (%get-current-B  $_))  True)
+  (= (system-predicate  (%compare0  $_ $_ $_))  True)
+  (= (system-predicate  (%compiled-predicate  $_ $_ $_))  True)
+  (= (system-predicate  (%compiled-predicate-or-builtin  $_ $_ $_))  True)
+  (= (system-predicate  (%hash-remove-first  $_ $_ $_))  True)
+  (= (system-predicate  (%hash-adda  $_ $_ $_))  True)
+  (= (system-predicate  (%hash-addz  $_ $_ $_))  True)
+  (= (system-predicate  (%read-token0  $_ $_ $_))  True)
+  (= (system-predicate  (%symbol-type0  $_ $_))  True)
+  (= (system-predicate  (%begin-sync  $_ $_))  True)
 
 
 
@@ -59,7 +59,7 @@
         (exists-file $File)) 
       (comp-to $File $Where)))
   (= (comp-to $File $Dir0)  
-    (must-det-l (, (makename (:: $Dir0 / SxxMachine) $Dir) (set-det) (exists-file $File) (file-base-name $File $Base) (file-name-extension $Stem $_ $Base) (makename (:: $Dir / $Stem .java) $FileName) (set-det) (wdmsg (comp-to $File $Dir $FileName)) (make-directory-path $Dir) (set-det) (nb-setval stem $Stem) (= $InProg Nil) (see $File) (readprogram $Stem $InProg $Prog) (set-det) (seen) (tell $FileName) (gencode-sss $Dir $Stem $Prog) (set-det) (told)))
+    (must-det-l (, (makename (:: $Dir0 / SxxMachine) $Dir) (set-det) (exists-file $File) (file-base-name $File $Base) (file-name-extension $Stem $_ $Base) (makename (:: $Dir / $Stem .java) $FileName) (set-det) (wdmsg (comp-to $File $Dir $FileName)) (make-directory-path $Dir) (set-det) (nb-setval stem $Stem) (= $InProg Nil) (see $File) (readprogram $Stem $InProg $Prog) (set-det) seen (tell $FileName) (gencode-sss $Dir $Stem $Prog) (set-det) told))
     (set-det))
 ; ; close(File) ,
      
@@ -83,11 +83,11 @@
 
 
   (= (local-side-efs $_ !(if $_))  
-    (repeat)
-    (read $Until)
-    (== $Until 
-      !(endif))
-    (set-det))
+    (repeat 
+      (read $Until) 
+      (== $Until 
+        !endif) 
+      (set-det)))
   (= (local-side-efs $_ !$Call)  
     (call-local-side-efs $Call)
     (set-det))
@@ -101,7 +101,7 @@
 ; local_side_efs(_, (H:-_)):- ( predicate_property(H,static) ; predicate_property(H,built_in) ),!.
 ;
 ; local_side_efs(_, (Call)):- call(assertz(Call)),!.
-  (= (local_side_efs  $_ $Clause)  True)
+  (= (local-side-efs  $_ $Clause)  True)
 
 
 
@@ -122,14 +122,14 @@
 
   (= (binarize !$C $Out)  
     (nb-current stem $Stem)
-    (atom-concat on-load- $Stem $Pred)
+    (symbol-concat on-load- $Stem $Pred)
     (set-det)
     (binarize 
       (= $Pred  
         (write $C)) $Out))
   (= (binarize !$C $Out)  
     (nb-current stem $Stem)
-    (atom-concat on-load- $Stem $Pred)
+    (symbol-concat on-load- $Stem $Pred)
     (set-det)
     (binarize 
       (= $Pred  $C) $Out))
@@ -232,8 +232,7 @@
   (= (wr (getval $Var))  
     (must (, (nb-current $Var $Value) (write $Value))))
   (= (wr (wr nl))  
-    (set-det)
-    (nl))
+    ( (set-det) nl))
   (= (wr $Atom)  
     (atomic $Atom)
     (set-det)
@@ -287,7 +286,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 )))))
   
-  (= (gencode_sss  $_ $_ $_ ())  True)
+  (= (gencode-sss  $_ $_ $_ ())  True)
   (= (gencode-sss $Strings $Dir $Stem (Cons  $Pred $Preds))  
     (gencodeforpred $Strings $Dir $Stem $Pred)
     (gencode-sss $Strings $Dir $Stem $Preds))
@@ -297,8 +296,8 @@ public class ' $Stem ' /*extends CodeFile*/ {
     ( (= $Pred 
         (:: (= $H  $B))) 
       (== $H $B) 
-      (add-is-symbol  &self 
-        (system_predicate  $H)) 
+      (add-atom  &self 
+        (system-predicate  $H)) 
       (set-det) 
       (format '~N/* System pred ~q */~n' 
         (:: $H))))
@@ -323,7 +322,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
   (= (symbol-to-name $Atom $Out)  
     (symbol-to-name1 $Atom $Out)
     (set-det))
-  (= (symbol_to_name  $Name $Name)  True)
+  (= (symbol-to-name  $Name $Name)  True)
 
 
   (= (symbol-to-name1 or or)  
@@ -361,7 +360,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (set-det)
     (name $NAtom $Rest)
     (symbol-to-name2 $NAtom $Mid2)
-    (atom-concat $Mid1 $Mid2 $Out))
+    (symbol-concat $Mid1 $Mid2 $Out))
 
   (= (symbol-to-name2 $Atom $Out)  
     (name $Atom 
@@ -374,7 +373,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
       (:: $C))
     (name $NAtom $Rest)
     (symbol-to-name2 $NAtom $Mid2)
-    (atom-concat $Mid1 $Mid2 $Out))
+    (symbol-concat $Mid1 $Mid2 $Out))
 
   (= (symbol-to-name2 $Atom $Out)  
     (name $Atom 
@@ -383,7 +382,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
       (:: $C))
     (name $NAtom $Rest)
     (symbol-to-name2 $NAtom $Mid2)
-    (atom-concat $Mid1 $Mid2 $Out))
+    (symbol-concat $Mid1 $Mid2 $Out))
    
 
 
@@ -436,7 +435,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (= $Clause 
       (= $Head  $Body))
     (set-det)
-    (must-det-l (, (legacy-functor $Head $Name0 $Arity) (symbol-to-name $Name0 $Name) (is $Amin2 (- $Arity 2)) (is $Amin1 (- $Arity 1)) (arg $Arity $Head ($cont $Arity)) (writel (:: 'public static Operation exec-' $ClassName -- $N '(Prolog mach){ ' (det-if-then-else (= $Last last) (write 'mach.RemoveChoice() ;') (, (is $M (+ $N 1)) (writel (:: mach.FillAlternative( (cont-ref $M) ) ;)))) (wr nl) 'Term local-aregs[] = mach.Areg ;' (wr nl) 'Term continuation = local-aregs[' $Amin1 ] ; (wr nl) (decl-deref-args $Amin2) (mynumbervars $Clause 1 $NumbVars) (det-if-then-else (> $NumbVars 1) (declvars $NumbVars) True) (gets $Head $Strings) (puts $Body $Strings) 'mach.CUTB = mach.CurrentChoice ;' (wr nl) (nullifyaregs $Clause) 'return ' (bodycont $Strings $Clause $Name $Arity)  ;} (wr nl))))))
+    (must-det-l (, (legacy-functor $Head $Name0 $Arity) (symbol-to-name $Name0 $Name) (is $Amin2 (- $Arity 2)) (is $Amin1 (- $Arity 1)) (arg $Arity $Head (%cont $Arity)) (writel (:: 'public static Operation exec-' $ClassName -- $N '(Prolog mach){ ' (det-if-then-else (= $Last last) (write 'mach.RemoveChoice() ;') (, (is $M (+ $N 1)) (writel (:: mach.FillAlternative( (cont-ref $M) ) ;)))) (wr nl) 'Term local-aregs[] = mach.Areg ;' (wr nl) 'Term continuation = local-aregs[' $Amin1 ] ; (wr nl) (decl-deref-args $Amin2) (mynumbervars $Clause 1 $NumbVars) (det-if-then-else (> $NumbVars 1) (declvars $NumbVars) True) (gets $Head $Strings) (puts $Body $Strings) 'mach.CUTB = mach.CurrentChoice ;' (wr nl) (nullifyaregs $Clause) 'return ' (bodycont $Strings $Clause $Name $Arity)  ;} (wr nl))))))
 
 
 
@@ -451,10 +450,8 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (nullify 0 $_)  
-    (set-det)
-    (write 'null ;')
-    (nl)
-    (fail))
+    ( (set-det) 
+      (write 'null ;') nl fail))
   (= (nullify $N $K)  
     (is $L 
       (- $K 1))
@@ -468,10 +465,10 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (var $Var)
     (set-det)
     (= $Var 
-      ($VAR $I $_))
+      (%VAR $I $_))
     (is $O 
       (+ $I 1)))
-  (= (mynumbervars ($VAR $_ $_) $I $O)  
+  (= (mynumbervars (%VAR $_ $_) $I $O)  
     (set-det)
     (= $I $O))
   (= (mynumbervars $A $I $O)  
@@ -548,10 +545,10 @@ public class ' $Stem ' /*extends CodeFile*/ {
 ; continuation is replaced by '$cont'(arity)
 
 
-  (= (constructterm ($cont $_) $_)  
+  (= (constructterm (%cont $_) $_)  
     (set-det)
     (writel (:: continuation)))
-  (= (constructterm ($VAR $N $T) $_)  
+  (= (constructterm (%VAR $N $T) $_)  
     (set-det)
     (det-if-then-else 
       (var $T) 
@@ -614,7 +611,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (writel (:: (getval stem) .s $I))
     (set-det))
   (= (writeConst $Name $Strings)  
-    (must-det-l (, (atom-string $Name $S) (writel (:: Const.Intern( (format ~q (:: $S)) )))))
+    (must-det-l (, (symbol-string $Name $S) (writel (:: Const.Intern( (format ~q (:: $S)) )))))
     (set-det))
 
 
@@ -628,10 +625,10 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (bodycont $String (= $_  $B) $Name $Arity)  
-    (fail)
-    (legacy-functor $B $Name $Arity)
-    (set-det)
-    (writel (:: entry-code)))
+    (fail 
+      (legacy-functor $B $Name $Arity) 
+      (set-det) 
+      (writel (:: entry-code))))
   (= (bodycont $String (= $_  $B) $_ $_)  
     (legacy-functor $B call 1)
     (set-det)
@@ -648,13 +645,13 @@ public class ' $Stem ' /*extends CodeFile*/ {
 ; bodycont(_String,(_ :- B),_,_) :- legacy_functor(B,cut,2) , ! , writel(['MeTTa.Cut2']) .
 
   (= (bodycont $String (= $_  $B) $_ $_)  
-    (fail)
-    (legacy-functor $B $Name $Arity)
-    (getnameindex $String $Name 0 $I)
-    (set-det)
-    (is $MArity 
-      (- $Arity 1))
-    (writel (:: '(Operation) ' (getval stem) .s $I .FindProc( $MArity ))))
+    (fail 
+      (legacy-functor $B $Name $Arity) 
+      (getnameindex $String $Name 0 $I) 
+      (set-det) 
+      (is $MArity 
+        (- $Arity 1)) 
+      (writel (:: '(Operation) ' (getval stem) .s $I .FindProc( $MArity )))))
 
 
   (= (bodycont $String (= $_  $B) $_ $_)  
@@ -689,12 +686,12 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (decl-deref-args $M))
 
 
-  (= (use_entry_code  $F $A)  
+  (= (use-entry-code  $F $A)  
     (empty))
 
-  (= (use_static_call  $F $A)  True)
+  (= (use-static-call  $F $A)  True)
 
-  (= (use_load_pred  $F $A)  True)
+  (= (use-load-pred  $F $A)  True)
 
 
   (= (initforeachcontinuation  () $_ $_)  True)
@@ -796,7 +793,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (> $M 0)
     (set-det))
   (= (declfor1string $N $M)  
-    (atom-string $N $S)
+    (symbol-string $N $S)
     (writel (:: 'final static Const ' (varnamestr $M $N) ' = Data.Intern(' (writeq $S) ) ; (wr nl))))
 				
 
@@ -850,7 +847,7 @@ public class ' $Stem ' /*extends CodeFile*/ {
     (symbol-to-name $F $Name)
     (is $AA 
       (- $A 1))
-    (atom-string $F $Str)
+    (symbol-string $F $Str)
     (writel (:: 'final static Operation reg-' $Name - $AA ' = PredTable.Register(' (writeq $Str) , $AA ', new pred-' $Name - $AA ()); (wr nl)))
     (set-det))
 	           
@@ -882,9 +879,8 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (strings1 $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (strings1 (, $A $_) $F)  
     (strings1 $A $F))
   (= (strings1 (, $_ $B) $F)  
@@ -905,17 +901,15 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (strings $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (strings $A $F)  
     (atom $A)
     (set-det)
     (= $F $A))
   (= (strings $A $_)  
-    (atomic $A)
-    (set-det)
-    (fail))
+    ( (atomic $A) 
+      (set-det) fail))
   (= (strings $T $F)  
     (legacy-functor $T $N $_)
     (= $F $N))
@@ -938,17 +932,15 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (ints $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (ints $A $F)  
     (integer $A)
     (set-det)
     (= $F $A))
   (= (ints $A $_)  
-    (atomic $A)
-    (set-det)
-    (fail))
+    ( (atomic $A) 
+      (set-det) fail))
   (= (ints $T $F)  
     (=.. $T 
       (Cons  $_ $Args))
@@ -963,9 +955,8 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 
   (= (preds $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (preds $P (/ $F $A))  
     (functor $P $F $A)
     (set-det))
@@ -1027,19 +1018,12 @@ public class ' $Stem ' /*extends CodeFile*/ {
 
 */
 ))
-  (= (prelude)  
-    (write '// Generated code file - by dmiles')
-    (nl)
-    (fail))
-  (= (prelude)  
-    (write '// Copyright August 16, 1996,2018 LOGICMOO, KUL and CUM')
-    (nl)
-    (fail))
-  (= (prelude)  
-    (write '// Authors: Douglas R. Miles, Bart Demoen and Paul Tarau')
-    (nl)
-    (nl)
-    (fail))
+  (= prelude  
+    ( (write '// Generated code file - by dmiles') nl fail))
+  (= prelude  
+    ( (write '// Copyright August 16, 1996,2018 LOGICMOO, KUL and CUM') nl fail))
+  (= prelude  
+    ( (write '// Authors: Douglas R. Miles, Bart Demoen and Paul Tarau') nl nl fail))
   (= prelude  True)
 
 ;

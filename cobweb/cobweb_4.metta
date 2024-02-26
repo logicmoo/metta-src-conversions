@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  cobweb_4 $_361122 cobweb/cobweb_4.pl cobweb/cobweb_4.metta)
+;                                           (convert-to-metta-file  cobweb_4 $_504454 cobweb/cobweb_4.pl cobweb/cobweb_4.metta)
 
   (= (features  ((nominal tails) (nominal color) (nominal nuclei)))  True)
 ; /********************************************************************/

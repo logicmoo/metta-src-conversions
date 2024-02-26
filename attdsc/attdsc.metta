@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  attdsc $_265692 attdsc/attdsc.pl attdsc/attdsc.metta)
+;                                           (convert-to-metta-file  attdsc $_363976 attdsc/attdsc.pl attdsc/attdsc.metta)
 
   !(op 300 xfx <==)
 ; /******************************************************************/
@@ -51,13 +51,11 @@
     ( (bagof 
         (example $ClassX $Obj) 
         (example $ClassX $Obj) $Examples) 
-      (learn $Examples $Class $Description) 
-      (nl) 
+      (learn $Examples $Class $Description) nl 
       (write $Class) 
-      (write <==) 
-      (nl) 
+      (write <==) nl 
       (writelist $Description) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (<==  $Class $Description))))
 ; /******************************************************************/
 ; /* */
@@ -193,7 +191,7 @@
 ; ; atleast one neg. example must not match AttVal
 	
 
-  (= (count_pos  () $_ 0)  True)
+  (= (count-pos  () $_ 0)  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : count_pos(+Examples,+Class,-N) */
@@ -269,15 +267,13 @@
 
   (= (writelist  ())  True)
   (= (writelist (Cons  $X $L))  
-    (tab 2)
-    (write $X)
-    (nl)
-    (writelist $L))
+    ( (tab 2) 
+      (write $X) nl 
+      (writelist $L)))
 
 
-  (= (help)  
-    (write 'Load data set and start learning with command: [Filename].')
-    (nl))
+  (= help  
+    ( (write 'Load data set and start learning with command: [Filename].') nl))
 
 
   !(help *)

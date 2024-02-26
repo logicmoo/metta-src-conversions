@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  qsort $_130012 sxx_machine/bench/qsort.pl sxx_machine/bench/qsort.metta)
+;                                           (convert-to-metta-file  qsort $_369612 sxx_machine/bench/qsort.pl sxx_machine/bench/qsort.metta)
 ;
 ; generated: 16 November 1989
 ;
@@ -17,11 +17,10 @@
 ; quicksort a list of 50 integers
 
 
-  (= (top)  
-    (qsort))
+  (= top  qsort)
 
 
-  (= (qsort)  
+  (= qsort  
     (qsort 
       (:: 27 74 17 33 94 18 46 83 65 2 32 53 28 85 99 47 28 82 6 11 55 29 39 81 90 37 10 0 66 51 7 21 85 27 31 63 75 4 95 99 11 28 61 74 18 92 40 53 59 8) $_ Nil))
 

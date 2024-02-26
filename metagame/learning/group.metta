@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  group $_444924 metagame/learning/group.pl metagame/learning/group.metta)
+;                                           (convert-to-metta-file  group $_89592 metagame/learning/group.pl metagame/learning/group.metta)
 ;
 ; ============================================================
 ;
@@ -35,6 +35,6 @@
   (= (do-group (Cons  (^ $V $X) $Edges) $V (Cons  $X $Neibs) $RestEdges)  
     (set-det)
     (do-group $Edges $V $Neibs $RestEdges))
-  (= (do_group  $Edges $_ () $Edges)  True)
+  (= (do-group  $Edges $_ () $Edges)  True)
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dctg $_196846 sre_dna/dctg.pl sre_dna/dctg.metta)
+;                                           (convert-to-metta-file  dctg $_288892 sre_dna/dctg.pl sre_dna/dctg.metta)
 
   !(op 650 yfx ^^)
 ; /* logic compilation of Definite Clause Translation Grammar rules */
@@ -130,29 +130,26 @@
       (:: $X)))
 
 
-  (= (c  (Cons  $X $S) $X $S)  True) 
+  (= (c  ([|]  $X $S) $X $S)  True) 
   (= (grammar $File)  
-    (seeing $Old)
-    (see $File)
-    (consume)
-    (seen)
-    (see $Old))
+    ( (seeing $Old) 
+      (see $File) consume seen 
+      (see $Old)))
 ; /* defined as a system predicate */
 ; ; :- asserta(( term_expansion(T,E) :- translate_rule(T,E) , ! )). ; :- asserta(( term_expansion(T,E) :- process_rule(T,E) , ! )).
 
 
-  (= (consume)  
-    (repeat)
-    (read $X)
-    (check-it $X))
+  (= consume  
+    (repeat 
+      (read $X) 
+      (check-it $X)))
 
 
   (= (check-it $X)  
     (= $X end-of-file)
     (set-det)) 
   (= (check-it $X)  
-    (process $X)
-    (fail))
+    ( (process $X) fail))
 
 
   (= (process $Grammar)  
@@ -163,7 +160,7 @@
           (::= $H $T))) 
       (set-det) 
       (translate-rule $Grammar $Clause) 
-      (add-is-symbol  &self $Clause) 
+      (add-atom  &self $Clause) 
       (set-det)))
 
   (= (process !$G)  
@@ -171,11 +168,11 @@
 ; ; Execute a command
 
   (= (process (= $P  $Q))  
-    ( (set-det) (add-is-symbol  &self (:-  $P $Q))))
+    ( (set-det) (add-atom  &self (:-  $P $Q))))
 ; ; Store a normal clause
 
   (= (process $P)  
-    (add-is-symbol  &self $P))
+    (add-atom  &self $P))
 ; ; Store a unit clause
 
 
@@ -186,19 +183,19 @@
 
 
   (= (prod-number $X)  
-    ( (remove-is-symbol  &self 
-        (rule_number  $X)) 
+    ( (remove-atom  &self 
+        (rule-number  $X)) 
       (is $X1 
         (+ $X 1)) 
-      (add-is-symbol  &self 
-        (rule_number  $X1))))
+      (add-atom  &self 
+        (rule-number  $X1))))
 ; /* get_sem(NonTerminal,Trees,Index,Head) :- semantic_rule(Index,NonTerminal,Trees,Head). */
 
 
   !(dynamic (/ rule-number 1))
 
 
-  (= (rule_number  0)  True)
+  (= (rule-number  0)  True)
 
 
   (= (assert-semantic-rule $Number $LP $StL (, $Rule $Rules))  
@@ -209,9 +206,9 @@
         (, 
           (= $Head $Rule) 
           (= $Body True))) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (:-  
-          (semantic_rule  $Number $Head $LP $StL) 
+          (semantic-rule  $Number $Head $LP $StL) 
           (,  ! $Body))) 
       (assert-semantic-rule $Number $LP $StL $Rules)))
 
@@ -221,7 +218,7 @@
           (::- $Head $Body)) 
         (, 
           (= $Head $Rule) 
-          (= $Body True))) (add-is-symbol  &self (:-  (semantic_rule  $Number $Head $LP $StL) (,  ! $Body)))))
+          (= $Body True))) (add-atom  &self (:-  (semantic-rule  $Number $Head $LP $StL) (,  ! $Body)))))
 
 
 

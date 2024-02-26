@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sdda $_396078 sxx_machine/bench/sdda.pl sxx_machine/bench/sdda.metta)
+;                                           (convert-to-metta-file  sdda $_151926 sxx_machine/bench/sdda.pl sxx_machine/bench/sdda.metta)
 ;
 ; Sdda3 5-Oct-86
 ;
@@ -36,7 +36,7 @@
 ;
 ; Front end for simulator use
 
-  (= (top)  
+  (= top  
     (do-sdda test $A $B $C))
 
 ;
@@ -328,37 +328,37 @@
 ; ----- Built-ins ----- ;
 
 
-  (= (built_in  (/  true 0) () ())  True)			;
+  (= (built-in  (/  true 0) () ())  True)			;
 ; No change
-  (= (built_in  (/  fail 0) () ())  True)			;
+  (= (built-in  (/  fail 0) () ())  True)			;
 ; No change
   (= (built-in (/ = 2) (:: $X $Y) (:: g g))  
     (or 
       (atomic $X) 
       (atomic $Y))) 		;
 ; Ground both if either atomic
-  (= (built_in  (/  = 2) ($X $Y) ($X $X))  True)		;
+  (= (built-in  (/  = 2) ($X $Y) ($X $X))  True)		;
 ; else bind them
-  (= (built_in  (/  + 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  + 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  - 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  - 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  * 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  * 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  / 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  / 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  >= 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  >= 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  < 2) ($X $Y) ($X $Y))  True)		;
+  (= (built-in  (/  < 2) ($X $Y) ($X $Y))  True)		;
 ; No change
-  (= (built_in  (/  is 2) ($X $Y) (g $Y))  True)			;
+  (= (built-in  (/  is 2) ($X $Y) (g $Y))  True)			;
 ; Ground result
 
 ;
 ; ----- Utilities ----- ;
 
 
-  (= (worst_case  () $_)  True)				;
+  (= (worst-case  () $_)  True)				;
 ; ; Doesn't work if any Exits
   (= (worst-case (Cons  $Exit $Exits) $Worst)  
     (unify $Exit $Worst)
@@ -368,9 +368,8 @@
 
 
   (= (look-up-act $_ $Known)  
-    (var $Known)
-    (set-det)
-    (fail))    
+    ( (var $Known) 
+      (set-det) fail))    
   (= (look-up-act (:: (/ $Functor $Arity) $Act $Exit) (Cons  (:: (/ $Functor $Arity) $KnownAct $Exit) $_))  
     (equiv $Act $KnownAct))    
   (= (look-up-act (:: (/ $Functor $Arity) $Act $Exit) (Cons  $_ $Known))  
@@ -409,10 +408,9 @@
 ; Membership relation for unbound-tail lists
 
   (= (umember $_ $List)  
-    (var $List)
-    (set-det)
-    (fail))
-  (= (umember  $Element (Cons  $Element $_))  True)
+    ( (var $List) 
+      (set-det) fail))
+  (= (umember  $Element ([|]  $Element $_))  True)
   (= (umember $Element (Cons  $_ $Tail))  
     (umember $Element $Tail))
 
@@ -420,9 +418,8 @@
 ; Strict membership relation for unbound-tail lists
 
   (= (sumember $_ $List)  
-    (var $List)
-    (set-det)
-    (fail))
+    ( (var $List) 
+      (set-det) fail))
   (= (sumember $Element (Cons  $AnyElement $_))  
     (== $Element $AnyElement))
   (= (sumember $Element (Cons  $_ $Tail))  
@@ -431,7 +428,7 @@
 ;
 ; Membership relation for standard nil-tail lists
 
-  (= (member  $X (Cons  $X $_))  True)
+  (= (member  $X ([|]  $X $_))  True)
   (= (member $X (Cons  $_ $T))  
     (member $X $T))
 
@@ -483,8 +480,7 @@
     (det-if-then-else 
       (nonvar $T) 
       (, 
-        (write ,) 
-        (nl) 
+        (write ,) nl 
         (write ' ') 
         (write-list2 $T $TempNextName $NewNextName)) 
       (= $NewNextName $TempNextName)))

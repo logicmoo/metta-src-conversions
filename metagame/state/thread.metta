@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  thread $_170834 metagame/state/thread.pl metagame/state/thread.metta)
+;                                           (convert-to-metta-file  thread $_189464 metagame/state/thread.pl metagame/state/thread.metta)
 ;
 ; ============================================================
 ;

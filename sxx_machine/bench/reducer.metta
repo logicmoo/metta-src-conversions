@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  reducer $_386556 sxx_machine/bench/reducer.pl sxx_machine/bench/reducer.metta)
+;                                           (convert-to-metta-file  reducer $_122466 sxx_machine/bench/reducer.pl sxx_machine/bench/reducer.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -18,7 +18,7 @@
 ;
 ; Uses write/1, compare/3, functor/3, arg/3.
 
-  (= (top)  
+  (= top  
     (try 
       (fac 3) $ans1)
     (try 
@@ -60,18 +60,18 @@
 ;
 ; Factorial function:
 
-  (= (t_def  fac ($N) (cond  (= $N  0) 1 (*  $N (fac  (-  $N 1)))))  True)
+  (= (t-def  fac ($N) (cond  (= $N  0) 1 (*  $N (fac  (-  $N 1)))))  True)
 
 ;
 ; Quicksort:
-  (= (t_def  quick ($l) (cond  (= $l  ) () (cond  (= (tl  $l)  ) $l (quick2  (split  (hd  $l) (tl  $l))))))  True)
-  (= (t_def  quick2 ($l) (append  (quick  (hd  $l)) (quick  (tl  $l))))  True)
+  (= (t-def  quick ($l) (cond  (= $l  ) () (cond  (= (tl  $l)  ) $l (quick2  (split  (hd  $l) (tl  $l))))))  True)
+  (= (t-def  quick2 ($l) (append  (quick  (hd  $l)) (quick  (tl  $l))))  True)
 
-  (= (t_def  split ($e $l) (cond  (= $l  ) (($e)) (cond  (=<  (hd  $l) $e) (inserthead  (hd  $l) (split  $e (tl  $l))) (inserttail  (hd  $l) (split  $e (tl  $l))))))  True)
-  (= (t_def  inserthead ($e $l) (Cons  (Cons  $e (hd  $l)) (tl  $l)))  True)
-  (= (t_def  inserttail ($e $l) (Cons  (hd  $l) (Cons  $e (tl  $l))))  True)
+  (= (t-def  split ($e $l) (cond  (= $l  ) (($e)) (cond  (=<  (hd  $l) $e) (inserthead  (hd  $l) (split  $e (tl  $l))) (inserttail  (hd  $l) (split  $e (tl  $l))))))  True)
+  (= (t-def  inserthead ($e $l) ([|]  ([|]  $e (hd  $l)) (tl  $l)))  True)
+  (= (t-def  inserttail ($e $l) ([|]  (hd  $l) ([|]  $e (tl  $l))))  True)
 
-  (= (t_def  append ($a $b) (cond  (= $a  ) $b (Cons  (hd  $a) (append  (tl  $a) $b))))  True)
+  (= (t-def  append ($a $b) (cond  (= $a  ) $b ([|]  (hd  $a) (append  (tl  $a) $b))))  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -103,7 +103,7 @@
 ; ; write('.'),
 
 
-  (= (t_append  $link $link $l $l)  True)
+  (= (t-append  $link $link $l $l)  True)
   (= (t-append (Cons  $a $l1) $link $l2 (Cons  $a $l3))  
     (t-append $l1 $link $l2 $l3))
 
@@ -115,14 +115,14 @@
 
   (= (t-redex (Cons  $x (Cons  $g (Cons  $f (Cons  $k sp)))) (Cons  (Cons  $xr $g) (Cons  (Cons  $xr $f) $k)))  
     (t-reduce $x $xr))
-  (= (t_redex  (Cons  $x (Cons  $g (Cons  $f (Cons  $k bp)))) (Cons  (Cons  $x $g) (Cons  $f $k)))  True)
-  (= (t_redex  (Cons  $x (Cons  $g (Cons  $f (Cons  $k cp)))) (Cons  $g (Cons  (Cons  $x $f) $k)))  True)
+  (= (t-redex  ([|]  $x ([|]  $g ([|]  $f ([|]  $k bp)))) ([|]  ([|]  $x $g) ([|]  $f $k)))  True)
+  (= (t-redex  ([|]  $x ([|]  $g ([|]  $f ([|]  $k cp)))) ([|]  $g ([|]  ([|]  $x $f) $k)))  True)
   (= (t-redex (Cons  $x (Cons  $g (Cons  $f s))) (Cons  (Cons  $xr $g) (Cons  $xr $f)))  
     (t-reduce $x $xr))
-  (= (t_redex  (Cons  $x (Cons  $g (Cons  $f b))) (Cons  (Cons  $x $g) $f))  True)
-  (= (t_redex  (Cons  $x (Cons  $g (Cons  $f c))) (Cons  $g (Cons  $x $f)))  True)
-  (= (t_redex  (Cons  $y (Cons  $x k)) $x)  True)
-  (= (t_redex  (Cons  $x i) $x)  True)
+  (= (t-redex  ([|]  $x ([|]  $g ([|]  $f b))) ([|]  ([|]  $x $g) $f))  True)
+  (= (t-redex  ([|]  $x ([|]  $g ([|]  $f c))) ([|]  $g ([|]  $x $f)))  True)
+  (= (t-redex  ([|]  $y ([|]  $x k)) $x)  True)
+  (= (t-redex  ([|]  $x i) $x)  True)
 
 ;
 ; Conditional:
@@ -132,7 +132,7 @@
     (set-det))
 	;
 ; Does NOT work if _bool is substituted in the call!
-  (= (t_redex  (Cons  $elsepart (Cons  $ifpart (Cons  $cond cond))) $elsepart)  True)
+  (= (t-redex  ([|]  $elsepart ([|]  $ifpart ([|]  $cond cond))) $elsepart)  True)
 
 ;
 ; Apply:
@@ -273,7 +273,7 @@
     (set-det))
 
 
-  (= (t_argvars  () $trans $trans)  True)
+  (= (t-argvars  () $trans $trans)  True)
   (= (t-argvars (Cons  $x $argvars) $in $trans)  
     (t-argvars $argvars $in $mid)
     (t-vars $mid $vars)
@@ -487,7 +487,7 @@
     (listify-list $I1 $N $Expr $LArgs))
 
 
-  (= (member  $X (Cons  $X $_))  True)
+  (= (member  $X ([|]  $X $_))  True)
   (= (member $X (Cons  $_ $L))  
     (member $X $L))
 
@@ -516,7 +516,7 @@
     (intersectv-2 $S2 $A $S1 $S))
 
 
-  (= (intersectv_2  () $_ $_ ())  True)
+  (= (intersectv-2  () $_ $_ ())  True)
   (= (intersectv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (intersectv-3 $Order $A $S1 $B $S2 $S))
@@ -530,13 +530,13 @@
     (intersectv-2 $S2 $A $S1 $S))
 
 
-  (= (intersectv_list  () ())  True)
+  (= (intersectv-list  () ())  True)
   (= (intersectv-list (Cons  $InS $Sets) $OutS)  
     (intersectv-list $Sets $InS $OutS))
 
 
-  (= (-->  (intersectv_list  ()) ())  True)
-  (= (-->  (intersectv_list  (Cons  $S $Sets)) (,  (intersectv  $S) (intersectv_list  $Sets)))  True)
+  (= (-->  (intersectv-list  ()) ())  True)
+  (= (-->  (intersectv-list  ([|]  $S $Sets)) (,  (intersectv  $S) (intersectv-list  $Sets)))  True)
 
 ;
 ; *** Difference
@@ -546,7 +546,7 @@
     (diffv-2 $S2 $A $S1 $S))
 
 
-  (= (diffv_2  () $A $S1 (Cons  $A $S1))  True)
+  (= (diffv-2  () $A $S1 ([|]  $A $S1))  True)
   (= (diffv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (diffv-3 $Order $A $S1 $B $S2 $S))
@@ -568,7 +568,7 @@
     (unionv-2 $S2 $A $S1 $S))
 
 
-  (= (unionv_2  () $A $S1 (Cons  $A $S1))  True)
+  (= (unionv-2  () $A $S1 ([|]  $A $S1))  True)
   (= (unionv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (unionv-3 $Order $A $S1 $B $S2 $S))
@@ -599,7 +599,7 @@
 ;
 ; For unordered lists S1:
 
-  (= (small_subsetv  () $_)  True)
+  (= (small-subsetv  () $_)  True)
   (= (small-subsetv (Cons  $A $S1) $S2)  
     (inv $A $S2)
     (small-subsetv $S1 $S2))
@@ -612,7 +612,7 @@
     (inv-2 $Order $A $S))
 
 
-  (= (inv_2  = $_ $_)  True)
+  (= (inv-2  = $_ $_)  True)
   (= (inv-2 > $A $S)  
     (inv $A $S))
 
@@ -623,13 +623,13 @@
     (notinv-2 $S $A))
 
 
-  (= (notinv_2  () $_)  True)
+  (= (notinv-2  () $_)  True)
   (= (notinv-2 (Cons  $B $S) $A)  
     (compare $Order $A $B)
     (notinv-3 $Order $A $S))
 
 
-  (= (notinv_3  < $_ $_)  True)
+  (= (notinv-3  < $_ $_)  True)
   (= (notinv-3 > $A $S)  
     (notinv-2 $S $A))
 

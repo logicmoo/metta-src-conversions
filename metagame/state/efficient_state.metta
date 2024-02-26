@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  efficient_state $_110400 metagame/state/efficient_state.pl metagame/state/efficient_state.metta)
+;                                           (convert-to-metta-file  efficient_state $_100076 metagame/state/efficient_state.pl metagame/state/efficient_state.metta)
 ;
 ; ============================================================
 ;
@@ -131,7 +131,7 @@
     (initialize-state-indices $Indices $SIn $SOut))
 
 
-  (= (initialize_state_indices  () $SIn $SIn)  True)
+  (= (initialize-state-indices  () $SIn $SIn)  True)
   (= (initialize-state-indices (Cons  (- $P $I) $Is) $SIn $SOut)  
     (initialize-state-index $P $I $SIn $S1)
     (initialize-state-indices $Is $S1 $SOut))
@@ -154,7 +154,7 @@
     (init-bucket $P $Bucket))
 
 
-  (= (is_state  (state  $_))  True)
+  (= (is-state  (state  $_))  True)
 
 
   (= (true-in $Pred (state $State))  
@@ -258,7 +258,7 @@
   (= (init-bucket (on $_ $_) $Bucket)  
     (set-det)
     (new-game-board $Bucket))
-  (= (init_bucket  $_ ())  True)
+  (= (init-bucket  $_ ())  True)
 
 
 
@@ -294,7 +294,7 @@
 ;
 ; empty_filler(empty).
 
-  (= (empty_filler  $_)  True)
+  (= (empty-filler  $_)  True)
 
 ;
 ; emptify(N,Board1,Board2) :-
@@ -496,7 +496,7 @@
 ; member_bag(Elem, Bag)
 
 
-  (= (member_bag  $Elem (Cons  $Elem $Bag))  True)
+  (= (member-bag  $Elem ([|]  $Elem $Bag))  True)
   (= (member-bag $Elem (Cons  $_ $Rest))  
     (member-bag $Elem $Rest))
 
@@ -513,7 +513,7 @@
 ; the end, it may still be used, and will add new elements at the end.
 
 
-  (= (add_bag  $Elem $Bag (Cons  $Elem $Bag))  True)
+  (= (add-bag  $Elem $Bag ([|]  $Elem $Bag))  True)
 
 
 ;
@@ -563,7 +563,7 @@
 
 
 
-  (= (index-dynamic-preds)  
+  (= index-dynamic-preds  
     (index-preds-file $File)
     (index-dynamic-preds-to-file $File)
     (compile $File))
@@ -571,23 +571,20 @@
 
   (= (index-dynamic-preds-to-file $File)  
     ( (format "~nIndexing Dynamic Predicates to file: ~w~n" 
-        (:: $File)) 
-      (assert-pred-indices) 
+        (:: $File)) assert-pred-indices 
       (tell $File) 
-      (listing pred-index) 
-      (told) 
+      (listing pred-index) told 
       (remove-all-atoms  &self 
-        (pred_index  $_ $_))))
+        (pred-index  $_ $_))))
 
 
-  (= (assert-pred-indices)  
+  (= assert-pred-indices  
     (or 
       (, 
         (abolish (/ pred-index 2)) 
         (pred-index-slow $Pred $Index) 
-        (add-is-symbol  &self 
-          (pred_index  $Pred $Index)) 
-        (fail)) True))
+        (add-atom  &self 
+          (pred-index  $Pred $Index)) fail) True))
 
 ;
 ; This is the predicate we partially execute to form an indexed table.

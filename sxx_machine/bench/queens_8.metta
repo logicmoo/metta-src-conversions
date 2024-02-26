@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  queens_8 $_203010 sxx_machine/bench/queens_8.pl sxx_machine/bench/queens_8.metta)
+;                                           (convert-to-metta-file  queens_8 $_443058 sxx_machine/bench/queens_8.pl sxx_machine/bench/queens_8.metta)
 ;
 ; generated: 10 November 1989
 ;
@@ -65,9 +65,8 @@
 ; Qs = [2,4,1,3]
 
 
-  (= (top)  
-    (queens 8 $Qs)
-    (fail))
+  (= top  
+    ( (queens 8 $Qs) fail))
   (= top  True)
 
 
@@ -98,7 +97,7 @@
     (not-attack $Ys $X $N1))
 
 
-  (= (select  (Cons  $X $Xs) $Xs $X)  True)
+  (= (select  ([|]  $X $Xs) $Xs $X)  True)
   (= (select (Cons  $Y $Ys) (Cons  $Y $Zs) $X)  
     (select $Ys $Zs $X))
 

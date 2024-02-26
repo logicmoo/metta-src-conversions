@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex1 $_18168 miles/examples/ex1.pl miles/examples/ex1.metta)
+;                                           (convert-to-metta-file  ex1 $_119230 miles/examples/ex1.pl miles/examples/ex1.metta)
 ;
 ; ;; examples for appending two lists
 

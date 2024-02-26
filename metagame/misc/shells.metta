@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  shells $_172758 metagame/misc/shells.pl metagame/misc/shells.metta)
+;                                           (convert-to-metta-file  shells $_448830 metagame/misc/shells.pl metagame/misc/shells.metta)
 ;
 ; ============================================================
 ;
@@ -67,11 +67,10 @@
 ;
 ; change the variables of the shell in use.
   (= (shell $Command $TmpFile $Value)  
-    (shell (:: $Command >  $TmpFile ' ; echo ' . ' >> ' $TmpFile))
-    (see $TmpFile)
-    (read $Value)
-    (seen)
-    (shell (:: rm $TmpFile)))
+    ( (shell (:: $Command >  $TmpFile ' ; echo ' . ' >> ' $TmpFile)) 
+      (see $TmpFile) 
+      (read $Value) seen 
+      (shell (:: rm $TmpFile))))
 
 ;
 ; SHELL_OUT(+Tree,+File)
@@ -113,7 +112,7 @@
 
 
 
-  (= (spacify_list  () ())  True)
+  (= (spacify-list  () ())  True)
   (= (spacify-list (Cons  $H $T) (Cons  $H (Cons  ' ' $TT)))  
     (spacify-list $T $TT))
 
@@ -209,7 +208,7 @@
 
 
   (= (find-architecture $Arch)  
-    ( (shell arch $Arch) (add-is-symbol  &self (found_current_architecture  $Arch))))
+    ( (shell arch $Arch) (add-atom  &self (found-current-architecture  $Arch))))
 
 
   (= (current-architecture $Arch)  
@@ -251,8 +250,8 @@
 	
 
 
-  (= (add-bin-library)  
-    ( (bin-directory $D) (add-is-symbol  &self (library_directory  $D))))
+  (= add-bin-library  
+    ( (bin-directory $D) (add-atom  &self (library-directory  $D))))
 
 
   (= (current-directory $X)  
@@ -374,17 +373,17 @@
 ;
 ; Some abbreviations
 
-  (= (cd)  
+  (= cd  
     (unix cd))
   (= (cd $X)  
     (unix (cd $X)))
 
-  (= (ls)  
+  (= ls  
     (unix (shell ls)))
 
-  (= (lsa)  
+  (= lsa  
     (unix (shell 'ls -Al')))
 
-  (= (pwd)  
+  (= pwd  
     (unix (shell pwd)))
 

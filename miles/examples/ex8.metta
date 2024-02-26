@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex8 $_61530 miles/examples/ex8.pl miles/examples/ex8.metta)
+;                                           (convert-to-metta-file  ex8 $_169394 miles/examples/ex8.pl miles/examples/ex8.metta)
 
 
   (= (ex  (reverse  () ()) +)  True)

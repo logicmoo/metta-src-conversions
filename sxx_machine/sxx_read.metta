@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sxx_read $_28460 sxx_machine/sxx_read.pl sxx_machine/sxx_read.metta)
+;                                           (convert-to-metta-file  sxx_read $_351922 sxx_machine/sxx_read.pl sxx_machine/sxx_read.metta)
 ;
 ; read/1: from screen - no error recovery - only simple syntax
 
@@ -34,15 +34,13 @@
   (= (notvmember $_ Nil)  
     (set-det))
   (= (notvmember $Name (Cons  (= $_ $Name) $_))  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (notvmember $Name (Cons  $_ $R))  
     (notvmember $Name $R))
 
 
   (= (readall end-of-file $Tail)  
-    (set-det)
-    (halt))
+    ( (set-det) halt))
   (= (readall end-of-clause $Tail)  
     (set-det)
     (= $Tail Nil))

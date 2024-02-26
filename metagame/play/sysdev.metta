@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sysdev $_374758 metagame/play/sysdev.pl metagame/play/sysdev.metta)
+;                                           (convert-to-metta-file  sysdev $_330012 metagame/play/sysdev.pl metagame/play/sysdev.metta)
 ;
 ; ============================================================
 ;
@@ -33,7 +33,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (my_absolute_file_name  $N $N)  True)
+  (= (my-absolute-file-name  $N $N)  True)
 
 
 ;
@@ -65,7 +65,7 @@
 
 
   (= (make-library-directory $Path)  
-    ( (my-absolute-file-name $Path $D) (add-is-symbol  &self (library_directory  $D))))
+    ( (my-absolute-file-name $Path $D) (add-atom  &self (library-directory  $D))))
 
 
 ;
@@ -98,38 +98,38 @@
     (make-library-directory $Dir))
 
 
-  (= (find-index-preds-file)  
+  (= find-index-preds-file  
     ( (metagame-subpath state/index-preds.pl $F) 
       (abolish (/ index-preds-file 1)) 
-      (add-is-symbol  &self 
-        (index_preds_file  $F))))
+      (add-atom  &self 
+        (index-preds-file  $F))))
 
 
 
-  (= (find-games-library)  
+  (= find-games-library  
     ( (metagame-subpath games $D) 
       (abolish (/ games-library-directory 1)) 
-      (add-is-symbol  &self 
-        (games_library_directory  $D))))
+      (add-atom  &self 
+        (games-library-directory  $D))))
 
 
 
-  (= (find-theory-directory)  
+  (= find-theory-directory  
     ( (metagame-subpath theory $D) 
       (abolish (/ theory-directory 1)) 
-      (add-is-symbol  &self 
-        (theory_directory  $D))))
+      (add-atom  &self 
+        (theory-directory  $D))))
 
 
-  (= (find-dynamic-preds-file)  
+  (= find-dynamic-preds-file  
     ( (metagame-subpath theory/dynamic-preds.pl $F) 
       (abolish (/ dynamic-preds-file 1)) 
-      (add-is-symbol  &self 
-        (dynamic_preds_file  $F))))
+      (add-atom  &self 
+        (dynamic-preds-file  $F))))
  
 
 
-  (= (bind-environment-paths)  
+  (= bind-environment-paths  
     ( (make-metagame-subpath generator) 
       (make-metagame-subpath misc) 
       (make-metagame-subpath play) 
@@ -139,24 +139,20 @@
       (make-metagame-subpath theory) 
       (make-metagame-subpath comms) 
       (make-metagame-subpath coding) 
-      (make-metagame-subpath learning) 
-      (find-dynamic-preds-file) 
-      (find-index-preds-file) 
-      (find-games-library) 
-      (find-theory-directory) 
-      (add-is-symbol  &self 
-        (library_directory  .))))
+      (make-metagame-subpath learning) find-dynamic-preds-file find-index-preds-file find-games-library find-theory-directory 
+      (add-atom  &self 
+        (library-directory  .))))
 
 
 ;
 ; Metagame System Filenames
 
 
-  (= (sys_filename_suffix  prolog .pl)  True)
-  (= (sys_filename_suffix  state_compile _stat)  True)
-  (= (sys_filename_suffix  game .game)  True)
-  (= (sys_filename_suffix  eval .eval)  True)
-  (= (sys_filename_suffix  record .rec)  True)
+  (= (sys-filename-suffix  prolog .pl)  True)
+  (= (sys-filename-suffix  state_compile _stat)  True)
+  (= (sys-filename-suffix  game .game)  True)
+  (= (sys-filename-suffix  eval .eval)  True)
+  (= (sys-filename-suffix  record .rec)  True)
 
 
 
@@ -171,17 +167,15 @@
 
 
   (= (find-suffixed-library-file $Name $Suffix $File)  
-    (nofileerrors)
-    (sys-suffixed-filename $Name $Suffix $File1)
-    (exists-absolute-file-name 
-      (library $File1) $File)
-    (set-det)
-    (fileerrors))
+    (nofileerrors 
+      (sys-suffixed-filename $Name $Suffix $File1) 
+      (exists-absolute-file-name 
+        (library $File1) $File) 
+      (set-det) fileerrors))
   (= (find-suffixed-library-file $Name $Suffix $File)  
-    (fileerrors)
-    (format "~nError: Couldn't find file ~w.~p~n" 
-      (:: $Name $Suffix))
-    (fail))
+    (fileerrors 
+      (format "~nError: Couldn't find file ~w.~p~n" 
+        (:: $Name $Suffix)) fail))
 
 ;
 ; ----------------------------------------
@@ -202,7 +196,7 @@
 
 
 
-  (= (load-main-system-files)  
+  (= load-main-system-files  
     (compile (library player-files)))
 
 
@@ -213,15 +207,12 @@
 ;
 ; player files reside.
 
-  (= (load-metagame)  
-    (bind-environment-paths)
-    (load-main-system-files)
-    (load-system library)
-    (load-system generator)
-    (load-system play)
-    (load-system analysis)
-    (compile-and-load-player)
-    (add-system-portrayals))
+  (= load-metagame  
+    (bind-environment-paths load-main-system-files 
+      (load-system library) 
+      (load-system generator) 
+      (load-system play) 
+      (load-system analysis) compile-and-load-player add-system-portrayals))
 
 
 
@@ -249,14 +240,13 @@
 ; see the respective files.
 
 
-  (= (enter-metagame)  
-    (metagame-version $V)
-    (format '~nMETAGAME Game-Playing Workbench ~p~n' 
-      (:: $V))
-    (format 'Copyright (c) 1992 Barney D. Pell~n~n' Nil)
-    (unix (argv $Argv))
-    (process-commands $Argv)
-    (metagame))
+  (= enter-metagame  
+    ( (metagame-version $V) 
+      (format '~nMETAGAME Game-Playing Workbench ~p~n' 
+        (:: $V)) 
+      (format 'Copyright (c) 1992 Barney D. Pell~n~n' Nil) 
+      (unix (argv $Argv)) 
+      (process-commands $Argv) metagame))
 
 
   (= (process-commands $Argv)  
@@ -289,9 +279,9 @@
 
   (= (set-parameter $P $V)  
     (det-if-then-else 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (parameter  $P $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (parameter  $P $V)) 
       (det-if-then otherwise 
         (format 'Unknown parameter <~p>!~n' 
@@ -306,14 +296,14 @@
 
   (= (add-parameter $P $V)  
     ( (remove-all-atoms  &self 
-        (parameter  $P $_)) (add-is-symbol  &self (parameter  $P $V)))) 
+        (parameter  $P $_)) (add-atom  &self (parameter  $P $V)))) 
 
 
   (= (change-parameter $P $Old $V)  
     (det-if-then-else 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (parameter  $P $Old)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (parameter  $P $V)) 
       (det-if-then otherwise 
         (format 'Unknown parameter <~p>!~n' 
@@ -321,11 +311,10 @@
 
 
 
-  (= (show)  
-    (show-parameters))
+  (= show  show-parameters)
 
 
-  (= (show-parameters)  
+  (= show-parameters  
     (listing parameter)
     (getrand $R)
     (format '~nrandom seed = ~p~n' 
@@ -333,23 +322,23 @@
 
 
 
-  (= (save-parameters)  
+  (= save-parameters  
     ( (findall 
         (- $P $V) 
         (parameter $P $V) $Params) 
       (remove-all-atoms  &self 
-        (saved_parameters  $_)) 
-      (add-is-symbol  &self 
-        (saved_parameters  $Params))))
+        (saved-parameters  $_)) 
+      (add-atom  &self 
+        (saved-parameters  $Params))))
 
 
-  (= (restore-parameters)  
+  (= restore-parameters  
     (det-if-then-else 
-      (remove-is-symbol  &self 
-        (saved_parameters  $Params)) 
+      (remove-atom  &self 
+        (saved-parameters  $Params)) 
       (restore-parameters $Params) True))
 
-  (= (restore_parameters  ())  True)
+  (= (restore-parameters  ())  True)
   (= (restore-parameters (Cons  (- $P $V) $Rest))  
     (set-parameter $P $V)
     (restore-parameters $Rest))
@@ -365,9 +354,9 @@
 
   (= (set-global $P $V)  
     (det-if-then-else 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (global  $P $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (global  $P $V)) 
       (det-if-then otherwise 
         (format 'Unknown global <~p>!~n' 
@@ -378,14 +367,14 @@
 
   (= (add-global $P $V)  
     ( (remove-all-atoms  &self 
-        (global  $P $_)) (add-is-symbol  &self (global  $P $V)))) 
+        (global  $P $_)) (add-atom  &self (global  $P $V)))) 
 
 
   (= (change-global $P $Old $V)  
     (det-if-then-else 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (global  $P $Old)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (global  $P $V)) 
       (det-if-then otherwise 
         (format 'Unknown global <~p>!~n' 
@@ -397,11 +386,10 @@
     (set-global $P $V)) 
 
 
-  (= (showg)  
-    (show-globals))
+  (= showg  show-globals)
 
 
-  (= (show-globals)  
+  (= show-globals  
     (listing global)
     (getrand $R)
     (format '~nrandom seed = ~p~n' 
@@ -409,23 +397,23 @@
 
 
 
-  (= (save-globals)  
+  (= save-globals  
     ( (findall 
         (- $P $V) 
         (global $P $V) $Params) 
       (remove-all-atoms  &self 
-        (saved_globals  $_)) 
-      (add-is-symbol  &self 
-        (saved_globals  $Params))))
+        (saved-globals  $_)) 
+      (add-atom  &self 
+        (saved-globals  $Params))))
 
 
-  (= (restore-globals)  
+  (= restore-globals  
     (det-if-then-else 
-      (remove-is-symbol  &self 
-        (saved_globals  $Params)) 
+      (remove-atom  &self 
+        (saved-globals  $Params)) 
       (restore-globals $Params) True))
 
-  (= (restore_globals  ())  True)
+  (= (restore-globals  ())  True)
   (= (restore-globals (Cons  (- $P $V) $Rest))  
     (set-global $P $V)
     (restore-globals $Rest))
@@ -455,15 +443,15 @@
     (verbosely (format $String $Args)))
 
 
-  (= (verbose)  
+  (= verbose  
     (parameter verbosity $X)
     (> $X 0))
 
 
-  (= (set-verbose)  
+  (= set-verbose  
     (set-parameter verbosity 1))
 
-  (= (set-quiet)  
+  (= set-quiet  
     (set-parameter verbosity 0))
 
 
@@ -519,15 +507,15 @@
   (= (add-portray $Func)  
     ( (functor $Goal $Func 1) 
       (arg 1 $Goal $Term) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (:-  
           (portray  $Term) $Goal))))
 
 
-  (= (system_portrayals  (portray_conj portray_disj portray_if portray_var portray_piece portray_player portray_square portray_moving portray_game portray_state))  True)
+  (= (system-portrayals  (portray_conj portray_disj portray_if portray_var portray_piece portray_player portray_square portray_moving portray_game portray_state))  True)
 
 
-  (= (add-system-portrayals)  
+  (= add-system-portrayals  
     (system-portrayals $Ps)
     (add-portrayals $Ps))
 

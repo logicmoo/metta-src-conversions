@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  utils $_148720 sre_dna/utils.pl sre_dna/utils.metta)
+;                                           (convert-to-metta-file  utils $_342938 sre_dna/utils.pl sre_dna/utils.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -60,7 +60,7 @@
     (set-det))
 
 
-  (= (size_of  () 0)  True)
+  (= (size-of  () 0)  True)
   (= (size-of (Cons  $_ $R) $K)  
     (size-of $R $L)
     (is $K 
@@ -72,8 +72,7 @@
 
 
   (= (writel Nil)  
-    (set-det)
-    (ttyflush))
+    ( (set-det) ttyflush))
   (= (writel (Cons  $A $R))  
     (var $A)
     (set-det)
@@ -81,46 +80,41 @@
     (write ' ')
     (writel $R))
   (= (writel (Cons  nl $R))  
-    (set-det)
-    (nl)
-    (writel $R))
+    ( (set-det) nl 
+      (writel $R)))
   (= (writel (Cons  $A $R))  
     (set-det)
     (write $A)
     (write ' ')
     (writel $R))
   (= (writel $A)  
-    (write $A)
-    (ttyflush)
-    (set-det))
+    ( (write $A) ttyflush 
+      (set-det)))
 
 
   (= (writel2 Nil)  
-    (set-det)
-    (ttyflush))
+    ( (set-det) ttyflush))
   (= (writel2 (Cons  $A $R))  
     (var $A)
     (set-det)
     (write $A)
     (writel2 $R))
   (= (writel2 (Cons  nl $R))  
-    (set-det)
-    (nl)
-    (writel2 $R))
+    ( (set-det) nl 
+      (writel2 $R)))
   (= (writel2 (Cons  $A $R))  
     (set-det)
     (write $A)
     (writel2 $R))
   (= (writel2 $A)  
-    (write $A)
-    (ttyflush)
-    (set-det))
+    ( (write $A) ttyflush 
+      (set-det)))
 
 
   (= (copy-struct $S $T)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (temp  $S)) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (temp  $T)) 
       (set-det)))
 ; /* sum_list([], 0). sum_list([A|L], N) :- sum_list(L, M), N is M + A, !. max_list([A|L], Max) :- once(max_list2(A, L, Max)). max_list2(A, [], A). max_list2(A, [B|L], Max) :- B > A, max_list2(B, L, Max). max_list2(A, [_|L], Max) :- max_list2(A, L, Max). min_list([A|L], Min) :- once(min_list2(A, L, Min)). min_list2(A, [], A). min_list2(A, [B|L], Min) :- B < A, min_list2(B, L, Min). min_list2(A, [_|L], Min) :- min_list2(A, L, Min). */
@@ -142,11 +136,10 @@
     (set-det))
 
 
-  (= (set-random-number-gen)  
-    (been-here)
-    (set-det))
-  (= (set-random-number-gen)  
-    ( (add-is-symbol  &self been_here) 
+  (= set-random-number-gen  
+    (been-here (set-det)))
+  (= set-random-number-gen  
+    ( (add-atom  &self been_here) 
       (set-det) 
       (seed-P $X $Y) 
       (set-seed $X $Y)))
@@ -182,10 +175,10 @@
         (+ 
           (mod $N3 30324) 1)) 
       (setrand (rand $R1 $R2 $R3)) 
-      (remove-is-symbol  &self 
-        (seed_P  $_ $_)) 
-      (add-is-symbol  &self 
-        (seed_P  random 
+      (remove-atom  &self 
+        (seed-P  $_ $_)) 
+      (add-atom  &self 
+        (seed-P  random 
           (,  $R1 
             (,  $R2 $R3)))) 
       (set-det)))
@@ -203,10 +196,10 @@
     (set-det)
     (writel $L))
 ; /* set_seed(default, _) :- !. set_seed(random, _) :- now(N), R1 is mod(N, 30000) + 1, ; between 1 and 30000 N2 is abs(N >> 2), ; shift right 2 bits R2 is mod(N2, 30000) + 1, N3 is abs(N >> 4), ; shift right 4 bits R3 is mod(N3, 30000) + 1, getrand(random(_,_,_,B)), setrand(random(R1,R2,R3,B)), retract(seed_P(_,_)), assert(seed_P(random, (R1,R2,R3))), !. set_seed(manual, (X, Y, Z)) :- getrand(random(_,_,_,B)), ; use default bit string (could be changed) setrand(random(X,Y,Z,B)), !. */
-  (= (debug_echo  $_)  True)
+  (= (debug-echo  $_)  True)
 
 
-  (= (rem_dups  () ())  True)
+  (= (rem-dups  () ())  True)
   (= (rem-dups (Cons  $A $R) $R2)  
     (member $A $R)
     (set-det)
@@ -246,12 +239,12 @@
 
 
   (= (remove  $_ () ())  True)
-  (= (remove  $A (Cons  $A $B) $B)  True)
+  (= (remove  $A ([|]  $A $B) $B)  True)
   (= (remove $A (Cons  $X $B) (Cons  $X $C))  
     (remove $A $B $C))
 
 
-  (= (remove_all  $_ () ())  True)
+  (= (remove-all  $_ () ())  True)
   (= (remove-all $A (Cons  $A $B) $C)  
     (set-det)
     (remove-all $A $B $C))
@@ -291,16 +284,14 @@
 
 
   (= (writelist Nil)  
-    (nl)
-    (set-det))
+    (nl (set-det)))
   (= (writelist (Cons  $A $R))  
-    (write $A)
-    (nl)
-    (writelist $R)
-    (set-det))
+    ( (write $A) nl 
+      (writelist $R) 
+      (set-det)))
 
 
-  (= (maybe)  
+  (= maybe  
     (maybe 0.5)
     (set-det))
 	
@@ -316,7 +307,7 @@
     (set-det))
 
 
-  (= (random_permutation2  () $_ ())  True)
+  (= (random-permutation2  () $_ ())  True)
   (= (random-permutation2 $L $Len (Cons  $X $Perm))  
     (random 0 $Len $R)
     (remove-nth $R $L $X $L2)

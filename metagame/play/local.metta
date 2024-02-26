@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  local $_435814 metagame/play/local.pl metagame/play/local.metta)
+;                                           (convert-to-metta-file  local $_342878 metagame/play/local.pl metagame/play/local.metta)
 ;
 ; ============================================================
 ;
@@ -45,8 +45,7 @@
     (query-accept-players $White $Black)
     (set-det))
   (= (get-players $_ $_)  
-    (format "\nPlease use 'player' to select the players.\n'help player' gives more info, and a list of available players.\n" Nil)
-    (fail))
+    ( (format "\nPlease use 'player' to select the players.\n'help player' gives more info, and a list of available players.\n" Nil) fail))
 
 
 
@@ -57,12 +56,12 @@
 
 
   (= (query-accept-players $White $Black)  
-    (human-mode)
-    (set-det)
-    (format "\n~p as ~p vs. ~p as ~p?\n(y to accept, n to select new players): " 
-      (:: $White player $Black opponent))
-    (read $Answer)
-    (= $Answer y))
+    (human-mode 
+      (set-det) 
+      (format "\n~p as ~p vs. ~p as ~p?\n(y to accept, n to select new players): " 
+        (:: $White player $Black opponent)) 
+      (read $Answer) 
+      (= $Answer y)))
   (= (query-accept-players $White $Black)  
     (format "Playing ~p as ~p vs. ~p as ~p?" 
       (:: $White player $Black opponent)))
@@ -90,25 +89,24 @@
 ;
 ; Else query user.
 
-  (= (get-current-game)  
+  (= get-current-game  
     (player-current-game $Game)
     (query-use-current-game $Game)
     (set-det))
-  (= (get-current-game)  
-    (format "\nPlease use 'game' to select a game.\n'games_library' will show you a list of available games.\n'generate <file> will generate a new game as <file>.game.\n" Nil)
-    (fail))
+  (= get-current-game  
+    ( (format "\nPlease use 'game' to select a game.\n'games_library' will show you a list of available games.\n'generate <file> will generate a new game as <file>.game.\n" Nil) fail))
 
 ;
 ; File saved as [path/]GameName.game
 
   (= (query-use-current-game $Game)  
-    (human-mode)
-    (set-det)
-    (game-name $Game $Name)
-    (format "~nPlay game ~w? (y to play, n to choose another): " 
-      (:: $Name))
-    (read $Answer)
-    (= $Answer y))
+    (human-mode 
+      (set-det) 
+      (game-name $Game $Name) 
+      (format "~nPlay game ~w? (y to play, n to choose another): " 
+        (:: $Name)) 
+      (read $Answer) 
+      (= $Answer y)))
   (= (query-use-current-game $Game)  
     (game-name $Game $Name)
     (format "~nPlaying game ~w" 
@@ -156,13 +154,11 @@
 ; 
 
   (= (ask-random-assignment $PieceNames $Squares $Assignment)  
-    (format "~nPlease assign ~w to ~w~nExample syntax: piece1 at {(1,1)} piece2 at {(2,2) (3,3)}.~n(C-d on new line to end)~n|: " 
-      (:: $PieceNames $Squares))
-    (read-tokens $AssignmentString)
-    (nl)
-    (set-parsing-mode)
-    (assignments $Assignment $AssignmentString 
-      (Cons  . $Rest)))
+    ( (format "~nPlease assign ~w to ~w~nExample syntax: piece1 at {(1,1)} piece2 at {(2,2) (3,3)}.~n(C-d on new line to end)~n|: " 
+        (:: $PieceNames $Squares)) 
+      (read-tokens $AssignmentString) nl set-parsing-mode 
+      (assignments $Assignment $AssignmentString 
+        (Cons  . $Rest))))
 
   (= (ask-random-assignment $PieceNames $Squares $Assignment)  
     (format "~nPlease assign ~w to ~w~n('.' for help)~n|: " 
@@ -176,10 +172,9 @@
     (ask-random-assignment $PieceNames $Squares $Assignment))
 
   (= (help-or-process-assign $AssignmentString $_ $_ $Assignment)  
-    (nl)
-    (set-parsing-mode)
-    (assignments $Assignment $AssignmentString 
-      (Cons  . $Rest)))
+    (nl set-parsing-mode 
+      (assignments $Assignment $AssignmentString 
+        (Cons  . $Rest))))
 
       
 

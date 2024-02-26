@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  lgg $_337376 miles/lgg.pl miles/lgg.metta)
+;                                           (convert-to-metta-file  lgg $_171590 miles/lgg.pl miles/lgg.metta)
 ;
 ; MODULE lgg EXPORTS
 
@@ -249,13 +249,13 @@
 
 
   (= (reduce-complete $Clause $Reduced)  
-    (clear-mngr)
-    (skolemize $Clause $S $SClause)
-    (assert-clause $SClause)
-    (reduce-complete1 $Clause $S $SReduced0)
-    (list-to-set $SReduced0 $SReduced)
-    (deskolemize $SReduced $S $Reduced)
-    (set-det))        ;
+    (clear-mngr 
+      (skolemize $Clause $S $SClause) 
+      (assert-clause $SClause) 
+      (reduce-complete1 $Clause $S $SReduced0) 
+      (list-to-set $SReduced0 $SReduced) 
+      (deskolemize $SReduced $S $Reduced) 
+      (set-det)))        ;
 ; No backtracking allowed (solution is unique)
 
 
@@ -304,16 +304,13 @@
     (prove1 $ToShow $SProof)
     (det-if-then-else 
       (reduce-complete-test $SProof) 
-      (, 
-        (clear-mngr) 
+      (, clear-mngr 
         (list-to-set $SProof $SProof1) 
         (assert-clause $SProof1) 
         (copy-term $S $S1) 
         (deskolemize $SProof1 $S1 $Proof) 
         (reduce-complete1 $Proof $S $RC)) 
-      (, 
-        (reset-counts) 
-        (fail))))
+      (, reset-counts fail)))
 ; ; backtrack, find another proof
   (= (reduce-complete1 $_ $S $RC)  
     (set-det)
@@ -324,11 +321,10 @@
 
   (= (reduce-complete-test $P)  
     (findall 
-      (with_self  $H 
-        (p)) 
+      (with-self  $H p) 
       (head $H $_ $_) $HL)
     (setof 
-      (with_self  $B $_) 
+      (with-self  $B $_) 
       (body $B $_ $_) $BL)
     (append $HL $BL $L)
     (list-to-set $L $L0)
@@ -380,30 +376,29 @@
 
 
   (= (reduce-approx $Clause $Reduced)  
-    (clear-mngr)
-    (copy-term $Clause $Copy)
-    (skolemize $Copy $S $SClause)
-    (assert-clause $SClause)
-    (reduce-approx1 $S 1 50)
-    (reduce-get-current-clause $SReduced0)
-    (list-to-set $SReduced0 $SReduced)
-    (deskolemize $SReduced $S $Reduced))
+    (clear-mngr 
+      (copy-term $Clause $Copy) 
+      (skolemize $Copy $S $SClause) 
+      (assert-clause $SClause) 
+      (reduce-approx1 $S 1 50) 
+      (reduce-get-current-clause $SReduced0) 
+      (list-to-set $SReduced0 $SReduced) 
+      (deskolemize $SReduced $S $Reduced)))
 
 
   (= (reduce-approx1 $S $Counter $Bound)  
-    (=< $Counter $Bound)
-    (copy-term $S $S1)
-    (reduce-get-current-clause $C)
-    (deskolemize $C $S1 $ToShow)
-    (prove1 $ToShow $SProof)
-    (clear-mngr)
-    (assert-body-randomly $SProof)
-    (is $J 
-      (+ $Counter 1))
-    (reduce-approx1 $S $J $Bound))
+    ( (=< $Counter $Bound) 
+      (copy-term $S $S1) 
+      (reduce-get-current-clause $C) 
+      (deskolemize $C $S1 $ToShow) 
+      (prove1 $ToShow $SProof) clear-mngr 
+      (assert-body-randomly $SProof) 
+      (is $J 
+        (+ $Counter 1)) 
+      (reduce-approx1 $S $J $Bound)))
 
 	
-  (= (reduce_approx1  $_ $_ $_)  True)
+  (= (reduce-approx1  $_ $_ $_)  True)
 
 
 
@@ -448,12 +443,10 @@
 
   (= (reduce-get-current-clause $CL)  
     (findall 
-      (with_self  $H 
-        (p)) 
+      (with-self  $H p) 
       (head $H $_ $_) $Heads)
     (findall 
-      (with_self  $L 
-        (n)) 
+      (with-self  $L n) 
       (body $L $_ $_) $Body)
     (append $Heads $Body $CL))
 
@@ -514,8 +507,7 @@
       (get-clause $ID $_ $_ $Clause $_) 
       (skolemize $Clause $_ 
         (Cons  
-          (with_self  $H 
-            (p)) $Body)) 
+          (with-self  $H p) $Body)) 
       (cover-assert-assumptions $Body) 
       (prove5 $H $RULES) 
       (set-det)))
@@ -584,8 +576,7 @@
       (not (or (member $ID $Covered1) (member $ID $Uncovered1))) 
       (skolemize $Clause $_ 
         (Cons  
-          (with_self  $H 
-            (p)) $Body)) 
+          (with-self  $H p) $Body)) 
       (cover-assert-assumptions $Body) 
       (set-det) 
       (| 
@@ -761,35 +752,33 @@
     (rlgg $ID1 $ID2 $_ $ID))
 
   (= (rlgg $ID1 $ID2 $PrefHead $ID)  
-    (or 
-      (get-clause $ID1 $_ $_ $Clause1 $_) 
-      (, 
-        (get-example $ID1 $Ex1 +) 
-        (= $Clause1 
-          (:: (with_self  $Ex1 (p))))))
-    (clear-mngr)
-    (skolemize $Clause1 $S1 $C1)
-    (assert-clause $C1)
-    (inv-derivate1 $ID1 1)
-    (msg-build-long-clause $D1)
-    (deskolemize $D1 $S1 $A1)
-    (or 
-      (get-clause $ID2 $_ $_ $Clause2 $_) 
-      (, 
-        (get-example $ID2 $Ex2 +) 
-        (= $Clause2 
-          (:: (with_self  $Ex2 (p))))))
-    (clear-mngr)
-    (skolemize $Clause2 $S2 $C2)
-    (assert-clause $C2)
-    (inv-derivate1 $ID2 1)
-    (msg-build-long-clause $D2)
-    (deskolemize $D2 $S2 $A2)
-    (lgg-gen-clause $A1 $A2 $D $_ Nil Nil $_ $_)
-    (set-det)
-    (convert-to-horn-clause $PrefHead $D $E)
-    (truncate-unconnected $E $F)
-    (store-clause $_ $F rlgg $ID))
+    ( (or 
+        (get-clause $ID1 $_ $_ $Clause1 $_) 
+        (, 
+          (get-example $ID1 $Ex1 +) 
+          (= $Clause1 
+            (:: (with-self  $Ex1 p))))) clear-mngr 
+      (skolemize $Clause1 $S1 $C1) 
+      (assert-clause $C1) 
+      (inv-derivate1 $ID1 1) 
+      (msg-build-long-clause $D1) 
+      (deskolemize $D1 $S1 $A1) 
+      (or 
+        (get-clause $ID2 $_ $_ $Clause2 $_) 
+        (, 
+          (get-example $ID2 $Ex2 +) 
+          (= $Clause2 
+            (:: (with-self  $Ex2 p))))) clear-mngr 
+      (skolemize $Clause2 $S2 $C2) 
+      (assert-clause $C2) 
+      (inv-derivate1 $ID2 1) 
+      (msg-build-long-clause $D2) 
+      (deskolemize $D2 $S2 $A2) 
+      (lgg-gen-clause $A1 $A2 $D $_ Nil Nil $_ $_) 
+      (set-det) 
+      (convert-to-horn-clause $PrefHead $D $E) 
+      (truncate-unconnected $E $F) 
+      (store-clause $_ $F rlgg $ID)))
 ; ; thru backtracking different
 ; ; heads may be obtained
 
@@ -841,7 +830,7 @@
     (subsumes-list1 $Gen1 $Spec1))
 
 
-  (= (subsumes_list1  () $_)  True)
+  (= (subsumes-list1  () $_)  True)
   (= (subsumes-list1 (Cons  $L $Rest) $Spec)  
     (member $L $Spec)
     (subsumes-list1 $Rest $Spec))
@@ -1062,15 +1051,12 @@
     (hlgg1 $Id1 $Id2 $HG $BGlist)
     (reduce-complete 
       (Cons  
-        (with_self  $HG 
-          (p)) $BGlist) 
+        (with-self  $HG p) $BGlist) 
       (Cons  
-        (with_self  $HGr 
-          (p)) $BGlistred))
+        (with-self  $HGr p) $BGlistred))
     (store-clause $_ 
       (Cons  
-        (with_self  $HGr 
-          (p)) $BGlistred) $Label $IdG))
+        (with-self  $HGr p) $BGlistred) $Label $IdG))
 ; ; reduce_irene([HG:p|BGlist],[HGr:p|BGlistred]),
 ; ; finally reduce lgg-body ; reduce_approx([HG:p|BGlist],[HGr:p|BGlistred]),; alternatively (more efficient)
 
@@ -1140,8 +1126,7 @@
     (hlgg1 $Id1 $Id2 $HG $BGlist)
     (store-clause $_ 
       (Cons  
-        (with_self  $HG 
-          (p)) $BGlist) $Label $IdG))
+        (with-self  $HG p) $BGlist) $Label $IdG))
 
 
 ;
@@ -1198,15 +1183,12 @@
     (lgg1 $Id1 $Id2 $HG $BGlist)
     (reduce-complete 
       (Cons  
-        (with_self  $HG 
-          (p)) $BGlist) 
+        (with-self  $HG p) $BGlist) 
       (Cons  
-        (with_self  $HGr 
-          (p)) $BGlistred))
+        (with-self  $HGr p) $BGlistred))
     (store-clause $_ 
       (Cons  
-        (with_self  $HGr 
-          (p)) $BGlistred) $Label $IdG))
+        (with-self  $HGr p) $BGlistred) $Label $IdG))
 ; ; reduce_irene([HG:p|BGlist],[HGr:p|BGlistred]),
 ; ; finally reduce lgg-body ; reduce_approx([HG:p|BGlist],[HGr:p|BGlistred]), ; alternatively (more efficient)
 
@@ -1284,8 +1266,7 @@
     (lgg1 $Id1 $Id2 $HG $BGlist)
     (store-clause $_ 
       (Cons  
-        (with_self  $HG 
-          (p)) $BGlist) $Label $IdG))
+        (with-self  $HG p) $BGlist) $Label $IdG))
 
 
 ;
@@ -1341,8 +1322,7 @@
       (buildlgg $CRest $Clgg_new1 $Clgg_new2 $L) 
       (delete-clause $Clgg_new1) 
       (, 
-        (delete-clause $Clgg_new1) 
-        (fail))))
+        (delete-clause $Clgg_new1) fail)))
 
   (= (buildlgg Nil $O $N $L)  
     (get-clause $O $_ $_ $Cl $_)
@@ -1406,7 +1386,7 @@
 	
 
 
-  (= (nr-lgg (Cons  (with_self  $H1 (p)) $B1list) (Cons  (with_self  $H2 (p)) $B2list) (Cons  (with_self  $HG (p)) $BGlist) $Theta1 $Theta2)  
+  (= (nr-lgg (Cons  (with-self  $H1 p) $B1list) (Cons  (with-self  $H2 p) $B2list) (Cons  (with-self  $HG p) $BGlist) $Theta1 $Theta2)  
     (det-if-then-else 
       (, 
         (functor $H1 $F $N) 
@@ -1475,7 +1455,7 @@
 ; reduce_approx([HG|BGlist],[HGr|BGlistred]), ;;alternatively (more efficient)
 
 
-  (= (hnr-lgg (Cons  (with_self  $H1 (p)) $B1list) (Cons  (with_self  $H2 (p)) $B2list) (Cons  (with_self  $HG (p)) $BGlist) $Theta1 $Theta2)  
+  (= (hnr-lgg (Cons  (with-self  $H1 p) $B1list) (Cons  (with-self  $H2 p) $B2list) (Cons  (with-self  $HG p) $BGlist) $Theta1 $Theta2)  
     (functor $H1 $F $N)
     (functor $H2 $F $N)
     (lgg-terms $H1 $H2 $HG $Subst1 $Subst2)
@@ -1582,9 +1562,9 @@
   (= (lgg-gen-clause $_ Nil $Accu $Accu $S1 $S2 $S1 $S2)  
     (set-det))
         
-  (= (lgg-gen-clause (Cons  (with_self  $Elem1 $Sign1) $R1) $List2 $Glist $AcGL $S1old $S2old $Theta1 $Theta2)  
+  (= (lgg-gen-clause (Cons  (with-self  $Elem1 $Sign1) $R1) $List2 $Glist $AcGL $S1old $S2old $Theta1 $Theta2)  
     (generalize-elem $List2 
-      (with_self  $Elem1 $Sign1) $GLelem1 $S1old $S2old $S1new $S2new)
+      (with-self  $Elem1 $Sign1) $GLelem1 $S1old $S2old $S1new $S2new)
     (append $AcGL $GLelem1 $AcGLnew)
     (lgg-gen-clause $R1 $List2 $Glist $AcGLnew $S1new $S2new $Theta1 $Theta2))
 
@@ -1638,7 +1618,7 @@
   (= (generalize-elem Nil $_ Nil $S1 $S2 $S1 $S2)  
     (set-det))
 
-  (= (generalize-elem (Cons  (with_self  $Elem1 $Sign1) $R1) (with_self  $Literal $Sign2) (Cons  (with_self  $GTerm $Sign) $RestGL) $S10 $S20 $S12 $S22)  
+  (= (generalize-elem (Cons  (with-self  $Elem1 $Sign1) $R1) (with-self  $Literal $Sign2) (Cons  (with-self  $GTerm $Sign) $RestGL) $S10 $S20 $S12 $S22)  
     (functor $Literal $F $N)
     (functor $Elem1 $F $N)
     (lgg-terms $Literal $Elem1 $GTerm $S11 $S21 $S10 $S20)
@@ -1664,7 +1644,7 @@
               (== $Sign2 n)) 
             (= $Sign n)))))
     (generalize-elem $R1 
-      (with_self  $Literal $Sign2) $RestGL $S11 $S21 $S12 $S22)
+      (with-self  $Literal $Sign2) $RestGL $S11 $S21 $S12 $S22)
     (set-det))
 
   (= (generalize-elem (Cons  $_ $R1) $Literal $RestGL $S1old $S2old $S1new $S2new)  
@@ -1728,7 +1708,7 @@
     (store-clause $_ $C gti $ID))
 
 
-  (= (gti (Cons  (with_self  $H1 (p)) $C1) (Cons  (with_self  $H2 (p)) $C2) (Cons  (with_self  $H (p)) $C) $S1 $S2)  
+  (= (gti (Cons  (with-self  $H1 p) $C1) (Cons  (with-self  $H2 p) $C2) (Cons  (with-self  $H p) $C) $S1 $S2)  
     (lgg-terms $H1 $H2 $H $Phi1 $Phi2)
     (gti $C1 $C2 $C $Phi1 $Phi2 $S1 $S2))
 
@@ -1737,9 +1717,9 @@
 
   (= (gti  () $_ () $S1 $S2 $S1 $S2)  True)
 
-  (= (gti (Cons  (with_self  $L1 $Sign1) $Rest1) $C2 (Cons  (with_self  $L $Sign) $Rest) $Phi1 $Phi2 $S1 $S2)  
+  (= (gti (Cons  (with-self  $L1 $Sign1) $Rest1) $C2 (Cons  (with-self  $L $Sign) $Rest) $Phi1 $Phi2 $S1 $S2)  
     (nth1 $N $C2 
-      (with_self  $L2 $Sign2) $Rest2)
+      (with-self  $L2 $Sign2) $Rest2)
     (lgg-terms $L1 $L2 $L $Theta1 $Theta2 $Phi1 $Phi2)
     (nonvar $L)
     (| 
@@ -1807,8 +1787,7 @@
     (or 
       (store-clause $_ $C lgti $ID) 
       (, 
-        (delete-clause $ID) 
-        (fail))))
+        (delete-clause $ID) fail)))
 
   (= (lgti $C1 $C2 $C $S1 $S2)  
     (lgti $C1 $C2 $C $S1 $S2 10))
@@ -1833,7 +1812,7 @@
     (findall $Comp 
       (chart $Comp $_ $_ $_ $_ $_) $Bag)
     (once (maximum $Bag $MaxComp))
-    (once (remove-is-symbol  &self (chart  $MaxComp $C $C1 $C2 $S1 $S2))))
+    (once (remove-atom  &self (chart  $MaxComp $C $C1 $C2 $S1 $S2))))
 
 
   !(dynamic (/ chart 6))
@@ -1842,9 +1821,9 @@
 
   (= (init-chart $C1 $C2 $Bound)  
     ( (remove-all-atoms  &self 
-        (chart_count  $_)) 
-      (add-is-symbol  &self 
-        (chart_count  1)) 
+        (chart-count  $_)) 
+      (add-atom  &self 
+        (chart-count  1)) 
       (remove-all-atoms  &self 
         (chart  $_ $_ $_ $_ $_ $_)) 
       (set-det) 
@@ -1854,7 +1833,7 @@
 
   (= (init-chart1 $C1 $C2 $Bound)  
     (gti $C1 $C2 $C $S1 $S2)
-    (once (, (complexity $C $Comp) (add-is-symbol  &self (chart  $Comp $C $C1 $C2 $S1 $S2)) (remove-is-symbol  &self (chart_count  $I)) (is $J (+ $I 1)) (add-is-symbol  &self (chart_count  $J))))
+    (once (, (complexity $C $Comp) (add-atom  &self (chart  $Comp $C $C1 $C2 $S1 $S2)) (remove-atom  &self (chart-count  $I)) (is $J (+ $I 1)) (add-atom  &self (chart-count  $J))))
     (> $J $Bound))
 ; ; no backtracking thru this
 

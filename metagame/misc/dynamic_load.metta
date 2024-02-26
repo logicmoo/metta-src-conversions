@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dynamic_load $_355230 metagame/misc/dynamic_load.pl metagame/misc/dynamic_load.metta)
+;                                           (convert-to-metta-file  dynamic_load $_102308 metagame/misc/dynamic_load.pl metagame/misc/dynamic_load.metta)
 ;
 ; ============================================================
 ;

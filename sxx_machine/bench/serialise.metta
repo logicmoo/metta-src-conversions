@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  serialise $_298080 sxx_machine/bench/serialise.pl sxx_machine/bench/serialise.metta)
+;                                           (convert-to-metta-file  serialise $_71932 sxx_machine/bench/serialise.pl sxx_machine/bench/serialise.metta)
 ;
 ; generated: 17 November 1989
 ;
@@ -19,11 +19,10 @@
 ; unique integer in) a list of 25 integers
 
 
-  (= (top)  
-    (serialise))
+  (= top  serialise)
 
 
-  (= (serialise)  
+  (= serialise  
     (serialise "ABLE WAS I ERE I SAW ELBA" $_))
 
   (= (serialise $L $R)  

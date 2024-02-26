@@ -1,10 +1,10 @@
-;                                           (convert_to_metta_file  ex9 $_123086 miles/examples/ex9.pl miles/examples/ex9.metta)
+;                                           (convert-to-metta-file  ex9 $_231338 miles/examples/ex9.pl miles/examples/ex9.metta)
 
 
   (= (lt $A $B)  
     (< $A $B))
 
-  (= (type_restriction  (lt  $A $B) ((number  $A) (number  $B)))  True)
+  (= (type-restriction  (lt  $A $B) ((number  $A) (number  $B)))  True)
 
 
 

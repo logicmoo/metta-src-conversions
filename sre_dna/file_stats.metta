@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  file_stats $_315714 sre_dna/file_stats.pl sre_dna/file_stats.metta)
+;                                           (convert-to-metta-file  file_stats $_436666 sre_dna/file_stats.pl sre_dna/file_stats.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -70,10 +70,10 @@
       (since-last-datime total call $HourT $MinuteT $SecT) 
       (since-last-datime generation retract $Hour $Minute $Sec) 
       (or 
-        (remove-is-symbol  &self 
-          (gp_stats  $Gen $_ $_ $_ $_ $_ $_ $Lamarck)) True) 
-      (add-is-symbol  &self 
-        (gp_stats  $Gen 
+        (remove-atom  &self 
+          (gp-stats  $Gen $_ $_ $_ $_ $_ $_ $Lamarck)) True) 
+      (add-atom  &self 
+        (gp-stats  $Gen 
           (:  $Hour 
             (:  $Minute 
               (:  
@@ -94,8 +94,8 @@
       (- $Now $Was))
     (det-if-then-else 
       (== $SetReset retract) 
-      (add-is-symbol  &self 
-        (got_time  $For $Now)) True)
+      (add-atom  &self 
+        (got-time  $For $Now)) True)
     (stamp-date-time $DiffTime 
       (date $Year $Month $Day $Hour $Minute $Sec $_ $_ $_) UTC)
     (set-det))
@@ -103,84 +103,79 @@
 
   !(dynamic (/ got-time 2))
   !((get-time $Now) 
-    (add-is-symbol  &self 
-      (got_time  total $Now)) 
-    (add-is-symbol  &self 
-      (got_time  total $Now)))
+    (add-atom  &self 
+      (got-time  total $Now)) 
+    (add-atom  &self 
+      (got-time  total $Now)))
 
 ;
 ; print run statistics
 
   (= (dump-stats $Run)  
-    (wd-P $Dir)
-    (working-directory $_ $Dir)
-    (set-file-name "stats" $Run $File)
-    (tell $File)
-    (since-last-datime total retract $Hour $Min $Sec)
-    (datime (datime $Year $Month $Day $DA_Hour $DA_Min $DA_Sec))
-    (writel (:: nl nl '***** Summary statistics: Run ' $Run  ***** nl nl (with_self  (- (- (- $Year $Month) $Day) $Hour) (with_self  $Min $Sec)) nl nl))
-    (gp-stats $Gen $Time $Best $Worst $Avg $AvgDepth $Lamarck)
-    (det-if-then-else 
-      (var $Lamarck) 
-      (= $Lamarck 
-        (lamarck 0 0 0)) True)
-    (print-stat $Gen $Time $Best $Worst $Avg $AvgDepth $Lamarck)
-    (fail))
+    ( (wd-P $Dir) 
+      (working-directory $_ $Dir) 
+      (set-file-name "stats" $Run $File) 
+      (tell $File) 
+      (since-last-datime total retract $Hour $Min $Sec) 
+      (datime (datime $Year $Month $Day $DA_Hour $DA_Min $DA_Sec)) 
+      (writel (:: nl nl '***** Summary statistics: Run ' $Run  ***** nl nl (with-self  (- (- (- $Year $Month) $Day) $Hour) (with-self  $Min $Sec)) nl nl)) 
+      (gp-stats $Gen $Time $Best $Worst $Avg $AvgDepth $Lamarck) 
+      (det-if-then-else 
+        (var $Lamarck) 
+        (= $Lamarck 
+          (lamarck 0 0 0)) True) 
+      (print-stat $Gen $Time $Best $Worst $Avg $AvgDepth $Lamarck) fail))
 ; ; Windows
 ; ; Windows
 ; ;once(time_stamp('Date: ;W, ;d ;M ;y Time: ;c:;02i;a', DateTime)),
 ; ; loops for all				   ;
 ; loop driver
   (= (dump-stats $Run)  
-    (nl)
-    (nl)
-    (population-size-P $InitPopSize $PopSize)
-    (max-runs-P $MaxRun $RunSoln $MaxGen)
-    (prob-crossover-P $PC)
-    (prob-internal-crossover-P $PIC)
-    (prob-terminal-mutation-P $PTM)
-    (max-depth-P $DepthInit $DepthCross)
-    (error-tolerance-P $Err)
-    (fitness-func-P $FitFile)
-    (dctg-file-P $FileDCTG)
-    (evaluator-reset-P $EvalReset $N)
-    (gen-type-P $GenType)
-    (best-in-run $Bgen $Fitness $Expr)
-    (count-nodes $Expr all $ENodeCnt)
-    (tree-depth $Expr $Edepth)
-    (tournament-size-P $TS $TR)
-    (lamarckian-P $LP $LK $Lsel $LCross)
-    (unique-population-P $Unique)
-    (seed-P $RanMode $Y)
-    (min-grammar-prob-P $MinProb)
-    (gen-set-size-P $GenSet)
-    (sre-mintestcnt-P $Mintst)
-    (max-string-length-P $Maxstr)
-    (writel (:: nl 'Best Soln:' $Expr nl))
-    (^^ $Expr 
-      (construct $E))
-    (write 'Expression: ')
-    (sre-pp $E)
-    (nl)
-    (writel (:: 'found at generation ' $Bgen nl 'Soln # nodes:' $ENodeCnt nl 'Soln depth:' $Edepth nl 'Soln Fitness = ' $Fitness nl))
-    (det-if-then-else 
-      (gp-stats $MaxGen $_ 
-        (best $MinLast $_ $BexprLast) $_ $_ $_ $_) 
-      (, 
-        (count-nodes $BexprLast all $ENodeCntLast) 
-        (tree-depth $BexprLast $EdepthLast) 
-        (writel (:: nl 'Best Last Gen' $MaxGen :  $BexprLast nl)) 
-        (^^ $BexprLast 
-          (construct $ELast)) 
-        (write 'Expression: ') 
-        (sre-pp $ELast) 
-        (nl) 
-        (writel (:: 'Last # nodes:' $ENodeCntLast nl 'Last depth:' $EdepthLast nl 'Last Fitness = ' $MinLast nl))) True)
-    (writel (:: ------- nl 'Fitness func file:' $FitFile nl 'DCTG file:' $FileDCTG nl 'Evaluator reset:' $EvalReset ' N:' $N nl 'Generation type:' $GenType nl 'Init pop size = ' $InitPopSize nl 'Pop size = ' $PopSize nl 'Max runs = ' $MaxRun ,  $RunSoln nl 'Max gen = ' $MaxGen nl 'Prob crossover = ' $PC nl 'Prob int cross = ' $PIC nl 'Prob term mutation = ' $PTM nl 'Tournament size: sel = ' $TS ' repl = ' $TR nl 'Lamarckian: ' $LP 'of popn, iterate = ' $LK ', select = ' $Lsel ', Prob Cross=' $LCross nl 'Unique popn = ' $Unique nl 'Random seed:' $RanMode ', Y=' $Y nl 'Max depth init = ' $DepthInit nl 'Max depth crossover = ' $DepthCross nl 'Initial test set size =' $GenSet nl 'Max test set string length =' $Maxstr nl 'Minimum test set count =' $Mintst nl 'Min grammar probability =' $MinProb nl 'Error tolerance = ' $Err nl))
-    (writel (:: '*** End of Run ' $Run  *** nl))
-    (told)
-    (tell user)
-    (write-soln "soln" $Run $Expr))
+    (nl nl 
+      (population-size-P $InitPopSize $PopSize) 
+      (max-runs-P $MaxRun $RunSoln $MaxGen) 
+      (prob-crossover-P $PC) 
+      (prob-internal-crossover-P $PIC) 
+      (prob-terminal-mutation-P $PTM) 
+      (max-depth-P $DepthInit $DepthCross) 
+      (error-tolerance-P $Err) 
+      (fitness-func-P $FitFile) 
+      (dctg-file-P $FileDCTG) 
+      (evaluator-reset-P $EvalReset $N) 
+      (gen-type-P $GenType) 
+      (best-in-run $Bgen $Fitness $Expr) 
+      (count-nodes $Expr all $ENodeCnt) 
+      (tree-depth $Expr $Edepth) 
+      (tournament-size-P $TS $TR) 
+      (lamarckian-P $LP $LK $Lsel $LCross) 
+      (unique-population-P $Unique) 
+      (seed-P $RanMode $Y) 
+      (min-grammar-prob-P $MinProb) 
+      (gen-set-size-P $GenSet) 
+      (sre-mintestcnt-P $Mintst) 
+      (max-string-length-P $Maxstr) 
+      (writel (:: nl 'Best Soln:' $Expr nl)) 
+      (^^ $Expr 
+        (construct $E)) 
+      (write 'Expression: ') 
+      (sre-pp $E) nl 
+      (writel (:: 'found at generation ' $Bgen nl 'Soln # nodes:' $ENodeCnt nl 'Soln depth:' $Edepth nl 'Soln Fitness = ' $Fitness nl)) 
+      (det-if-then-else 
+        (gp-stats $MaxGen $_ 
+          (best $MinLast $_ $BexprLast) $_ $_ $_ $_) 
+        (, 
+          (count-nodes $BexprLast all $ENodeCntLast) 
+          (tree-depth $BexprLast $EdepthLast) 
+          (writel (:: nl 'Best Last Gen' $MaxGen :  $BexprLast nl)) 
+          (^^ $BexprLast 
+            (construct $ELast)) 
+          (write 'Expression: ') 
+          (sre-pp $ELast) nl 
+          (writel (:: 'Last # nodes:' $ENodeCntLast nl 'Last depth:' $EdepthLast nl 'Last Fitness = ' $MinLast nl))) True) 
+      (writel (:: ------- nl 'Fitness func file:' $FitFile nl 'DCTG file:' $FileDCTG nl 'Evaluator reset:' $EvalReset ' N:' $N nl 'Generation type:' $GenType nl 'Init pop size = ' $InitPopSize nl 'Pop size = ' $PopSize nl 'Max runs = ' $MaxRun ,  $RunSoln nl 'Max gen = ' $MaxGen nl 'Prob crossover = ' $PC nl 'Prob int cross = ' $PIC nl 'Prob term mutation = ' $PTM nl 'Tournament size: sel = ' $TS ' repl = ' $TR nl 'Lamarckian: ' $LP 'of popn, iterate = ' $LK ', select = ' $Lsel ', Prob Cross=' $LCross nl 'Unique popn = ' $Unique nl 'Random seed:' $RanMode ', Y=' $Y nl 'Max depth init = ' $DepthInit nl 'Max depth crossover = ' $DepthCross nl 'Initial test set size =' $GenSet nl 'Max test set string length =' $Maxstr nl 'Minimum test set count =' $Mintst nl 'Min grammar probability =' $MinProb nl 'Error tolerance = ' $Err nl)) 
+      (writel (:: '*** End of Run ' $Run  *** nl)) told 
+      (tell user) 
+      (write-soln "soln" $Run $Expr)))
 ; ; from gp_parameters file...
 ; ;crossover_P(PIC, PTC),
 ; ;rep_limit_P(Rep),
@@ -249,23 +244,20 @@
 
 
   (= (dump-population $Run)  
-    (set-file-name "popn" $Run $File)
-    (tell $File)
-    (individual $ID $V $Expr)
-    (write-individual $ID $V $Expr)
-    (fail))
+    ( (set-file-name "popn" $Run $File) 
+      (tell $File) 
+      (individual $ID $V $Expr) 
+      (write-individual $ID $V $Expr) fail))
   (= (dump-population $_)  
-    (told)
-    (tell user))
+    (told (tell user)))
 
 
   (= (write-individual $ID $V $Expr)  
-    (writel (:: ----- nl 'Individual ' $ID ': fit=' $V nl $Expr nl))
-    (^^ $Expr 
-      (construct $E))
-    (sre-pp $E)
-    (nl)
-    (set-det))
+    ( (writel (:: ----- nl 'Individual ' $ID ': fit=' $V nl $Expr nl)) 
+      (^^ $Expr 
+        (construct $E)) 
+      (sre-pp $E) nl 
+      (set-det)))
 
 ;
 ; ------------------------------------
@@ -278,15 +270,13 @@
 
 
   (= (write-soln $Name $Run $E)  
-    (set-file-name $Name $Run $File)
-    (tell $File)
-    (write soln()
-    (write-term $E)
-    (write ).)
-    (nl)
-    (told)
-    (tell user)
-    (set-det))
+    ( (set-file-name $Name $Run $File) 
+      (tell $File) 
+      (write soln() 
+      (write-term $E) 
+      (write ).) nl told 
+      (tell user) 
+      (set-det)))
 
 
   (= (write-term (node $X $List $Y))  
@@ -305,11 +295,10 @@
   (= (write-tlist Nil)  
     (set-det))
   (= (write-tlist (Cons  $X (Cons  $Y $Z)))  
-    (set-det)
-    (write-term $X)
-    (write ,)
-    (nl)
-    (write-tlist (Cons  $Y $Z)))
+    ( (set-det) 
+      (write-term $X) 
+      (write ,) nl 
+      (write-tlist (Cons  $Y $Z))))
   (= (write-tlist (:: $X))  
     (write-term $X))
 

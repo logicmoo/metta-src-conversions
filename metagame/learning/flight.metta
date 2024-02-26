@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  flight $_216976 metagame/learning/flight.pl metagame/learning/flight.metta)
+;                                           (convert-to-metta-file  flight $_346296 metagame/learning/flight.pl metagame/learning/flight.metta)
 ;
 ; ============================================================
 ;
@@ -50,7 +50,7 @@
 
 
 
-  (= (testflight)  
+  (= testflight  
     (checkpoint cap $Pos)
     (flight-square $Piece player $SqF $SqT $Pos $ZOut $Tables)
     (format "~p->~p~n" 
@@ -103,12 +103,12 @@
 ; /* A piece is tightly-dominated to the extent that its flight squares are covered by enemy pieces. Domination is slightly worse for the player who has to move, because of Zugswang. [?] Also important for domination is the number of pieces left to capture before the goal is achieved. Thus when a player has just one king, this is vital to protect, whereas when he has lots of checkers, dominating any 1 isn't that crucial until the numbers are smaller. To model this, we should first count the number matching this goal, and then weight the resulting domination value for each target piece by some value which decreases as the number of such targets increases. In fact, maybe don't even think about domination until the number of targets is smaller. */
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  metagame/learning/flight.pl 105 12 3822))
   
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  metagame/learning/flight.pl 110 13 3967))
 
 
@@ -160,7 +160,7 @@
 
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  metagame/learning/flight.pl 150 12 5319))
 
 	

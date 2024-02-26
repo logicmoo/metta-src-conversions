@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  serve_tourney $_298140 metagame/comms/serve_tourney.pl metagame/comms/serve_tourney.metta)
+;                                           (convert-to-metta-file  serve_tourney $_285816 metagame/comms/serve_tourney.pl metagame/comms/serve_tourney.metta)
 ;
 ; ============================================================
 ;
@@ -41,11 +41,10 @@
 ; Redefine METAGAME here, so automatically start serving upon startup.
 
 
-  (= (metagame)  
-    (serve-tourney))
+  (= metagame  serve-tourney)
 
 
-  (= (serve-tourney)  
+  (= serve-tourney  
     (find-players $Player1 $Info1 $Player2 $Info2)
     (serve-tourney $Player1 $Info1 $Player2 $Info2))
 
@@ -58,12 +57,10 @@
 
 
   (= (serve-tourney $Player1 $Info1 $Player2 $Info2)  
-    (use-module (library linda/server))
-    (greet-players $Player1 $Player2)
-    (nl)
-    (write ' I am your friendly Linda Server!')
-    (nl)
-    (linda (- $Addr (create-tourney $Addr $Player1 $Info1 $Player2 $Info2))))
+    ( (use-module (library linda/server)) 
+      (greet-players $Player1 $Player2) nl 
+      (write ' I am your friendly Linda Server!') nl 
+      (linda (- $Addr (create-tourney $Addr $Player1 $Info1 $Player2 $Info2)))))
 ; ; nl, write('just used server'), nl,
 ; ; linda((Addr-format('Server address is ~q~n',[Addr]))).
 
@@ -89,11 +86,11 @@
 ;
 ; good_addr(any).
 
-  (= (good_addr  shoveller)  True)
+  (= (good-addr  shoveller)  True)
 
 
 
-  (= (start-ref (with_self  $ServerAddr $Port) $Player1 $Player2)  
+  (= (start-ref (with-self  $ServerAddr $Port) $Player1 $Player2)  
     (good-addr $Slave)
     (command-from-args 
       (:: ref $ServerAddr : $Player1 vs $Player2) - $Title)
@@ -101,7 +98,7 @@
       (:: server-name $ServerAddr server-port $Port player1-name $Player1 player2-name $Player2 file ~/prolog/play/referee) $Title))
 
 
-  (= (start-player (with_self  $ServerAddr $Port) $Player $MoveFile)  
+  (= (start-player (with-self  $ServerAddr $Port) $Player $MoveFile)  
     (good-addr $Slave)
     (command-from-args 
       (:: $ServerAddr : $Player $MoveFile) - $Title)

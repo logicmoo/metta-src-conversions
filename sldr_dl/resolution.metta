@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  resolution $_192350 sldr_dl/resolution.pl sldr_dl/resolution.metta)
+;                                           (convert-to-metta-file  resolution $_285570 sldr_dl/resolution.pl sldr_dl/resolution.metta)
 
   !(:: (nnet *))
 
@@ -56,11 +56,10 @@
 
 
   (= (axnum-to-vec $AxNum $Dim $Vec)  
-    (> $AxNum $Dim)
-    (print (:: 'Warning: AxNum is bigger than Dim: ' $AxNum $Dim))
-    (nl)
-    (copy-n-times 0 $Dim $Vec)
-    (set-det))
+    ( (> $AxNum $Dim) 
+      (print (:: 'Warning: AxNum is bigger than Dim: ' $AxNum $Dim)) nl 
+      (copy-n-times 0 $Dim $Vec) 
+      (set-det)))
 
   (= (axnum-to-vec $AxNum $Dim $Vec)  
     (is $D1 
@@ -77,76 +76,74 @@
 
   !(dynamic (/ search-time 1))
 
-  (= (init-search-time)  
+  (= init-search-time  
     ( (remove-all-atoms  &self 
-        (search_time  $_)) (add-is-symbol  &self (search_time  0))))
+        (search-time  $_)) (add-atom  &self (search-time  0))))
 
-  (= (add-search-time)  
+  (= add-search-time  
     ( (search-time $N) 
       (remove-all-atoms  &self 
-        (search_time  $_)) 
+        (search-time  $_)) 
       (is $N1 
         (+ $N 1)) 
-      (add-is-symbol  &self 
-        (search_time  $N1)) 
+      (add-atom  &self 
+        (search-time  $N1)) 
       (set-det)))
 
 
   (= (dnn-sl-resolution $A $B $C $D $E $F $G)  
     (dnn-sl-resolution $A $B $C standard $D $E $F $G))
 
-  (= (dnn_sl_resolution  () $_ $_ $_ $_ $_ $_ ())  True)
+  (= (dnn-sl-resolution  () $_ $_ $_ $_ $_ $_ ())  True)
   (= (dnn-sl-resolution $GList (:: $AList $NumA) $SList $StatModName $Nnet $Mtd $Depth $Path)  
-    (> $Depth 0)
-    (is $D1 
-      (- $Depth 1))
-    (= $GList 
-      (Cons  
-        (- $OrgG) $GLT))
-    (copy-term $GList $PreGList)
-    (static-module $StatModName $OrgG $G)
-    (copy-term $G $GTemp)
-    (dnn-heuristic $Nnet $G $SList $Mtd $SAL)
-    (member 
-      (:: $_ $AxNum) $SAL)
-    (member 
-      (:: $AxNum $AxName $AxRule) $AList)
-    (add-search-time)
-    (copy-term $AxRule $Ax)
-    (append $GN 
-      (:: (+ $G)) $Ax)
-    (append $GN $GLT $GListNew)
-    (dnn-sl-resolution $GListNew 
-      (:: $AList $NumA) $SList $StatModName $Nnet $Mtd $D1 $PathNew)
-    (= $Path 
-      (Cons  
-        (:: $PreGList $AxName) $PathNew))
-    (or 
-      (, 
+    ( (> $Depth 0) 
+      (is $D1 
+        (- $Depth 1)) 
+      (= $GList 
+        (Cons  
+          (- $OrgG) $GLT)) 
+      (copy-term $GList $PreGList) 
+      (static-module $StatModName $OrgG $G) 
+      (copy-term $G $GTemp) 
+      (dnn-heuristic $Nnet $G $SList $Mtd $SAL) 
+      (member 
+        (:: $_ $AxNum) $SAL) 
+      (member 
+        (:: $AxNum $AxName $AxRule) $AList) add-search-time 
+      (copy-term $AxRule $Ax) 
+      (append $GN 
+        (:: (+ $G)) $Ax) 
+      (append $GN $GLT $GListNew) 
+      (dnn-sl-resolution $GListNew 
+        (:: $AList $NumA) $SList $StatModName $Nnet $Mtd $D1 $PathNew) 
+      (= $Path 
+        (Cons  
+          (:: $PreGList $AxName) $PathNew)) 
+      (or 
+        (, 
+          (= $Mtd 
+            (method 
+              (learning $_ $_) $_ $_)) 
+          (dnn-train $Nnet $GTemp $SList $AxNum $Mtd)) 
         (= $Mtd 
-          (method 
-            (learning $_ $_) $_ $_)) 
-        (dnn-train $Nnet $GTemp $SList $AxNum $Mtd)) 
-      (= $Mtd 
-        (method reasoning $_ $_))))
+          (method reasoning $_ $_)))))
 ; ;SAL = AList,
 ; ;Ax = [+G|GN],
 
 
-  (= (print_by_line  ())  True)
+  (= (print-by-line  ())  True)
   (= (print-by-line (Cons  $X $L))  
-    (print $X)
-    (nl)
-    (print-by-line $L))
+    ( (print $X) nl 
+      (print-by-line $L)))
 
 
 
 
   !(dynamic (/ num-vble 1))
   ! (remove-all-atoms  &self 
-      (num_vble  $_))
-  ! (add-is-symbol  &self 
-      (num_vble  0))
+      (num-vble  $_))
+  ! (add-atom  &self 
+      (num-vble  0))
 
 
   (= (vble-fill $X $X)  
@@ -158,9 +155,9 @@
       (is $N 
         (+ $N1 1)) 
       (remove-all-atoms  &self 
-        (num_vble  $_)) 
-      (add-is-symbol  &self 
-        (num_vble  $N)) 
+        (num-vble  $_)) 
+      (add-atom  &self 
+        (num-vble  $N)) 
       (= $X 
         (vble $N)) 
       (set-det)))
@@ -236,7 +233,7 @@
 ; ; Check if the lengths agree.
 
 
-  (= (get_first_element  $_ 0 ())  True)
+  (= (get-first-element  $_ 0 ())  True)
   (= (get-first-element Nil $N (Cons  norule $Res1))  
     (> $N 0)
     (is $N1 
@@ -271,11 +268,10 @@
     (copy-n-times 0 $Dim $Vec)
     (set-det))
   (= (num-to-vec $Num $Dim $Vec)  
-    (> $Num $Dim)
-    (print (:: 'Warning: Num is bigger than Dim: ' $Num $Dim))
-    (nl)
-    (copy-n-times 0 $Dim $Vec)
-    (set-det))
+    ( (> $Num $Dim) 
+      (print (:: 'Warning: Num is bigger than Dim: ' $Num $Dim)) nl 
+      (copy-n-times 0 $Dim $Vec) 
+      (set-det)))
 
   (= (num-to-vec $Num $Dim $Vec)  
     (is $D1 
@@ -310,7 +306,7 @@
     (for $K $P1 $Q))
 
 
-  (= (static_module  standard $G $G)  True)
+  (= (static-module  standard $G $G)  True)
 
 
 

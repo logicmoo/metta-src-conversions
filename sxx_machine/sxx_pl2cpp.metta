@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sxx_pl2cpp $_194292 sxx_machine/sxx_pl2cpp.pl sxx_machine/sxx_pl2cpp.metta)
+;                                           (convert-to-metta-file  sxx_pl2cpp $_478670 sxx_machine/sxx_pl2cpp.pl sxx_machine/sxx_pl2cpp.metta)
 
   !(op 1170 xfx :-)
 ; /***************************************************************** Time-stamp: <2008-10-29 10:41:19 banbara> NAME pl2am: Translating MeTTa into WAM-based Intermediate Code USAGE # sicstus ?- [pl2am]. ?- pl2am([File1, File2, [Op1,..,OpN]]). PARAMETERS File1 is an input MeTTa file name. File2 is an output file name. Op ::= ed | ac | ie | rc | idx | clo ed : eliminate disjunctions ac : arithmetic compilation ie : inline expansion rc : optimise recursive call idx: switch_on_hash (2nd. level indexing) clo: generate closure for meta predicates pif(folder): folder for writing package init predicates DESCRIPTION This program translates MeTTa program into WAM-based intermediate codes. Generated codes can be translated into Java program by using am2j.pl, and then compiled and executed by usual java utilities with the MeTTa Cafe runtime system. COPYRIGHT pl2am (Translating MeTTa into WAM-based Intermediate Code) Copyright (C) 1997-2008 by Mutsunori Banbara (banbara@kobe-u.ac.jp) and Naoyuki Tamura (tamura@kobe-u.ac.jp) SEE ALSO http://kaminari.istc.kobe-u.ac.jp/MeTTaCafe/ *****************************************************************/
@@ -67,7 +67,7 @@
 
   !(public (, (/ main 0) (/ pl2am 1)))
 
-  (= (main-pl2am)  
+  (= main-pl2am  
     (read $X)
     (pl2am $X))
 ; /***************************************************************** Main *****************************************************************/
@@ -86,17 +86,15 @@
     ( (pl2am-preread $File $Opts) 
       (==  
         (= 
-          (file_name  $F) $_) 
+          (file-name  $F) $_) 
         (get-atoms  &self)) 
-      (read-in-file $F) 
-      (pl2am-postread)))
+      (read-in-file $F) pl2am-postread))
 ; /***************************************************************** Read in Program *****************************************************************/
 
 
   (= (read-in-file $File)  
     ( (build-file-name $File $F) 
-      (open $F read $In) 
-      (repeat) 
+      (open $F read $In) repeat 
       (line-count $In $L) 
       (assert-file-line $F $L) 
       (read-clause- $In $X) 
@@ -104,7 +102,7 @@
       (== $X end-of-file) 
       (set-det) 
       (remove-all-atoms  &self 
-        (file_line  $_ $_)) 
+        (file-line  $_ $_)) 
       (close $In)))
 
 
@@ -114,62 +112,60 @@
     (set-det))
 ; ; catch is necessary only for SWI prolg
   (= (read-clause- $_ $_)  
-    (pl2am-error Nil)
-    (fail))
+    ( (pl2am-error Nil) fail))
 
 ;
 ; ;; Pre-init
 
   (= (pl2am-preread $File $Opts)  
     ( (remove-all-atoms  &self 
-        (internal_clause  $_ $_)) 
+        (internal-clause  $_ $_)) 
       (remove-all-atoms  &self 
-        (internal_predicates  $_ $_)) 
+        (internal-predicates  $_ $_)) 
       (remove-all-atoms  &self 
-        (dynamic_predicates  $_ $_ $_)) 
+        (dynamic-predicates  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (database_call  $_)) 
+        (database-call  $_)) 
       (remove-all-atoms  &self 
-        (compiler_constant  $_ $_)) 
+        (compiler-constant  $_ $_)) 
       (remove-all-atoms  &self 
-        (meta_predicates  $_ $_ $_)) 
+        (meta-predicates  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (package_name  $_)) 
+        (package-name  $_)) 
       (remove-all-atoms  &self 
-        (public_predicates  $_ $_)) 
+        (public-predicates  $_ $_)) 
       (remove-all-atoms  &self 
-        (import_package  $_ $_)) 
+        (import-package  $_ $_)) 
       (remove-all-atoms  &self 
-        (internal_declarations  $_)) 
+        (internal-declarations  $_)) 
       (remove-all-atoms  &self 
-        (file_name  $_)) 
+        (file-name  $_)) 
       (remove-all-atoms  &self 
-        (included_file  $_)) 
+        (included-file  $_)) 
       (remove-all-atoms  &self 
-        (dummy_clause_counter  $_)) 
+        (dummy-clause-counter  $_)) 
       (remove-all-atoms  &self 
-        (pl2am_flag  $_)) 
+        (pl2am-flag  $_)) 
       (remove-all-atoms  &self fail_flag) 
       (remove-all-atoms  &self skip_code) 
       (remove-all-atoms  &self ifdef_flag) 
       (remove-all-atoms  &self 
-        (domain_definition  $_ $_)) 
-      (add-is-symbol  &self 
-        (database_call  
+        (domain-definition  $_ $_)) 
+      (add-atom  &self 
+        (database-call  
           (:  SxxMachine.builtin call))) 
       (assert-file-name $File) 
-      (add-is-symbol  &self 
-        (dummy_clause_counter  0)) 
-      (assert-compile-opts $Opts) 
-      (assert-default-decls)))
+      (add-atom  &self 
+        (dummy-clause-counter  0)) 
+      (assert-compile-opts $Opts) assert-default-decls))
 
 
   (= (assert-file-name (/ $Directory $File))  
     ( (set-det) 
-      (add-is-symbol  &self 
-        (file_name  $File)) 
-      (add-is-symbol  &self 
-        (file_base  $Directory))))
+      (add-atom  &self 
+        (file-name  $File)) 
+      (add-atom  &self 
+        (file-base  $Directory))))
 
   (= (assert-file-name $File)  
     (assert-file-name (/ '' $File)))
@@ -178,37 +174,36 @@
   (= (build-file-name $File $File)  
     ( (==  
         (= 
-          (file_base  '') $_) 
+          (file-base  '') $_) 
         (get-atoms  &self)) (set-det)))
 
   (= (build-file-name $File $File)  
     (= $File 
-      (with_self  $Package $ResourceName))
+      (with-self  $Package $ResourceName))
     (set-det))
 
   (= (build-file-name $InFile $OutFile)  
     ( (==  
         (= 
-          (file_base  $Directory) $_) 
+          (file-base  $Directory) $_) 
         (get-atoms  &self)) 
       (list-to-string 
         (:: $Directory / $InFile) $OutFile) 
       (set-det)))
 
-  (= (build_file_name  $File $File)  True)
+  (= (build-file-name  $File $File)  True)
 
 
   (= (assert-file-line $File $Line)  
     ( (remove-all-atoms  &self 
-        (file_line  $_ $_)) (add-is-symbol  &self (file_line  $File $Line))))
+        (file-line  $_ $_)) (add-atom  &self (file-line  $File $Line))))
 ; ;TODO keep stack of included
 
 
-  (= (assert-default-decls)  
+  (= assert-default-decls  
     ( (builtin-meta-predicates $Pred $Arity $Mode) 
-      (add-is-symbol  &self 
-        (meta_predicates  $Pred $Arity $Mode)) 
-      (fail)))
+      (add-atom  &self 
+        (meta-predicates  $Pred $Arity $Mode)) fail))
   (= assert_default_decls  True)
 
 
@@ -222,55 +217,52 @@
   (= (assert-copts $O)  
     ( (==  
         (= 
-          (pl2am_flag  $O) $_) 
+          (pl2am-flag  $O) $_) 
         (get-atoms  &self)) (set-det)))
   (= (assert-copts $O)  
     ( (copt-expr $O) 
       (set-det) 
-      (add-is-symbol  &self 
-        (pl2am_flag  $O))))
+      (add-atom  &self 
+        (pl2am-flag  $O))))
   (= (assert-copts $O)  
-    (pl2am-error (:: $O is an invalid option for pl2am))
-    (fail))
+    ( (pl2am-error (:: $O is an invalid option for pl2am)) fail))
 
 
-  (= (copt_expr  ed)  True)
-  (= (copt_expr  ac)  True)
-  (= (copt_expr  ie)  True)
-  (= (copt_expr  rc)  True)
-  (= (copt_expr  (rc  $_ $_))  True)
-  (= (copt_expr  idx)  True)
-  (= (copt_expr  clo)  True)
-  (= (copt_expr  (pif  $_))  True)
+  (= (copt-expr  ed)  True)
+  (= (copt-expr  ac)  True)
+  (= (copt-expr  ie)  True)
+  (= (copt-expr  rc)  True)
+  (= (copt-expr  (rc  $_ $_))  True)
+  (= (copt-expr  idx)  True)
+  (= (copt-expr  clo)  True)
+  (= (copt-expr  (pif  $_))  True)
 
 ;
 ; ;; Post-init
 
-  (= (pl2am-postread)  
-    (assert-import SxxMachine.lang)
-    (assert-import SxxMachine.builtin)
-    (assert-dummy-package)
-    (assert-dummy-public))
+  (= pl2am-postread  
+    ( (assert-import SxxMachine.lang) 
+      (assert-import SxxMachine.builtin) assert-dummy-package assert-dummy-public))
 
 
-  (= (assert-dummy-package)  
+  (= assert-dummy-package  
     ( (==  
         (= 
-          (package_name  $_) $_) 
+          (package-name  $_) $_) 
         (get-atoms  &self)) (set-det)))
-  (= (assert-dummy-package)  
-    (add-is-symbol  &self 
-      (package_name  user)))
+  (= assert-dummy-package  
+    (add-atom  &self 
+      (package-name  user)))
 
 
-  (= (assert-dummy-public)  
+  (= assert-dummy-public  
     ( (==  
         (= 
-          (public_predicates  $_ $_) $_) 
+          (public-predicates  $_ $_) $_) 
         (get-atoms  &self)) (set-det)))
-  (= (assert-dummy-public)  
-    (add-is-symbol  &self 
-      (public_predicates  $_ $_)))
+  (= assert-dummy-public  
+    (add-atom  &self 
+      (public-predicates  $_ $_)))
 
 ;
 ; ;; Expand constants
@@ -279,7 +271,7 @@
     ( (atom $InClause) 
       (==  
         (= 
-          (compiler_constant  $InClause $OutClause) $_) 
+          (compiler-constant  $InClause $OutClause) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (expand-constants $InClause $OutClause)  
@@ -302,12 +294,10 @@
   (= (assert-clause !(ifndef $C))  
     (set-det)
     (assert-ifndef $C))
-  (= (assert-clause !(elsedef))  
-    (set-det)
-    (assert-elsedef))
-  (= (assert-clause !(enddef))  
-    (set-det)
-    (assert-enddef))
+  (= (assert-clause !elsedef)  
+    ( (set-det) assert-elsedef))
+  (= (assert-clause !enddef)  
+    ( (set-det) assert-enddef))
   (= (assert-clause $_)  
     ( (==  
         (= skip_code $_) 
@@ -367,14 +357,14 @@
     (set-det)
     (call $G)
     (assert-declarations $G))
-  (= (assert-clause- (= (%init)  $InitBody))  
+  (= (assert-clause- (= %init  $InitBody))  
     ( (==  
         (= 
-          (pl2am_flag  
+          (pl2am-flag  
             (pif  $PackageInitFolder)) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (write-init (= (%init)  $InitBody))))
+      (write-init (= %init  $InitBody))))
   (= (assert-clause- (= $Head  
     (or $Body1 $Body2)))  
     (set-det)
@@ -392,20 +382,18 @@
         (= $Name $_)) 
       (==  
         (= 
-          (compiler_constant  $Name $_) $_) 
+          (compiler-constant  $Name $_) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (pl2am-error (:: compiler constant $Name is already defined)) 
-      (fail)))
+      (pl2am-error (:: compiler constant $Name is already defined)) fail))
   (= (assert-constant $C)  
     ( (= $C 
         (= $Name $Value)) 
-      (add-is-symbol  &self 
-        (compiler_constant  $Name $Value)) 
+      (add-atom  &self 
+        (compiler-constant  $Name $Value)) 
       (set-det)))
   (= (assert-constant $C)  
-    (pl2am-error (:: $C is an invalid constant declaration))
-    (fail))
+    ( (pl2am-error (:: $C is an invalid constant declaration)) fail))
 
 ;
 ; ;; Conditional compilation
@@ -415,12 +403,11 @@
         (= ifdef_flag $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (pl2am-error (:: nested ifdef are not supported)) 
-      (fail)))
+      (pl2am-error (:: nested ifdef are not supported)) fail))
   (= (assert-ifdef $C)  
-    ( (not (==  (= (compiler_constant  $C $_) $_) (get-atoms  &self))) (add-is-symbol  &self skip_code)))
+    ( (not (==  (= (compiler-constant  $C $_) $_) (get-atoms  &self))) (add-atom  &self skip_code)))
   (= (assert-ifdef $_)  
-    (add-is-symbol  &self ifdef_flag))
+    (add-atom  &self ifdef_flag))
 
 
   (= (assert-ifndef $_)  
@@ -428,18 +415,17 @@
         (= ifdef_flag $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (pl2am-error (:: nested ifdef are not supported)) 
-      (fail)))
+      (pl2am-error (:: nested ifdef are not supported)) fail))
   (= (assert-ifndef $C)  
     ( (==  
         (= 
-          (compiler_constant  $C $_) $_) 
-        (get-atoms  &self)) (add-is-symbol  &self skip_code)))
+          (compiler-constant  $C $_) $_) 
+        (get-atoms  &self)) (add-atom  &self skip_code)))
   (= (assert-ifndef $_)  
-    (add-is-symbol  &self ifdef_flag))
+    (add-atom  &self ifdef_flag))
 
 
-  (= (assert-elsedef)  
+  (= assert-elsedef  
     ( (==  
         (= ifdef_flag $_) 
         (get-atoms  &self)) 
@@ -448,29 +434,27 @@
         (get-atoms  &self)) 
       (set-det) 
       (remove-all-atoms  &self skip_code)))
-  (= (assert-elsedef)  
+  (= assert-elsedef  
     ( (==  
         (= ifdef_flag $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (add-is-symbol  &self skip_code)))
-  (= (assert-elsedef)  
-    (set-det)
-    (pl2am-error (:: elsedef without ifdef))
-    (fail))
+      (add-atom  &self skip_code)))
+  (= assert-elsedef  
+    ( (set-det) 
+      (pl2am-error (:: elsedef without ifdef)) fail))
 
 
-  (= (assert-enddef)  
+  (= assert-enddef  
     ( (==  
         (= ifdef_flag $_) 
         (get-atoms  &self)) 
       (set-det) 
       (remove-all-atoms  &self skip_code) 
       (remove-all-atoms  &self ifdef_flag)))
-  (= (assert-enddef)  
-    (set-det)
-    (pl2am-error (:: enddef without ifdef))
-    (fail))
+  (= assert-enddef  
+    ( (set-det) 
+      (pl2am-error (:: enddef without ifdef)) fail))
 
 ;
 ; ;; Include files
@@ -478,39 +462,38 @@
   (= (assert-include-file $F)  
     ( (==  
         (= 
-          (file_name  $BaseFile) $_) 
+          (file-name  $BaseFile) $_) 
         (get-atoms  &self)) 
       (pl2am-resolve-file $BaseFile $F $IncludeFile) 
       (==  
         (= 
-          (included_file  $IncludeFile) $_) 
+          (included-file  $IncludeFile) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (assert-include-file $F)  
     ( (==  
         (= 
-          (file_name  $BaseFile) $_) 
+          (file-name  $BaseFile) $_) 
         (get-atoms  &self)) 
       (pl2am-resolve-file $BaseFile $F $IncludeFile) 
-      (add-is-symbol  &self 
-        (included_file  $IncludeFile)) 
+      (add-atom  &self 
+        (included-file  $IncludeFile)) 
       (remove-all-atoms  &self 
-        (file_name  $_)) 
-      (add-is-symbol  &self 
-        (file_name  $IncludeFile)) 
+        (file-name  $_)) 
+      (add-atom  &self 
+        (file-name  $IncludeFile)) 
       (read-in-file $IncludeFile) 
       (remove-all-atoms  &self 
-        (file_name  $_)) 
-      (add-is-symbol  &self 
-        (file_name  $BaseFile)) 
+        (file-name  $_)) 
+      (add-atom  &self 
+        (file-name  $BaseFile)) 
       (set-det)))
   (= (assert-include-file $F)  
     ( (==  
         (= 
-          (file_name  $BaseFile) $_) 
+          (file-name  $BaseFile) $_) 
         (get-atoms  &self)) 
-      (pl2am-error (:: failed to include file $F in $BaseFile)) 
-      (fail)))
+      (pl2am-error (:: failed to include file $F in $BaseFile)) fail))
 
 ;
 ; ;; Database declaration
@@ -520,11 +503,10 @@
         (= $Name $_)) 
       (==  
         (= 
-          (domain_definition  $Name $_) $_) 
+          (domain-definition  $Name $_) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (pl2am-error (:: database $Name is already defined)) 
-      (fail)))
+      (pl2am-error (:: database $Name is already defined)) fail))
   (= (assert-database $D)  
     (= $D 
       (= $_ $Value))
@@ -532,8 +514,7 @@
     (assert-database-dynamic $Value)
     (set-det))
   (= (assert-database $D)  
-    (pl2am-error (:: $D is an invalid database definition))
-    (fail))
+    ( (pl2am-error (:: $D is an invalid database definition)) fail))
 
 
   (= (assert-database-dynamic (or $Fact $Tail))  
@@ -556,20 +537,19 @@
 
 
   (= (assert-dynamic $G)  
-    (not (==  (= (package_name  SxxMachine.builtin) $_) (get-atoms  &self)))
-    (= $G 
-      (/ $F $A))
-    (functor $Head $F $A)
-    (system-predicate $Head)
-    (set-det)
-    (pl2am-error (:: can not redefine builtin predicate (/ $F $A)))
-    (fail))
+    ( (not (==  (= (package-name  SxxMachine.builtin) $_) (get-atoms  &self))) 
+      (= $G 
+        (/ $F $A)) 
+      (functor $Head $F $A) 
+      (system-predicate $Head) 
+      (set-det) 
+      (pl2am-error (:: can not redefine builtin predicate (/ $F $A))) fail))
   (= (assert-dynamic $G)  
     ( (= $G 
         (/ $F $A)) 
       (==  
         (= 
-          (dynamic_predicates  $F $A $_) $_) 
+          (dynamic-predicates  $F $A $_) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (assert-dynamic $G)  
@@ -577,14 +557,13 @@
         (/ $F $A)) 
       (==  
         (= 
-          (database_call  $Call) $_) 
+          (database-call  $Call) $_) 
         (get-atoms  &self)) 
-      (add-is-symbol  &self 
-        (dynamic_predicates  $F $A $Call)) 
+      (add-atom  &self 
+        (dynamic-predicates  $F $A $Call)) 
       (set-det)))
   (= (assert-dynamic $G)  
-    (pl2am-error (:: $G is an invalid dynamic declaration))
-    (fail))
+    ( (pl2am-error (:: $G is an invalid dynamic declaration)) fail))
 
 ;
 ; ;; Domain definitions
@@ -594,20 +573,18 @@
         (= $Name $_)) 
       (==  
         (= 
-          (domain_definition  $Name $_) $_) 
+          (domain-definition  $Name $_) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      (pl2am-error (:: domain $Name is already defined)) 
-      (fail)))
+      (pl2am-error (:: domain $Name is already defined)) fail))
   (= (assert-domain-definition $D)  
     ( (= $D 
         (= $Name $Value)) 
-      (add-is-symbol  &self 
-        (domain_definition  $Name $Value)) 
+      (add-atom  &self 
+        (domain-definition  $Name $Value)) 
       (set-det)))
   (= (assert-domain-definition $D)  
-    (pl2am-error (:: $D is an invalid domain definition))
-    (fail))
+    ( (pl2am-error (:: $D is an invalid domain definition)) fail))
 
 ;
 ; ;; Meta Predicates Declaration
@@ -623,7 +600,7 @@
     ( (functor $G $F $A) 
       (==  
         (= 
-          (meta_predicates  $F $A $_) $_) 
+          (meta-predicates  $F $A $_) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (assert-meta $G)  
@@ -632,11 +609,10 @@
         (Cons  $_ $M)) 
       (mode-expr $M) 
       (set-det) 
-      (add-is-symbol  &self 
-        (meta_predicates  $F $A $M))))
+      (add-atom  &self 
+        (meta-predicates  $F $A $M))))
   (= (assert-meta $G)  
-    (pl2am-error (:: $G is an invalid meta-predicate declaration))
-    (fail))
+    ( (pl2am-error (:: $G is an invalid meta-predicate declaration)) fail))
 
 ;
 ; ;; Package Declaration
@@ -644,22 +620,20 @@
   (= (assert-package $G)  
     ( (==  
         (= 
-          (package_name  $G1) $_) 
+          (package-name  $G1) $_) 
         (get-atoms  &self)) 
       (\== $G $G1) 
       (set-det) 
-      (pl2am-error (:: duplicate package declarations : $G1 and $G)) 
-      (fail)))
+      (pl2am-error (:: duplicate package declarations : $G1 and $G)) fail))
   (= (assert-package $G)  
     ( (atom $G) 
       (set-det) 
-      (add-is-symbol  &self 
-        (package_name  $G)) 
+      (add-atom  &self 
+        (package-name  $G)) 
       (remove-all-atoms  &self 
-        (import_package  $G $_))))
+        (import-package  $G $_))))
   (= (assert-package $G)  
-    (pl2am-error (:: $G is invalid package declaration))
-    (fail))
+    ( (pl2am-error (:: $G is invalid package declaration)) fail))
 
 ;
 ; ;; Public Declaration
@@ -675,11 +649,11 @@
     ( (predspec-expr (/ $F $A)) 
       (==  
         (= 
-          (public_predicates  $F $A) $_) 
+          (public-predicates  $F $A) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (assert-public (/ $F $A))  
-    ( (predspec-expr (/ $F $A)) (add-is-symbol  &self (public_predicates  $F $A))))
+    ( (predspec-expr (/ $F $A)) (add-atom  &self (public-predicates  $F $A))))
 
 ;
 ; ;; Import Declaration
@@ -688,7 +662,7 @@
     (atom $G)
     (set-det)
     (assert-impt $G *))
-  (= (assert-import (with_self  $M $P))  
+  (= (assert-import (with-self  $M $P))  
     (atom $M)
     (or 
       (predspec-expr $P) 
@@ -696,27 +670,26 @@
     (set-det)
     (assert-impt $M $P))
   (= (assert-import $G)  
-    (pl2am-error (:: $G is invalid import declaration))
-    (fail))
+    ( (pl2am-error (:: $G is invalid import declaration)) fail))
 
 
   (= (assert-impt $M $P)  
     ( (==  
         (= 
-          (package_name  $M) $_) 
+          (package-name  $M) $_) 
         (get-atoms  &self)) (set-det)))
   (= (assert-impt $M $P)  
     ( (==  
         (= 
-          (import_package  $M $P0) $_) 
+          (import-package  $M $P0) $_) 
         (get-atoms  &self)) 
       (or 
         (== $P0 *) 
         (== $P0 $P)) 
       (set-det)))
   (= (assert-impt $M $P)  
-    (add-is-symbol  &self 
-      (import_package  $M $P)))
+    (add-atom  &self 
+      (import-package  $M $P)))
 
 ;
 ; ;; Assert Declaration (:- G)
@@ -724,11 +697,11 @@
   (= (assert-declarations $G)  
     ( (==  
         (= 
-          (internal_declarations  $G) $_) 
+          (internal-declarations  $G) $_) 
         (get-atoms  &self)) (set-det)))
   (= (assert-declarations $G)  
-    (add-is-symbol  &self 
-      (internal_declarations  $G)))
+    (add-atom  &self 
+      (internal-declarations  $G)))
 
 ;
 ; ;; Assert Cluase
@@ -736,31 +709,30 @@
   (= (assert-cls (= $Head  $Body))  
     ( (set-det) 
       (assert-predicate $Head) 
-      (add-is-symbol  &self 
-        (internal_clause  $Head $Body))))
+      (add-atom  &self 
+        (internal-clause  $Head $Body))))
   (= (assert-cls $Head)  
     ( (set-det) 
       (assert-predicate $Head) 
-      (add-is-symbol  &self 
-        (internal_clause  $Head true))))
+      (add-atom  &self 
+        (internal-clause  $Head true))))
 
 
   (= (assert-predicate $Head)  
-    (not (==  (= (package_name  SxxMachine.builtin) $_) (get-atoms  &self)))
-    (system-predicate $Head)
-    (set-det)
-    (functor $Head $Functor $Arity)
-    (pl2am-error (:: can not redefine builtin predicate (/ $Functor $Arity)))
-    (fail))
+    ( (not (==  (= (package-name  SxxMachine.builtin) $_) (get-atoms  &self))) 
+      (system-predicate $Head) 
+      (set-det) 
+      (functor $Head $Functor $Arity) 
+      (pl2am-error (:: can not redefine builtin predicate (/ $Functor $Arity))) fail))
   (= (assert-predicate $Head)  
     ( (functor $Head $Functor $Arity) 
       (==  
         (= 
-          (internal_predicates  $Functor $Arity) $_) 
+          (internal-predicates  $Functor $Arity) $_) 
         (get-atoms  &self)) 
       (set-det)))
   (= (assert-predicate $Head)  
-    ( (functor $Head $Functor $Arity) (add-is-symbol  &self (internal_predicates  $Functor $Arity))))
+    ( (functor $Head $Functor $Arity) (add-atom  &self (internal-predicates  $Functor $Arity))))
 
 ;
 ; ;; Preprocess
@@ -768,7 +740,7 @@
   (= (preprocess $Cl0 $Cl)  
     ( (==  
         (= 
-          (pl2am_flag  ed) $_) 
+          (pl2am-flag  ed) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (expand-term $Cl0 $Cl1) 
@@ -792,34 +764,30 @@
   (= (compile-all-predicates $Out)  
     ( (==  
         (= 
-          (internal_declarations  $G) $_) 
+          (internal-declarations  $G) $_) 
         (get-atoms  &self)) 
       (writeq $Out 
         !$G) 
       (write $Out .) 
-      (nl $Out) 
-      (fail)))
+      (nl $Out) fail))
 ; /***************************************************************** Compile MeTTa Program *****************************************************************/
 ; ; output declarations (ex. op/3)
   (= (compile-all-predicates $_)  
-    (findall 
-      (/ $Functor $Arity) 
-      (dynamic-predicates $Functor $Arity 
-        (with_self  
-          (SxxMachine.builtin *) 
-          (call))) $PredSpecs)
-    (assert-init-clauses $PredSpecs)
-    (fail))
+    ( (findall 
+        (/ $Functor $Arity) 
+        (dynamic-predicates $Functor $Arity 
+          (with-self  
+            (SxxMachine.builtin *) call)) $PredSpecs) 
+      (assert-init-clauses $PredSpecs) fail))
 ; ; treat dynamic declaration
   (= (compile-all-predicates $Out)  
     ( (==  
         (= 
-          (internal_predicates  $Functor $Arity) $_) 
+          (internal-predicates  $Functor $Arity) $_) 
         (get-atoms  &self)) 
       (compile-predicate $Functor $Arity $Instructions Nil) 
       (write-asm $Out $Instructions) 
-      (nl $Out) 
-      (fail)))
+      (nl $Out) fail))
 ; ; compile predicate
   (= (compile-all-predicates $Out)  
     (write-domain-definitions $Out))
@@ -854,7 +822,7 @@
       (comment $Comment))
     (write $Out .)
     (nl $Out))
-  (= (write-asm $Out (with_self  $Label $Instruction))  
+  (= (write-asm $Out (with-self  $Label $Instruction))  
     (set-det)
     (writeq $Out $Label)
     (write $Out  :)
@@ -871,31 +839,30 @@
   (= (write-domain-definitions $Out)  
     ( (==  
         (= 
-          (package_name  $PackageName) $_) 
+          (package-name  $PackageName) $_) 
         (get-atoms  &self)) 
       (==  
         (= 
-          (domain_definition  $Name $Value) $_) 
+          (domain-definition  $Name $Value) $_) 
         (get-atoms  &self)) 
       (= $AssertTerm 
-        ! (add-is-symbol  &self 
-            (domain_definition  
+        ! (add-atom  &self 
+            (domain-definition  
               (= (:  $PackageName $Name)  $Value)))) 
       (writeq $Out $AssertTerm) 
       (write $Out .) 
-      (nl $Out) 
-      (fail)))
-  (= (write_domain_definitions  $_)  True)
+      (nl $Out) fail))
+  (= (write-domain-definitions  $_)  True)
 
 
   (= (write-init $InitPredicate)  
     ( (==  
         (= 
-          (package_name  $PackageName) $_) 
+          (package-name  $PackageName) $_) 
         (get-atoms  &self)) 
       (==  
         (= 
-          (pl2am_flag  
+          (pl2am-flag  
             (pif  $PackageInitFolder)) $_) 
         (get-atoms  &self)) 
       (list-to-string 
@@ -903,7 +870,7 @@
       (with-mutex $PackageName 
         (write-init-file $File $PackageName $InitPredicate))))
 
-  (= (write_init  $_)  True)
+  (= (write-init  $_)  True)
 
 
   (= (write-init-file $File $PackageName $InitPredicate)  
@@ -924,7 +891,7 @@
 ; ;PackageName == InPackageName,
 ; ;InitHead == InInitHead,
 
-  (= (write_init_file  $_ $_ $_)  True)
+  (= (write-init-file  $_ $_ $_)  True)
 
 
   (= (conj-member $X $X)  
@@ -948,7 +915,7 @@
   (= (conj-union $X $Y $Y)  
     (conj-member $X $Y)
     (set-det))
-  (= (conj_union  $X $Y (,  $X $Y))  True)
+  (= (conj-union  $X $Y (,  $X $Y))  True)
 
 
   (= (read-init-predicate $File $PackageName $InitPredicate)  
@@ -989,25 +956,25 @@
   (= (collect-init-cls (Cons  (/ $F $A) $FAs) (Cons  $Cls $Cls1))  
     ( (==  
         (= 
-          (internal_predicates  $F $A) $_) 
+          (internal-predicates  $F $A) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (functor $Head $F $A) 
       (findall 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (:-  $Head $Body)) 
         (internal-clause $Head $Body) $Cls) 
       (remove-all-atoms  &self 
-        (internal_predicates  $F $A)) 
+        (internal-predicates  $F $A)) 
       (remove-all-atoms  &self 
-        (internal_clause  $Head $_)) 
+        (internal-clause  $Head $_)) 
       (collect-init-cls $FAs $Cls1)))
 ;
 ; collect_init_cls([FA|FAs], [hash_put(P,FA,[])|Cls]) :-
-  (= (collect-init-cls (Cons  $FA $FAs) (Cons  ($new-indexing-hash $P $FA $_) $Cls))  
+  (= (collect-init-cls (Cons  $FA $FAs) (Cons  (%new-indexing-hash $P $FA $_) $Cls))  
     ( (==  
         (= 
-          (package_name  $P) $_) 
+          (package-name  $P) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (collect-init-cls $FAs $Cls)))
@@ -1017,34 +984,34 @@
     (set-det))
   (= (assert-init-cls $Cls)  
     (list-to-conj $Cls $Body)
-    (assert-clause (= (%init)  $Body)))
+    (assert-clause (= %init  $Body)))
 
 
-  (= (-->  (compile_predicate  $Functor $Arity) (,  {(functor  $Head $Functor $Arity) } (,  {(findall  (:-  $Head $Body) (internal_clause  $Head $Body) $Clauses) } (,  {(clause  (package_name  $P) $_) } (,  ((begin_predicate  $P (/  $Functor $Arity))) (,  (generate_info  $Functor $Arity) (,  generate_import (,  (compile_pred  $Clauses (/  $Functor $Arity)) ((end_predicate  $P (/  $Functor $Arity)))))))))))  True)
+  (= (-->  (compile-predicate  $Functor $Arity) (,  {(functor  $Head $Functor $Arity) } (,  {(findall  (:-  $Head $Body) (internal-clause  $Head $Body) $Clauses) } (,  {(clause  (package-name  $P) $_) } (,  ((begin-predicate  $P (/  $Functor $Arity))) (,  (generate-info  $Functor $Arity) (,  generate_import (,  (compile-pred  $Clauses (/  $Functor $Arity)) ((end-predicate  $P (/  $Functor $Arity)))))))))))  True)
 ; /**************************************************************** Compile Predicate ****************************************************************/
 
 ;
 ; ;; Program Code
-  (= (-->  (compile_pred  () $_) (,  () !))  True)
-  (= (-->  (compile_pred  ($Clause) $FA) (,  ! (,  {(check_modifier  $FA $MF) } (,  ((:  (main  $FA $MF) ())) (,  ($PutGroundTerm) (,  ((:  $FA ())) (,  ((comment  $Clause)) (,  (setB0) (,  ($DeclLocalVars) (,  {(= $FA  
-    (/  $_ $A)) } (,  (set_arguments  1 $A arg a set) (,  {(= $GTI0  
-    (1 () ())) } (,  (compile_clause  $Clause $GTI0 $GTI $LTI) (,  {(,  (= $GTI  
-    ($_ $_ $PutGroundTerm0)) (pl2am_rev  $PutGroundTerm0 $PutGroundTerm)) } {(,  (= $LTI  
-    (Cons  $XN 
-      (Cons  $_ 
-        (Cons  $PN $_)))) (generate_var_decl  (1 1) ($XN $PN) $DeclLocalVars ())) }))))))))))))))  True)
+  (= (-->  (compile-pred  () $_) (,  () !))  True)
+  (= (-->  (compile-pred  ($Clause) $FA) (,  ! (,  {(check-modifier  $FA $MF) } (,  ((:  (main  $FA $MF) ())) (,  ($PutGroundTerm) (,  ((:  $FA ())) (,  ((comment  $Clause)) (,  (setB0) (,  ($DeclLocalVars) (,  {(= $FA  
+    (/  $_ $A)) } (,  (set-arguments  1 $A arg a set) (,  {(= $GTI0  
+    (1 () ())) } (,  (compile-clause  $Clause $GTI0 $GTI $LTI) (,  {(,  (= $GTI  
+    ($_ $_ $PutGroundTerm0)) (pl2am-rev  $PutGroundTerm0 $PutGroundTerm)) } {(,  (= $LTI  
+    ([|]  $XN 
+      ([|]  $_ 
+        ([|]  $PN $_)))) (generate-var-decl  (1 1) ($XN $PN) $DeclLocalVars ())) }))))))))))))))  True)
 ; ; checks public or non-public
 ; ; generates put instructions of ground terms
 ; ; set B0 register for cut
 ; ; generates the declarations of local variables
 ; ; set arg(N) to a(N).
 ; ; GTI0 = [SN,SAlloc,PutGroundTerm]
-  (= (-->  (compile_pred  $Clauses $FA) (,  {(check_modifier  $FA $MF) } (,  ((:  (main  $FA $MF) ())) (,  ($PutGroundTerm) (,  ($OPT1) (,  ($PutLabel) (,  ($NewHash) (,  ($PutHash) (,  ((:  $FA ())) (,  {(= $FA  
-    (/  $Functor $Arity)) } (,  (set_arguments  1 $Arity arg ea set) (,  ((set  cont econt)) (,  ($OPT2) (,  ($OPT3) (,  (setB0) (,  (generate_switch  $Clauses $FA $GLI) (,  {(= $GTI0  
-    (1 () ())) } (,  (compile_pred2  $Clauses $FA 1 $GTI0 $GTI) (,  {(,  (= $GTI  
-    ($_ $SAlloc $PutGroundTerm0)) (pl2am_rev  $PutGroundTerm0 $PutGroundTerm)) } (,  {(= $GLI  
-    ($PutLabel $Hash0)) } (,  {(replace_hash_keys  $Hash0 $SAlloc $NewHash $PutHash0) } (,  {(;  (->  (==  $PutHash0 ()) (= $PutHash  )) (= $PutHash  
-    (static  $PutHash0))) } {(;  (->  (clause  (pl2am_flag  (rc  $Functor $Arity)) $_) (,  (= $OPT1  
+  (= (-->  (compile-pred  $Clauses $FA) (,  {(check-modifier  $FA $MF) } (,  ((:  (main  $FA $MF) ())) (,  ($PutGroundTerm) (,  ($OPT1) (,  ($PutLabel) (,  ($NewHash) (,  ($PutHash) (,  ((:  $FA ())) (,  {(= $FA  
+    (/  $Functor $Arity)) } (,  (set-arguments  1 $Arity arg ea set) (,  ((set  cont econt)) (,  ($OPT2) (,  ($OPT3) (,  (setB0) (,  (generate-switch  $Clauses $FA $GLI) (,  {(= $GTI0  
+    (1 () ())) } (,  (compile-pred2  $Clauses $FA 1 $GTI0 $GTI) (,  {(,  (= $GTI  
+    ($_ $SAlloc $PutGroundTerm0)) (pl2am-rev  $PutGroundTerm0 $PutGroundTerm)) } (,  {(= $GLI  
+    ($PutLabel $Hash0)) } (,  {(replace-hash-keys  $Hash0 $SAlloc $NewHash $PutHash0) } (,  {(;  (->  (==  $PutHash0 ()) (= $PutHash  )) (= $PutHash  
+    (static  $PutHash0))) } {(;  (->  (clause  (pl2am-flag  (rc  $Functor $Arity)) $_) (,  (= $OPT1  
     (label  
       (+  $FA top))) (,  (= $OPT2  
     (goto  
@@ -1066,52 +1033,52 @@
 ; ; replace the hash key with s(i), si(i), or sf(i)
 ; ; generate code for the recursize call optimization
 
-  (= (-->  (compile_pred2  () $_ $_ $GTI $GTI) !)  True)
-  (= (-->  (compile_pred2  (Cons  $Clause $Clauses) $FA $N $GTI0 $GTI) (,  ((:  (+  $FA $N) ())) (,  ((comment  $Clause)) (,  ($DeclLocalVars) (,  ((decl_pred_vars  (cont))) (,  {(= $FA  
-    (/  $_ $Arity)) } (,  (set_arguments  1 $Arity ea a set) (,  ((set  econt cont)) (,  (compile_clause  $Clause $GTI0 $GTI1 $LTI) (,  {(is  $N1 (+  $N 1)) } (,  (compile_pred2  $Clauses $FA $N1 $GTI1 $GTI) {(,  (= $LTI  
-    (Cons  $XN 
-      (Cons  $_ 
-        (Cons  $PN $_)))) (generate_var_decl  (1 1) ($XN $PN) $DeclLocalVars ())) })))))))))))  True)
+  (= (-->  (compile-pred2  () $_ $_ $GTI $GTI) !)  True)
+  (= (-->  (compile-pred2  ([|]  $Clause $Clauses) $FA $N $GTI0 $GTI) (,  ((:  (+  $FA $N) ())) (,  ((comment  $Clause)) (,  ($DeclLocalVars) (,  ((decl-pred-vars  (cont))) (,  {(= $FA  
+    (/  $_ $Arity)) } (,  (set-arguments  1 $Arity ea a set) (,  ((set  econt cont)) (,  (compile-clause  $Clause $GTI0 $GTI1 $LTI) (,  {(is  $N1 (+  $N 1)) } (,  (compile-pred2  $Clauses $FA $N1 $GTI1 $GTI) {(,  (= $LTI  
+    ([|]  $XN 
+      ([|]  $_ 
+        ([|]  $PN $_)))) (generate-var-decl  (1 1) ($XN $PN) $DeclLocalVars ())) })))))))))))  True)
 ; ; generates the declarations of local variables
 ; ; set engine.areg(N) to a(N).
 ; ; set engine.cont to cont
 
 ;
 ; ;; Control and Indexing instructions
-  (= (-->  (generate_switch  $Clauses $FA ($Label $Hash)) (,  {(generate_switch0  $Clauses $FA $Instrs ()) } (,  (generate_bp_label  $Instrs (+  $FA sub) 1 $Ls0 $SWTs) (,  {(;  (->  (retract  fail_flag) (= $Ls1  
-    (Cons  
+  (= (-->  (generate-switch  $Clauses $FA ($Label $Hash)) (,  {(generate-switch0  $Clauses $FA $Instrs ()) } (,  (generate-bp-label  $Instrs (+  $FA sub) 1 $Ls0 $SWTs) (,  {(;  (->  (retract  fail_flag) (= $Ls1  
+    ([|]  
       (label  
-        (/  fail 0)) $Ls0))) (= $Ls1  $Ls0)) } (,  {(length  $Clauses $N) } (,  {(generate_cl_label  $FA 1 $N $Ls2) } (,  {(pl2am_append  $Ls1 $Ls2 $Label) } {(gen_hash  $SWTs $Hash ()) })))))))  True)
+        (/  fail 0)) $Ls0))) (= $Ls1  $Ls0)) } (,  {(length  $Clauses $N) } (,  {(generate-cl-label  $FA 1 $N $Ls2) } (,  {(pl2am-append  $Ls1 $Ls2 $Label) } {(gen-hash  $SWTs $Hash ()) })))))))  True)
 ; ; generates try, retry, trust, switch_on_term, and switch_on_hash
 ; ; generates sub-labels for BP
 ; ; generates fail label (fail_flag may be asserted by generate_switch0/4)
 ; ; generates labels for clauses
 ; ; generates new_hash and put_hash instructions for switch_on_hash
 
-  (= (-->  (generate_switch0  $Clauses $FA) (,  {(get_indices  $Clauses $FA 1 $Is) } (generate_switch1  $Is $FA)))  True)
+  (= (-->  (generate-switch0  $Clauses $FA) (,  {(get-indices  $Clauses $FA 1 $Is) } (generate-switch1  $Is $FA)))  True)
 
 ;
 ; ;; 1st. Indexing
-  (= (-->  (generate_switch1  $Is $FA) (,  {(= $FA  
-    (/  $_ 0)) } (,  ! (generate_tries  $Is))))  True)
-  (= (-->  (generate_switch1  $Is $_) (,  {(all_variable_indices  $Is) } (,  ! (generate_tries  $Is))))  True)
-  (= (-->  (generate_switch1  $Is $FA) (,  ((switch_on_term  $LV $LI $LF $LC $LS $LL)) (,  (generate_sw  $Is $FA var $LV () $PIs0) (,  (generate_sw  $Is $FA int $LI $PIs0 $PIs1) (,  (generate_sw  $Is $FA flo $LF $PIs1 $PIs2) (,  (generate_sw  $Is $FA con $LC $PIs2 $PIs3) (,  (generate_sw  $Is $FA str $LS $PIs3 $PIs4) (generate_sw  $Is $FA lis $LL $PIs4 $_))))))))  True)
+  (= (-->  (generate-switch1  $Is $FA) (,  {(= $FA  
+    (/  $_ 0)) } (,  ! (generate-tries  $Is))))  True)
+  (= (-->  (generate-switch1  $Is $_) (,  {(all-variable-indices  $Is) } (,  ! (generate-tries  $Is))))  True)
+  (= (-->  (generate-switch1  $Is $FA) (,  ((switch-on-term  $LV $LI $LF $LC $LS $LL)) (,  (generate-sw  $Is $FA var $LV () $PIs0) (,  (generate-sw  $Is $FA int $LI $PIs0 $PIs1) (,  (generate-sw  $Is $FA flo $LF $PIs1 $PIs2) (,  (generate-sw  $Is $FA con $LC $PIs2 $PIs3) (,  (generate-sw  $Is $FA str $LS $PIs3 $PIs4) (generate-sw  $Is $FA lis $LL $PIs4 $_))))))))  True)
 
-  (= (-->  (generate_sw  $Is $FA $Tag $L $PIs0 $PIs) (,  {(select_indices  $Is $Tag $Is1) } (generate_sw1  $Is1 $FA $Tag $L $PIs0 $PIs)))  True)
+  (= (-->  (generate-sw  $Is $FA $Tag $L $PIs0 $PIs) (,  {(select-indices  $Is $Tag $Is1) } (generate-sw1  $Is1 $FA $Tag $L $PIs0 $PIs)))  True)
 
 ;
 ; ;; 2nd. Indexing
-  (= (-->  (generate_sw1  () $_ $_ (/  fail 0) $PIs $PIs) (,  ! {assert_fail }))  True)
-  (= (-->  (generate_sw1  ($I) $_ $_ $L $PIs $PIs) (,  ! {(= $I  
-    (Cons  $L $_)) }))  True)
-  (= (-->  (generate_sw1  $Is $FA $Tag $L $PIs0 $PIs) (,  {(no_switch_on_hash  $Is $Tag) } (,  ! (generate_sw2  $Is $FA $Tag $L $PIs0 $PIs))))  True)
-  (= (-->  (generate_sw1  $Is $FA $Tag (+  $FA $Tag) $PIs0 $PIs) (,  (generate_sw  $Is $FA nil $L $PIs0 $PIs) (,  {(count_unique_hash  $Is $Size $Keys) } (,  ((:  (+  $FA $Tag) (switch_on_hash  $Tag $Size $L $HT))) (,  {(generate_hash_table  $Keys $Is $LIs) } (generate_hash_tries  $LIs (+  $FA $Tag) 0 $HT))))))  True)
+  (= (-->  (generate-sw1  () $_ $_ (/  fail 0) $PIs $PIs) (,  ! {assert_fail }))  True)
+  (= (-->  (generate-sw1  ($I) $_ $_ $L $PIs $PIs) (,  ! {(= $I  
+    ([|]  $L $_)) }))  True)
+  (= (-->  (generate-sw1  $Is $FA $Tag $L $PIs0 $PIs) (,  {(no-switch-on-hash  $Is $Tag) } (,  ! (generate-sw2  $Is $FA $Tag $L $PIs0 $PIs))))  True)
+  (= (-->  (generate-sw1  $Is $FA $Tag (+  $FA $Tag) $PIs0 $PIs) (,  (generate-sw  $Is $FA nil $L $PIs0 $PIs) (,  {(count-unique-hash  $Is $Size $Keys) } (,  ((:  (+  $FA $Tag) (switch-on-hash  $Tag $Size $L $HT))) (,  {(generate-hash-table  $Keys $Is $LIs) } (generate-hash-tries  $LIs (+  $FA $Tag) 0 $HT))))))  True)
 
 
   (= (no-switch-on-hash $Is $Tag)  
     ( (==  
         (= 
-          (pl2am_flag  idx) $_) 
+          (pl2am-flag  idx) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (or 
@@ -1123,27 +1090,27 @@
             (, 
               (count-unique-hash $Is $C $_) 
               (< $C 2)))))))
-  (= (no_switch_on_hash  $_ $_)  True)
+  (= (no-switch-on-hash  $_ $_)  True)
 
 
-  (= (-->  (generate_sw2  $Is $_ $_ $L $PIs $PIs) (,  {(pl2am_member  (,  $L $Is) $PIs) } !))  True)
-  (= (-->  (generate_sw2  $Is $FA $Tag (+  $FA $Tag) $PIs0 (Cons  (,  (+  $FA $Tag) $Is) $PIs0)) (,  ((:  (+  $FA $Tag) ())) (generate_tries  $Is)))  True)
+  (= (-->  (generate-sw2  $Is $_ $_ $L $PIs $PIs) (,  {(pl2am-member  (,  $L $Is) $PIs) } !))  True)
+  (= (-->  (generate-sw2  $Is $FA $Tag (+  $FA $Tag) $PIs0 ([|]  (,  (+  $FA $Tag) $Is) $PIs0)) (,  ((:  (+  $FA $Tag) ())) (generate-tries  $Is)))  True)
 
-  (= (-->  (generate_hash_tries  () $_ $_ ()) !)  True)
-  (= (-->  (generate_hash_tries  (Cons  (:  $K ()) $LIs) $L0 $N (Cons  (:  $K (/  fail 0)) $Ls)) (,  ! (,  {assert_fail } (generate_hash_tries  $LIs $L0 $N $Ls))))  True)
-  (= (-->  (generate_hash_tries  (Cons  (:  $K ($I)) $LIs) $L0 $N (Cons  (:  $K $L) $Ls)) (,  ! (,  {(= $I  
-    (Cons  $L $_)) } (generate_hash_tries  $LIs $L0 $N $Ls))))  True)
-  (= (-->  (generate_hash_tries  (Cons  (:  $K $Is) $LIs) $L0 $N (Cons  (:  $K (+  $L0 $N)) $Ls)) (,  ((:  (+  $L0 $N) ())) (,  (generate_tries  $Is) (,  {(is  $N1 (+  $N 1)) } (generate_hash_tries  $LIs $L0 $N1 $Ls)))))  True)
+  (= (-->  (generate-hash-tries  () $_ $_ ()) !)  True)
+  (= (-->  (generate-hash-tries  ([|]  (:  $K ()) $LIs) $L0 $N ([|]  (:  $K (/  fail 0)) $Ls)) (,  ! (,  {assert_fail } (generate-hash-tries  $LIs $L0 $N $Ls))))  True)
+  (= (-->  (generate-hash-tries  ([|]  (:  $K ($I)) $LIs) $L0 $N ([|]  (:  $K $L) $Ls)) (,  ! (,  {(= $I  
+    ([|]  $L $_)) } (generate-hash-tries  $LIs $L0 $N $Ls))))  True)
+  (= (-->  (generate-hash-tries  ([|]  (:  $K $Is) $LIs) $L0 $N ([|]  (:  $K (+  $L0 $N)) $Ls)) (,  ((:  (+  $L0 $N) ())) (,  (generate-tries  $Is) (,  {(is  $N1 (+  $N 1)) } (generate-hash-tries  $LIs $L0 $N1 $Ls)))))  True)
 
 
   (= (generate-hash-table Nil $_ Nil)  
     (set-det))
-  (= (generate-hash-table (Cons  $K $Ks) $Is0 (Cons  (with_self  $K $Is) $LIs))  
+  (= (generate-hash-table (Cons  $K $Ks) $Is0 (Cons  (with-self  $K $Is) $LIs))  
     (select-hash $Is0 $K $Is)
     (generate-hash-table $Ks $Is0 $LIs))
 
 
-  (= (select_hash  () $_ ())  True)
+  (= (select-hash  () $_ ())  True)
   (= (select-hash (Cons  $I $Is0) $K (Cons  $I $Is))  
     (= $I 
       (:: $_ $_ $Tag $Hash))
@@ -1158,16 +1125,16 @@
 ;
 ; ;; Choice Point (try, retry, trust)
 
-  (= (-->  (generate_tries  (Cons  $I $Is)) (,  {(= $I  
-    (Cons  $L $_)) } (,  ((try  $L)) (generate_tries1  $Is))))  True)
+  (= (-->  (generate-tries  ([|]  $I $Is)) (,  {(= $I  
+    ([|]  $L $_)) } (,  ((try  $L)) (generate-tries1  $Is))))  True)
 
-  (= (-->  (generate_tries1  ($I)) (,  ! (,  {(= $I  
-    (Cons  $L $_)) } ((trust  $L)))))  True)
-  (= (-->  (generate_tries1  (Cons  $I $Is)) (,  {(= $I  
-    (Cons  $L $_)) } (,  ((retry  $L)) (generate_tries1  $Is))))  True)
+  (= (-->  (generate-tries1  ($I)) (,  ! (,  {(= $I  
+    ([|]  $L $_)) } ((trust  $L)))))  True)
+  (= (-->  (generate-tries1  ([|]  $I $Is)) (,  {(= $I  
+    ([|]  $L $_)) } (,  ((retry  $L)) (generate-tries1  $Is))))  True)
 
 
-  (= (get_indices  () $_ $_ ())  True)
+  (= (get-indices  () $_ $_ ())  True)
   (= (get-indices (Cons  $_ $Clauses) $FA $N (Cons  (:: (+ $FA $N)) $Is))  
     (= $FA 
       (/ $_ 0))
@@ -1206,12 +1173,12 @@
     (set-det))
 
 
-  (= (all_variable_indices  ())  True)
+  (= (all-variable-indices  ())  True)
   (= (all-variable-indices (Cons  (:: $_ $_ var $_) $Is))  
     (all-variable-indices $Is))
 
 
-  (= (count_unique_hash  () 0 ())  True)
+  (= (count-unique-hash  () 0 ())  True)
   (= (count-unique-hash (Cons  $I $Is) $C $K)  
     (count-unique-hash $Is $C0 $K0)
     (= $I 
@@ -1231,7 +1198,7 @@
           (Cons  $Hash $K0)))))
 
 
-  (= (select_indices  () $_ ())  True)
+  (= (select-indices  () $_ ())  True)
   (= (select-indices (Cons  $I $Is0) $Tag (Cons  $I $Is))  
     (= $I 
       (Cons  $_ 
@@ -1250,23 +1217,23 @@
 ;
 ; ;; Assert Fail Flag
 
-  (= (assert-fail)  
+  (= assert-fail  
     ( (==  
         (= fail_flag $_) 
         (get-atoms  &self)) (set-det)))
-  (= (assert-fail)  
-    (add-is-symbol  &self fail_flag))
+  (= assert-fail  
+    (add-atom  &self fail_flag))
 
 ;
 ; ;; Generate Labels for Backtrack Point
 
-  (= (-->  (generate_bp_label  () $_ $_ () ()) !)  True)
-  (= (-->  (generate_bp_label  (Cons  $X $Xs) $CL $N $Ls (Cons  $X $Hs)) (,  {(= $X  
-    (switch_on_hash  $_ $_ $_ $_)) } (,  ! (,  ($X) (generate_bp_label  $Xs $CL $N $Ls $Hs)))))  True)
-  (= (-->  (generate_bp_label  (Cons  (try  $L) $Xs) $CL $N (Cons  (label  (+  $CL $N)) $Ls) $Hs) (,  ! (,  ((try  $L (+  $CL $N))) (,  ((:  (+  $CL $N) ())) (,  {(is  $N1 (+  $N 1)) } (generate_bp_label  $Xs $CL $N1 $Ls $Hs))))))  True)
-  (= (-->  (generate_bp_label  (Cons  (retry  $L) $Xs) $CL $N (Cons  (label  (+  $CL $N)) $Ls) $Hs) (,  ! (,  ((retry  $L (+  $CL $N))) (,  ((:  (+  $CL $N) ())) (,  {(is  $N1 (+  $N 1)) } (generate_bp_label  $Xs $CL $N1 $Ls $Hs))))))  True)
-  (= (-->  (generate_bp_label  (Cons  (:  $L $X) $Xs) $_ $_ (Cons  (label  $L) $Ls) $Hs) (,  ! (,  ((:  $L ())) (generate_bp_label  (Cons  $X $Xs) $L 1 $Ls $Hs))))  True)
-  (= (-->  (generate_bp_label  (Cons  $X $Xs) $CL $N $Ls $Hs) (,  ($X) (generate_bp_label  $Xs $CL $N $Ls $Hs)))  True)
+  (= (-->  (generate-bp-label  () $_ $_ () ()) !)  True)
+  (= (-->  (generate-bp-label  ([|]  $X $Xs) $CL $N $Ls ([|]  $X $Hs)) (,  {(= $X  
+    (switch-on-hash  $_ $_ $_ $_)) } (,  ! (,  ($X) (generate-bp-label  $Xs $CL $N $Ls $Hs)))))  True)
+  (= (-->  (generate-bp-label  ([|]  (try  $L) $Xs) $CL $N ([|]  (label  (+  $CL $N)) $Ls) $Hs) (,  ! (,  ((try  $L (+  $CL $N))) (,  ((:  (+  $CL $N) ())) (,  {(is  $N1 (+  $N 1)) } (generate-bp-label  $Xs $CL $N1 $Ls $Hs))))))  True)
+  (= (-->  (generate-bp-label  ([|]  (retry  $L) $Xs) $CL $N ([|]  (label  (+  $CL $N)) $Ls) $Hs) (,  ! (,  ((retry  $L (+  $CL $N))) (,  ((:  (+  $CL $N) ())) (,  {(is  $N1 (+  $N 1)) } (generate-bp-label  $Xs $CL $N1 $Ls $Hs))))))  True)
+  (= (-->  (generate-bp-label  ([|]  (:  $L $X) $Xs) $_ $_ ([|]  (label  $L) $Ls) $Hs) (,  ! (,  ((:  $L ())) (generate-bp-label  ([|]  $X $Xs) $L 1 $Ls $Hs))))  True)
+  (= (-->  (generate-bp-label  ([|]  $X $Xs) $CL $N $Ls $Hs) (,  ($X) (generate-bp-label  $Xs $CL $N $Ls $Hs)))  True)
 
 
   (= (generate-cl-label $_ $I $N Nil)  
@@ -1280,11 +1247,11 @@
 ;
 ; ;; Generate Hash instructions for switch_on_hash
 
-  (= (-->  (gen_hash  ()) !)  True)
-  (= (-->  (gen_hash  (Cons  (switch_on_hash  $T $S $_ $H) $Xs)) (,  ! (,  ((new_hash  $T $S)) (,  (gen_put_hash  $H $T) (gen_hash  $Xs)))))  True)
+  (= (-->  (gen-hash  ()) !)  True)
+  (= (-->  (gen-hash  ([|]  (switch-on-hash  $T $S $_ $H) $Xs)) (,  ! (,  ((new-hash  $T $S)) (,  (gen-put-hash  $H $T) (gen-hash  $Xs)))))  True)
 
-  (= (-->  (gen_put_hash  () $_) !)  True)
-  (= (-->  (gen_put_hash  (Cons  (:  $K $V) $Xs) $T) (,  ((put_hash  $K $V $T)) (gen_put_hash  $Xs $T)))  True)
+  (= (-->  (gen-put-hash  () $_) !)  True)
+  (= (-->  (gen-put-hash  ([|]  (:  $K $V) $Xs) $T) (,  ((put-hash  $K $V $T)) (gen-put-hash  $Xs $T)))  True)
 
 
   (= (replace-hash-keys Nil $_ Nil Nil)  
@@ -1300,22 +1267,19 @@
   (= (replace-key $K $Alloc $X)  
     (integer $K)
     (allocated $Alloc 
-      (with_self  $K 
-        (int)) 
+      (with-self  $K int) 
       (:: $X yes))
     (set-det))
   (= (replace-key $K $Alloc $X)  
     (float $K)
     (allocated $Alloc 
-      (with_self  $K 
-        (flo)) 
+      (with-self  $K flo) 
       (:: $X yes))
     (set-det))
   (= (replace-key $K $Alloc $X)  
     (atom $K)
     (allocated $Alloc 
-      (with_self  $K 
-        (con)) 
+      (with-self  $K con) 
       (:: $X yes))
     (set-det))
   (= (replace-key $K $Alloc $X)  
@@ -1325,26 +1289,24 @@
     (atom $F)
     (integer $A)
     (allocated $Alloc 
-      (with_self  $K 
-        (con)) 
+      (with-self  $K con) 
       (:: $X yes))
     (set-det))
   (= (replace-key $K $_ $_)  
-    (pl2am-error (:: replacement of hash key $K failed))
-    (fail))
+    ( (pl2am-error (:: replacement of hash key $K failed)) fail))
 
 ;
 ; ;; Import Declarations
 
-  (= (-->  generate_import (,  {(findall  (,  $P $C) (import_package  $P $C) $X) } (gen_import  $X)))  True)
+  (= (-->  generate_import (,  {(findall  (,  $P $C) (import-package  $P $C) $X) } (gen-import  $X)))  True)
 
-  (= (-->  (gen_import  ()) !)  True)
-  (= (-->  (gen_import  (Cons  (,  $P *) $Xs)) (,  ! (,  ((import_package  $P)) (gen_import  $Xs))))  True)
-  (= (-->  (gen_import  (Cons  (,  $P $C) $Xs)) (,  ((import_package  $P $C)) (gen_import  $Xs)))  True)
+  (= (-->  (gen-import  ()) !)  True)
+  (= (-->  (gen-import  ([|]  (,  $P *) $Xs)) (,  ! (,  ((import-package  $P)) (gen-import  $Xs))))  True)
+  (= (-->  (gen-import  ([|]  (,  $P $C) $Xs)) (,  ((import-package  $P $C)) (gen-import  $Xs)))  True)
 
 ;
 ; ;; Information
-  (= (-->  (generate_info  $Functor $Arity) (,  {(clause  (file_name  $File) $_) } ((info  ((/  $Functor $Arity) $File)))))  True)
+  (= (-->  (generate-info  $Functor $Arity) (,  {(clause  (file-name  $File) $_) } ((info  ((/  $Functor $Arity) $File)))))  True)
 
 ;
 ; ;; Check the Modifier of Predicate F/A.
@@ -1354,9 +1316,9 @@
   (= (check-modifier (/ $F $A) public)  
     ( (==  
         (= 
-          (public_predicates  $F $A) $_) 
+          (public-predicates  $F $A) $_) 
         (get-atoms  &self)) (set-det)))
-  (= (check_modifier  $_ (-  non public))  True)
+  (= (check-modifier  $_ (-  non public))  True)
 
 ;
 ; ;; generate a list of registers with given range.
@@ -1375,38 +1337,38 @@
 ;
 ; ;; generate set instructions
 
-  (= (-->  (gen_set  () ()) !)  True)
-  (= (-->  (gen_set  (Cons  $X $Xs) (Cons  $Y $Ys)) (,  ((set  $X $Y)) (gen_set  $Xs $Ys)))  True)
+  (= (-->  (gen-set  () ()) !)  True)
+  (= (-->  (gen-set  ([|]  $X $Xs) ([|]  $Y $Ys)) (,  ((set  $X $Y)) (gen-set  $Xs $Ys)))  True)
 
 ;
 ; ;; generate deref instructions
-  (= (-->  (gen_deref  () ()) !)  True)
-  (= (-->  (gen_deref  (Cons  $X $Xs) (Cons  $Y $Ys)) (,  ((deref  $X $Y)) (gen_deref  $Xs $Ys)))  True)
+  (= (-->  (gen-deref  () ()) !)  True)
+  (= (-->  (gen-deref  ([|]  $X $Xs) ([|]  $Y $Ys)) (,  ((deref  $X $Y)) (gen-deref  $Xs $Ys)))  True)
 
 ;
 ; ;; generate set and deref instructions
-  (= (-->  (set_arguments  $SN $EN $R1 $R2 $Flag) (,  {(range_reg  $SN $EN $R1 $L1) } (,  {(range_reg  $SN $EN $R2 $L2) } (gen_set_arg  $Flag $L1 $L2))))  True)
+  (= (-->  (set-arguments  $SN $EN $R1 $R2 $Flag) (,  {(range-reg  $SN $EN $R1 $L1) } (,  {(range-reg  $SN $EN $R2 $L2) } (gen-set-arg  $Flag $L1 $L2))))  True)
 
-  (= (-->  (gen_set_arg  set $L1 $L2) (gen_set  $L1 $L2))  True)
-  (= (-->  (gen_set_arg  deref $L1 $L2) (gen_deref  $L1 $L2))  True)
+  (= (-->  (gen-set-arg  set $L1 $L2) (gen-set  $L1 $L2))  True)
+  (= (-->  (gen-set-arg  deref $L1 $L2) (gen-deref  $L1 $L2))  True)
 
 ;
 ; ;; generate decl_var instructions
-  (= (-->  (generate_var_decl  ($X0 $P0) ($XN $PN)) (,  {(,  (is  $X1 (-  $XN 1)) (is  $P1 (-  $PN 1))) } (,  {(range_reg  $X0 $X1 a $XL) } (,  {(range_reg  $P0 $P1 p $PL) } (,  (gen_decl_term_vars  $XL) (gen_decl_pred_vars  $PL))))))  True)
+  (= (-->  (generate-var-decl  ($X0 $P0) ($XN $PN)) (,  {(,  (is  $X1 (-  $XN 1)) (is  $P1 (-  $PN 1))) } (,  {(range-reg  $X0 $X1 a $XL) } (,  {(range-reg  $P0 $P1 p $PL) } (,  (gen-decl-term-vars  $XL) (gen-decl-pred-vars  $PL))))))  True)
 
-  (= (-->  (gen_decl_term_vars  ()) !)  True)
-  (= (-->  (gen_decl_term_vars  $XL) ((decl_term_vars  $XL)))  True)
+  (= (-->  (gen-decl-term-vars  ()) !)  True)
+  (= (-->  (gen-decl-term-vars  $XL) ((decl-term-vars  $XL)))  True)
 
-  (= (-->  (gen_decl_pred_vars  ()) !)  True)
-  (= (-->  (gen_decl_pred_vars  $PL) ((decl_pred_vars  $PL)))  True)
+  (= (-->  (gen-decl-pred-vars  ()) !)  True)
+  (= (-->  (gen-decl-pred-vars  $PL) ((decl-pred-vars  $PL)))  True)
 
-  (= (-->  (compile_clause  (:-  $Head $Body) $GTI0 $GTI $LTI) (,  {(pretreat_body  $Body $Goals0) } (,  {(localize_meta  $Goals0 $Goals) } (,  {(precompile  $Head $Goals $Instrs) } (,  ((comment  (:-  $Head $Goals))) (,  (compile_chunks  $Instrs $GTI0 $GTI $LTI) !))))))  True)
+  (= (-->  (compile-clause  (:-  $Head $Body) $GTI0 $GTI $LTI) (,  {(pretreat-body  $Body $Goals0) } (,  {(localize-meta  $Goals0 $Goals) } (,  {(precompile  $Head $Goals $Instrs) } (,  ((comment  (:-  $Head $Goals))) (,  (compile-chunks  $Instrs $GTI0 $GTI $LTI) !))))))  True)
 ; /**************************************************************** Compile Clause ****************************************************************/
 ; ; cut, rename, compile aith exp.
 ; ; add package name for meta predicates
 ; ; generate get, put, put_clo, put_cont, inline
 ; ; output precompiled clause
-  (= (-->  (compile_clause  $Clause $_ $_ $_) (,  {(pl2am_error  (compilation of $Clause failed)) } {fail }))  True)
+  (= (-->  (compile-clause  $Clause $_ $_ $_) (,  {(pl2am-error  (compilation of $Clause failed)) } {fail }))  True)
 
 ;
 ; ;;;;;;;;; Pretreat Body and Compile Arithmetic Expressions
@@ -1419,109 +1381,109 @@
   (= (pretreat-cut $Cut $Gs $Gs)  
     (var $Cut)
     (set-det))
-  (= (pretreat-cut ($cut $Level) (Cons  ($cut $Level) $Gs) (Cons  %neck-cut $Gs))  
-    (not (pl2am-member ($cut $Level) $Gs))
+  (= (pretreat-cut (%cut $Level) (Cons  (%cut $Level) $Gs) (Cons  %neck-cut $Gs))  
+    (not (pl2am-member (%cut $Level) $Gs))
     (set-det))
-  (= (pretreat-cut ($cut $Level) (Cons  ($cut $Level) $Gs) (Cons  ($get-level $Level) (Cons  %neck-cut $Gs)))  
+  (= (pretreat-cut (%cut $Level) (Cons  (%cut $Level) $Gs) (Cons  (%get-level $Level) (Cons  %neck-cut $Gs)))  
     (set-det))
-  (= (pretreat_cut  (%cut  $Level) $Gs (Cons  (%get_level  $Level) $Gs))  True)
+  (= (pretreat-cut  (%cut  $Level) $Gs ([|]  (%get-level  $Level) $Gs))  True)
 
 
-  (= (-->  (pretreat_body0  $G $_) (,  {(var  $G) } (,  ! ((call  $G)))))  True)
-  (= (-->  (pretreat_body0  ! $Cut) (,  ! (,  {(= $Cut  
+  (= (-->  (pretreat-body0  $G $_) (,  {(var  $G) } (,  ! ((call  $G)))))  True)
+  (= (-->  (pretreat-body0  ! $Cut) (,  ! (,  {(= $Cut  
     (%cut  $Level)) } ((%cut  $Level)))))  True)
-  (= (-->  (pretreat_body0  otherwise $_) !)  True)
-  (= (-->  (pretreat_body0  true $_) !)  True)
-  (= (-->  (pretreat_body0  fail $_) (,  ! (fail)))  True)
-  (= (-->  (pretreat_body0  false $_) (,  ! (fail)))  True)
-  (= (-->  (pretreat_body0  halt $_) (,  ! (halt)))  True)
-  (= (-->  (pretreat_body0  abort $_) (,  ! (abort)))  True)
-  (= (-->  (pretreat_body0  (,  $G1 $G2) $Cut) (,  ! (,  (pretreat_body0  $G1 $Cut) (pretreat_body0  $G2 $Cut))))  True)
-  (= (-->  (pretreat_body0  $G $_) (,  (pretreat_builtin  $G) !))  True)
-  (= (-->  (pretreat_body0  $G $_) (,  {(,  (functor  $G $F $A) (,  (clause  (dynamic_predicates  $F $A (:  $_ $Call)) $_) (=..  $CG ($Call $G)))) } (,  ! ($CG))))  True)
-  (= (-->  (pretreat_body0  (findall  $X $G $L) $Z) (,  {(,  (nonvar  $G) (,  (functor  $G $F $A) (,  (clause  (dynamic_predicates  $F $A $Call) $_) (,  (\==  $Call (:  SxxMachine.builtin call)) (,  (= $Call  
-    (:  $P $C)) (,  (clause  (package_name  $P1) $_) (=..  $CG ($C (:  $P1 $G))))))))) } (,  ! (pretreat_body0  (findall  $X (:  $P $CG) $L) $Z))))  True)
+  (= (-->  (pretreat-body0  otherwise $_) !)  True)
+  (= (-->  (pretreat-body0  true $_) !)  True)
+  (= (-->  (pretreat-body0  fail $_) (,  ! (fail)))  True)
+  (= (-->  (pretreat-body0  false $_) (,  ! (fail)))  True)
+  (= (-->  (pretreat-body0  halt $_) (,  ! (halt)))  True)
+  (= (-->  (pretreat-body0  abort $_) (,  ! (abort)))  True)
+  (= (-->  (pretreat-body0  (,  $G1 $G2) $Cut) (,  ! (,  (pretreat-body0  $G1 $Cut) (pretreat-body0  $G2 $Cut))))  True)
+  (= (-->  (pretreat-body0  $G $_) (,  (pretreat-builtin  $G) !))  True)
+  (= (-->  (pretreat-body0  $G $_) (,  {(,  (functor  $G $F $A) (,  (clause  (dynamic-predicates  $F $A (:  $_ $Call)) $_) (=..  $CG ($Call $G)))) } (,  ! ($CG))))  True)
+  (= (-->  (pretreat-body0  (findall  $X $G $L) $Z) (,  {(,  (nonvar  $G) (,  (functor  $G $F $A) (,  (clause  (dynamic-predicates  $F $A $Call) $_) (,  (\==  $Call (:  SxxMachine.builtin call)) (,  (= $Call  
+    (:  $P $C)) (,  (clause  (package-name  $P1) $_) (=..  $CG ($C (:  $P1 $G))))))))) } (,  ! (pretreat-body0  (findall  $X (:  $P $CG) $L) $Z))))  True)
 
-  (= (-->  (pretreat_body0  $G $_) ($G))  True)
+  (= (-->  (pretreat-body0  $G $_) ($G))  True)
 
 ;
 ; ;; rename builtins
-  (= (-->  (pretreat_builtin  (= $X  $Y)) (,  ! ((%unify  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (\=  $X $Y)) (,  ! ((%not_unifiable  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (==  $X $Y)) (,  ! ((%equality_of_term  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (\==  $X $Y)) (,  ! ((%inequality_of_term  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (?=  $X $Y)) (,  ! ((%identical_or_cannot_unify  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (@<  $X $Y)) (,  ! ((%before  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (@>  $X $Y)) (,  ! ((%after  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (@=<  $X $Y)) (,  ! ((%not_after  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (@>=  $X $Y)) (,  ! ((%not_before  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (compare  $Op $X $Y)) (,  {(==  $Op =) } (,  ! ((%equality_of_term  $X $Y)))))  True)
-  (= (-->  (pretreat_builtin  (compare  $Op $X $Y)) (,  {(==  $Op <) } (,  ! ((%before  $X $Y)))))  True)
-  (= (-->  (pretreat_builtin  (compare  $Op $X $Y)) (,  {(==  $Op >) } (,  ! ((%after  $X $Y)))))  True)
-  (= (-->  (pretreat_builtin  (=..  $X $Y)) (,  ! ((%univ  $X $Y))))  True)
-  (= (-->  (pretreat_builtin  (=:=  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%arith_equal  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (=\=  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%arith_not_equal  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (>  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%greater_than  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (>=  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%greater_or_equal  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (<  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%less_than  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (=<  $X $Y)) (,  ! (,  (pretreat_is  $U $X) (,  (pretreat_is  $V $Y) ((%less_or_equal  $U $V))))))  True)
-  (= (-->  (pretreat_builtin  (is  $Z $X)) (,  ! (pretreat_is0  $Z $X)))  True)
+  (= (-->  (pretreat-builtin  (= $X  $Y)) (,  ! ((%unify  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (\=  $X $Y)) (,  ! ((%not-unifiable  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (==  $X $Y)) (,  ! ((%equality-of-term  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (\==  $X $Y)) (,  ! ((%inequality-of-term  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (?=  $X $Y)) (,  ! ((%identical-or-cannot-unify  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (@<  $X $Y)) (,  ! ((%before  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (@>  $X $Y)) (,  ! ((%after  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (@=<  $X $Y)) (,  ! ((%not-after  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (@>=  $X $Y)) (,  ! ((%not-before  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (compare  $Op $X $Y)) (,  {(==  $Op =) } (,  ! ((%equality-of-term  $X $Y)))))  True)
+  (= (-->  (pretreat-builtin  (compare  $Op $X $Y)) (,  {(==  $Op <) } (,  ! ((%before  $X $Y)))))  True)
+  (= (-->  (pretreat-builtin  (compare  $Op $X $Y)) (,  {(==  $Op >) } (,  ! ((%after  $X $Y)))))  True)
+  (= (-->  (pretreat-builtin  (=..  $X $Y)) (,  ! ((%univ  $X $Y))))  True)
+  (= (-->  (pretreat-builtin  (=:=  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%arith-equal  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (=\=  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%arith-not-equal  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (>  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%greater-than  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (>=  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%greater-or-equal  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (<  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%less-than  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (=<  $X $Y)) (,  ! (,  (pretreat-is  $U $X) (,  (pretreat-is  $V $Y) ((%less-or-equal  $U $V))))))  True)
+  (= (-->  (pretreat-builtin  (is  $Z $X)) (,  ! (pretreat-is0  $Z $X)))  True)
 
-  (= (-->  (pretreat_is  $Z $X) (,  {(var  $X) } (,  ! {(= $X  $Z) })))  True)
-  (= (-->  (pretreat_is  $Z $X) (pretreat_is0  $Z $X))  True)
+  (= (-->  (pretreat-is  $Z $X) (,  {(var  $X) } (,  ! {(= $X  $Z) })))  True)
+  (= (-->  (pretreat-is  $Z $X) (pretreat-is0  $Z $X))  True)
 
-  (= (-->  (pretreat_is0  $Z $X) (,  {(clause  (pl2am_flag  ac) $_) } (,  ! (precompile_is  $X $Z))))  True)
-  (= (-->  (pretreat_is0  $Z $X) ((is  $Z $X)))  True)
+  (= (-->  (pretreat-is0  $Z $X) (,  {(clause  (pl2am-flag  ac) $_) } (,  ! (precompile-is  $X $Z))))  True)
+  (= (-->  (pretreat-is0  $Z $X) ((is  $Z $X)))  True)
 
 ;
 ; ;; compile aithmetic expressions
-  (= (-->  (precompile_is  $X $A) (,  {(var  $X) } (,  ! ((is  $A $X)))))  True)
-  (= (-->  (precompile_is  $X $A) (,  {(number  $X) } (,  ! {(= $X  $A) })))  True)
-  (= (-->  (precompile_is  $X $A) (,  {(builtin_arith_constant  $X) } (,  ! {(= $X  $A) })))  True)
-  (= (-->  (precompile_is  (+  $X) $A) (,  ! (precomp_is  $X $A)))  True)
-  (= (-->  (precompile_is  (-  $X) $A) (,  ! (precompile_is  (*  -1 $X) $A)))  True)
-  (= (-->  (precompile_is  (+  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%plus  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (-  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%minus  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (*  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%multi  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (/  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%float_quotient  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (//  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%int_quotient  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (mod  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%mod  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (rem  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%mod  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (/\  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%bitwise_conj  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (\/  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%bitwise_disj  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (#  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%bitwise_exclusive_or  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (\  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%bitwise_neg  $U $A)))))  True)
-  (= (-->  (precompile_is  (<<  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%shift_left  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (>>  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%shift_right  $U $V $A))))))  True)
-  (= (-->  (precompile_is  ($X) $A) (,  ! (precomp_is  $X $A)))  True)
-  (= (-->  (precompile_is  (abs  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%abs  $U $A)))))  True)
-  (= (-->  (precompile_is  (min  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%min  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (max  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%max  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (round  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%round  $U $A)))))  True)
-  (= (-->  (precompile_is  (floor  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%floor  $U $A)))))  True)
-  (= (-->  (precompile_is  (ceiling  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%ceil  $U $A)))))  True)
-  (= (-->  (precompile_is  (sin  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%sin  $U $A)))))  True)
-  (= (-->  (precompile_is  (cos  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%cos  $U $A)))))  True)
-  (= (-->  (precompile_is  (tan  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%tan  $U $A)))))  True)
-  (= (-->  (precompile_is  (asin  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%asin  $U $A)))))  True)
-  (= (-->  (precompile_is  (acos  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%acos  $U $A)))))  True)
-  (= (-->  (precompile_is  (atan  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%atan  $U $A)))))  True)
-  (= (-->  (precompile_is  (sqrt  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%sqrt  $U $A)))))  True)
-  (= (-->  (precompile_is  (log  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%log  $U $A)))))  True)
-  (= (-->  (precompile_is  (exp  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%exp  $U $A)))))  True)
-  (= (-->  (precompile_is  (**  $X $Y) $A) (,  ! (,  (precomp_is  $X $U) (,  (precomp_is  $Y $V) ((%pow  $U $V $A))))))  True)
-  (= (-->  (precompile_is  (degrees  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%degrees  $U $A)))))  True)
-  (= (-->  (precompile_is  (radians  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%radians  $U $A)))))  True)
-  (= (-->  (precompile_is  (rint  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%rint  $U $A)))))  True)
-  (= (-->  (precompile_is  (float  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%float  $U $A)))))  True)
-  (= (-->  (precompile_is  (float_integer_part  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%float_integer_part  $U $A)))))  True)
-  (= (-->  (precompile_is  (float_fractional_part  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%float_fractional_part  $U $A)))))  True)
-  (= (-->  (precompile_is  (truncate  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%truncate  $U $A)))))  True)
-  (= (-->  (precompile_is  (sign  $X) $A) (,  ! (,  (precomp_is  $X $U) ((%sign  $U $A)))))  True)
-  (= (-->  (precompile_is  $X $_) (,  {(pl2am_error  (unknown arithemetic expression $X)) } {fail }))  True)
+  (= (-->  (precompile-is  $X $A) (,  {(var  $X) } (,  ! ((is  $A $X)))))  True)
+  (= (-->  (precompile-is  $X $A) (,  {(number  $X) } (,  ! {(= $X  $A) })))  True)
+  (= (-->  (precompile-is  $X $A) (,  {(builtin-arith-constant  $X) } (,  ! {(= $X  $A) })))  True)
+  (= (-->  (precompile-is  (+  $X) $A) (,  ! (precomp-is  $X $A)))  True)
+  (= (-->  (precompile-is  (-  $X) $A) (,  ! (precompile-is  (*  -1 $X) $A)))  True)
+  (= (-->  (precompile-is  (+  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%plus  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (-  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%minus  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (*  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%multi  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (/  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%float-quotient  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (//  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%int-quotient  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (mod  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%mod  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (rem  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%mod  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (/\  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%bitwise-conj  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (\/  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%bitwise-disj  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (#  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%bitwise-exclusive-or  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (\  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%bitwise-neg  $U $A)))))  True)
+  (= (-->  (precompile-is  (<<  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%shift-left  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (>>  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%shift-right  $U $V $A))))))  True)
+  (= (-->  (precompile-is  ($X) $A) (,  ! (precomp-is  $X $A)))  True)
+  (= (-->  (precompile-is  (abs  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%abs  $U $A)))))  True)
+  (= (-->  (precompile-is  (min  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%min  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (max  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%max  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (round  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%round  $U $A)))))  True)
+  (= (-->  (precompile-is  (floor  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%floor  $U $A)))))  True)
+  (= (-->  (precompile-is  (ceiling  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%ceil  $U $A)))))  True)
+  (= (-->  (precompile-is  (sin  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%sin  $U $A)))))  True)
+  (= (-->  (precompile-is  (cos  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%cos  $U $A)))))  True)
+  (= (-->  (precompile-is  (tan  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%tan  $U $A)))))  True)
+  (= (-->  (precompile-is  (asin  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%asin  $U $A)))))  True)
+  (= (-->  (precompile-is  (acos  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%acos  $U $A)))))  True)
+  (= (-->  (precompile-is  (atan  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%atan  $U $A)))))  True)
+  (= (-->  (precompile-is  (sqrt  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%sqrt  $U $A)))))  True)
+  (= (-->  (precompile-is  (log  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%log  $U $A)))))  True)
+  (= (-->  (precompile-is  (exp  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%exp  $U $A)))))  True)
+  (= (-->  (precompile-is  (**  $X $Y) $A) (,  ! (,  (precomp-is  $X $U) (,  (precomp-is  $Y $V) ((%pow  $U $V $A))))))  True)
+  (= (-->  (precompile-is  (degrees  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%degrees  $U $A)))))  True)
+  (= (-->  (precompile-is  (radians  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%radians  $U $A)))))  True)
+  (= (-->  (precompile-is  (rint  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%rint  $U $A)))))  True)
+  (= (-->  (precompile-is  (float  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%float  $U $A)))))  True)
+  (= (-->  (precompile-is  (float-integer-part  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%float-integer-part  $U $A)))))  True)
+  (= (-->  (precompile-is  (float-fractional-part  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%float-fractional-part  $U $A)))))  True)
+  (= (-->  (precompile-is  (truncate  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%truncate  $U $A)))))  True)
+  (= (-->  (precompile-is  (sign  $X) $A) (,  ! (,  (precomp-is  $X $U) ((%sign  $U $A)))))  True)
+  (= (-->  (precompile-is  $X $_) (,  {(pl2am-error  (unknown arithemetic expression $X)) } {fail }))  True)
 
-  (= (-->  (precomp_is  $X $A) (,  {(var  $X) } (,  {(var  $A) } (,  ! {(= $X  $A) }))))  True)
-  (= (-->  (precomp_is  $X $A) (precompile_is  $X $A))  True)
+  (= (-->  (precomp-is  $X $A) (,  {(var  $X) } (,  {(var  $A) } (,  ! {(= $X  $A) }))))  True)
+  (= (-->  (precomp-is  $X $A) (precompile-is  $X $A))  True)
 
 ;
 ; ;;;;;;;;; Add Pacakge (module) name to meta predicates
@@ -1529,7 +1491,7 @@
   (= (localize-meta $G0 $G)  
     ( (==  
         (= 
-          (package_name  $P) $_) 
+          (package-name  $P) $_) 
         (get-atoms  &self)) 
       (localize-meta $G0 $P $G) 
       (set-det)))
@@ -1540,7 +1502,7 @@
     (localize-meta-goal $G $P $X)
     (det-if-then-else 
       (= $X 
-        (with_self  $P $Y)) 
+        (with-self  $P $Y)) 
       (= $G1 $Y) 
       (= $G1 $X))
     (localize-meta $Gs $P $Gs1))
@@ -1551,7 +1513,7 @@
     (set-det)
     (localize-meta-goal 
       (call $G) $P $G1))
-  (= (localize-meta-goal (with_self  $P $G) $_ $G1)  
+  (= (localize-meta-goal (with-self  $P $G) $_ $G1)  
     (set-det)
     (localize-meta-goal $G $P $G1))
   (= (localize-meta-goal (, $X $Y) $P (, $X1 $Y1))  
@@ -1571,7 +1533,7 @@
     (or 
       (==  
         (= 
-          (meta_predicates  $F $A $M) $_) 
+          (meta-predicates  $F $A $M) $_) 
         (get-atoms  &self)) 
       (builtin-local-predicates $F $A $M))
     (set-det)
@@ -1580,29 +1542,29 @@
     (localize-meta-args $M $As $P $As1)
     (=.. $G1 
       (Cons  $F $As1)))
-  (= (localize-meta-goal $G $P (call (with_self  $P $G)))  
+  (= (localize-meta-goal $G $P (call (with-self  $P $G)))  
     (var $P)
     (set-det))
   (= (localize-meta-goal $G $_ $G)  
     (system-predicate $G)
     (set-det))
-  (= (localize_meta_goal  $G $P (:  $P $G))  True)
+  (= (localize-meta-goal  $G $P (:  $P $G))  True)
 
 
   (= (localize-meta-args Nil Nil $_ Nil)  
     (set-det))
-  (= (localize-meta-args (Cons  : $Ms) (Cons  $A $As) $P (Cons  (with_self  $P $A) $As1))  
+  (= (localize-meta-args (Cons  : $Ms) (Cons  $A $As) $P (Cons  (with-self  $P $A) $As1))  
     (or 
       (var $A) 
       (\= $A 
-        (with_self  $_ $_)))
+        (with-self  $_ $_)))
     (set-det)
     (localize-meta-args $Ms $As $P $As1))
-  (= (localize-meta-args (Cons  or $Ms) (Cons  $A $As) $P (Cons  (with_self  $P $A) $As1))  
+  (= (localize-meta-args (Cons  or $Ms) (Cons  $A $As) $P (Cons  (with-self  $P $A) $As1))  
     (or 
       (var $A) 
       (\= $A 
-        (with_self  $_ $_)))
+        (with-self  $_ $_)))
     (set-det)
     (localize-meta-args $Ms $As $P $As1))
   (= (localize-meta-args (Cons  $_ $Ms) (Cons  $A $As) $P (Cons  $A $As1))  
@@ -1619,36 +1581,36 @@
 ;
 ; ;; Precompile head (generates get instructions)
 
-  (= (-->  (precompile_head  $Head) (,  {(=..  $Head (Cons  $_ $Args)) } (precomp_head  $Args 1)))  True)
+  (= (-->  (precompile-head  $Head) (,  {(=..  $Head ([|]  $_ $Args)) } (precomp-head  $Args 1)))  True)
 
-  (= (-->  (precomp_head  () $_) !)  True)
-  (= (-->  (precomp_head  (Cons  $A $As) $I) (,  ((get  $A (a  $I))) (,  {(is  $I1 (+  $I 1)) } (precomp_head  $As $I1))))  True)
+  (= (-->  (precomp-head  () $_) !)  True)
+  (= (-->  (precomp-head  ([|]  $A $As) $I) (,  ((get  $A (a  $I))) (,  {(is  $I1 (+  $I 1)) } (precomp-head  $As $I1))))  True)
 
 ;
 ; ;; Precompile body
 ;
 ; ;; (generates put, put_clo, put_cont, and inline instructions)
-  (= (-->  (precompile_body  $Goals) (,  {(clause  (pl2am_flag  ie) $_) } (,  ! (,  {(pickup_inline_goals  $Goals $IGs $Gs) } (precomp_inline  $IGs $Gs)))))  True)
-  (= (-->  (precompile_body  $Goals) (precomp_body  $Goals))  True)
+  (= (-->  (precompile-body  $Goals) (,  {(clause  (pl2am-flag  ie) $_) } (,  ! (,  {(pickup-inline-goals  $Goals $IGs $Gs) } (precomp-inline  $IGs $Gs)))))  True)
+  (= (-->  (precompile-body  $Goals) (precomp-body  $Goals))  True)
 
-  (= (-->  (precomp_body  ()) (,  ! ((execute  cont))))  True)
-  (= (-->  (precomp_body  (Cons  (:  $M $G) $Cont)) (,  ! (,  (binarize_body  $G $Cont $G1) ((execute  (:  $M $G1))))))  True)
-  (= (-->  (precomp_body  (Cons  $G $Cont)) (,  (binarize_body  $G $Cont $G1) ((execute  $G1))))  True)
+  (= (-->  (precomp-body  ()) (,  ! ((execute  cont))))  True)
+  (= (-->  (precomp-body  ([|]  (:  $M $G) $Cont)) (,  ! (,  (binarize-body  $G $Cont $G1) ((execute  (:  $M $G1))))))  True)
+  (= (-->  (precomp-body  ([|]  $G $Cont)) (,  (binarize-body  $G $Cont $G1) ((execute  $G1))))  True)
 
-  (= (-->  (binarize_body  $G $Cont $G1) (,  {(=..  $G (Cons  $F $Args)) } (,  {(functor  $G $F $A) } (,  (precomp_call  $Args $Us $F $A) (,  (precomp_cont  $Cont $V) (,  {(pl2am_append  $Us ($V) $Ws) } {(=..  $G1 (Cons  $F $Ws)) }))))))  True)
+  (= (-->  (binarize-body  $G $Cont $G1) (,  {(=..  $G ([|]  $F $Args)) } (,  {(functor  $G $F $A) } (,  (precomp-call  $Args $Us $F $A) (,  (precomp-cont  $Cont $V) (,  {(pl2am-append  $Us ($V) $Ws) } {(=..  $G1 ([|]  $F $Ws)) }))))))  True)
 ; /*--------------------------------------------------------------- Binarization technique was developed by P.Tarau and M.Boyer, please see: * "Elementary Logic Programs" P.Tarau and M.Boyer Programming Language Implementation and Logic Programming, pp.159--173, LNCS 456, Springer Verlag, 1990 ----------------------------------------------------------------*/
 ; ;precomp_call(Args, Us), ; for no closure
 
-  (= (-->  (precomp_call  () ()) !)  True)
-  (= (-->  (precomp_call  (Cons  $A $As) (Cons  $U $Us)) (,  ((put  $A $U)) (precomp_call  $As $Us)))  True)
+  (= (-->  (precomp-call  () ()) !)  True)
+  (= (-->  (precomp-call  ([|]  $A $As) ([|]  $U $Us)) (,  ((put  $A $U)) (precomp-call  $As $Us)))  True)
 
-  (= (-->  (precomp_cont  () cont) !)  True)
-  (= (-->  (precomp_cont  (Cons  (:  $M $G) $Cont) $V) (,  ! (,  (binarize_body  $G $Cont $G1) ((put_cont  (:  $M $G1) $V)))))  True)
-  (= (-->  (precomp_cont  (Cons  $G $Cont) $V) (,  (binarize_body  $G $Cont $G1) ((put_cont  $G1 $V))))  True)
+  (= (-->  (precomp-cont  () cont) !)  True)
+  (= (-->  (precomp-cont  ([|]  (:  $M $G) $Cont) $V) (,  ! (,  (binarize-body  $G $Cont $G1) ((put-cont  (:  $M $G1) $V)))))  True)
+  (= (-->  (precomp-cont  ([|]  $G $Cont) $V) (,  (binarize-body  $G $Cont $G1) ((put-cont  $G1 $V))))  True)
 
-  (= (-->  (precomp_inline  () $Gs1) (,  ! (precomp_body  $Gs1)))  True)
-  (= (-->  (precomp_inline  (Cons  fail $_) $_) (,  ! ((inline  fail))))  True)
-  (= (-->  (precomp_inline  (Cons  $G $Gs) $Gs1) (,  {(=..  $G (Cons  $F $Args)) } (,  {(functor  $G $F $A) } (,  (precomp_call  $Args $Us $F $A) (,  {(=..  $G1 (Cons  $F $Us)) } (,  ((inline  $G1)) (precomp_inline  $Gs $Gs1)))))))  True)
+  (= (-->  (precomp-inline  () $Gs1) (,  ! (precomp-body  $Gs1)))  True)
+  (= (-->  (precomp-inline  ([|]  fail $_) $_) (,  ! ((inline  fail))))  True)
+  (= (-->  (precomp-inline  ([|]  $G $Gs) $Gs1) (,  {(=..  $G ([|]  $F $Args)) } (,  {(functor  $G $F $A) } (,  (precomp-call  $Args $Us $F $A) (,  {(=..  $G1 ([|]  $F $Us)) } (,  ((inline  $G1)) (precomp-inline  $Gs $Gs1)))))))  True)
 ; ;precomp_call(Args, Us),
 
 
@@ -1658,35 +1620,33 @@
     (builtin-inline-predicates $G)
     (set-det)
     (pickup-inline-goals $Gs $IGs $BGs))
-  (= (pickup_inline_goals  $Gs () $Gs)  True)
+  (= (pickup-inline-goals  $Gs () $Gs)  True)
 
 ;
 ; ;; Generate Closure
 
-  (= (-->  (precomp_call  $As $Us $Functor $Arity) (,  {(clause  (pl2am_flag  clo) $_) } (,  {(clause  (meta_predicates  $Functor $Arity $Mode) $_) } (,  ! (,  {(clause  (package_name  $P) $_) } (precomp_closure  $Mode $As $P $Us))))))  True)
-  (= (-->  (precomp_call  $As $Us $_ $_) (precomp_call  $As $Us))  True)
+  (= (-->  (precomp-call  $As $Us $Functor $Arity) (,  {(clause  (pl2am-flag  clo) $_) } (,  {(clause  (meta-predicates  $Functor $Arity $Mode) $_) } (,  ! (,  {(clause  (package-name  $P) $_) } (precomp-closure  $Mode $As $P $Us))))))  True)
+  (= (-->  (precomp-call  $As $Us $_ $_) (precomp-call  $As $Us))  True)
 
-  (= (-->  (precomp_closure  () () $_ ()) !)  True)
-  (= (-->  (precomp_closure  (Cons  : $Ms) (Cons  $A $As) $P (Cons  $U $Us)) (,  {(get_closure  $A $P $C) } (,  ! (,  ((put_clo  $C $U)) (precomp_closure  $Ms $As $P $Us)))))  True)
-  (= (-->  (precomp_closure  (Cons  $_ $Ms) (Cons  $A $As) $P (Cons  $U $Us)) (,  ((put  $A $U)) (precomp_closure  $Ms $As $P $Us)))  True)
+  (= (-->  (precomp-closure  () () $_ ()) !)  True)
+  (= (-->  (precomp-closure  ([|]  : $Ms) ([|]  $A $As) $P ([|]  $U $Us)) (,  {(get-closure  $A $P $C) } (,  ! (,  ((put-clo  $C $U)) (precomp-closure  $Ms $As $P $Us)))))  True)
+  (= (-->  (precomp-closure  ([|]  $_ $Ms) ([|]  $A $As) $P ([|]  $U $Us)) (,  ((put  $A $U)) (precomp-closure  $Ms $As $P $Us)))  True)
 
 
   (= (get-closure $G $_ $_)  
-    (var $G)
-    (set-det)
-    (fail))
+    ( (var $G) 
+      (set-det) fail))
   (= (get-closure $_ $P $_)  
-    (var $P)
-    (set-det)
-    (fail))
-  (= (get-closure (with_self  $P $G) $_ $Clo)  
+    ( (var $P) 
+      (set-det) fail))
+  (= (get-closure (with-self  $P $G) $_ $Clo)  
     (set-det)
     (get-closure $G $P $Clo))
-  (= (get-closure $G $P (with_self  $P $G))  
+  (= (get-closure $G $P (with-self  $P $G))  
     (atom $P)
     (callable $G)
     (functor $G $F $A)
-    (not (==  (= (dynamic_predicates  $F $A $_) $_) (get-atoms  &self)))
+    (not (==  (= (dynamic-predicates  $F $A $_) $_) (get-atoms  &self)))
     (set-det))
 ; ; ???
 
@@ -1696,35 +1656,35 @@
   (= (optimize-recursive-call $Head $Instrs0 $Instrs)  
     ( (==  
         (= 
-          (pl2am_flag  rc) $_) 
+          (pl2am-flag  rc) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (optimize-rc $Instrs0 $Head $Instrs Nil)))
-  (= (optimize_recursive_call  $_ $Instrs $Instrs)  True)
+  (= (optimize-recursive-call  $_ $Instrs $Instrs)  True)
 
 
-  (= (-->  (optimize_rc  () $_) !)  True)
-  (= (-->  (optimize_rc  (Cons  (execute  $Goal) $Xs) $Head) (,  {(functor  $Head $F $A) } (,  {(functor  $Goal $F $A1) } (,  {(=:=  (+  $A 1) $A1) } (,  ! (,  {(assert_copts  (rc  $F $A)) } (,  {(=..  $Goal (Cons  $F $Args)) } (,  {(range_reg  1 $A ea $Rs0) } (,  {(pl2am_append  $Rs0 (econt) $Rs) } (,  (gen_set  $Args $Rs) (,  ((goto  (+  (/  $F $A) top))) (optimize_rc  $Xs $Head))))))))))))  True)
-  (= (-->  (optimize_rc  (Cons  $X $Xs) $Head) (,  ($X) (optimize_rc  $Xs $Head)))  True)
+  (= (-->  (optimize-rc  () $_) !)  True)
+  (= (-->  (optimize-rc  ([|]  (execute  $Goal) $Xs) $Head) (,  {(functor  $Head $F $A) } (,  {(functor  $Goal $F $A1) } (,  {(=:=  (+  $A 1) $A1) } (,  ! (,  {(assert-copts  (rc  $F $A)) } (,  {(=..  $Goal ([|]  $F $Args)) } (,  {(range-reg  1 $A ea $Rs0) } (,  {(pl2am-append  $Rs0 (econt) $Rs) } (,  (gen-set  $Args $Rs) (,  ((goto  (+  (/  $F $A) top))) (optimize-rc  $Xs $Head))))))))))))  True)
+  (= (-->  (optimize-rc  ([|]  $X $Xs) $Head) (,  ($X) (optimize-rc  $Xs $Head)))  True)
 
 ;
 ; ;;;;;;;;; Compile Clause
-  (= (-->  (compile_chunks  $Chunk $GTI0 $GTI $LTI) (,  {(alloc_voids  $Chunk () $Alloc) } (compile_chunk  $Chunk $Alloc $GTI0 $GTI $LTI)))  True)
+  (= (-->  (compile-chunks  $Chunk $GTI0 $GTI $LTI) (,  {(alloc-voids  $Chunk () $Alloc) } (compile-chunk  $Chunk $Alloc $GTI0 $GTI $LTI)))  True)
 ; ; check void variables
 
-  (= (-->  (compile_chunk  () $_ $GTI $GTI ()) !)  True)
-  (= (-->  (compile_chunk  $Chunk $Alloc $GTI0 $GTI $LTI) (,  {(,  (free_x_reg  $Chunk 1 $XN) (,  (= $YN  1) (= $PN  1))) } (,  {(= $LTI0  
-    ($XN $YN $PN $Alloc)) } (comp_chunk  $Chunk $LTI0 $LTI $GTI0 $GTI))))  True)
+  (= (-->  (compile-chunk  () $_ $GTI $GTI ()) !)  True)
+  (= (-->  (compile-chunk  $Chunk $Alloc $GTI0 $GTI $LTI) (,  {(,  (free-x-reg  $Chunk 1 $XN) (,  (= $YN  1) (= $PN  1))) } (,  {(= $LTI0  
+    ($XN $YN $PN $Alloc)) } (comp-chunk  $Chunk $LTI0 $LTI $GTI0 $GTI))))  True)
 
-  (= (-->  (comp_chunk  () $LTI $LTI $GTI $GTI) !)  True)
-  (= (-->  (comp_chunk  (Cons  (:  $L ()) $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  ((:  $L ())) (comp_chunk  $Cs $LTI0 $LTI $GTI0 $GTI))))  True)
-  (= (-->  (comp_chunk  (Cons  (:  $L $C) $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  ((:  $L ())) (comp_chunk  (Cons  $C $Cs) $LTI0 $LTI $GTI0 $GTI))))  True)
-  (= (-->  (comp_chunk  (Cons  $C $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  (comp_instr  $C $LTI0 $LTI1 $GTI0 $GTI1) (comp_chunk  $Cs $LTI1 $LTI $GTI1 $GTI))))  True)
+  (= (-->  (comp-chunk  () $LTI $LTI $GTI $GTI) !)  True)
+  (= (-->  (comp-chunk  ([|]  (:  $L ()) $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  ((:  $L ())) (comp-chunk  $Cs $LTI0 $LTI $GTI0 $GTI))))  True)
+  (= (-->  (comp-chunk  ([|]  (:  $L $C) $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  ((:  $L ())) (comp-chunk  ([|]  $C $Cs) $LTI0 $LTI $GTI0 $GTI))))  True)
+  (= (-->  (comp-chunk  ([|]  $C $Cs) $LTI0 $LTI $GTI0 $GTI) (,  ! (,  (comp-instr  $C $LTI0 $LTI1 $GTI0 $GTI1) (comp-chunk  $Cs $LTI1 $LTI $GTI1 $GTI))))  True)
 
 ;
 ; ;; finds an available number A-register
 
-  (= (free_x_reg  () $XN $XN)  True)
+  (= (free-x-reg  () $XN $XN)  True)
   (= (free-x-reg (Cons  (get $_ $V) $Cs) $XN0 $XN)  
     (nonvar $V)
     (= $V 
@@ -1754,7 +1714,7 @@
     (alloc-voids1 $Vars $Chunks $Alloc0 $Alloc))
 
 
-  (= (alloc_voids1  () $_ $Alloc $Alloc)  True)
+  (= (alloc-voids1  () $_ $Alloc $Alloc)  True)
   (= (alloc-voids1 (Cons  $V $Vars) $Chunks $Alloc0 $Alloc)  
     (count-variable $V $Chunks 1)
     (set-det)
@@ -1768,104 +1728,103 @@
 ;
 ; ;;;;;;;;; Compile Precompiled Instructions: get, put, put_clo, and put_cont
 
-  (= (-->  (comp_instr  (get  $X $A) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen_get  $X $A $LTI0 $LTI $GTI0 $GTI)))  True)
+  (= (-->  (comp-instr  (get  $X $A) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen-get  $X $A $LTI0 $LTI $GTI0 $GTI)))  True)
 ; /* comp_instr(+Instr, +LTI0, ?LTI, +GTI0, ?GTI) Instr : Intermediate instruction LTI : [XN, YN, PN, Alloc] XN : The register a(XN) is available for "Term". YN : The register y(YN) is available for "Term[]". PN : The register p(PN) is available for "Predicate". Alloc : [[VarTerm, Register, Seen],...] GTI : [SN, SAlloc, SInstrs] SN : The registers s(SN), si(SN), or sf(SN) are available for static "Term". SAlloc : [[NonVarTerm:Type, Register, Seen],...] SInstrs : list of instructions for static terms. Seen : Unbound variable | yes | void Type : int | flo | con | str | lis | arr */
-  (= (-->  (comp_instr  (put  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen_put  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
-  (= (-->  (comp_instr  (put_clo  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen_put_clo  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
-  (= (-->  (comp_instr  (put_cont  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen_put_cont  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
-  (= (-->  (comp_instr  $Instr $LTI $LTI $GTI $GTI) ($Instr))  True)
+  (= (-->  (comp-instr  (put  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen-put  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
+  (= (-->  (comp-instr  (put-clo  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen-put-clo  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
+  (= (-->  (comp-instr  (put-cont  $X $V) $LTI0 $LTI $GTI0 $GTI) (,  ! (gen-put-cont  $X $V $LTI0 $LTI $GTI0 $GTI)))  True)
+  (= (-->  (comp-instr  $Instr $LTI $LTI $GTI $GTI) ($Instr))  True)
 
 ;
 ; ;;;;;;;;; put instructions
-  (= (-->  (gen_put  $_ $A $_ $_ $_ $_) (,  {(nonvar  $A) } (,  ! (,  {(pl2am_error  ($A should be an unbound variable)) } {fail }))))  True)
-  (= (-->  (gen_put  $X $A $LTI0 $LTI $GTI $GTI) (,  {(var  $X) } (,  ! (,  {(assign_reg  $X $R $Seen $LTI0 $LTI) } (gen_put_var  $R $Seen $A)))))  True)
-  (= (-->  (gen_put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  {(assign_sreg  (:  $X int) $R $Seen $GTI0 $GTI1) } (gen_put_int  $X $R $Seen $A $GTI1 $GTI)))))  True)
-  (= (-->  (gen_put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(long  $X) } (,  ! (,  {(assign_sreg  (:  $X long) $R $Seen $GTI0 $GTI1) } (gen_put_int  $X $R $Seen $A $GTI1 $GTI)))))  True)
-  (= (-->  (gen_put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  {(assign_sreg  (:  $X flo) $R $Seen $GTI0 $GTI1) } (gen_put_float  $X $R $Seen $A $GTI1 $GTI)))))  True)
-  (= (-->  (gen_put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(is-symbol  $X) } (,  ! (,  {(assign_sreg  (:  $X con) $R $Seen $GTI0 $GTI1) } (gen_put_con  $X $R $Seen $A $GTI1 $GTI)))))  True)
-  (= (-->  (gen_put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (ground  $X) (= $X  
-    (Cons  $X1 $X2))) } (,  ! (,  (gen_put_args  ($X1 $X2) ($R1 $R2) $LTI0 $LTI $GTI0 $GTI1) (,  {(assign_sreg  (:  $X lis) $R $Seen $GTI1 $GTI2) } (gen_put_list  ($R1 $R2) $R $Seen $A $GTI2 $GTI))))))  True)
-  (= (-->  (gen_put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (ground  $X) (,  (=..  $X (Cons  $_ $Args)) (functor  $X $F $N))) } (,  ! (,  {(assign_sreg  (:  (/  $F $N) con) $R0 $Seen0 $GTI0 $GTI1) } (,  (gen_put_con  (/  $F $N) $R0 $Seen0 $_ $GTI1 $GTI2) (,  (gen_put_args  $Args $Regs $LTI0 $LTI $GTI2 $GTI3) (,  {(assign_sreg  (:  $Args arr) $R1 $Seen1 $GTI3 $GTI4) } (,  (gen_put_str_args  $Regs $R1 $Seen1 $_ $GTI4 $GTI5) (,  {(assign_sreg  (:  $X str) $R $Seen $GTI5 $GTI6) } (gen_put_str  ($R0 $R1) $R $Seen $A $GTI6 $GTI))))))))))  True)
-  (= (-->  (gen_put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(= $X  
-    (Cons  $X1 $X2)) } (,  ! (,  (gen_put_args  ($X1 $X2) ($R1 $R2) $LTI0 $LTI1 $GTI0 $GTI) (,  {(assign_reg  $_ $R $Seen $LTI1 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } ((put_list  $R1 $R2 $R))))))))  True)
-  (= (-->  (gen_put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (=..  $X (Cons  $_ $Args)) (functor  $X $F $N)) } (,  ! (,  {(assign_sreg  (:  (/  $F $N) con) $R0 $Seen0 $GTI0 $GTI1) } (,  (gen_put_con  (/  $F $N) $R0 $Seen0 $_ $GTI1 $GTI2) (,  (gen_put_args  $Args $Regs $LTI0 $LTI1 $GTI2 $GTI) (,  {(inc_YN  $R1 $LTI1 $LTI2) } (,  {(assign_reg  $_ $R $Seen $LTI2 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } (,  ((put_str_args  $Regs $R1)) ((put_str  $R0 $R1 $R))))))))))))  True)
+  (= (-->  (gen-put  $_ $A $_ $_ $_ $_) (,  {(nonvar  $A) } (,  ! (,  {(pl2am-error  ($A should be an unbound variable)) } {fail }))))  True)
+  (= (-->  (gen-put  $X $A $LTI0 $LTI $GTI $GTI) (,  {(var  $X) } (,  ! (,  {(assign-reg  $X $R $Seen $LTI0 $LTI) } (gen-put-var  $R $Seen $A)))))  True)
+  (= (-->  (gen-put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  {(assign-sreg  (:  $X int) $R $Seen $GTI0 $GTI1) } (gen-put-int  $X $R $Seen $A $GTI1 $GTI)))))  True)
+  (= (-->  (gen-put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(long  $X) } (,  ! (,  {(assign-sreg  (:  $X long) $R $Seen $GTI0 $GTI1) } (gen-put-int  $X $R $Seen $A $GTI1 $GTI)))))  True)
+  (= (-->  (gen-put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  {(assign-sreg  (:  $X flo) $R $Seen $GTI0 $GTI1) } (gen-put-float  $X $R $Seen $A $GTI1 $GTI)))))  True)
+  (= (-->  (gen-put  $X $A $LTI $LTI $GTI0 $GTI) (,  {(atom  $X) } (,  ! (,  {(assign-sreg  (:  $X con) $R $Seen $GTI0 $GTI1) } (gen-put-con  $X $R $Seen $A $GTI1 $GTI)))))  True)
+  (= (-->  (gen-put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (ground  $X) (= $X  
+    ([|]  $X1 $X2))) } (,  ! (,  (gen-put-args  ($X1 $X2) ($R1 $R2) $LTI0 $LTI $GTI0 $GTI1) (,  {(assign-sreg  (:  $X lis) $R $Seen $GTI1 $GTI2) } (gen-put-list  ($R1 $R2) $R $Seen $A $GTI2 $GTI))))))  True)
+  (= (-->  (gen-put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (ground  $X) (,  (=..  $X ([|]  $_ $Args)) (functor  $X $F $N))) } (,  ! (,  {(assign-sreg  (:  (/  $F $N) con) $R0 $Seen0 $GTI0 $GTI1) } (,  (gen-put-con  (/  $F $N) $R0 $Seen0 $_ $GTI1 $GTI2) (,  (gen-put-args  $Args $Regs $LTI0 $LTI $GTI2 $GTI3) (,  {(assign-sreg  (:  $Args arr) $R1 $Seen1 $GTI3 $GTI4) } (,  (gen-put-str-args  $Regs $R1 $Seen1 $_ $GTI4 $GTI5) (,  {(assign-sreg  (:  $X str) $R $Seen $GTI5 $GTI6) } (gen-put-str  ($R0 $R1) $R $Seen $A $GTI6 $GTI))))))))))  True)
+  (= (-->  (gen-put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(= $X  
+    ([|]  $X1 $X2)) } (,  ! (,  (gen-put-args  ($X1 $X2) ($R1 $R2) $LTI0 $LTI1 $GTI0 $GTI) (,  {(assign-reg  $_ $R $Seen $LTI1 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } ((put-list  $R1 $R2 $R))))))))  True)
+  (= (-->  (gen-put  $X $A $LTI0 $LTI $GTI0 $GTI) (,  {(,  (=..  $X ([|]  $_ $Args)) (functor  $X $F $N)) } (,  ! (,  {(assign-sreg  (:  (/  $F $N) con) $R0 $Seen0 $GTI0 $GTI1) } (,  (gen-put-con  (/  $F $N) $R0 $Seen0 $_ $GTI1 $GTI2) (,  (gen-put-args  $Args $Regs $LTI0 $LTI1 $GTI2 $GTI) (,  {(inc-YN  $R1 $LTI1 $LTI2) } (,  {(assign-reg  $_ $R $Seen $LTI2 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } (,  ((put-str-args  $Regs $R1)) ((put-str  $R0 $R1 $R))))))))))))  True)
 
-  (= (-->  (gen_put_var  void $_ $A) (,  ! {(= $A  void) }))  True) ;
+  (= (-->  (gen-put-var  void $_ $A) (,  ! {(= $A  void) }))  True) ;
 ; void is a special constant.
-  (= (-->  (gen_put_var  $R $Seen $A) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } ((put_var  $R))))))  True)
-  (= (-->  (gen_put_var  $R $_ $A) {(= $R  $A) })  True)
+  (= (-->  (gen-put-var  $R $Seen $A) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } ((put-var  $R))))))  True)
+  (= (-->  (gen-put-var  $R $_ $A) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_int  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_int  $X $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_int  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-int  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-int  $X $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-int  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_float  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_float  $X $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_float  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-float  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-float  $X $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-float  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_con  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_con  $X $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_con  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-con  $X $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-con  $X $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-con  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_list  ($R1 $R2) $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_list  $R1 $R2 $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_list  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-list  ($R1 $R2) $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-list  $R1 $R2 $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-list  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_str_args  $Regs $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_str_args  $Regs $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_str_args  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-str-args  $Regs $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-str-args  $Regs $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-str-args  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_str  ($R0 $R1) $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add_instr  (put_str  $R0 $R1 $R) $GTI0 $GTI) }))))  True)
-  (= (-->  (gen_put_str  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
+  (= (-->  (gen-put-str  ($R0 $R1) $R $Seen $A $GTI0 $GTI) (,  {(var  $Seen) } (,  ! (,  {(,  (= $Seen  yes) (= $R  $A)) } {(add-instr  (put-str  $R0 $R1 $R) $GTI0 $GTI) }))))  True)
+  (= (-->  (gen-put-str  $_ $R $_ $A $GTI $GTI) {(= $R  $A) })  True)
 
-  (= (-->  (gen_put_args  () () $LTI $LTI $GTI $GTI) !)  True)
-  (= (-->  (gen_put_args  (Cons  $X $Xs) (Cons  $R $Rs) $LTI0 $LTI $GTI0 $GTI) (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (gen_put_args  $Xs $Rs $LTI1 $LTI $GTI1 $GTI)))  True)
+  (= (-->  (gen-put-args  () () $LTI $LTI $GTI $GTI) !)  True)
+  (= (-->  (gen-put-args  ([|]  $X $Xs) ([|]  $R $Rs) $LTI0 $LTI $GTI0 $GTI) (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (gen-put-args  $Xs $Rs $LTI1 $LTI $GTI1 $GTI)))  True)
 
-  (= (-->  (gen_put_clo  (:  $P $X) $A $LTI0 $LTI $GTI0 $GTI) (,  {(=..  $X (Cons  $F $Args)) } (,  ! (,  (gen_put_args  $Args $Regs $LTI0 $LTI1 $GTI0 $GTI) (,  {(assign_reg  $_ $R $Seen $LTI1 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } (,  {(=..  $X1 (Cons  $F $Regs)) } (,  {(;  (->  (clause  (package_name  $P) $_) (= $CLO  $X1)) (= $CLO  
-    (:  $P $X1))) } ((put_clo  $CLO $R))))))))))  True)
+  (= (-->  (gen-put-clo  (:  $P $X) $A $LTI0 $LTI $GTI0 $GTI) (,  {(=..  $X ([|]  $F $Args)) } (,  ! (,  (gen-put-args  $Args $Regs $LTI0 $LTI1 $GTI0 $GTI) (,  {(assign-reg  $_ $R $Seen $LTI1 $LTI) } (,  {(,  (= $Seen  yes) (= $R  $A)) } (,  {(=..  $X1 ([|]  $F $Regs)) } (,  {(;  (->  (clause  (package-name  $P) $_) (= $CLO  $X1)) (= $CLO  
+    (:  $P $X1))) } ((put-clo  $CLO $R))))))))))  True)
 
 ;
 ; ;;;;;;;;; get instructions
-  (= (-->  (gen_get  $X $A $LTI0 $LTI $GTI0 $GTI) (gen_get  ((= $A  $X)) $LTI0 $LTI $GTI0 $GTI))  True)
+  (= (-->  (gen-get  $X $A $LTI0 $LTI $GTI0 $GTI) (gen-get  ((= $A  $X)) $LTI0 $LTI $GTI0 $GTI))  True)
 
-  (= (-->  (gen_get  () $LTI $LTI $GTI $GTI) !)  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $_) $LTI $LTI $GTI $GTI) (,  {(var  $A) } (,  ! (,  {(pl2am_error  ($A must not be a variable in (get  $X $A))) } {fail }))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  {(assign_reg  $X $R $Seen $LTI0 $LTI1) } (,  {(nonvar  $Seen) } (,  ! (,  (gen_get_var  $R $Seen $A) (gen_get  $Instrs $LTI1 $LTI $GTI0 $GTI)))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  ! (,  {(add_alloc  ($X $A yes) $LTI0 $LTI1) } (gen_get  $Instrs $LTI1 $LTI $GTI0 $GTI)))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get_int  $X $R $A)) (gen_get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get_float  $X $R $A)) (gen_get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(is-symbol  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get_con  $X $R $A)) (gen_get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(ground  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get_ground  $X $R $A)) (gen_get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(= $X  
-    (Cons  $X1 $X2)) } (,  ! (,  ((get_list  $A)) (,  (gen_unify  ($X1 $X2) $Instrs1 $LTI0 $LTI1 $GTI0 $GTI1) (,  (gen_get  $Instrs1 $LTI1 $LTI2 $GTI1 $GTI2) (gen_get  $Instrs $LTI2 $LTI $GTI2 $GTI)))))))  True)
-  (= (-->  (gen_get  (Cons  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(,  (=..  $X (Cons  $F $Args)) (functor  $X $F $N)) } (,  {(assign_sreg  (:  (/  $F $N) con) $R $Seen $GTI0 $GTI1) } (,  (gen_put_con  (/  $F $N) $R $Seen $_ $GTI1 $GTI2) (,  ((get_str  (/  $F $N) $R $A)) (,  (gen_unify  $Args $Instrs1 $LTI0 $LTI1 $GTI2 $GTI3) (,  (gen_get  $Instrs1 $LTI1 $LTI2 $GTI3 $GTI4) (gen_get  $Instrs $LTI2 $LTI $GTI4 $GTI))))))))  True)
+  (= (-->  (gen-get  () $LTI $LTI $GTI $GTI) !)  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $_) $LTI $LTI $GTI $GTI) (,  {(var  $A) } (,  ! (,  {(pl2am-error  ($A must not be a variable in (get  $X $A))) } {fail }))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  {(assign-reg  $X $R $Seen $LTI0 $LTI1) } (,  {(nonvar  $Seen) } (,  ! (,  (gen-get-var  $R $Seen $A) (gen-get  $Instrs $LTI1 $LTI $GTI0 $GTI)))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  ! (,  {(add-alloc  ($X $A yes) $LTI0 $LTI1) } (gen-get  $Instrs $LTI1 $LTI $GTI0 $GTI)))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get-int  $X $R $A)) (gen-get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get-float  $X $R $A)) (gen-get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(atom  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get-con  $X $R $A)) (gen-get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(ground  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((get-ground  $X $R $A)) (gen-get  $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(= $X  
+    ([|]  $X1 $X2)) } (,  ! (,  ((get-list  $A)) (,  (gen-unify  ($X1 $X2) $Instrs1 $LTI0 $LTI1 $GTI0 $GTI1) (,  (gen-get  $Instrs1 $LTI1 $LTI2 $GTI1 $GTI2) (gen-get  $Instrs $LTI2 $LTI $GTI2 $GTI)))))))  True)
+  (= (-->  (gen-get  ([|]  (= $A  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(,  (=..  $X ([|]  $F $Args)) (functor  $X $F $N)) } (,  {(assign-sreg  (:  (/  $F $N) con) $R $Seen $GTI0 $GTI1) } (,  (gen-put-con  (/  $F $N) $R $Seen $_ $GTI1 $GTI2) (,  ((get-str  (/  $F $N) $R $A)) (,  (gen-unify  $Args $Instrs1 $LTI0 $LTI1 $GTI2 $GTI3) (,  (gen-get  $Instrs1 $LTI1 $LTI2 $GTI3 $GTI4) (gen-get  $Instrs $LTI2 $LTI $GTI4 $GTI))))))))  True)
 
-  (= (-->  (gen_get_var  void $_ $_) !)  True)
-  (= (-->  (gen_get_var  $R $_ $A) ((get_val  $R $A)))  True)
+  (= (-->  (gen-get-var  void $_ $_) !)  True)
+  (= (-->  (gen-get-var  $R $_ $A) ((get-val  $R $A)))  True)
 
 ;
 ; ;;;;;;;;; unify instructions
-  (= (-->  (gen_unify  () () $LTI $LTI $GTI $GTI) !)  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  ! (,  {(assign_reg  $X $R $Seen $LTI0 $LTI1) } (,  (gen_unify_var  $R $Seen) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI0 $GTI))))))  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify_int  $X $R)) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify_float  $X $R)) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(is-symbol  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify_con  $X $R)) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(ground  $X) } (,  ! (,  (gen_put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify_ground  $X $R)) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
-  (= (-->  (gen_unify  (Cons  $X $Xs) (Cons  (= $R  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(assign_reg  $_ $R $Seen $LTI0 $LTI1) } (,  (gen_unify_var  $R $Seen) (gen_unify  $Xs $Instrs $LTI1 $LTI $GTI0 $GTI))))  True)
+  (= (-->  (gen-unify  () () $LTI $LTI $GTI $GTI) !)  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(var  $X) } (,  ! (,  {(assign-reg  $X $R $Seen $LTI0 $LTI1) } (,  (gen-unify-var  $R $Seen) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI0 $GTI))))))  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(integer  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify-int  $X $R)) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(float  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify-float  $X $R)) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(atom  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify-con  $X $R)) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) $Instrs $LTI0 $LTI $GTI0 $GTI) (,  {(ground  $X) } (,  ! (,  (gen-put  $X $R $LTI0 $LTI1 $GTI0 $GTI1) (,  ((unify-ground  $X $R)) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI1 $GTI))))))  True)
+  (= (-->  (gen-unify  ([|]  $X $Xs) ([|]  (= $R  $X) $Instrs) $LTI0 $LTI $GTI0 $GTI) (,  {(assign-reg  $_ $R $Seen $LTI0 $LTI1) } (,  (gen-unify-var  $R $Seen) (gen-unify  $Xs $Instrs $LTI1 $LTI $GTI0 $GTI))))  True)
 
 ;
 ; ;; unify_void, unify_variable, unify_value
-  (= (-->  (gen_unify_var  void $_) (,  ! ((unify_void  1))))  True)
-  (= (-->  (gen_unify_var  $R $Seen) (,  {(var  $Seen) } (,  ! (,  {(= $Seen  yes) } ((unify_var  $R))))))  True)
-  (= (-->  (gen_unify_var  $R $_) ((unify_val  $R)))  True)
+  (= (-->  (gen-unify-var  void $_) (,  ! ((unify-void  1))))  True)
+  (= (-->  (gen-unify-var  $R $Seen) (,  {(var  $Seen) } (,  ! (,  {(= $Seen  yes) } ((unify-var  $R))))))  True)
+  (= (-->  (gen-unify-var  $R $_) ((unify-val  $R)))  True)
 
 ;
 ; ;;;;;;;;; generate continuation goal
-  (= (-->  (gen_put_cont  $X $R $LTI0 $LTI $GTI $GTI) (,  {(inc_PN  $R $LTI0 $LTI) } ((put_cont  $X $R))))  True)
+  (= (-->  (gen-put-cont  $X $R $LTI0 $LTI $GTI $GTI) (,  {(inc-PN  $R $LTI0 $LTI) } ((put-cont  $X $R))))  True)
 
 ;
 ; ;; A register
 
   (= (assign-reg $X $Reg $Seen $LTI0 $LTI)  
-    (nonvar $X)
-    (set-det)
-    (pl2am-error (:: $X must be unbound variable in (assign-reg $X $Reg $Seen $LTI0 $LTI)))
-    (fail))
+    ( (nonvar $X) 
+      (set-det) 
+      (pl2am-error (:: $X must be unbound variable in (assign-reg $X $Reg $Seen $LTI0 $LTI))) fail))
   (= (assign-reg $X $Reg $Seen (:: $XN $YN $PN $Alloc) (:: $XN $YN $PN $Alloc))  
     (allocated $Alloc $X 
       (:: $Reg $Seen))
@@ -1890,22 +1849,21 @@
 ; ;; S register
 
   (= (assign-sreg $X $Reg $Seen $GTI0 $GTI)  
-    (not (ground $X))
-    (set-det)
-    (pl2am-error (:: $X must be ground term in (assign-sreg $X $Reg $Seen $GTI0 $GTI)))
-    (fail))
+    ( (not (ground $X)) 
+      (set-det) 
+      (pl2am-error (:: $X must be ground term in (assign-sreg $X $Reg $Seen $GTI0 $GTI))) fail))
   (= (assign-sreg $X $Reg $Seen (:: $SN $SAlloc $SInstrs) (:: $SN $SAlloc $SInstrs))  
     (allocated $SAlloc $X 
       (:: $Reg $Seen))
     (set-det))
-  (= (assign-sreg (with_self  $X $T) $Reg $Seen (:: $SN $SAlloc $SInstrs) (:: $SN1 $SAlloc1 $SInstrs))  
+  (= (assign-sreg (with-self  $X $T) $Reg $Seen (:: $SN $SAlloc $SInstrs) (:: $SN1 $SAlloc1 $SInstrs))  
     (assign-sreg0 $T $SN $Reg)
     (is $SN1 
       (+ $SN 1))
     (= $SAlloc1 
       (Cons  
         (:: 
-          (with_self  $X $T) $Reg $Seen) $SAlloc)))
+          (with-self  $X $T) $Reg $Seen) $SAlloc)))
 
 
   (= (assign-sreg0 int $SN (si $SN))  
@@ -1940,142 +1898,142 @@
 ;
 ; ;; add an instruction to GTI
 
-  (= (add_instr  $Instr ($SN $SAlloc $SInstrs0) ($SN $SAlloc (Cons  $Instr $SInstrs0)))  True)
+  (= (add-instr  $Instr ($SN $SAlloc $SInstrs0) ($SN $SAlloc ([|]  $Instr $SInstrs0)))  True)
 
 ;
 ; ;; add an allocation to LTI
 
-  (= (add_alloc  $E ($XN $YN $PN $Alloc0) ($XN $YN $PN (Cons  $E $Alloc0)))  True)
+  (= (add-alloc  $E ($XN $YN $PN $Alloc0) ($XN $YN $PN ([|]  $E $Alloc0)))  True)
 
 
-  (= (builtin_meta_predicates  ^ 2 (? :))  True)
+  (= (builtin-meta-predicates  ^ 2 (? :))  True)
 ; /***************************************************************** Built-in Predicates and Constants *****************************************************************/
-  (= (builtin_meta_predicates  call 1 (:))  True)
-  (= (builtin_meta_predicates  once 1 (:))  True)
-  (= (builtin_meta_predicates  \+ 1 (:))  True)
-  (= (builtin_meta_predicates  findall 3 (? : ?))  True)
-  (= (builtin_meta_predicates  bagof 3 (? : ?))  True)
-  (= (builtin_meta_predicates  setof 3 (? : ?))  True)
-  (= (builtin_meta_predicates  on_exception 3 (? : :))  True)
-  (= (builtin_meta_predicates  catch 3 (: ? :))  True)
-  (= (builtin_meta_predicates  synchronized 2 (? :))  True)
-  (= (builtin_meta_predicates  freeze 2 (? :))  True)
+  (= (builtin-meta-predicates  call 1 (:))  True)
+  (= (builtin-meta-predicates  once 1 (:))  True)
+  (= (builtin-meta-predicates  \+ 1 (:))  True)
+  (= (builtin-meta-predicates  findall 3 (? : ?))  True)
+  (= (builtin-meta-predicates  bagof 3 (? : ?))  True)
+  (= (builtin-meta-predicates  setof 3 (? : ?))  True)
+  (= (builtin-meta-predicates  on_exception 3 (? : :))  True)
+  (= (builtin-meta-predicates  catch 3 (: ? :))  True)
+  (= (builtin-meta-predicates  synchronized 2 (? :))  True)
+  (= (builtin-meta-predicates  freeze 2 (? :))  True)
 
 
-  (= (builtin_local_predicates  assert 1 (:))  True)
-  (= (builtin_local_predicates  asserta 1 (:))  True)
-  (= (builtin_local_predicates  assertz 1 (:))  True)
-  (= (builtin_local_predicates  retract 1 (:))  True)
-  (= (builtin_local_predicates  retractall 1 (:))  True)
-  (= (builtin_local_predicates  assert 2 (: ?))  True)
-  (= (builtin_local_predicates  asserta 2 (: ?))  True)
-  (= (builtin_local_predicates  assertz 2 (: ?))  True)
-  (= (builtin_local_predicates  retract 2 (: ?))  True)
-  (= (builtin_local_predicates  retractall 2 (: ?))  True)
-  (= (builtin_local_predicates  save 2 (? :))  True)
-  (= (builtin_local_predicates  clause 2 (: ?))  True)
-  (= (builtin_local_predicates  abolish 1 (:))  True)
-  (= (builtin_local_predicates  log_level 1 (:))  True)
-  (= (builtin_local_predicates  loggable 1 (:))  True)
-  (= (builtin_local_predicates  log_error 2 (: ?))  True)
-  (= (builtin_local_predicates  log 2 (: ?))  True)
-  (= (builtin_local_predicates  log 3 (: ? ?))  True)
-  (= (builtin_local_predicates  log 4 (: ? ? ?))  True)
-  (= (builtin_local_predicates  log 5 (: ? ? ? ?))  True)
-  (= (builtin_local_predicates  log 6 (: ? ? ? ? ?))  True)
-  (= (builtin_local_predicates  log 7 (: ? ? ? ? ? ?))  True)
+  (= (builtin-local-predicates  assert 1 (:))  True)
+  (= (builtin-local-predicates  asserta 1 (:))  True)
+  (= (builtin-local-predicates  assertz 1 (:))  True)
+  (= (builtin-local-predicates  retract 1 (:))  True)
+  (= (builtin-local-predicates  retractall 1 (:))  True)
+  (= (builtin-local-predicates  assert 2 (: ?))  True)
+  (= (builtin-local-predicates  asserta 2 (: ?))  True)
+  (= (builtin-local-predicates  assertz 2 (: ?))  True)
+  (= (builtin-local-predicates  retract 2 (: ?))  True)
+  (= (builtin-local-predicates  retractall 2 (: ?))  True)
+  (= (builtin-local-predicates  save 2 (? :))  True)
+  (= (builtin-local-predicates  clause 2 (: ?))  True)
+  (= (builtin-local-predicates  abolish 1 (:))  True)
+  (= (builtin-local-predicates  log_level 1 (:))  True)
+  (= (builtin-local-predicates  loggable 1 (:))  True)
+  (= (builtin-local-predicates  log_error 2 (: ?))  True)
+  (= (builtin-local-predicates  log 2 (: ?))  True)
+  (= (builtin-local-predicates  log 3 (: ? ?))  True)
+  (= (builtin-local-predicates  log 4 (: ? ? ?))  True)
+  (= (builtin-local-predicates  log 5 (: ? ? ? ?))  True)
+  (= (builtin-local-predicates  log 6 (: ? ? ? ? ?))  True)
+  (= (builtin-local-predicates  log 7 (: ? ? ? ? ? ?))  True)
 
-  (= (builtin_meta_predicates  with_mutex 2 (? :))  True)
+  (= (builtin-meta-predicates  with_mutex 2 (? :))  True)
 
 ;
 ; Control constructs
 
-  (= (builtin_inline_predicates  fail)  True)
-  (= (builtin_inline_predicates  (%get_level  $_))  True)
-  (= (builtin_inline_predicates  $neck_cut)  True)
-  (= (builtin_inline_predicates  (%cut  $_))  True)
+  (= (builtin-inline-predicates  fail)  True)
+  (= (builtin-inline-predicates  (%get-level  $_))  True)
+  (= (builtin-inline-predicates  $neck_cut)  True)
+  (= (builtin-inline-predicates  (%cut  $_))  True)
 ;
 ; Term unification
-  (= (builtin_inline_predicates  (%unify  $_ $_))  True)
-  (= (builtin_inline_predicates  (%not_unifiable  $_ $_))  True)
+  (= (builtin-inline-predicates  (%unify  $_ $_))  True)
+  (= (builtin-inline-predicates  (%not-unifiable  $_ $_))  True)
 ;
 ; Type testing
-  (= (builtin_inline_predicates  (var  $_))  True)
-  (= (builtin_inline_predicates  (is-symbol  $_))  True)
-  (= (builtin_inline_predicates  (integer  $_))  True)
-  (= (builtin_inline_predicates  (long  $_))  True)
-  (= (builtin_inline_predicates  (float  $_))  True)
-  (= (builtin_inline_predicates  (is-symbolic  $_))  True)
-  (= (builtin_inline_predicates  (nonvar  $_))  True)
-  (= (builtin_inline_predicates  (number  $_))  True)
-  (= (builtin_inline_predicates  (java  $_))  True)
-  (= (builtin_inline_predicates  (java  $_ $_))  True)
-  (= (builtin_inline_predicates  (closure  $_))  True)
-  (= (builtin_inline_predicates  (ground  $_))  True)
+  (= (builtin-inline-predicates  (var  $_))  True)
+  (= (builtin-inline-predicates  (atom  $_))  True)
+  (= (builtin-inline-predicates  (integer  $_))  True)
+  (= (builtin-inline-predicates  (long  $_))  True)
+  (= (builtin-inline-predicates  (float  $_))  True)
+  (= (builtin-inline-predicates  (atomic  $_))  True)
+  (= (builtin-inline-predicates  (nonvar  $_))  True)
+  (= (builtin-inline-predicates  (number  $_))  True)
+  (= (builtin-inline-predicates  (java  $_))  True)
+  (= (builtin-inline-predicates  (java  $_ $_))  True)
+  (= (builtin-inline-predicates  (closure  $_))  True)
+  (= (builtin-inline-predicates  (ground  $_))  True)
 ;
 ; Term comparison
-  (= (builtin_inline_predicates  (%equality_of_term  $_ $_))  True)
-  (= (builtin_inline_predicates  (%inequality_of_term  $_ $_))  True)
-  (= (builtin_inline_predicates  (%after  $_ $_))  True)
-  (= (builtin_inline_predicates  (%before  $_ $_))  True)
-  (= (builtin_inline_predicates  (%not_after  $_ $_))  True)
-  (= (builtin_inline_predicates  (%not_before  $_ $_))  True)
-  (= (builtin_inline_predicates  (%identical_or_cannot_unify  $_ $_))  True)
+  (= (builtin-inline-predicates  (%equality-of-term  $_ $_))  True)
+  (= (builtin-inline-predicates  (%inequality-of-term  $_ $_))  True)
+  (= (builtin-inline-predicates  (%after  $_ $_))  True)
+  (= (builtin-inline-predicates  (%before  $_ $_))  True)
+  (= (builtin-inline-predicates  (%not-after  $_ $_))  True)
+  (= (builtin-inline-predicates  (%not-before  $_ $_))  True)
+  (= (builtin-inline-predicates  (%identical-or-cannot-unify  $_ $_))  True)
 ;
 ; Term creation and decomposition
-  (= (builtin_inline_predicates  (copy_term  $_ $_))  True)
+  (= (builtin-inline-predicates  (copy-term  $_ $_))  True)
 ;
 ; Arithmetic evaluation
-  (= (builtin_inline_predicates  (is  $_ $_))  True)
-  (= (builtin_inline_predicates  (%abs  $_ $_))  True)
-  (= (builtin_inline_predicates  (%asin  $_ $_))  True)
-  (= (builtin_inline_predicates  (%acos  $_ $_))  True)
-  (= (builtin_inline_predicates  (%atan  $_ $_))  True)
-  (= (builtin_inline_predicates  (%bitwise_conj  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%bitwise_disj  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%bitwise_exclusive_or  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%bitwise_neg  $_ $_))  True)
-  (= (builtin_inline_predicates  (%ceil  $_ $_))  True)
-  (= (builtin_inline_predicates  (%cos  $_ $_))  True)
-  (= (builtin_inline_predicates  (%degrees  $_ $_))  True)
-  (= (builtin_inline_predicates  (%exp  $_ $_))  True)
-  (= (builtin_inline_predicates  (%float_quotient  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%floor  $_ $_))  True)
-  (= (builtin_inline_predicates  (%int_quotient  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%log  $_ $_))  True)
-  (= (builtin_inline_predicates  (%max  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%min  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%minus  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%mod  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%multi  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%plus  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%pow  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%radians  $_ $_))  True)
-  (= (builtin_inline_predicates  (%rint  $_ $_))  True)
-  (= (builtin_inline_predicates  (%round  $_ $_))  True)
-  (= (builtin_inline_predicates  (%shift_left  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%shift_right  $_ $_ $_))  True)
-  (= (builtin_inline_predicates  (%sin  $_ $_))  True)
-  (= (builtin_inline_predicates  (%sqrt  $_ $_))  True)
-  (= (builtin_inline_predicates  (%tan  $_ $_))  True)
-  (= (builtin_inline_predicates  (%float  $_ $_))  True)
-  (= (builtin_inline_predicates  (%float_integer_part  $_ $_))  True)
-  (= (builtin_inline_predicates  (%float_fractional_part  $_ $_))  True)
-  (= (builtin_inline_predicates  (%truncate  $_ $_))  True)
-  (= (builtin_inline_predicates  (%sign  $_ $_))  True)
+  (= (builtin-inline-predicates  (is  $_ $_))  True)
+  (= (builtin-inline-predicates  (%abs  $_ $_))  True)
+  (= (builtin-inline-predicates  (%asin  $_ $_))  True)
+  (= (builtin-inline-predicates  (%acos  $_ $_))  True)
+  (= (builtin-inline-predicates  (%atan  $_ $_))  True)
+  (= (builtin-inline-predicates  (%bitwise-conj  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%bitwise-disj  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%bitwise-exclusive-or  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%bitwise-neg  $_ $_))  True)
+  (= (builtin-inline-predicates  (%ceil  $_ $_))  True)
+  (= (builtin-inline-predicates  (%cos  $_ $_))  True)
+  (= (builtin-inline-predicates  (%degrees  $_ $_))  True)
+  (= (builtin-inline-predicates  (%exp  $_ $_))  True)
+  (= (builtin-inline-predicates  (%float-quotient  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%floor  $_ $_))  True)
+  (= (builtin-inline-predicates  (%int-quotient  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%log  $_ $_))  True)
+  (= (builtin-inline-predicates  (%max  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%min  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%minus  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%mod  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%multi  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%plus  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%pow  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%radians  $_ $_))  True)
+  (= (builtin-inline-predicates  (%rint  $_ $_))  True)
+  (= (builtin-inline-predicates  (%round  $_ $_))  True)
+  (= (builtin-inline-predicates  (%shift-left  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%shift-right  $_ $_ $_))  True)
+  (= (builtin-inline-predicates  (%sin  $_ $_))  True)
+  (= (builtin-inline-predicates  (%sqrt  $_ $_))  True)
+  (= (builtin-inline-predicates  (%tan  $_ $_))  True)
+  (= (builtin-inline-predicates  (%float  $_ $_))  True)
+  (= (builtin-inline-predicates  (%float-integer-part  $_ $_))  True)
+  (= (builtin-inline-predicates  (%float-fractional-part  $_ $_))  True)
+  (= (builtin-inline-predicates  (%truncate  $_ $_))  True)
+  (= (builtin-inline-predicates  (%sign  $_ $_))  True)
 ;
 ; Arithmetic comparison
-  (= (builtin_inline_predicates  (%arith_equal  $_ $_))  True)
-  (= (builtin_inline_predicates  (%arith_not_equal  $_ $_))  True)
-  (= (builtin_inline_predicates  (%greater_or_equal  $_ $_))  True)
-  (= (builtin_inline_predicates  (%greater_than  $_ $_))  True)
-  (= (builtin_inline_predicates  (%less_or_equal  $_ $_))  True)
-  (= (builtin_inline_predicates  (%less_than  $_ $_))  True)
+  (= (builtin-inline-predicates  (%arith-equal  $_ $_))  True)
+  (= (builtin-inline-predicates  (%arith-not-equal  $_ $_))  True)
+  (= (builtin-inline-predicates  (%greater-or-equal  $_ $_))  True)
+  (= (builtin-inline-predicates  (%greater-than  $_ $_))  True)
+  (= (builtin-inline-predicates  (%less-or-equal  $_ $_))  True)
+  (= (builtin-inline-predicates  (%less-than  $_ $_))  True)
 
 
-  (= (builtin_arith_constant  random)  True)
-  (= (builtin_arith_constant  pi)  True)
-  (= (builtin_arith_constant  e)  True)
+  (= (builtin-arith-constant  random)  True)
+  (= (builtin-arith-constant  pi)  True)
+  (= (builtin-arith-constant  e)  True)
 
 
   (= (eliminate-disj $Cl $NewCl $DummyCls)  
@@ -2085,15 +2043,15 @@
 ; ; The clause a :- b;c is converted into a :- b. and a :- c. ; In addition, ; (C1 -> C2) is converted into ((C1,!,C2) ; fail). ; ((C1 -> C2) ; C3) is converted into ((C1,!,C2) ; C3). ; not(C) is converted into ((C,!,fail) ; true). ; \+(C) is converted into ((C,!,fail) ; true). ; And then all of disjunctions are eliminated. ; ; Note: this is based on flatten.pl in holmer's benchmark.
 
 
-  (= (-->  (extract_disj  $Cl $Cl) (,  {(var  $Cl) } !))  True)
-  (= (-->  (extract_disj  $Cl (:-  $H $NewB)) (,  {(= $Cl  
-    (:-  $H $B)) } (,  ! (extract_disj  $B $NewB $Cl))))  True)
-  (= (-->  (extract_disj  $Cl $Cl) !)  True)
+  (= (-->  (extract-disj  $Cl $Cl) (,  {(var  $Cl) } !))  True)
+  (= (-->  (extract-disj  $Cl (:-  $H $NewB)) (,  {(= $Cl  
+    (:-  $H $B)) } (,  ! (extract-disj  $B $NewB $Cl))))  True)
+  (= (-->  (extract-disj  $Cl $Cl) !)  True)
 
-  (= (-->  (extract_disj  $G $G $_) (,  {(var  $G) } !))  True)
-  (= (-->  (extract_disj  (,  $G1 $G2) (,  $NewG1 $NewG2) $Cl) (,  ! (,  (extract_disj  $G1 $NewG1 $Cl) (extract_disj  $G2 $NewG2 $Cl))))  True)
-  (= (-->  (extract_disj  $G $NewG $Cl) (,  {(is_disj  $G $DisjG) } (,  ! (,  {(retract  (dummy_clause_counter  $N)) } (,  ((disj  $DisjG $N $NewG $Cl)) (,  {(is  $N1 (+  $N 1)) } {(assert  (dummy_clause_counter  $N1)) }))))))  True)
-  (= (-->  (extract_disj  $G $G $_) !)  True)
+  (= (-->  (extract-disj  $G $G $_) (,  {(var  $G) } !))  True)
+  (= (-->  (extract-disj  (,  $G1 $G2) (,  $NewG1 $NewG2) $Cl) (,  ! (,  (extract-disj  $G1 $NewG1 $Cl) (extract-disj  $G2 $NewG2 $Cl))))  True)
+  (= (-->  (extract-disj  $G $NewG $Cl) (,  {(is-disj  $G $DisjG) } (,  ! (,  {(retract  (dummy-clause-counter  $N)) } (,  ((disj  $DisjG $N $NewG $Cl)) (,  {(is  $N1 (+  $N 1)) } {(assert  (dummy-clause-counter  $N1)) }))))))  True)
+  (= (-->  (extract-disj  $G $G $_) !)  True)
 
 
   (= (is-disj (det-if-then $C1 $C2) (or (, $C1 (set-det) $C2) fail))  
@@ -2102,13 +2060,13 @@
     (set-det))
   (= (is-disj (or $C1 $C2) (or $C1 $C2))  
     (set-det))
-  (= (is-disj (not $C) (or (, $C (set-det) (fail)) True))  
+  (= (is-disj (not $C) (or (, $C (set-det) fail) True))  
     (set-det))
-  (= (is_disj  (\+  $C) (;  (,  $C (,  ! fail)) true))  True)
+  (= (is-disj  (\+  $C) (;  (,  $C (,  ! fail)) true))  True)
 
 
-  (= (-->  (treat_disj  ()) !)  True)
-  (= (-->  (treat_disj  (Cons  (disj  (;  $A $B) $N $X $C) $Disjs)) (,  {(variables  (;  $A $B) $Vars) } (,  {(variables  $C $CVars) } (,  {(intersect_vars  $Vars $CVars $Args) } (,  {(clause  (file_name  $File) $_) } (,  {(list_to_string  ($dummy_ $N _ $File) $Name) } (,  {(=..  $X (Cons  $Name $Args)) } (,  {(copy_term  (:-  $X $A) $DummyCla) } (,  {(copy_term  (:-  $X $B) $DummyClb) } (,  ($DummyCla) (,  ($DummyClb) (treat_disj  $Disjs))))))))))))  True)
+  (= (-->  (treat-disj  ()) !)  True)
+  (= (-->  (treat-disj  ([|]  (disj  (;  $A $B) $N $X $C) $Disjs)) (,  {(variables  (;  $A $B) $Vars) } (,  {(variables  $C $CVars) } (,  {(intersect-vars  $Vars $CVars $Args) } (,  {(clause  (file-name  $File) $_) } (,  {(list-to-string  ($dummy_ $N _ $File) $Name) } (,  {(=..  $X ([|]  $Name $Args)) } (,  {(copy-term  (:-  $X $A) $DummyCla) } (,  {(copy-term  (:-  $X $B) $DummyClb) } (,  ($DummyCla) (,  ($DummyClb) (treat-disj  $Disjs))))))))))))  True)
 
 
   (= (intersect-vars $V1 $V2 $Out)  
@@ -2119,7 +2077,7 @@
 
   (= (intersect-sorted-vars Nil $_ Nil)  
     (set-det))
-  (= (intersect_sorted_vars  $_ () ())  True)
+  (= (intersect-sorted-vars  $_ () ())  True)
   (= (intersect-sorted-vars (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $X $Rs))  
     (== $X $Y)
     (set-det)
@@ -2139,7 +2097,7 @@
   (= (pl2am-error $M)  
     ( (==  
         (= 
-          (file_line  $File $Line) $_) 
+          (file-line  $File $Line) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (pl2am-message user-error 
@@ -2175,7 +2133,7 @@
 ;
 ; ;; format
 
-  (= (mode_expr  ())  True)
+  (= (mode-expr  ())  True)
   (= (mode-expr (Cons  $M $Ms))  
     (nonvar $M)
     (pl2am-member $M 
@@ -2191,20 +2149,20 @@
 ;
 ; ;; list
 
-  (= (pl2am_append  () $Zs $Zs)  True)
+  (= (pl2am-append  () $Zs $Zs)  True)
   (= (pl2am-append (Cons  $X $Xs) $Ys (Cons  $X $Zs))  
     (pl2am-append $Xs $Ys $Zs))
 
 
   (= (pl2am-rev $L $R)  
     (pl2am-rev $L Nil $R))
-  (= (pl2am_rev  () $R $R)  True)
+  (= (pl2am-rev  () $R $R)  True)
   (= (pl2am-rev (Cons  $X $L) $Y $R)  
     (pl2am-rev $L 
       (Cons  $X $Y) $R))
 
 
-  (= (pl2am_member  $X (Cons  $X $_))  True)
+  (= (pl2am-member  $X ([|]  $X $_))  True)
   (= (pl2am-member $X (Cons  $_ $Ys))  
     (pl2am-member $X $Ys))
 
@@ -2216,17 +2174,17 @@
     (pl2am-memq $X $Ys))
 
 
-  (= (-->  (flatten_list  ()) !)  True)
-  (= (-->  (flatten_list  (Cons  $L1 $L2)) (,  ! (,  (flatten_list  $L1) (flatten_list  $L2))))  True)
-  (= (-->  (flatten_list  $L) ($L))  True)
+  (= (-->  (flatten-list  ()) !)  True)
+  (= (-->  (flatten-list  ([|]  $L1 $L2)) (,  ! (,  (flatten-list  $L1) (flatten-list  $L2))))  True)
+  (= (-->  (flatten-list  $L) ($L))  True)
 
-  (= (-->  (flatten_code  ()) !)  True)
-  (= (-->  (flatten_code  (Cons  (:  $L $C) $Code)) (,  ! (,  ((:  $L ())) (flatten_code  (Cons  $C $Code)))))  True)
-  (= (-->  (flatten_code  (Cons  $Code1 $Code2)) (,  ! (,  (flatten_code  $Code1) (flatten_code  $Code2))))  True)
-  (= (-->  (flatten_code  $Code) ($Code))  True)
+  (= (-->  (flatten-code  ()) !)  True)
+  (= (-->  (flatten-code  ([|]  (:  $L $C) $Code)) (,  ! (,  ((:  $L ())) (flatten-code  ([|]  $C $Code)))))  True)
+  (= (-->  (flatten-code  ([|]  $Code1 $Code2)) (,  ! (,  (flatten-code  $Code1) (flatten-code  $Code2))))  True)
+  (= (-->  (flatten-code  $Code) ($Code))  True)
 
 
-  (= (pl2am_maplist  $_ () ())  True)
+  (= (pl2am-maplist  $_ () ())  True)
   (= (pl2am-maplist $Goal (Cons  $Elem1 $Tail1) (Cons  $Elem2 $Tail2))  
     (=.. $Term 
       (:: $Goal $Elem1 $Elem2))
@@ -2236,21 +2194,21 @@
 
   (= (pl2am-resolve-file $BaseFile $File $File)  
     (= $File 
-      (with_self  $Package $ResourceName))
+      (with-self  $Package $ResourceName))
     (set-det))
 
   (= (pl2am-resolve-file $BaseFile $File $IncludeFile)  
     (pl2am-file-directory $BaseFile $Directory)
-    (atom-concat $Directory $File $IncludeFile))
+    (symbol-concat $Directory $File $IncludeFile))
 
 
   (= (pl2am-file-directory $BaseFile $Directory)  
-    (atom-chars $BaseFile $BaseFileChars)
+    (symbol-chars $BaseFile $BaseFileChars)
     (pl2am-rev $BaseFileChars $BaseFileCharsRev)
     (pl2am-file-directory- $BaseFileCharsRev $DirectoryCharsRev)
     (pl2am-add-directory-separator $DirectoryCharsRev $DirectoryCharsRev1)
     (pl2am-rev $DirectoryCharsRev1 $DirectoryChars)
-    (atom-chars $Directory $DirectoryChars))
+    (symbol-chars $Directory $DirectoryChars))
 
 
   (= (pl2am-file-directory- Nil Nil)  
@@ -2275,16 +2233,15 @@
     (= $D 
       (Cons  \ $_))
     (set-det))
-  (= (pl2am_add_directory_separator  $D (Cons  / $D))  True)
+  (= (pl2am-add-directory-separator  $D ([|]  / $D))  True)
 
 ;
 ; ;; transform
 
   (= (conj-to-list $X $_)  
-    (var $X)
-    (set-det)
-    (pl2am-error (:: variable $X can not be converted to [A|B] expression))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (pl2am-error (:: variable $X can not be converted to [A|B] expression)) fail))
   (= (conj-to-list (, $X1 $X2 $Xs) $Y)  
     (set-det)
     (conj-to-list 
@@ -2292,13 +2249,13 @@
   (= (conj-to-list (, $X $Xs) (Cons  $X $Zs))  
     (set-det)
     (conj-to-list $Xs $Zs))
-  (= (conj_to_list  $X ($X))  True)
+  (= (conj-to-list  $X ($X))  True)
 
 
   (= (list-to-string $List $String)  
     (list-to-chars $List $Chars0)
     (flatten-list $Chars0 $Chars Nil)
-    (atom-codes $String $Chars))
+    (symbol-codes $String $Chars))
 
 
   (= (list-to-chars Nil Nil)  
@@ -2306,7 +2263,7 @@
   (= (list-to-chars (Cons  $L $Ls) (Cons  $C $Cs))  
     (atom $L)
     (set-det)
-    (atom-codes $L $C)
+    (symbol-codes $L $C)
     (list-to-chars $Ls $Cs))
   (= (list-to-chars (Cons  $L $Ls) (Cons  $C $Cs))  
     (number $L)
@@ -2321,11 +2278,10 @@
 
 
   (= (list-to-conj0 $X $_)  
-    (var $X)
-    (set-det)
-    (pl2am-error (:: variable $X can not be converted to '(A,B)' expression))
-    (fail))
-  (= (list_to_conj0  ($X) $X)  True)
+    ( (var $X) 
+      (set-det) 
+      (pl2am-error (:: variable $X can not be converted to '(A,B)' expression)) fail))
+  (= (list-to-conj0  ($X) $X)  True)
   (= (list-to-conj0 (Cons  $X $Xs) (, $X $Ys))  
     (set-det)
     (list-to-conj0 $Xs $Ys))
@@ -2423,7 +2379,7 @@
   !(package TauPrologG.compiler.am2cpp)
   !(public (, (/ main 0) (/ am2cpp 1)))
 
-  (= (main-am2cpp)  
+  (= main-am2cpp  
     (read $X)
     (am2cpp $X))
 ; /***************************************************************** Main *****************************************************************/
@@ -2441,40 +2397,37 @@
     (am2cpp (:: $File .)))
   (= (am2cpp (:: $File $Dir))  
     ( (remove-all-atoms  &self 
-        (dest_dir  $_)) 
-      (add-is-symbol  &self 
-        (dest_dir  $Dir)) 
-      (open $File read $In) 
-      (repeat) 
+        (dest-dir  $_)) 
+      (add-atom  &self 
+        (dest-dir  $Dir)) 
+      (open $File read $In) repeat 
       (read $In $X) 
       (write-java $X $In) 
       (== $X end-of-file) 
       (set-det) 
-      (close $In) 
-      (write-domains)))
+      (close $In) write-domains))
 
 
-  (= (write-domains)  
+  (= write-domains  
     ( (==  
         (= 
-          (dest_dir  $Dir) $_) 
+          (dest-dir  $Dir) $_) 
         (get-atoms  &self)) 
       (findall $D 
         (domain-definition $D) $LD) 
       (catch 
-        (with_self  
+        (with-self  
           (TauPrologG.builtin *) 
-          (call (with_self  (TauPrologG.builtin *) (write-domain-definitions $Dir $LD)))) $_ 
+          (call (with-self  (TauPrologG.builtin *) (write-domain-definitions $Dir $LD)))) $_ 
         (am2cpp-message (:: domain definitions are not supported and skipped)))))
 ; ; on some platforms (like SWI MeTTa) predicate write_domain_definitions might be not available
 ; ; so wrap it with catch and produce warning message
 
 
   (= (write-java $X $_)  
-    (var $X)
-    (set-det)
-    (am2cpp-error (:: unbound variable is found))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (am2cpp-error (:: unbound variable is found)) fail))
   (= (write-java end-of-file $_)  
     (set-det))
   (= (write-java !$G $_)  
@@ -2483,22 +2436,22 @@
   (= (write-java (begin-predicate $P (/ $F $A)) $In)  
     ( (==  
         (= 
-          (dest_dir  $Dir) $_) 
+          (dest-dir  $Dir) $_) 
         (get-atoms  &self)) 
       (remove-all-atoms  &self 
-        (current_package  $_)) 
+        (current-package  $_)) 
       (remove-all-atoms  &self 
-        (current_arity  $_)) 
+        (current-arity  $_)) 
       (remove-all-atoms  &self 
-        (current_functor  $_)) 
+        (current-functor  $_)) 
       (remove-all-atoms  &self 
         (inlined  $_ $_)) 
-      (add-is-symbol  &self 
-        (current_package  $P)) 
-      (add-is-symbol  &self 
-        (current_arity  $A)) 
-      (add-is-symbol  &self 
-        (current_functor  $F)) 
+      (add-atom  &self 
+        (current-package  $P)) 
+      (add-atom  &self 
+        (current-arity  $A)) 
+      (add-atom  &self 
+        (current-functor  $F)) 
       (predicate-encoding $F $F1) 
       (package-encoding $P $PDir) 
       (list-to-string 
@@ -2510,8 +2463,7 @@
       (write $Out 'package ') 
       (write-package $P $Out) 
       (write $Out or) 
-      (nl $Out) 
-      (repeat) 
+      (nl $Out) repeat 
       (read $In $X) 
       (write-java0 $X $In $Out) 
       (== $X 
@@ -2520,15 +2472,13 @@
       (close $Out) 
       (set-det)))
   (= (write-java $X $_)  
-    (am2cpp-error (:: $X is an invalid argument in (/ write-java 2)))
-    (fail))
+    ( (am2cpp-error (:: $X is an invalid argument in (/ write-java 2))) fail))
 
 
   (= (write-java0 $X $_ $_)  
-    (var $X)
-    (set-det)
-    (am2cpp-error (:: unbound variable is found))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (am2cpp-error (:: unbound variable is found)) fail))
 ; /***************************************************************** Write Java *****************************************************************/
   (= (write-java0 Nil $_ $_)  
     (set-det))
@@ -2589,7 +2539,7 @@
       (write-package $FA $Out))
     (write $Out or)
     (nl $Out))
-  (= (write-java0 (with_self  $Label $Instruction) $In $Out)  
+  (= (write-java0 (with-self  $Label $Instruction) $In $Out)  
     (set-det)
     (write-label $Label $Out)
     (write-java0 $Instruction $In $Out))
@@ -2670,7 +2620,7 @@
     (set-det)
     (det-if-then-else 
       (= $BinG 
-        (with_self  $P $G)) True 
+        (with-self  $P $G)) True 
       (= $BinG $G))
     (functor $G $F $A0)
     (is $A 
@@ -2700,7 +2650,7 @@
     (set-det)
     (det-if-then-else 
       (= $BinG 
-        (with_self  $P $G)) True 
+        (with-self  $P $G)) True 
       (= $BinG $G))
     (functor $G $F $A0)
     (is $A 
@@ -2812,7 +2762,7 @@
     (write $Out );)
     (nl $Out))
   (= (write-java0 (put-con (/ $F $A) $X) $_ $Out)  
-    ( (set-det) (add-is-symbol  &self (inlined  $X (/  $F $A)))))
+    ( (set-det) (add-atom  &self (inlined  $X (/  $F $A)))))
   (= (write-java0 (put-con $C $X) $_ $Out)  
     (set-det)
     (tab $Out 4)
@@ -2874,7 +2824,7 @@
     (write $Out );)
     (nl $Out))
   (= (write-java0 (put-str-args $Xs (s $Y)) $_ $Out)  
-    ( (set-det) (add-is-symbol  &self (inlined  (s  $Y) (str_args  $Xs)))))
+    ( (set-det) (add-atom  &self (inlined  (s  $Y) (str-args  $Xs)))))
   (= (write-java0 (put-str-args $Xs $Y) $_ $Out)  
     (set-det)
     (det-if-then-else 
@@ -2894,7 +2844,7 @@
     (set-det)
     (det-if-then-else 
       (= $G0 
-        (with_self  $P $G)) True 
+        (with-self  $P $G)) True 
       (= $G0 $G))
     (functor $G $F $A)
     (=.. $G 
@@ -3020,7 +2970,7 @@
     ( (set-det) 
       (==  
         (= 
-          (current_arity  $A) $_) 
+          (current-arity  $A) $_) 
         (get-atoms  &self)) 
       (tab $Out 8) 
       (write $Out engine.jtry) 
@@ -3105,15 +3055,14 @@
     (write $Out ).exec(engine);)
     (nl $Out))
   (= (write-java0 $Instruction $_ $_)  
-    (am2cpp-error (:: $Instruction is an invalid instruction))
-    (fail))
+    ( (am2cpp-error (:: $Instruction is an invalid instruction)) fail))
 
 
   (= (write-label (main (/ $F $A) $Modifier) $Out)  
     ( (set-det) 
       (==  
         (= 
-          (current_package  $P) $_) 
+          (current-package  $P) $_) 
         (get-atoms  &self)) 
       (nl $Out) 
       (nl $Out) 
@@ -3171,33 +3120,31 @@
     (set-det))
 ; ; method for control instructions and clauses
   (= (write-label $Instruction $_ $_)  
-    (am2cpp-error (:: $Instruction is an invalid instruction))
-    (fail))
+    ( (am2cpp-error (:: $Instruction is an invalid instruction)) fail))
 
 
   (= (write-constructor (/ $F $A) $Out)  
-    (tab $Out 4)
-    (write $Out 'public ')
-    (write-class-name 
-      (/ $F $A) $Out)
-    (write $Out ()
-    (det-if-then-else 
+    ( (tab $Out 4) 
+      (write $Out 'public ') 
+      (write-class-name 
+        (/ $F $A) $Out) 
+      (write $Out () 
+      (det-if-then-else 
+        (> $A 0) 
+        (write-enum '' 'Term a' 1 $A ,  ,  0 $Out) True) 
+      (write $Out 'Operation cont) {') 
+      (nl $Out) 
       (> $A 0) 
-      (write-enum '' 'Term a' 1 $A ,  ,  0 $Out) True)
-    (write $Out 'Operation cont) {')
-    (nl $Out)
-    (> $A 0)
-    (for $I 1 $A)
-    (tab $Out 8)
-    (write $Out this.)
-    (write $Out arg)
-    (write $Out $I)
-    (write $Out  = )
-    (write $Out a)
-    (write $Out $I)
-    (write $Out or)
-    (nl $Out)
-    (fail))
+      (for $I 1 $A) 
+      (tab $Out 8) 
+      (write $Out this.) 
+      (write $Out arg) 
+      (write $Out $I) 
+      (write $Out  = ) 
+      (write $Out a) 
+      (write $Out $I) 
+      (write $Out or) 
+      (nl $Out) fail))
 ; /***************************************************************** Write Constructor *****************************************************************/
   (= (write-constructor $_ $Out)  
     (tab $Out 8)
@@ -3208,16 +3155,15 @@
 
 
   (= (write-enum $Head $Sym $SN $EN $Delim $_ $Tab $Out)  
-    (=< $SN $EN)
-    (tab $Out $Tab)
-    (write $Out $Head)
-    (for $I $SN $EN)
-    (write $Out $Sym)
-    (write $Out $I)
-    (det-if-then-else 
-      (< $I $EN) 
-      (write $Out $Delim) True)
-    (fail))
+    ( (=< $SN $EN) 
+      (tab $Out $Tab) 
+      (write $Out $Head) 
+      (for $I $SN $EN) 
+      (write $Out $Sym) 
+      (write $Out $I) 
+      (det-if-then-else 
+        (< $I $EN) 
+        (write $Out $Delim) True) fail))
   (= (write-enum $_ $_ $SN $EN $_ $Tail $_ $Out)  
     (=< $SN $EN)
     (write $Out $Tail))
@@ -3240,10 +3186,9 @@
 
 
   (= (write-unify-r $X $_ $_)  
-    (var $X)
-    (set-det)
-    (am2cpp-error (:: unbound variable is found))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (am2cpp-error (:: unbound variable is found)) fail))
   (= (write-unify-r (unify-var $X) $N $Out)  
     (set-det)
     (tab $Out 12)
@@ -3286,8 +3231,7 @@
     (write-unify-r 
       (unify-val $X) $N $Out))
   (= (write-unify-r $X $_ $_)  
-    (am2cpp-error (:: $X is an invalid instruction))
-    (fail))
+    ( (am2cpp-error (:: $X is an invalid instruction)) fail))
 
 ;
 ; ;; Write Mode
@@ -3311,10 +3255,9 @@
 
 
   (= (write-unify-w $X $_ $_)  
-    (var $X)
-    (set-det)
-    (am2cpp-error (:: unbound variable is found))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (am2cpp-error (:: unbound variable is found)) fail))
   (= (write-unify-w (unify-var $X) $X $Out)  
     (set-det)
     (tab $Out 12)
@@ -3332,8 +3275,7 @@
   (= (write-unify-w (unify-ground $_ $X) $X $_)  
     (set-det))
   (= (write-unify-w $X $_ $_)  
-    (am2cpp-error (:: $X is an invalid instruction))
-    (fail))
+    ( (am2cpp-error (:: $X is an invalid instruction)) fail))
 
 
   (= (write-inline $X $In $Out)  
@@ -3362,7 +3304,7 @@
     (tab $Out 8)
     (write $Out 'return engine.fail();')
     (nl $Out))
-  (= (write-inline0 ($get-level $X) $_ $Out)  
+  (= (write-inline0 (%get-level $X) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op 
@@ -3374,7 +3316,7 @@
     (tab $Out 8)
     (write $Out engine.neckCut();)
     (nl $Out))
-  (= (write-inline0 ($cut $X) $_ $Out)  
+  (= (write-inline0 (%cut $X) $_ $Out)  
     (set-det)
     (write-deref-args 
       (:: $X) $Out)
@@ -3401,13 +3343,13 @@
     (nl $Out))
 ;
 ; Term unification
-  (= (write-inline0 ($unify $X $Y) $_ $Out)  
+  (= (write-inline0 (%unify $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op 
         (set-det) 
         (unify $X $Y)) Nil 8 $Out))
-  (= (write-inline0 ($not-unifiable $X $Y) $_ $Out)  
+  (= (write-inline0 (%not-unifiable $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (unify $X $Y) Nil 8 $Out))
@@ -3530,43 +3472,43 @@
       (:: $X) 8 $Out))
 ;
 ; Term comparison
-  (= (write-inline0 ($equality-of-term $X $Y) $_ $Out)  
+  (= (write-inline0 (%equality-of-term $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op 
         (set-det) 
         (@ (equals $X $Y))) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($inequality-of-term $X $Y) $_ $Out)  
+  (= (write-inline0 (%inequality-of-term $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (@ (equals $X $Y)) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($after $X $Y) $_ $Out)  
+  (= (write-inline0 (%after $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op <= 
         (@ (compareTo $X $Y)) 0) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($before $X $Y) $_ $Out)  
+  (= (write-inline0 (%before $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op >= 
         (@ (compareTo $X $Y)) 0) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($not-after $X $Y) $_ $Out)  
+  (= (write-inline0 (%not-after $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op > 
         (@ (compareTo $X $Y)) 0) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($not-before $X $Y) $_ $Out)  
+  (= (write-inline0 (%not-before $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op < 
         (@ (compareTo $X $Y)) 0) 
       (:: $X $Y) 8 $Out))
-  (= (write-inline0 ($identical-or-cannot-unify $X $Y) $_ $Out)  
+  (= (write-inline0 (%identical-or-cannot-unify $X $Y) $_ $Out)  
     (set-det)
     (write-if-fail 
       (op && 
@@ -3592,132 +3534,132 @@
   (= (write-inline0 (is $X $Y) $_ $Out)  
     (set-det)
     (write-arith $_ $Y $X 8 $Out))
-  (= (write-inline0 ($abs $X $Y) $_ $Out)  
+  (= (write-inline0 (%abs $X $Y) $_ $Out)  
     (set-det)
     (write-arith abs $X $Y 8 $Out))
-  (= (write-inline0 ($asin $X $Y) $_ $Out)  
+  (= (write-inline0 (%asin $X $Y) $_ $Out)  
     (set-det)
     (write-arith asin $X $Y 8 $Out))
-  (= (write-inline0 ($acos $X $Y) $_ $Out)  
+  (= (write-inline0 (%acos $X $Y) $_ $Out)  
     (set-det)
     (write-arith acos $X $Y 8 $Out))
-  (= (write-inline0 ($atan $X $Y) $_ $Out)  
+  (= (write-inline0 (%atan $X $Y) $_ $Out)  
     (set-det)
     (write-arith atan $X $Y 8 $Out))
-  (= (write-inline0 ($bitwise-conj $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%bitwise-conj $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith and $X $Y $Z 8 $Out))
-  (= (write-inline0 ($bitwise-disj $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%bitwise-disj $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith or $X $Y $Z 8 $Out))
-  (= (write-inline0 ($bitwise-exclusive-or $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%bitwise-exclusive-or $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith xor $X $Y $Z 8 $Out))
-  (= (write-inline0 ($bitwise-neg $X $Y) $_ $Out)  
+  (= (write-inline0 (%bitwise-neg $X $Y) $_ $Out)  
     (set-det)
     (write-arith not $X $Y 8 $Out))
-  (= (write-inline0 ($ceil $X $Y) $_ $Out)  
+  (= (write-inline0 (%ceil $X $Y) $_ $Out)  
     (set-det)
     (write-arith ceil $X $Y 8 $Out))
-  (= (write-inline0 ($cos $X $Y) $_ $Out)  
+  (= (write-inline0 (%cos $X $Y) $_ $Out)  
     (set-det)
     (write-arith cos $X $Y 8 $Out))
-  (= (write-inline0 ($degrees $X $Y) $_ $Out)  
+  (= (write-inline0 (%degrees $X $Y) $_ $Out)  
     (set-det)
     (write-arith toDegrees $X $Y 8 $Out))
-  (= (write-inline0 ($exp $X $Y) $_ $Out)  
+  (= (write-inline0 (%exp $X $Y) $_ $Out)  
     (set-det)
     (write-arith exp $X $Y 8 $Out))
-  (= (write-inline0 ($float $X $Y) $_ $Out)  
+  (= (write-inline0 (%float $X $Y) $_ $Out)  
     (set-det)
     (write-arith toFloat $X $Y 8 $Out))
-  (= (write-inline0 ($float-integer-part $X $Y) $_ $Out)  
+  (= (write-inline0 (%float-integer-part $X $Y) $_ $Out)  
     (set-det)
     (write-arith floatIntPart $X $Y 8 $Out))
-  (= (write-inline0 ($float-fractional-part $X $Y) $_ $Out)  
+  (= (write-inline0 (%float-fractional-part $X $Y) $_ $Out)  
     (set-det)
     (write-arith floatFractPart $X $Y 8 $Out))
-  (= (write-inline0 ($float-quotient $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%float-quotient $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith divide $X $Y $Z 8 $Out))
-  (= (write-inline0 ($floor $X $Y) $_ $Out)  
+  (= (write-inline0 (%floor $X $Y) $_ $Out)  
     (set-det)
     (write-arith floor $X $Y 8 $Out))
-  (= (write-inline0 ($int-quotient $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%int-quotient $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith intDivide $X $Y $Z 8 $Out))
-  (= (write-inline0 ($log $X $Y) $_ $Out)  
+  (= (write-inline0 (%log $X $Y) $_ $Out)  
     (set-det)
     (write-arith log $X $Y 8 $Out))
-  (= (write-inline0 ($max $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%max $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith max $X $Y $Z 8 $Out))
-  (= (write-inline0 ($min $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%min $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith min $X $Y $Z 8 $Out))
-  (= (write-inline0 ($minus $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%minus $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith subtract $X $Y $Z 8 $Out))
-  (= (write-inline0 ($mod $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%mod $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith mod $X $Y $Z 8 $Out))
-  (= (write-inline0 ($multi $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%multi $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith multiply $X $Y $Z 8 $Out))
-  (= (write-inline0 ($plus $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%plus $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith add $X $Y $Z 8 $Out))
-  (= (write-inline0 ($pow $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%pow $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith pow $X $Y $Z 8 $Out))
-  (= (write-inline0 ($radians $X $Y) $_ $Out)  
+  (= (write-inline0 (%radians $X $Y) $_ $Out)  
     (set-det)
     (write-arith toRadians $X $Y 8 $Out))
-  (= (write-inline0 ($rint $X $Y) $_ $Out)  
+  (= (write-inline0 (%rint $X $Y) $_ $Out)  
     (set-det)
     (write-arith rint $X $Y 8 $Out))
-  (= (write-inline0 ($round $X $Y) $_ $Out)  
+  (= (write-inline0 (%round $X $Y) $_ $Out)  
     (set-det)
     (write-arith round $X $Y 8 $Out))
-  (= (write-inline0 ($shift-left $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%shift-left $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith shiftLeft $X $Y $Z 8 $Out))
-  (= (write-inline0 ($shift-right $X $Y $Z) $_ $Out)  
+  (= (write-inline0 (%shift-right $X $Y $Z) $_ $Out)  
     (set-det)
     (write-arith shiftRight $X $Y $Z 8 $Out))
-  (= (write-inline0 ($sign $X $Y) $_ $Out)  
+  (= (write-inline0 (%sign $X $Y) $_ $Out)  
     (set-det)
     (write-arith signum $X $Y 8 $Out))
-  (= (write-inline0 ($sin $X $Y) $_ $Out)  
+  (= (write-inline0 (%sin $X $Y) $_ $Out)  
     (set-det)
     (write-arith sin $X $Y 8 $Out))
-  (= (write-inline0 ($sqrt $X $Y) $_ $Out)  
+  (= (write-inline0 (%sqrt $X $Y) $_ $Out)  
     (set-det)
     (write-arith sqrt $X $Y 8 $Out))
-  (= (write-inline0 ($tan $X $Y) $_ $Out)  
+  (= (write-inline0 (%tan $X $Y) $_ $Out)  
     (set-det)
     (write-arith tan $X $Y 8 $Out))
-  (= (write-inline0 ($truncate $X $Y) $_ $Out)  
+  (= (write-inline0 (%truncate $X $Y) $_ $Out)  
     (set-det)
     (write-arith truncate $X $Y 8 $Out))
 ;
 ; Arithmetic comparison
-  (= (write-inline0 ($arith-equal $X $Y) $_ $Out)  
+  (= (write-inline0 (%arith-equal $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare != $X $Y 8 $Out))
-  (= (write-inline0 ($arith-not-equal $X $Y) $_ $Out)  
+  (= (write-inline0 (%arith-not-equal $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare == $X $Y 8 $Out))
-  (= (write-inline0 ($greater-or-equal $X $Y) $_ $Out)  
+  (= (write-inline0 (%greater-or-equal $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare < $X $Y 8 $Out))
-  (= (write-inline0 ($greater-than $X $Y) $_ $Out)  
+  (= (write-inline0 (%greater-than $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare <= $X $Y 8 $Out))
-  (= (write-inline0 ($less-or-equal $X $Y) $_ $Out)  
+  (= (write-inline0 (%less-or-equal $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare > $X $Y 8 $Out))
-  (= (write-inline0 ($less-than $X $Y) $_ $Out)  
+  (= (write-inline0 (%less-than $X $Y) $_ $Out)  
     (set-det)
     (write-arith-compare >= $X $Y 8 $Out))
 
@@ -3752,9 +3694,8 @@
 
 
   (= (make-arith-arg $E $_)  
-    (var $E)
-    (set-det)
-    (fail))
+    ( (var $E) 
+      (set-det) fail))
   (= (make-arith-arg $E $E)  
     (= $E 
       (si $_))
@@ -3765,7 +3706,7 @@
     (set-det))
 ;
 ; make_arith_arg(E, cast('NumberTerm',E)) :- E = a(_), !. ;???
-  (= (make_arith_arg  $E (#  (Arithmetic.evaluate  $E)))  True)
+  (= (make-arith-arg  $E (#  (Arithmetic.evaluate  $E)))  True)
 
 
   (= (write-arith $M $E $V $Tab $Out)  
@@ -3824,9 +3765,8 @@
 
 
   (= (write-inline-java $X $_ $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (write-inline-java Nil $_ $_)  
     (set-det))
   (= (write-inline-java (Cons  $X $Xs) $Tab $Out)  
@@ -3888,9 +3828,8 @@
 
 
   (= (write-inline-exp $X $_ $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
   (= (write-inline-exp Nil $_ $_)  
     (set-det))
   (= (write-inline-exp (:: $X) $Tab $Out)  
@@ -3996,13 +3935,11 @@
 
 
   (= (write-inline-method $F $_ $_ $_)  
-    (var $F)
-    (set-det)
-    (fail))
+    ( (var $F) 
+      (set-det) fail))
   (= (write-inline-method $_ $A $_ $_)  
-    (var $A)
-    (set-det)
-    (fail))
+    ( (var $A) 
+      (set-det) fail))
   (= (write-inline-method $F (:: $A) $Tab $Out)  
     (set-det)
     (tab $Out $Tab)
@@ -4022,9 +3959,8 @@
 
 
   (= (write-insert $X $_ $_)  
-    (var $X)
-    (set-det)
-    (fail))
+    ( (var $X) 
+      (set-det) fail))
 ; /***************************************************************** Write Insert *****************************************************************/
   (= (write-insert Nil $_ $_)  
     (set-det))
@@ -4144,11 +4080,11 @@
   (= (write-method-ref $R $Out)  
     ( (==  
         (= 
-          (current_arity  $A) $_) 
+          (current-arity  $A) $_) 
         (get-atoms  &self)) 
       (==  
         (= 
-          (current_functor  $F) $_) 
+          (current-functor  $F) $_) 
         (get-atoms  &self)) 
       (write-class-name 
         (/ $F $A) $Out) 
@@ -4219,52 +4155,52 @@
 ; Package name as directory
 
   (= (package-encoding $P $Dir)  
-    (atom-codes $P $Chs0)
+    (symbol-codes $P $Chs0)
     (package-encoding $Chs0 $Chs Nil)
-    (atom-codes $Dir $Chs))
+    (symbol-codes $Dir $Chs))
 
 
-  (= (-->  (package_encoding  ()) !)  True)
-  (= (-->  (package_encoding  (Cons  46 $Xs)) (,  ! (,  (47) (package_encoding  $Xs))))  True)
-  (= (-->  (package_encoding  (Cons  $X $Xs)) (,  ! (,  ($X) (package_encoding  $Xs))))  True)
+  (= (-->  (package-encoding  ()) !)  True)
+  (= (-->  (package-encoding  ([|]  46 $Xs)) (,  ! (,  (47) (package-encoding  $Xs))))  True)
+  (= (-->  (package-encoding  ([|]  $X $Xs)) (,  ! (,  ($X) (package-encoding  $Xs))))  True)
 
 ;
 ; Predicate Encoding
 
   (= (predicate-encoding $X $Y)  
-    (atom-codes $X $Chs0)
+    (symbol-codes $X $Chs0)
     (pred-encoding $Chs0 $Chs Nil)
-    (atom-codes $Y $Chs))
+    (symbol-codes $Y $Chs))
 
 
-  (= (-->  (pred_encoding  ()) !)  True)
-  (= (-->  (pred_encoding  (Cons  $X $Xs)) (,  (pred_encoding_char  $X) (pred_encoding  $Xs)))  True)
+  (= (-->  (pred-encoding  ()) !)  True)
+  (= (-->  (pred-encoding  ([|]  $X $Xs)) (,  (pred-encoding-char  $X) (pred-encoding  $Xs)))  True)
 
-  (= (-->  (pred_encoding_char  $X) (,  {(,  (=<  97 $X) (=<  $X 122)) } (,  ! ($X))))  True) ;
+  (= (-->  (pred-encoding-char  $X) (,  {(,  (=<  97 $X) (=<  $X 122)) } (,  ! ($X))))  True) ;
 ; a..z
-  (= (-->  (pred_encoding_char  $X) (,  {(,  (=<  65 $X) (=<  $X 90)) } (,  ! ($X))))  True) ;
+  (= (-->  (pred-encoding-char  $X) (,  {(,  (=<  65 $X) (=<  $X 90)) } (,  ! ($X))))  True) ;
 ; A..Z
-  (= (-->  (pred_encoding_char  $X) (,  {(,  (=<  48 $X) (=<  $X 57)) } (,  ! ($X))))  True) ;
+  (= (-->  (pred-encoding-char  $X) (,  {(,  (=<  48 $X) (=<  $X 57)) } (,  ! ($X))))  True) ;
 ; 0..9
-  (= (-->  (pred_encoding_char  95) (,  ! (95)))  True)                    ;
+  (= (-->  (pred-encoding-char  95) (,  ! (95)))  True)                    ;
 ; '_'
-  (= (-->  (pred_encoding_char  36) (,  ! (36)))  True)                    ;
+  (= (-->  (pred-encoding-char  36) (,  ! (36)))  True)                    ;
 ; '$' ???
-  (= (-->  (pred_encoding_char  $X) (,  {(,  (=<  0 $X) (=<  $X 65535)) } (,  ! (,  (36) (pred_encoding_hex  $X)))))  True)
+  (= (-->  (pred-encoding-char  $X) (,  {(,  (=<  0 $X) (=<  $X 65535)) } (,  ! (,  (36) (pred-encoding-hex  $X)))))  True)
 ; ; '$'
-  (= (-->  (pred_encoding_char  $X) {(,  (am2cpp_error  ($X is an invalid character code)) fail) })  True)
+  (= (-->  (pred-encoding-char  $X) {(,  (am2cpp-error  ($X is an invalid character code)) fail) })  True)
 
-  (= (-->  (pred_encoding_hex  $X) (,  {(int_to_hex  $X () $H) } (pred_encoding_hex_char  $H)))  True)
+  (= (-->  (pred-encoding-hex  $X) (,  {(int-to-hex  $X () $H) } (pred-encoding-hex-char  $H)))  True)
 
-  (= (-->  (pred_encoding_hex_char  ()) (,  ! (48 48 48 48)))  True) ;
+  (= (-->  (pred-encoding-hex-char  ()) (,  ! (48 48 48 48)))  True) ;
 ; 0000
-  (= (-->  (pred_encoding_hex_char  ($X)) (,  ! (48 48 48 $X)))  True) ;
+  (= (-->  (pred-encoding-hex-char  ($X)) (,  ! (48 48 48 $X)))  True) ;
 ; 000X
-  (= (-->  (pred_encoding_hex_char  ($X $Y)) (,  ! (48 48 $X $Y)))  True) ;
+  (= (-->  (pred-encoding-hex-char  ($X $Y)) (,  ! (48 48 $X $Y)))  True) ;
 ; 00XY
-  (= (-->  (pred_encoding_hex_char  ($X $Y $Z)) (,  ! (48 $X $Y $Z)))  True) ;
+  (= (-->  (pred-encoding-hex-char  ($X $Y $Z)) (,  ! (48 $X $Y $Z)))  True) ;
 ; 0XYZ
-  (= (-->  (pred_encoding_hex_char  ($X $Y $Z $W)) (,  ! ($X $Y $Z $W)))  True) ;
+  (= (-->  (pred-encoding-hex-char  ($X $Y $Z $W)) (,  ! ($X $Y $Z $W)))  True) ;
 ; XYZW
 
 
@@ -4308,9 +4244,9 @@
 ; Constant Encoding (especially, escape sequence)
 
   (= (constant-encoding $X $Y)  
-    (atom-codes $X $Chs0)
+    (symbol-codes $X $Chs0)
     (con-encoding $Chs0 $Chs)
-    (atom-codes $Y $Chs))
+    (symbol-codes $Y $Chs))
 ; ;???
 
 
@@ -4363,10 +4299,9 @@
 ; Write Register name
 
   (= (write-reg $X $_)  
-    (var $X)
-    (set-det)
-    (am2cpp-error (:: register expression must not be unbound variable))
-    (fail))
+    ( (var $X) 
+      (set-det) 
+      (am2cpp-error (:: register expression must not be unbound variable)) fail))
   (= (write-reg void $Out)  
     (set-det)
     (write $Out 'new Var(engine)'))
@@ -4405,7 +4340,7 @@
         (= 
           (inlined  
             (s  $X) 
-            (str_args  $Xs)) $_) 
+            (str-args  $Xs)) $_) 
         (get-atoms  &self)) 
       (set-det) 
       (write-reg-args $Xs $Out)))
@@ -4445,8 +4380,7 @@
     (write $Out $X)
     (write $Out ]))
   (= (write-reg $X $_)  
-    (am2cpp-error (:: $X is an invalid register expression))
-    (fail))
+    ( (am2cpp-error (:: $X is an invalid register expression)) fail))
 
 
   (= (write-reg-args Nil $_)  
@@ -4494,20 +4428,20 @@
 ;
 ; ;; list
 
-  (= (am2cpp_append  () $Zs $Zs)  True)
+  (= (am2cpp-append  () $Zs $Zs)  True)
   (= (am2cpp-append (Cons  $X $Xs) $Ys (Cons  $X $Zs))  
     (am2cpp-append $Xs $Ys $Zs))
 
 
-  (= (-->  (flatten_list  ()) !)  True)
-  (= (-->  (flatten_list  (Cons  $L1 $L2)) (,  ! (,  (flatten_list  $L1) (flatten_list  $L2))))  True)
-  (= (-->  (flatten_list  $L) ($L))  True)
+  (= (-->  (flatten-list  ()) !)  True)
+  (= (-->  (flatten-list  ([|]  $L1 $L2)) (,  ! (,  (flatten-list  $L1) (flatten-list  $L2))))  True)
+  (= (-->  (flatten-list  $L) ($L))  True)
 
 
   (= (list-to-string $List $String)  
     (list-to-chars $List $Chars0)
     (flatten-list $Chars0 $Chars Nil)
-    (atom-codes $String $Chars))
+    (symbol-codes $String $Chars))
 
 
   (= (list-to-chars Nil Nil)  
@@ -4515,7 +4449,7 @@
   (= (list-to-chars (Cons  $L $Ls) (Cons  $C $Cs))  
     (atom $L)
     (set-det)
-    (atom-codes $L $C)
+    (symbol-codes $L $C)
     (list-to-chars $Ls $Cs))
   (= (list-to-chars (Cons  $L $Ls) (Cons  $C $Cs))  
     (number $L)

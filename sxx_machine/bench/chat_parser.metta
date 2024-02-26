@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  chat_parser $_180594 sxx_machine/bench/chat_parser.pl sxx_machine/bench/chat_parser.metta)
+;                                           (convert-to-metta-file  chat_parser $_362228 sxx_machine/bench/chat_parser.pl sxx_machine/bench/chat_parser.metta)
 ;
 ; generated: 19 November 1989
 ;
@@ -13,25 +13,22 @@
 ; Fernando C. N. Pereira and David H. D. Warren
 
 
-  (= (top)  
-    (chat-parser))
+  (= top  chat-parser)
 
 
-  (= (go)  
-    (statistics runtime 
-      (:: $_ $_))
-    (chat-parser)
-    (statistics runtime 
-      (:: $_ $T))
-    (write 'execution time is ')
-    (write $T)
-    (write milliseconds))
+  (= go  
+    ( (statistics runtime 
+        (:: $_ $_)) chat-parser 
+      (statistics runtime 
+        (:: $_ $T)) 
+      (write 'execution time is ') 
+      (write $T) 
+      (write milliseconds)))
 
 
-  (= (chat-parser)  
-    (my-string $X)
-    (determinate-say $X $_)
-    (fail))
+  (= chat-parser  
+    ( (my-string $X) 
+      (determinate-say $X $_) fail))
   (= chat_parser  True)
 
 
@@ -39,22 +36,22 @@
 ; query set
 
 
-  (= (my_string  (what rivers are there ?))  True)
-  (= (my_string  (does afghanistan border china ?))  True)
-  (= (my_string  (what is the capital of upper_volta ?))  True)
-  (= (my_string  (where is the largest country ?))  True)
-  (= (my_string  (which country ~ s capital is london ?))  True)
-  (= (my_string  (which countries are european ?))  True)
-  (= (my_string  (how large is the smallest american country ?))  True)
-  (= (my_string  (what is the ocean that borders african countries and that borders asian countries ?))  True)
-  (= (my_string  (what are the capitals of the countries bordering the baltic ?))  True)
-  (= (my_string  (which countries are bordered by two seas ?))  True)
-  (= (my_string  (how many countries does the danube flow through ?))  True)
-  (= (my_string  (what is the total area of countries south of the equator and not in australasia ?))  True)
-  (= (my_string  (what is the average area of the countries in each continent ?))  True)
-  (= (my_string  (is there more than one country in each continent ?))  True)
-  (= (my_string  (is there some ocean that does not border any country ?))  True)
-  (= (my_string  (what are the countries from which a river flows into the black_sea ?))  True)
+  (= (my-string  (what rivers are there ?))  True)
+  (= (my-string  (does afghanistan border china ?))  True)
+  (= (my-string  (what is the capital of upper_volta ?))  True)
+  (= (my-string  (where is the largest country ?))  True)
+  (= (my-string  (which country ~ s capital is london ?))  True)
+  (= (my-string  (which countries are european ?))  True)
+  (= (my-string  (how large is the smallest american country ?))  True)
+  (= (my-string  (what is the ocean that borders african countries and that borders asian countries ?))  True)
+  (= (my-string  (what are the capitals of the countries bordering the baltic ?))  True)
+  (= (my-string  (which countries are bordered by two seas ?))  True)
+  (= (my-string  (how many countries does the danube flow through ?))  True)
+  (= (my-string  (what is the total area of countries south of the equator and not in australasia ?))  True)
+  (= (my-string  (what is the average area of the countries in each continent ?))  True)
+  (= (my-string  (is there more than one country in each continent ?))  True)
+  (= (my-string  (is there some ocean that does not border any country ?))  True)
+  (= (my-string  (what are the countries from which a river flows into the black_sea ?))  True)
 
 
 ;
@@ -105,16 +102,16 @@
 ; normal form masks
 
 
-  (= (is_pp  (#  1 $_ $_ $_))  True)
+  (= (is-pp  (#  1 $_ $_ $_))  True)
 
 
-  (= (is_pred  (#  $_ 1 $_ $_))  True)
+  (= (is-pred  (#  $_ 1 $_ $_))  True)
 
 
-  (= (is_trace  (#  $_ $_ 1 $_))  True)
+  (= (is-trace  (#  $_ $_ 1 $_))  True)
 
 
-  (= (is_adv  (#  $_ $_ $_ 1))  True)
+  (= (is-adv  (#  $_ $_ $_ 1))  True)
 
 
   (= (trace1  (#  $_ $_ 1 $_) (#  0 0 0 0))  True)
@@ -128,13 +125,13 @@
   (= (empty  (#  0 0 0 0))  True)
 
 
-  (= (np_all  (#  1 1 1 0))  True)
+  (= (np-all  (#  1 1 1 0))  True)
 
 
-  (= (s_all  (#  1 0 1 1))  True)
+  (= (s-all  (#  1 0 1 1))  True)
 
 
-  (= (np_no_trace  (#  1 1 0 0))  True)
+  (= (np-no-trace  (#  1 1 0 0))  True)
 
 ;
 ; mask operations
@@ -174,13 +171,13 @@
   (= (role  nil $_ $_)  True)
 
 
-  (= (subj_case  (#  1 0 0))  True)
+  (= (subj-case  (#  1 0 0))  True)
 
-  (= (verb_case  (#  0 1 0))  True)
+  (= (verb-case  (#  0 1 0))  True)
 
-  (= (prep_case  (#  0 0 1))  True)
+  (= (prep-case  (#  0 0 1))  True)
 
-  (= (compl_case  (#  0 $_ $_))  True)
+  (= (compl-case  (#  0 $_ $_))  True)
 
 
 ;
@@ -238,7 +235,7 @@
 
   (= (opt-comma $B $C $D $E)  
     (~ , $B $C $D $E))
-  (= (opt_comma  $B $B $C $C)  True)
+  (= (opt-comma  $B $B $C $C)  True)
 
 
 
@@ -377,8 +374,8 @@
 
 
 
-  (= (subj_question  subj)  True)
-  (= (subj_question  undef)  True)
+  (= (subj-question  subj)  True)
+  (= (subj-question  undef)  True)
 
 
 
@@ -496,7 +493,7 @@
 
   (= (an-s $B $C $D $E)  
     (~ s $B $C $D $E))
-  (= (an_s  $B $B $C $C)  True)
+  (= (an-s  $B $B $C $C)  True)
 
 
 
@@ -529,12 +526,12 @@
 
   (= (neg-adv $B (+ not $B) $C $D $E $F)  
     (~ not $C $D $E $F))
-  (= (neg_adv  $B $B $C $C $D $D)  True)
+  (= (neg-adv  $B $B $C $C $D $D)  True)
 
 
 
-  (= (sup_op  least (+  not less))  True)
-  (= (sup_op  most (+  not more))  True)
+  (= (sup-op  least (+  not less))  True)
+  (= (sup-op  most (+  not more))  True)
 
 
 
@@ -545,7 +542,7 @@
     (minus $G $S $T)
     (myplus $O $G $U)
     (np-mods $B $C $D $F $T $H $U $J $P $L $Q $N))
-  (= (np_mods  $B $C $D $D $E $E $F $F $G $G $H $H)  True)
+  (= (np-mods  $B $C $D $D $E $E $F $F $G $G $H $H)  True)
 
 
 
@@ -563,7 +560,7 @@
     (minus $D $O $P)
     (myplus $K $D $Q)
     (verb-mods $C $P $Q $F $L $H $M $J))
-  (= (verb_mods  () $B $C $C $D $D $E $E)  True)
+  (= (verb-mods  () $B $C $C $D $D $E $E)  True)
 
 
 
@@ -638,7 +635,7 @@
   (= (rel-rest $B $C $D $E $F $G $H $I $J $K)  
     (conj $C $L $D $M $E $H $N $J $O)
     (rel-conj $B $L $M $G $N $I $O $K))
-  (= (rel_rest  $B $C $D $D $E $E $F $F $G $G)  True)
+  (= (rel-rest  $B $C $D $D $E $E $F $F $G $G)  True)
 
 
 
@@ -696,7 +693,7 @@
   (= (reduced-rel-rest $B $C $D $E $F $G $H $I $J $K)  
     (conj $C $L $D $M $E $H $N $J $O)
     (reduced-rel-conj $B $L $M $G $N $I $O $K))
-  (= (reduced_rel_rest  $B $C $D $D $E $E $F $F $G $G)  True)
+  (= (reduced-rel-rest  $B $C $D $D $E $E $F $F $G $G)  True)
 
 
 
@@ -751,7 +748,7 @@
     (be $J $I $B $C $D $M $F $N $H))
   (= (rest-verb aux do $B active Nil $C $D $E $F)  
     (verb-form $B inf $G $H $C $D $E $F))
-  (= (rest_verb  main $B $B active () $C $C $D $D)  True)
+  (= (rest-verb  main $B $B active () $C $C $D $D)  True)
 
 
 
@@ -848,7 +845,7 @@
   (= (pred-rest $B $C $D $E $F $G $H $I $J)  
     (conj $B $K $C $L $D $G $M $I $N)
     (pred-conj $K $L $F $M $H $N $J))
-  (= (pred_rest  $B $C $C $D $D $E $E $F $F)  True)
+  (= (pred-rest  $B $C $C $D $D $E $E $F $F)  True)
 
 
 
@@ -875,9 +872,9 @@
 
 
 
-  (= (no_args  trans)  True)
-  (= (no_args  ditrans)  True)
-  (= (no_args  intrans)  True)
+  (= (no-args  trans)  True)
+  (= (no-args  ditrans)  True)
+  (= (no-args  intrans)  True)
 
 
 
@@ -1001,7 +998,7 @@
 
 
 
-  (= (opt_the  $B $B $C $C)  True)
+  (= (opt-the  $B $B $C $C)  True)
   (= (opt-the $B $C $D $E)  
     (~ the $B $C $D $E))
 
@@ -1107,14 +1104,14 @@
   (= (conj  or)  True)
 
 
-  (= (int_pron  what undef)  True)
-  (= (int_pron  which undef)  True)
-  (= (int_pron  who subj)  True)
-  (= (int_pron  whom compl)  True)
+  (= (int-pron  what undef)  True)
+  (= (int-pron  which undef)  True)
+  (= (int-pron  who subj)  True)
+  (= (int-pron  whom compl)  True)
 
 
-  (= (int_art  what $X $_ (int_det  $X))  True)
-  (= (int_art  which $X $_ (int_det  $X))  True)
+  (= (int-art  what $X $_ (int-det  $X))  True)
+  (= (int-art  which $X $_ (int-det  $X))  True)
 
 
   (= (det  the $No (the  $No) def)  True)
@@ -1133,35 +1130,35 @@
     (ag-number $I $Nb))
 
 
-  (= (tr_number  (nb  $I) $I)  True)
-  (= (tr_number  one 1)  True)
-  (= (tr_number  two 2)  True)
-  (= (tr_number  three 3)  True)
-  (= (tr_number  four 4)  True)
-  (= (tr_number  five 5)  True)
-  (= (tr_number  six 6)  True)
-  (= (tr_number  seven 7)  True)
-  (= (tr_number  eight 8)  True)
-  (= (tr_number  nine 9)  True)
-  (= (tr_number  ten 10)  True)
+  (= (tr-number  (nb  $I) $I)  True)
+  (= (tr-number  one 1)  True)
+  (= (tr-number  two 2)  True)
+  (= (tr-number  three 3)  True)
+  (= (tr-number  four 4)  True)
+  (= (tr-number  five 5)  True)
+  (= (tr-number  six 6)  True)
+  (= (tr-number  seven 7)  True)
+  (= (tr-number  eight 8)  True)
+  (= (tr-number  nine 9)  True)
+  (= (tr-number  ten 10)  True)
 
 
-  (= (ag_number  1 sin)  True)
+  (= (ag-number  1 sin)  True)
   (= (ag-number $N plu)  
     (> $N 1))
 
 
-  (= (quantifier_pron  everybody every person)  True)
-  (= (quantifier_pron  everyone every person)  True)
-  (= (quantifier_pron  everything every thing)  True)
-  (= (quantifier_pron  somebody some person)  True)
-  (= (quantifier_pron  someone some person)  True)
-  (= (quantifier_pron  something some thing)  True)
-  (= (quantifier_pron  anybody any person)  True)
-  (= (quantifier_pron  anyone any person)  True)
-  (= (quantifier_pron  anything any thing)  True)
-  (= (quantifier_pron  nobody no person)  True)
-  (= (quantifier_pron  nothing no thing)  True)
+  (= (quantifier-pron  everybody every person)  True)
+  (= (quantifier-pron  everyone every person)  True)
+  (= (quantifier-pron  everything every thing)  True)
+  (= (quantifier-pron  somebody some person)  True)
+  (= (quantifier-pron  someone some person)  True)
+  (= (quantifier-pron  something some thing)  True)
+  (= (quantifier-pron  anybody any person)  True)
+  (= (quantifier-pron  anyone any person)  True)
+  (= (quantifier-pron  anything any thing)  True)
+  (= (quantifier-pron  nobody no person)  True)
+  (= (quantifier-pron  nothing no thing)  True)
 
 
   (= (prep  as)  True)
@@ -1181,71 +1178,71 @@
     (noun-plu $Plu $Sin))
   (= (noun-form $Sin $Sin sin)  
     (noun-sin $Sin))
-  (= (noun_form  proportion proportion $_)  True)
-  (= (noun_form  percentage percentage $_)  True)
+  (= (noun-form  proportion proportion $_)  True)
+  (= (noun-form  percentage percentage $_)  True)
 
 
-  (= (root_form  (+  1 sin))  True)
-  (= (root_form  (+  2 $_))  True)
-  (= (root_form  (+  1 plu))  True)
-  (= (root_form  (+  3 plu))  True)
+  (= (root-form  (+  1 sin))  True)
+  (= (root-form  (+  2 $_))  True)
+  (= (root-form  (+  1 plu))  True)
+  (= (root-form  (+  3 plu))  True)
 
 
-  (= (verb_root  be)  True)
-  (= (verb_root  have)  True)
-  (= (verb_root  do)  True)
-  (= (verb_root  border)  True)
-  (= (verb_root  contain)  True)
-  (= (verb_root  drain)  True)
-  (= (verb_root  exceed)  True)
-  (= (verb_root  flow)  True)
-  (= (verb_root  rise)  True)
+  (= (verb-root  be)  True)
+  (= (verb-root  have)  True)
+  (= (verb-root  do)  True)
+  (= (verb-root  border)  True)
+  (= (verb-root  contain)  True)
+  (= (verb-root  drain)  True)
+  (= (verb-root  exceed)  True)
+  (= (verb-root  flow)  True)
+  (= (verb-root  rise)  True)
 
 
-  (= (regular_pres  have)  True)
-  (= (regular_pres  do)  True)
-  (= (regular_pres  rise)  True)
-  (= (regular_pres  border)  True)
-  (= (regular_pres  contain)  True)
-  (= (regular_pres  drain)  True)
-  (= (regular_pres  exceed)  True)
-  (= (regular_pres  flow)  True)
+  (= (regular-pres  have)  True)
+  (= (regular-pres  do)  True)
+  (= (regular-pres  rise)  True)
+  (= (regular-pres  border)  True)
+  (= (regular-pres  contain)  True)
+  (= (regular-pres  drain)  True)
+  (= (regular-pres  exceed)  True)
+  (= (regular-pres  flow)  True)
 
 
-  (= (regular_past  had have)  True)
-  (= (regular_past  bordered border)  True)
-  (= (regular_past  contained contain)  True)
-  (= (regular_past  drained drain)  True)
-  (= (regular_past  exceeded exceed)  True)
-  (= (regular_past  flowed flow)  True)
+  (= (regular-past  had have)  True)
+  (= (regular-past  bordered border)  True)
+  (= (regular-past  contained contain)  True)
+  (= (regular-past  drained drain)  True)
+  (= (regular-past  exceeded exceed)  True)
+  (= (regular-past  flowed flow)  True)
 
 
-  (= (rel_pron  who subj)  True)
-  (= (rel_pron  whom compl)  True)
-  (= (rel_pron  which undef)  True)
+  (= (rel-pron  who subj)  True)
+  (= (rel-pron  whom compl)  True)
+  (= (rel-pron  which undef)  True)
 
 
-  (= (poss_pron  my $_ 1 sin)  True)
-  (= (poss_pron  your $_ 2 $_)  True)
-  (= (poss_pron  his masc 3 sin)  True)
-  (= (poss_pron  her fem 3 sin)  True)
-  (= (poss_pron  its neut 3 sin)  True)
-  (= (poss_pron  our $_ 1 plu)  True)
-  (= (poss_pron  their $_ 3 plu)  True)
+  (= (poss-pron  my $_ 1 sin)  True)
+  (= (poss-pron  your $_ 2 $_)  True)
+  (= (poss-pron  his masc 3 sin)  True)
+  (= (poss-pron  her fem 3 sin)  True)
+  (= (poss-pron  its neut 3 sin)  True)
+  (= (poss-pron  our $_ 1 plu)  True)
+  (= (poss-pron  their $_ 3 plu)  True)
 
 
-  (= (pers_pron  i $_ 1 sin subj)  True)
-  (= (pers_pron  you $_ 2 $_ $_)  True)
-  (= (pers_pron  he masc 3 sin subj)  True)
-  (= (pers_pron  she fem 3 sin subj)  True)
-  (= (pers_pron  it neut 3 sin $_)  True)
-  (= (pers_pron  we $_ 1 plu subj)  True)
-  (= (pers_pron  them $_ 3 plu subj)  True)
-  (= (pers_pron  me $_ 1 sin (compl  $_))  True)
-  (= (pers_pron  him masc 3 sin (compl  $_))  True)
-  (= (pers_pron  her fem 3 sin (compl  $_))  True)
-  (= (pers_pron  us $_ 1 plu (compl  $_))  True)
-  (= (pers_pron  them $_ 3 plu (compl  $_))  True)
+  (= (pers-pron  i $_ 1 sin subj)  True)
+  (= (pers-pron  you $_ 2 $_ $_)  True)
+  (= (pers-pron  he masc 3 sin subj)  True)
+  (= (pers-pron  she fem 3 sin subj)  True)
+  (= (pers-pron  it neut 3 sin $_)  True)
+  (= (pers-pron  we $_ 1 plu subj)  True)
+  (= (pers-pron  them $_ 3 plu subj)  True)
+  (= (pers-pron  me $_ 1 sin (compl  $_))  True)
+  (= (pers-pron  him masc 3 sin (compl  $_))  True)
+  (= (pers-pron  her fem 3 sin (compl  $_))  True)
+  (= (pers-pron  us $_ 1 plu (compl  $_))  True)
+  (= (pers-pron  them $_ 3 plu (compl  $_))  True)
 
 
   (= (terminator  . $_)  True)
@@ -1262,10 +1259,10 @@
 ; specialised dictionary
 
 
-  (= (loc_pred  east (prep  eastof))  True)
-  (= (loc_pred  west (prep  westof))  True)
-  (= (loc_pred  north (prep  northof))  True)
-  (= (loc_pred  south (prep  southof))  True)
+  (= (loc-pred  east (prep  eastof))  True)
+  (= (loc-pred  west (prep  westof))  True)
+  (= (loc-pred  north (prep  northof))  True)
+  (= (loc-pred  south (prep  southof))  True)
 
 
   (= (adj  minimum restr)  True)
@@ -1285,75 +1282,75 @@
   (= (adj  populous quant)  True)
 
 
-  (= (rel_adj  greater great)  True)
-  (= (rel_adj  less small)  True)
-  (= (rel_adj  bigger big)  True)
-  (= (rel_adj  smaller small)  True)
-  (= (rel_adj  larger large)  True)
-  (= (rel_adj  older old)  True)
-  (= (rel_adj  newer new)  True)
+  (= (rel-adj  greater great)  True)
+  (= (rel-adj  less small)  True)
+  (= (rel-adj  bigger big)  True)
+  (= (rel-adj  smaller small)  True)
+  (= (rel-adj  larger large)  True)
+  (= (rel-adj  older old)  True)
+  (= (rel-adj  newer new)  True)
 
 
-  (= (sup_adj  biggest big)  True)
-  (= (sup_adj  smallest small)  True)
-  (= (sup_adj  largest large)  True)
-  (= (sup_adj  oldest old)  True)
-  (= (sup_adj  newest new)  True)
+  (= (sup-adj  biggest big)  True)
+  (= (sup-adj  smallest small)  True)
+  (= (sup-adj  largest large)  True)
+  (= (sup-adj  oldest old)  True)
+  (= (sup-adj  newest new)  True)
 
 
-  (= (noun_sin  average)  True)
-  (= (noun_sin  total)  True)
-  (= (noun_sin  sum)  True)
-  (= (noun_sin  degree)  True)
-  (= (noun_sin  sqmile)  True)
-  (= (noun_sin  ksqmile)  True)
-  (= (noun_sin  thousand)  True)
-  (= (noun_sin  million)  True)
-  (= (noun_sin  time)  True)
-  (= (noun_sin  place)  True)
-  (= (noun_sin  area)  True)
-  (= (noun_sin  capital)  True)
-  (= (noun_sin  city)  True)
-  (= (noun_sin  continent)  True)
-  (= (noun_sin  country)  True)
-  (= (noun_sin  latitude)  True)
-  (= (noun_sin  longitude)  True)
-  (= (noun_sin  ocean)  True)
-  (= (noun_sin  person)  True)
-  (= (noun_sin  population)  True)
-  (= (noun_sin  region)  True)
-  (= (noun_sin  river)  True)
-  (= (noun_sin  sea)  True)
-  (= (noun_sin  seamass)  True)
-  (= (noun_sin  number)  True)
+  (= (noun-sin  average)  True)
+  (= (noun-sin  total)  True)
+  (= (noun-sin  sum)  True)
+  (= (noun-sin  degree)  True)
+  (= (noun-sin  sqmile)  True)
+  (= (noun-sin  ksqmile)  True)
+  (= (noun-sin  thousand)  True)
+  (= (noun-sin  million)  True)
+  (= (noun-sin  time)  True)
+  (= (noun-sin  place)  True)
+  (= (noun-sin  area)  True)
+  (= (noun-sin  capital)  True)
+  (= (noun-sin  city)  True)
+  (= (noun-sin  continent)  True)
+  (= (noun-sin  country)  True)
+  (= (noun-sin  latitude)  True)
+  (= (noun-sin  longitude)  True)
+  (= (noun-sin  ocean)  True)
+  (= (noun-sin  person)  True)
+  (= (noun-sin  population)  True)
+  (= (noun-sin  region)  True)
+  (= (noun-sin  river)  True)
+  (= (noun-sin  sea)  True)
+  (= (noun-sin  seamass)  True)
+  (= (noun-sin  number)  True)
 
 
-  (= (noun_plu  averages average)  True)
-  (= (noun_plu  totals total)  True)
-  (= (noun_plu  sums sum)  True)
-  (= (noun_plu  degrees degree)  True)
-  (= (noun_plu  sqmiles sqmile)  True)
-  (= (noun_plu  ksqmiles ksqmile)  True)
-  (= (noun_plu  million million)  True)
-  (= (noun_plu  thousand thousand)  True)
-  (= (noun_plu  times time)  True)
-  (= (noun_plu  places place)  True)
-  (= (noun_plu  areas area)  True)
-  (= (noun_plu  capitals capital)  True)
-  (= (noun_plu  cities city)  True)
-  (= (noun_plu  continents continent)  True)
-  (= (noun_plu  countries country)  True)
-  (= (noun_plu  latitudes latitude)  True)
-  (= (noun_plu  longitudes longitude)  True)
-  (= (noun_plu  oceans ocean)  True)
-  (= (noun_plu  persons person)  True)  
-  (= (noun_plu  people person)  True)
-  (= (noun_plu  populations population)  True)
-  (= (noun_plu  regions region)  True)
-  (= (noun_plu  rivers river)  True)
-  (= (noun_plu  seas sea)  True)
-  (= (noun_plu  seamasses seamass)  True)
-  (= (noun_plu  numbers number)  True)
+  (= (noun-plu  averages average)  True)
+  (= (noun-plu  totals total)  True)
+  (= (noun-plu  sums sum)  True)
+  (= (noun-plu  degrees degree)  True)
+  (= (noun-plu  sqmiles sqmile)  True)
+  (= (noun-plu  ksqmiles ksqmile)  True)
+  (= (noun-plu  million million)  True)
+  (= (noun-plu  thousand thousand)  True)
+  (= (noun-plu  times time)  True)
+  (= (noun-plu  places place)  True)
+  (= (noun-plu  areas area)  True)
+  (= (noun-plu  capitals capital)  True)
+  (= (noun-plu  cities city)  True)
+  (= (noun-plu  continents continent)  True)
+  (= (noun-plu  countries country)  True)
+  (= (noun-plu  latitudes latitude)  True)
+  (= (noun-plu  longitudes longitude)  True)
+  (= (noun-plu  oceans ocean)  True)
+  (= (noun-plu  persons person)  True)  
+  (= (noun-plu  people person)  True)
+  (= (noun-plu  populations population)  True)
+  (= (noun-plu  regions region)  True)
+  (= (noun-plu  rivers river)  True)
+  (= (noun-plu  seas sea)  True)
+  (= (noun-plu  seamasses seamass)  True)
+  (= (noun-plu  numbers number)  True)
 
 
   (= (verb-form $V $V inf $_)  
@@ -1365,46 +1362,46 @@
   (= (verb-form $Past $Root (+ past $_) $_)  
     (regular-past $Past $Root))
 
-  (= (verb_form  am be (+  pres fin) (+  1 sin))  True)
-  (= (verb_form  are be (+  pres fin) (+  2 sin))  True)
-  (= (verb_form  is be (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  are be (+  pres fin) (+  $_ plu))  True)
-  (= (verb_form  was be (+  past fin) (+  1 sin))  True)
-  (= (verb_form  were be (+  past fin) (+  2 sin))  True)
-  (= (verb_form  was be (+  past fin) (+  3 sin))  True)
-  (= (verb_form  were be (+  past fin) (+  $_ plu))  True)
-  (= (verb_form  been be (+  past part) $_)  True)
-  (= (verb_form  being be (+  pres part) $_)  True)
-  (= (verb_form  has have (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  having have (+  pres part) $_)  True)
-  (= (verb_form  does do (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  did do (+  past fin) $_)  True)
-  (= (verb_form  doing do (+  pres part) $_)  True)
-  (= (verb_form  done do (+  past part) $_)  True)
-  (= (verb_form  flows flow (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  flowing flow (+  pres part) $_)  True)
-  (= (verb_form  rises rise (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  rose rise (+  past fin) $_)  True)
-  (= (verb_form  risen rise (+  past part) $_)  True)
-  (= (verb_form  borders border (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  bordering border (+  pres part) $_)  True)
-  (= (verb_form  contains contain (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  containing contain (+  pres part) $_)  True)
-  (= (verb_form  drains drain (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  draining drain (+  pres part) $_)  True)
-  (= (verb_form  exceeds exceed (+  pres fin) (+  3 sin))  True)
-  (= (verb_form  exceeding exceed (+  pres part) $_)  True)
+  (= (verb-form  am be (+  pres fin) (+  1 sin))  True)
+  (= (verb-form  are be (+  pres fin) (+  2 sin))  True)
+  (= (verb-form  is be (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  are be (+  pres fin) (+  $_ plu))  True)
+  (= (verb-form  was be (+  past fin) (+  1 sin))  True)
+  (= (verb-form  were be (+  past fin) (+  2 sin))  True)
+  (= (verb-form  was be (+  past fin) (+  3 sin))  True)
+  (= (verb-form  were be (+  past fin) (+  $_ plu))  True)
+  (= (verb-form  been be (+  past part) $_)  True)
+  (= (verb-form  being be (+  pres part) $_)  True)
+  (= (verb-form  has have (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  having have (+  pres part) $_)  True)
+  (= (verb-form  does do (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  did do (+  past fin) $_)  True)
+  (= (verb-form  doing do (+  pres part) $_)  True)
+  (= (verb-form  done do (+  past part) $_)  True)
+  (= (verb-form  flows flow (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  flowing flow (+  pres part) $_)  True)
+  (= (verb-form  rises rise (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  rose rise (+  past fin) $_)  True)
+  (= (verb-form  risen rise (+  past part) $_)  True)
+  (= (verb-form  borders border (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  bordering border (+  pres part) $_)  True)
+  (= (verb-form  contains contain (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  containing contain (+  pres part) $_)  True)
+  (= (verb-form  drains drain (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  draining drain (+  pres part) $_)  True)
+  (= (verb-form  exceeds exceed (+  pres fin) (+  3 sin))  True)
+  (= (verb-form  exceeding exceed (+  pres part) $_)  True)
 
 
-  (= (verb_type  have (+  aux have))  True)
-  (= (verb_type  be (+  aux be))  True)
-  (= (verb_type  do (+  aux ditrans))  True)
-  (= (verb_type  rise (+  main intrans))  True)
-  (= (verb_type  border (+  main trans))  True)
-  (= (verb_type  contain (+  main trans))  True)
-  (= (verb_type  drain (+  main intrans))  True)
-  (= (verb_type  exceed (+  main trans))  True)
-  (= (verb_type  flow (+  main intrans))  True)
+  (= (verb-type  have (+  aux have))  True)
+  (= (verb-type  be (+  aux be))  True)
+  (= (verb-type  do (+  aux ditrans))  True)
+  (= (verb-type  rise (+  main intrans))  True)
+  (= (verb-type  border (+  main trans))  True)
+  (= (verb-type  contain (+  main trans))  True)
+  (= (verb-type  drain (+  main intrans))  True)
+  (= (verb-type  exceed (+  main trans))  True)
+  (= (verb-type  flow (+  main intrans))  True)
 
 
   (= (adverb  yesterday)  True)

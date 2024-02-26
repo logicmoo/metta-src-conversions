@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  analysis $_168170 metagame/learning/analysis.pl metagame/learning/analysis.metta)
+;                                           (convert-to-metta-file  analysis $_265382 metagame/learning/analysis.pl metagame/learning/analysis.metta)
 ;
 ; ============================================================
 ;
@@ -13,7 +13,7 @@
 ;
 ; ;; Analysing game definitions to extract useful info.
 
-  (= (build-transition-matrix)  
+  (= build-transition-matrix  
     (new-empty-state $State)
     (build-transition-matrix $Matrix $State))
 ; /* I really want to make some reachability tables: 1. piece-square: for each square, the set of squares a piece token can eventually reach starting from that square. 2. piece-piece: for each piece (and square?) the set of other piece types which could be promoted into, given we start with a piece on that square. 3. piece-notpiece: for each piece, init square, and target square, the set of piece types which could eventually be captured (or just removed?) from that target square, given a piece type on the init square. */
@@ -26,7 +26,7 @@
       (:: $State) $Matrix))
 
 
-  (= (print-transition-matrix)  
+  (= print-transition-matrix  
     (print-transition-matrix $Sq $Piece $SqT))
 
   (= (print-transition-matrix $Sq $Piece $SqT)  
@@ -35,8 +35,7 @@
       (, 
         (square-piece-transition $Sq $Piece $SqT) 
         (format "~p: ~p -> ~p~n" 
-          (:: $Piece $Sq $SqT)) 
-        (fail)) True))
+          (:: $Piece $Sq $SqT)) fail) True))
 ; ; format("matrix[~p][~p] = ~p~n",[Sq,Piece,SqT]),
 
 
@@ -214,7 +213,7 @@
 ;
 ; 
 
-  (= (print-mobility-matrix)  
+  (= print-mobility-matrix  
     (print-mobility-matrix $_ $_))
 
   (= (print-mobility-matrix $Sq $Piece)  
@@ -223,8 +222,7 @@
       (, 
         (square-piece-mobility $Sq $Piece $Value) 
         (format "matrix[~p][~p] = ~p~n" 
-          (:: $Sq $Piece $Value)) 
-        (fail)) True))
+          (:: $Sq $Piece $Value)) fail) True))
 
 
 ;
@@ -298,7 +296,7 @@
 ;
 ; 
 
-  (= (print-eventual-matrix)  
+  (= print-eventual-matrix  
     (print-eventual-matrix $_ $_))
 
   (= (print-eventual-matrix $Sq $Piece)  
@@ -307,8 +305,7 @@
       (, 
         (square-piece-reachability $Sq $Piece $Value) 
         (format "matrix[~p][~p] = ~p~n" 
-          (:: $Sq $Piece $Value)) 
-        (fail)) True))
+          (:: $Sq $Piece $Value)) fail) True))
 
 ;
 ; ==============================================================================
@@ -326,7 +323,7 @@
 
 
 
-  (= (build-distance-table)  
+  (= build-distance-table  
     (distance-matrix $M)
     (build-distance-table $M $_))
 
@@ -405,7 +402,7 @@
 
 
 
-  (= (print-distance-matrix)  
+  (= print-distance-matrix  
     (print-distance-matrix $_ $_ $_))
 
 
@@ -415,13 +412,12 @@
       (, 
         (square-piece-list-distance $Sq $Piece $SqT $Dist) 
         (format "~p: ~p -> ~p <~p>~n" 
-          (:: $Piece $Sq $SqT $Dist)) 
-        (fail)) True))
+          (:: $Piece $Sq $SqT $Dist)) fail) True))
 ; ; format("matrix[~p][~p] = ~p~n",[Sq,Piece,SqT]),
 
 
 
-  (= (print-distance-table)  
+  (= print-distance-table  
     (print-distance-table $_ $_ $_))
 
 
@@ -431,8 +427,7 @@
       (, 
         (square-piece-distance $Sq $Piece $SqT $Dist) 
         (format "~p: ~p -> ~p <~p>~n" 
-          (:: $Piece $Sq $SqT $Dist)) 
-        (fail)) True))
+          (:: $Piece $Sq $SqT $Dist)) fail) True))
 ; ; format("table[~p][~p] = ~p~n",[Sq,Piece,SqT]),
 
 
@@ -667,13 +662,13 @@
 ;
 ; 
 
-  (= (crunch_ds  () ())  True)
+  (= (crunch-ds  () ())  True)
   (= (crunch-ds (Cons  (- $D $Sqs) $G) (Cons  (- $D $Count) $Rest))  
     (length $Sqs $Count)
     (crunch-ds $G $Rest))
 
 
-  (= (count_less  () $_ 0)  True)
+  (= (count-less  () $_ 0)  True)
   (= (count-less (Cons  (- $Dist $_) $_) $Max 0)  
     (< $Max $Dist)
     (set-det))
@@ -689,7 +684,7 @@
   (= (discounted-sum $Series $Discount $Sum)  
     (discounted-sum $Series $Discount 0 $Sum))
 
-  (= (discounted_sum  () $_ $Count $Count)  True)
+  (= (discounted-sum  () $_ $Count $Count)  True)
   (= (discounted-sum (Cons  (- $Dist $C1) $Rest) $Discount $Sum1 $Sum)  
     (discount-value $Dist $C1 $Discount $Val)
     (is $Sum2 
@@ -787,10 +782,10 @@
       (anal $Level) $Status))
 
 
-  (= (silent-anal)  
+  (= silent-anal  
     (all-anal off))
 
-  (= (loud-anal)  
+  (= loud-anal  
     (all-anal on))
 
 
@@ -801,19 +796,19 @@
     (set-anal-verbosity pieces $Status)) 
 
 
-  (= (trace-anal-tables)  
+  (= trace-anal-tables  
     (set-anal-verbosity tables on)) 
 
-  (= (trace-anal-index)  
+  (= trace-anal-index  
     (set-anal-verbosity index on)) 
 
-  (= (trace-anal-subsume)  
+  (= trace-anal-subsume  
     (set-anal-verbosity subsume on)) 
 
-  (= (trace-anal-simplify)  
+  (= trace-anal-simplify  
     (set-anal-verbosity simplify on)) 
 
-  (= (trace-anal-pieces)  
+  (= trace-anal-pieces  
     (set-anal-verbosity pieces on)) 
 
 

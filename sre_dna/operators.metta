@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  operators $_83624 sre_dna/operators.pl sre_dna/operators.metta)
+;                                           (convert-to-metta-file  operators $_263060 sre_dna/operators.pl sre_dna/operators.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -21,8 +21,7 @@
 
 
   (= (sre $E)  
-    (write $E)
-    (nl))
+    ( (write $E) nl))
 
 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  simple_analyzer $_388104 sxx_machine/bench/simple_analyzer.pl sxx_machine/bench/simple_analyzer.metta)
+;                                           (convert-to-metta-file  simple_analyzer $_161944 sxx_machine/bench/simple_analyzer.pl sxx_machine/bench/simple_analyzer.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -24,7 +24,7 @@
 ; Builtins used: compare/3, arg/3, functor/3, sort/2, keysort/2, ==/2, \==/2.
 
 
-  (= (top)  
+  (= top  
     (main $_))
 ;
 ; main :- main(Table), write(Table), nl.
@@ -35,7 +35,7 @@
       (:: 
         (stree 
           (/ main 0) 
-          (= (main)  
+          (= main  
             (or 
               (qsort 
                 (:: 1 2) $L Nil) fail)) 
@@ -61,32 +61,32 @@
           (= (part $W $X $Y $Z)  
             (or 
               (, 
-                ($cut-load $A1) 
-                ($cut-part/4-1 $W $X $Y $Z $A1)) fail)) 
+                (%cut-load $A1) 
+                (%cut-part/4-1 $W $X $Y $Z $A1)) fail)) 
           (= (part  $_ $_ $_ $_)  True) 
-          (:: (stree (/ %cut-part/4-1 5) (= ($cut-part/4-1 $I1 $E1 $F1 $G1 $H1)  
+          (:: (stree (/ %cut-part/4-1 5) (= (%cut-part/4-1 $I1 $E1 $F1 $G1 $H1)  
             (or 
               (, 
                 (= $I1 
                   (Cons  $C1 $D1)) 
-                ($fac-$cut-part/4-1/5-2 $D1 $E1 $F1 $G1 $H1 $C1)) 
+                (%fac-$cut-part/4-1/5-2 $D1 $E1 $F1 $G1 $H1 $C1)) 
               (or 
                 (, 
                   (= $I1 Nil) 
                   (= $F1 Nil) 
-                  (= $G1 Nil)) fail))) (= (%cut_part/4_1  $_ $_ $_ $_ $_)  True) (:: (stree (/ %fac-%cut-part/4-1/5-2 6) (= ($fac-$cut-part/4-1/5-2 $K1 $L1 $Q1 $O1 $P1 $M1)  
+                  (= $G1 Nil)) fail))) (= (%cut-part/4-1  $_ $_ $_ $_ $_)  True) (:: (stree (/ %fac-$cut-part/4-1/5-2 6) (= (%fac-$cut-part/4-1/5-2 $K1 $L1 $Q1 $O1 $P1 $M1)  
             (or 
               (, 
                 (= $Q1 
                   (Cons  $M1 $N1)) 
                 (=< $M1 $L1) 
-                ($cut-shallow $P1) 
+                (%cut-shallow $P1) 
                 (part $K1 $L1 $N1 $O1)) 
               (or 
                 (, 
                   (= $O1 
                     (Cons  $M1 $R1)) 
-                  (part $K1 $L1 $Q1 $R1)) fail))) (= (%fac_%cut_part/4_1/5_2  $_ $_ $_ $_ $_ $_)  True) Nil 1)) 1)) 1)) $Table))
+                  (part $K1 $L1 $Q1 $R1)) fail))) (= (%fac-$cut-part/4-1/5-2  $_ $_ $_ $_ $_ $_)  True) Nil 1)) 1)) 1)) $Table))
 
 
   (= (analyze-strees $Strees $OutTable)  
@@ -118,7 +118,7 @@
 ; Initialize the table of call lattice values:
 
 
-  (= (init_strees  () $4 $4)  True)
+  (= (init-strees  () $4 $4)  True)
   (= (init-strees (Cons  $12 $13) $4 $5)  
     (= $12 
       (stree $14 
@@ -131,13 +131,13 @@
     (init-strees $13 $25 $5))
 
 
-  (= (init_conj  true $4 $4)  True)
+  (= (init-conj  true $4 $4)  True)
   (= (init-conj (, $12 $13) $4 $5)  
     (init-goal $12 $4 $16)
     (init-conj $13 $16 $5))
 
 
-  (= (init_disj  fail $4 $4)  True)
+  (= (init-disj  fail $4 $4)  True)
   (= (init-disj (or $12 $13) $4 $5)  
     (init-conj $12 $4 $16)
     (init-disj $13 $16 $5))
@@ -160,7 +160,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (traverse_strees  () $4 $4 $6 $6)  True)
+  (= (traverse-strees  () $4 $4 $6 $6)  True)
   (= (traverse-strees (Cons  $14 $15) $4 $5 $6 $7)  
     (= $14 
       (stree $16 
@@ -170,7 +170,7 @@
     (traverse-strees $15 $28 $5 $29 $7))
 
 
-  (= (traverse_disj  $3 fail $5 $5 $7 $7)  True)
+  (= (traverse-disj  $3 fail $5 $5 $7 $7)  True)
   (= (traverse-disj $3 (or $15 $16) $5 $6 $7 $8)  
     (traverse-conj $3 $15 $5 $22 $7 $23)
     (traverse-disj $3 $16 $22 $6 $23 $8))
@@ -186,7 +186,7 @@
     (get-entry-modes ground $3 $17 $27)
     (traverse-conj $4 $25 $6 $7 $8 $27 $28 $26 $29 $24 $30))
 
-  (= (traverse_conj  true $4 $4 $6 $6 $8 $8 $10 $10 $12 $12)  True)
+  (= (traverse-conj  true $4 $4 $6 $6 $8 $8 $10 $10 $12 $12)  True)
   (= (traverse-conj (, $20 $21) $4 $5 $6 $7 $8 $9 $10 $11 $12 $13)  
     (varset $20 $32)
     (update-goal $20 $32 $4 $33 $6 $34 $8 $35 $10 $36 $12 $37)
@@ -260,7 +260,7 @@
         (/ $15 $16) $19) $24 $6)
     (is $8 
       (+ $7 1)))
-  (= (update_table  (/  $15 $16) $4 $5 $5 $7 $7)  True)
+  (= (update-table  (/  $15 $16) $4 $5 $5 $7 $7)  True)
 
 
   (= (create-new-call $I $Ar $_ $_ $_ $_ $_ $_ $_)  
@@ -391,7 +391,7 @@
     (set-det))
   (= (lattice-modes-arg ground $X (, (ground $X) $Link) $Link)  
     (set-det))
-  (= (lattice_modes_arg  $Other $X $Link $Link)  True)
+  (= (lattice-modes-arg  $Other $X $Link $Link)  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -431,7 +431,7 @@
 
   (= (set-2 < $I $V $W $L $R $W $NL $R)  
     (set $L $I $V $NL))
-  (= (set_2  = $I $V $_ $L $R $V $L $R)  True)
+  (= (set-2  = $I $V $_ $L $R $V $L $R)  True)
   (= (set-2 > $I $V $W $L $R $W $L $NR)  
     (set $R $I $V $NR))
 
@@ -453,14 +453,14 @@
   (= (membership-flag $X $Set yes)  
     (inv $X $Set)
     (set-det))
-  (= (membership_flag  $X $Set no)  True)
+  (= (membership-flag  $X $Set no)  True)
 
 
   (= (ground-flag $X $Ground yes)  
     (varset $X $Set)
     (subsetv $Set $Ground)
     (set-det))
-  (= (ground_flag  $X $Ground no)  True)
+  (= (ground-flag  $X $Ground no)  True)
 
 
   (= (get-entry-modes $Type $Head $Value $TypeSet)  
@@ -497,11 +497,11 @@
     (filter-vars $Ar $Goal $Vs Nil))
 
 
-  (= (-->  (filter_vars  $N $Goal) (,  {(=<  $N 0) } !))  True)
-  (= (-->  (filter_vars  $N $Goal) (,  {(>  $N 0) } (,  ! (,  {(arg  $N $Goal $V) } (filter_vars_arg  $N $Goal $V)))))  True)
+  (= (-->  (filter-vars  $N $Goal) (,  {(=<  $N 0) } !))  True)
+  (= (-->  (filter-vars  $N $Goal) (,  {(>  $N 0) } (,  ! (,  {(arg  $N $Goal $V) } (filter-vars-arg  $N $Goal $V)))))  True)
 
-  (= (-->  (filter_vars_arg  $N $Goal $V) (,  {(var  $V) } (,  ! (,  ($V) (,  {(is  $N1 (-  $N 1)) } (filter_vars  $N1 $Goal))))))  True)
-  (= (-->  (filter_vars_arg  $N $Goal $V) (,  {(nonvar  $V) } (,  ! (,  {(is  $N1 (-  $N 1)) } (filter_vars  $N1 $Goal)))))  True)
+  (= (-->  (filter-vars-arg  $N $Goal $V) (,  {(var  $V) } (,  ! (,  ($V) (,  {(is  $N1 (-  $N 1)) } (filter-vars  $N1 $Goal))))))  True)
+  (= (-->  (filter-vars-arg  $N $Goal $V) (,  {(nonvar  $V) } (,  ! (,  {(is  $N1 (-  $N 1)) } (filter-vars  $N1 $Goal)))))  True)
 
 
   (= (goal-dupset $Goal $DupSet)  
@@ -520,7 +520,7 @@
     (filter-dups $KeySet $DupSet))
 
 
-  (= (make_key  () ())  True)
+  (= (make-key  () ())  True)
   (= (make-key (Cons  $V $Bag) (Cons  (- $V dummy) $KeyBag))  
     (make-key $Bag $KeyBag))
 
@@ -529,10 +529,10 @@
     (filter-dups $KeySet $Set Nil))
 
 
-  (= (-->  (filter_dups  ()) !)  True)
-  (= (-->  (filter_dups  (Cons  (-  $V1 $_) (Cons  (-  $V2 $_) (Cons  (-  $V3 $_) $KeySet)))) (,  {(,  (==  $V1 $V2) (==  $V2 $V3)) } (,  ! (filter_dups  (Cons  (-  $V2 $_) (Cons  (-  $V3 $_) $KeySet))))))  True)
-  (= (-->  (filter_dups  (Cons  (-  $V1 $_) (Cons  (-  $V2 $_) $KeySet))) (,  {(==  $V1 $V2) } (,  ! (,  ($V1) (filter_dups  $KeySet)))))  True)
-  (= (-->  (filter_dups  (Cons  (-  $V1 $_) $KeySet)) (,  ! (filter_dups  $KeySet)))  True)
+  (= (-->  (filter-dups  ()) !)  True)
+  (= (-->  (filter-dups  ([|]  (-  $V1 $_) ([|]  (-  $V2 $_) ([|]  (-  $V3 $_) $KeySet)))) (,  {(,  (==  $V1 $V2) (==  $V2 $V3)) } (,  ! (filter-dups  ([|]  (-  $V2 $_) ([|]  (-  $V3 $_) $KeySet))))))  True)
+  (= (-->  (filter-dups  ([|]  (-  $V1 $_) ([|]  (-  $V2 $_) $KeySet))) (,  {(==  $V1 $V2) } (,  ! (,  ($V1) (filter-dups  $KeySet)))))  True)
+  (= (-->  (filter-dups  ([|]  (-  $V1 $_) $KeySet)) (,  ! (filter-dups  $KeySet)))  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -565,7 +565,7 @@
     (inv-2 $Order $A $S))
 
 
-  (= (inv_2  = $_ $_)  True)
+  (= (inv-2  = $_ $_)  True)
   (= (inv-2 > $A $S)  
     (inv $A $S))
 
@@ -575,7 +575,7 @@
     (intersectv-2 $S2 $A $S1 $S))
 
 
-  (= (intersectv_2  () $A $S1 ())  True)
+  (= (intersectv-2  () $A $S1 ())  True)
   (= (intersectv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (intersectv-3 $Order $A $S1 $B $S2 $S))
@@ -594,7 +594,7 @@
     (diffv-2 $S2 $A $S1 $S))
 
 
-  (= (diffv_2  () $A $S1 ($A))  True)
+  (= (diffv-2  () $A $S1 ($A))  True)
   (= (diffv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (diffv-3 $Order $A $S1 $B $S2 $S))
@@ -614,7 +614,7 @@
     (unionv-2 $S2 $A $S1 $S))
 
 
-  (= (unionv_2  () $A $S1 (Cons  $A $S1))  True)
+  (= (unionv-2  () $A $S1 ([|]  $A $S1))  True)
   (= (unionv-2 (Cons  $B $S2) $A $S1 $S)  
     (compare $Order $A $B)
     (unionv-3 $Order $A $S1 $B $S2 $S))
@@ -632,14 +632,14 @@
     (includev-2 $S1 $A $S))
 
 
-  (= (includev_2  () $A ($A))  True)
+  (= (includev-2  () $A ($A))  True)
   (= (includev-2 (Cons  $B $S1) $A $S)  
     (compare $Order $A $B)
     (includev-3 $Order $A $B $S1 $S))
 
 
-  (= (includev_3  < $A $B $S1 (Cons  $A (Cons  $B $S1)))  True)
-  (= (includev_3  = $_ $B $S1 (Cons  $B $S1))  True)
+  (= (includev-3  < $A $B $S1 ([|]  $A ([|]  $B $S1)))  True)
+  (= (includev-3  = $_ $B $S1 ([|]  $B $S1))  True)
   (= (includev-3 > $A $B $S1 (Cons  $B $S))  
     (includev-2 $S1 $A $S))
 
@@ -672,15 +672,15 @@
   (= (-->  (varbag  $Str $N $Arity) (,  {(=<  $N $Arity) } (,  ! (,  {(arg  $N $Str $Arg) } (,  (varbag  $Arg) (,  {(is  $N1 (+  $N 1)) } (varbag  $Str $N1 $Arity)))))))  True)
 
 
-  (= (unify_p  (= $_  $_))  True)
+  (= (unify-p  (= $_  $_))  True)
 
 
   (= (call-p $G)  
     (not (unify-p $G)))
 
 
-  (= (split_unify  (= $X  $Y) $X $Y)  True)
-  (= (split_unify  (= $Y  $X) $X $Y)  True)
+  (= (split-unify  (= $X  $Y) $X $Y)  True)
+  (= (split-unify  (= $Y  $X) $X $Y)  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

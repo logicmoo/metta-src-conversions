@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tak $_342136 sxx_machine/bench/tak.pl sxx_machine/bench/tak.metta)
+;                                           (convert-to-metta-file  tak $_124456 sxx_machine/bench/tak.pl sxx_machine/bench/tak.metta)
 ;
 ; generated: 17 November 1989
 ;
@@ -17,11 +17,10 @@
 ; (almost) Takeuchi function (recursive arithmetic)
 
 
-  (= (top)  
-    (tak))
+  (= top  tak)
 
 
-  (= (tak)  
+  (= tak  
     (tak 18 12 6 $_))
 
   (= (tak $X $Y $Z $A)  

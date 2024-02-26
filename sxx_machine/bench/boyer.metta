@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  boyer $_256844 sxx_machine/bench/boyer.pl sxx_machine/bench/boyer.metta)
+;                                           (convert-to-metta-file  boyer $_439542 sxx_machine/bench/boyer.pl sxx_machine/bench/boyer.metta)
 ;
 ; generated: 20 November 1989
 ;
@@ -21,7 +21,7 @@
 ; prove arithmetic theorem
 
 
-  (= (go)  
+  (= go  
     (statistics runtime 
       (:: $_ $_))
     (wff $Wff)
@@ -34,7 +34,7 @@
     (write ' milliseconds'))
 
 
-  (= (top)  
+  (= top  
     (wff $Wff)
     (rewrite $Wff $NewWff)
     (tautology $NewWff Nil Nil))
@@ -138,13 +138,13 @@
   (= (equal  (and  $P $Q) (if  $P (if  $Q t f) f))  True)
   (= (equal  (append  (append  $X $Y) $Z) (append  $X (append  $Y $Z)))  True)
   (= (equal  (assignment  $X (append  $A $B)) (if  (assignedp  $X $A) (assignment  $X $A) (assignment  $X $B)))  True)
-  (= (equal  (assume_false  $Var $Alist) (cons  (cons  $Var f) $Alist))  True)
-  (= (equal  (assume_true  $Var $Alist) (cons  (cons  $Var t) $Alist))  True)
+  (= (equal  (assume-false  $Var $Alist) (cons  (cons  $Var f) $Alist))  True)
+  (= (equal  (assume-true  $Var $Alist) (cons  (cons  $Var t) $Alist))  True)
   (= (equal  (boolean  $X) (or  (equal  $X t) (equal  $X f)))  True)
   (= (equal  (car  (gopher  $X)) (if  (listp  $X) (car  (flatten  $X)) zero))  True)
   (= (equal  (compile  $Form) (reverse  (codegen  (optimize  $Form) ())))  True)
-  (= (equal  (count_list  $Z (sort_lp  $X $Y)) (myplus  (count_list  $Z $X) (count_list  $Z $Y)))  True)
-  (= (equal  (countps_  $L $Pred) (countps_loop  $L $Pred zero))  True)
+  (= (equal  (count-list  $Z (sort-lp  $X $Y)) (myplus  (count-list  $Z $X) (count-list  $Z $Y)))  True)
+  (= (equal  (countps-  $L $Pred) (countps-loop  $L $Pred zero))  True)
   (= (equal (boyer-difference $A $B) $C)  
     (boyer-difference $A $B $C))
   (= (equal  (divides  $X $Y) (zerop  (remainder  $Y $X)))  True)
@@ -156,7 +156,7 @@
   (= (equal  (exec  (append  $X $Y) $Pds $Envrn) (exec  $Y (exec  $X $Pds $Envrn) $Envrn))  True)
   (= (equal (exp $A $B) $C)  
     (exp $A $B $C))
-  (= (equal  (fact_  $I) (fact_loop  $I 1))  True)
+  (= (equal  (fact-  $I) (fact-loop  $I 1))  True)
   (= (equal  (falsify  $X) (falsify1  (normalize  $X) ()))  True)
   (= (equal  (fix  $X) (if  (numberp  $X) $X zero))  True)
   (= (equal  (flatten  (cdr  (gopher  $X))) (if  (listp  $X) (cdr  (flatten  $X)) (cons  zero ())))  True)
@@ -176,7 +176,7 @@
   (= (equal (lessp $A $B) $C)  
     (lessp $A $B $C))
   (= (equal  (listp  (gopher  $X)) (listp  $X))  True)
-  (= (equal  (mc_flatten  $X $Y) (append  (flatten  $X) $Y))  True)
+  (= (equal  (mc-flatten  $X $Y) (append  (flatten  $X) $Y))  True)
   (= (equal (meaning $A $B) $C)  
     (meaning $A $B $C))
   (= (equal (boyer-member $A $B) $C)  
@@ -184,29 +184,29 @@
   (= (equal  (not  $P) (if  $P f t))  True)
   (= (equal (nth $A $B) $C)  
     (nth $A $B $C))
-  (= (equal  (numberp  (greatest_factor  $X $Y)) (not  (and  (or  (zerop  $Y) (equal  $Y 1)) (not  (numberp  $X)))))  True)
+  (= (equal  (numberp  (greatest-factor  $X $Y)) (not  (and  (or  (zerop  $Y) (equal  $Y 1)) (not  (numberp  $X)))))  True)
   (= (equal  (or  $P $Q) (if  $P t (if  $Q t f) f))  True)
   (= (equal (myplus $A $B) $C)  
     (myplus $A $B $C))
   (= (equal (power-eval $A $B) $C)  
     (power-eval $A $B $C))
   (= (equal  (prime  $X) (and  (not  (zerop  $X)) (and  (not  (equal  $X (add1  zero))) (prime1  $X (decr  $X)))))  True)
-  (= (equal  (prime_list  (append  $X $Y)) (and  (prime_list  $X) (prime_list  $Y)))  True)
+  (= (equal  (prime-list  (append  $X $Y)) (and  (prime-list  $X) (prime-list  $Y)))  True)
   (= (equal (quotient $A $B) $C)  
     (quotient $A $B $C))
   (= (equal (remainder $A $B) $C)  
     (remainder $A $B $C))
-  (= (equal  (reverse_  $X) (reverse_loop  $X ()))  True)
+  (= (equal  (reverse-  $X) (reverse-loop  $X ()))  True)
   (= (equal  (reverse  (append  $A $B)) (append  (reverse  $B) (reverse  $A)))  True)
   (= (equal (reverse-loop $A $B) $C)  
     (reverse-loop $A $B $C))
   (= (equal  (samefringe  $X $Y) (equal  (flatten  $X) (flatten  $Y)))  True)
   (= (equal  (sigma  zero $I) (quotient  (times  $I (add1  $I)) 2))  True)
   (= (equal  (sort2  (delete  $X $L)) (delete  $X (sort2  $L)))  True)
-  (= (equal  (tautology_checker  $X) (tautologyp  (normalize  $X) ()))  True)
+  (= (equal  (tautology-checker  $X) (tautologyp  (normalize  $X) ()))  True)
   (= (equal (times $A $B) $C)  
     (times $A $B $C))
-  (= (equal  (times_list  (append  $X $Y)) (times  (times_list  $X) (times_list  $Y)))  True)
+  (= (equal  (times-list  (append  $X $Y)) (times  (times-list  $X) (times-list  $Y)))  True)
   (= (equal  (value  (normalize  $X) $A) (value  $X $A))  True)
   (= (equal  (zerop  $X) (or  (equal  $X zero) (not  (numberp  $X))))  True)
 
@@ -223,7 +223,7 @@
     (set-det))
   (= (boyer-difference (add1 (myplus $Y $Z)) $Z (add1 $Y))  
     (set-det))
-  (= (boyer_difference  (add1  (add1  $X)) 2 (fix  $X))  True)
+  (= (boyer-difference  (add1  (add1  $X)) 2 (fix  $X))  True)
 
 
   (= (eq (myplus $A $B) zero (and (zerop $A) (zerop $B)))  
@@ -281,26 +281,26 @@
     (set-det))
   (= (lessp $Y (myplus $X $Y) (not (zerop $X)))  
     (set-det))
-  (= (lessp  (length  (delete  $X $L)) (length  $L) (boyer_member  $X $L))  True)
+  (= (lessp  (length  (delete  $X $L)) (length  $L) (boyer-member  $X $L))  True)
 
 
   (= (meaning (plus-tree (append $X $Y)) $A (myplus (meaning (plus-tree $X) $A) (meaning (plus-tree $Y) $A)))  
     (set-det))
   (= (meaning (plus-tree (plus-fringe $X)) $A (fix (meaning $X $A)))  
     (set-det))
-  (= (meaning  (plus_tree  (delete  $X $Y)) $A (if  (boyer_member  $X $Y) (boyer_difference  (meaning  (plus_tree  $Y) $A) (meaning  $X $A)) (meaning  (plus_tree  $Y) $A)))  True)
+  (= (meaning  (plus-tree  (delete  $X $Y)) $A (if  (boyer-member  $X $Y) (boyer-difference  (meaning  (plus-tree  $Y) $A) (meaning  $X $A)) (meaning  (plus-tree  $Y) $A)))  True)
 
 
   (= (myboyer-member $X (append $A $B) (or (boyer-member $X $A) (boyer-member $X $B)))  
     (set-det))
   (= (myboyer-member $X (reverse $Y) (boyer-member $X $Y))  
     (set-det))
-  (= (myboyer_member  $A (intersect  $B $C) (and  (boyer_member  $A $B) (boyer_member  $A $C)))  True)
+  (= (myboyer-member  $A (intersect  $B $C) (and  (boyer-member  $A $B) (boyer-member  $A $C)))  True)
 
 
   (= (nth  zero $_ zero)  True)
   (= (nth  () $I (if  (zerop  $I) () zero))  True)
-  (= (nth  (append  $A $B) $I (append  (nth  $A $I) (nth  $B (boyer_difference  $I (length  $A)))))  True)
+  (= (nth  (append  $A $B) $I (append  (nth  $A $I) (nth  $B (boyer-difference  $I (length  $A)))))  True)
 
 
   (= (myplus (myplus $X $Y) $Z (myplus $X (myplus $Y $Z)))  
@@ -316,7 +316,7 @@
     (set-det))
   (= (power-eval (big-plus $X $Y $I $Base) $Base (myplus $I (myplus (power-eval $X $Base) (power-eval $Y $Base))))  
     (set-det))
-  (= (power_eval  (big_plus  (power_rep  $I $Base) (power_rep  $J $Base) zero $Base) $Base (myplus  $I $J))  True)
+  (= (power-eval  (big-plus  (power-rep  $I $Base) (power-rep  $J $Base) zero $Base) $Base (myplus  $I $J))  True)
 
 
   (= (quotient  (myplus  $X (myplus  $X $Y)) 2 (myplus  $X (quotient  $Y 2)))  True)
@@ -334,7 +334,7 @@
 
   (= (reverse-loop $X $Y (append (reverse $X) $Y))  
     (set-det))
-  (= (reverse_loop  $X () (reverse  $X))  True)
+  (= (reverse-loop  $X () (reverse  $X))  True)
 
 
   (= (times $X (myplus $Y $Z) (myplus (times $X $Y) (times $X $Z)))  

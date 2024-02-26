@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  generate $_59478 sre_dna/generate.pl sre_dna/generate.metta)
+;                                           (convert-to-metta-file  generate $_219766 sre_dna/generate.pl sre_dna/generate.metta)
 ;
 ; ------------------------------------------------
 ;
@@ -56,12 +56,11 @@
         (^ $X 
           (^ $Y 
             (^ $Z 
-              (with_self  
+              (with-self  
                 (fast *) 
                 (dctg-rule-info $Root $X $Y $D $Z))))) $L) 
       (max-list $L $MinDepth) 
-      (populate $MinDepth $MaxDepth $MinDepth grow 0 $PopSize) 
-      (number-population) 
+      (populate $MinDepth $MaxDepth $MinDepth grow 0 $PopSize) number-population 
       (set-det)))
 
 ;
@@ -99,8 +98,8 @@
 ; ; new: June 11/99
 
 
-  (= (toggle_type  grow full)  True)
-  (= (toggle_type  full grow)  True)
+  (= (toggle-type  grow full)  True)
+  (= (toggle-type  full grow)  True)
 
 ;
 ; make_individual(Depth, Type, Popn, NewPopn)
@@ -137,7 +136,7 @@
           (== $Type full) 
           (writel f) 
           (writel g)) 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (individual  x $_ $Expr)) 
         (is $NewPopn 
           (+ $Popn 1))))
@@ -148,45 +147,43 @@
 ; consecutively numbers all the population with unique ID numbers
 
 
-  (= (number-population)  
-    ( (add-is-symbol  &self 
-        (popn_cnt  0)) 
-      (remove-is-symbol  &self 
+  (= number-population  
+    ( (add-atom  &self 
+        (popn-cnt  0)) 
+      (remove-atom  &self 
         (individual  x $V $E)) 
-      (remove-is-symbol  &self 
-        (popn_cnt  $K)) 
+      (remove-atom  &self 
+        (popn-cnt  $K)) 
       (is $K2 
         (+ $K 1)) 
-      (add-is-symbol  &self 
-        (popn_cnt  $K2)) 
-      (add-is-symbol  &self 
-        (individual  $K2 $V $E)) 
-      (fail)))
-  (= (number-population)  
-    ( (remove-is-symbol  &self 
-        (popn_cnt  $_)) (set-det)))
+      (add-atom  &self 
+        (popn-cnt  $K2)) 
+      (add-atom  &self 
+        (individual  $K2 $V $E)) fail))
+  (= number-population  
+    ( (remove-atom  &self 
+        (popn-cnt  $_)) (set-det)))
 
 ;
 ; consecutively renumbers all the new population with unique ID numbers
 
 
-  (= (renumber-population)  
-    ( (add-is-symbol  &self 
-        (popn_cnt  0)) 
-      (remove-is-symbol  &self 
+  (= renumber-population  
+    ( (add-atom  &self 
+        (popn-cnt  0)) 
+      (remove-atom  &self 
         (newindividual  $_ $V $E)) 
-      (remove-is-symbol  &self 
-        (popn_cnt  $K)) 
+      (remove-atom  &self 
+        (popn-cnt  $K)) 
       (is $K2 
         (+ $K 1)) 
-      (add-is-symbol  &self 
-        (popn_cnt  $K2)) 
-      (add-is-symbol  &self 
-        (individual  $K2 $V $E)) 
-      (fail)))
-  (= (renumber-population)  
-    ( (remove-is-symbol  &self 
-        (popn_cnt  $_)) (set-det)))
+      (add-atom  &self 
+        (popn-cnt  $K2)) 
+      (add-atom  &self 
+        (individual  $K2 $V $E)) fail))
+  (= renumber-population  
+    ( (remove-atom  &self 
+        (popn-cnt  $_)) (set-det)))
 
 
 

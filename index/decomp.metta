@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  decomp $_297580 index/decomp.pl index/decomp.metta)
+;                                           (convert-to-metta-file  decomp $_506430 index/decomp.pl index/decomp.metta)
 
   (= (decompose $DisplayIC $PosIn $PosOut $InICs $OutICs)  
     (display $IC $DisplayIC)
@@ -47,7 +47,7 @@
     (det-if-then-else 
       (= $Answer -) 
       (, 
-        (concat-atom $AListIn $R) 
+        (concat-symbol $AListIn $R) 
         (= $AListOut $AListIn)) 
       (det-if-then-else 
         (= $Answer +) 
@@ -83,7 +83,7 @@
 ; ; divides(SplitPos,Dep,NewPos,Numbers),
 
 
-  (= (decomp_again  () $Dep $Pos $Pos $ICs $ICs)  True)
+  (= (decomp-again  () $Dep $Pos $Pos $ICs $ICs)  True)
   (= (decomp-again (Cons  $Name $Names) $Dep $PosIn $PosOut $InICs $OutICs)  
     (det-if-then-else 
       (yesno (:: 'Decompose ' $Name ? )) 
@@ -161,13 +161,13 @@
     (yesno (:: 'Proceed? ')))
 
 
-  (= (new_preds  $Rel () $New $New $Names $Names)  True)
+  (= (new-preds  $Rel () $New $New $Names $Names)  True)
   (= (new-preds $Rel (Cons  $H $T) $New0 $New $Names0 $Names)  
     (new-preds1 $Rel $H $New0 $New1 $Names0 $Names1)
     (new-preds $Rel $T $New1 $New $Names1 $Names))
 
 
-  (= (new_preds1  $Rel () $New $New $Names $Names)  True)
+  (= (new-preds1  $Rel () $New $New $Names $Names)  True)
   (= (new-preds1 $Rel (Cons  $R $Rs) $New0 $New $Names0 $Names)  
     (show-list $Rel 'partial relation' $R)
     (prompt-read 'relation name' $N)
@@ -193,6 +193,6 @@
     (set-det)
     (=.. $NewT 
       (Cons  $N $Args)))
-  (= (new_tuple  $Rel $T $N $T)  True)	;
+  (= (new-tuple  $Rel $T $N $T)  True)	;
 ; tuple from other relation
 

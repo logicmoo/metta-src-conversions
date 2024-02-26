@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  setup $_109322 metagame/play/setup.pl metagame/play/setup.metta)
+;                                           (convert-to-metta-file  setup $_55300 metagame/play/setup.pl metagame/play/setup.metta)
 ;
 ; ============================================================
 ;
@@ -198,12 +198,12 @@
 ;
 ; done
 
-  (= (done_setup  done $SIn $SIn)  True)
+  (= (done-setup  done $SIn $SIn)  True)
 
 ;
 ; abort: abandon changes and back to move menu.
 
-  (= (abort_setup  abort $SIn $_)  True)
+  (= (abort-setup  abort $SIn $_)  True)
 
 ;
 ; display
@@ -214,10 +214,9 @@
 
 
 
-  (= (help-setup $_ $_ $_)  
-    (help-setup))
+  (= (help-setup $_ $_ $_)  help-setup)
 
-  (= (help-setup)  
+  (= help-setup  
     (format "\nModifying Board Setup\n---------------------\nmove <x1> <y1> <x2> <y2>         => transfer piece to different square\nput <x> <y> <color> <piece>      => put a piece on square (<x>,<y>)\ninitprom <x> <y> <color> <piece> => opponent must promote piece on square\nempty <row> <col>\t\t => empty square (<row>,<col>)\nhand <Hcolor> <color> <piece>    => put piece in <Hcolor>'s hand\nclear\t\t\t\t => makes all the square empty\ncontrol <color>\t\t\t => puts player <color> in control\nstage <stage>\t\t\t => sets current stage to <stage>\nadd/del\t\t\t\t => add or delete a property from state\ndisplay\t\t\t\t => prints the board\ndone\t\t\t\t => exits setup stage with current setup\nabort\t\t\t\t => exits setup stage, abandon changes\ncheckpoint <n>.                  => record state under name <n> \nrestore <n>.                     => set state to that checkpointed as <n> \n\nExamples:\n\nmove e 2 e 4.\nput e 2 white king.\nhand white black queen.\ncontrol white.\nstage assign.\ninitprom e 2 black bishop. \ndone.\n" Nil))
 
 

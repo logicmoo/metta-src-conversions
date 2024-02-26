@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  cobweb_1 $_178754 cobweb/cobweb_1.pl cobweb/cobweb_1.metta)
+;                                           (convert-to-metta-file  cobweb_1 $_317642 cobweb/cobweb_1.pl cobweb/cobweb_1.metta)
 
   (= (features  ((numeric minPrice) (nominal tv) (nominal bar)))  True)
 ; /********************************************************************/

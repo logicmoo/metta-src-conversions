@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  parse2 $_218178 metagame/theory/parse2.pl metagame/theory/parse2.metta)
+;                                           (convert-to-metta-file  parse2 $_313224 metagame/theory/parse2.pl metagame/theory/parse2.metta)
 ;
 ; ============================================================
 ;
@@ -82,7 +82,7 @@
     (game-constraints $Game $Con))
 
 
-  (= (current-game-must-capture)  
+  (= current-game-must-capture  
     (player-current-game $Game)
     (game-must-capture $Game))
 
@@ -230,7 +230,7 @@
 ;
 ; Either a decision, or a simple type.
 
-  (= (promoting_info  (promote  $Promote) (promote  $Promote))  True)
+  (= (promoting-info  (promote  $Promote) (promote  $Promote))  True)
   (= (promoting-info $Promote $Promoting)  
     (decision-chooser $Promote $Player)
     (decision-options $Promote $Descr)

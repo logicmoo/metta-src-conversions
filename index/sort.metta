@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sort $_292974 index/sort.pl index/sort.metta)
+;                                           (convert-to-metta-file  sort $_507886 index/sort.pl index/sort.metta)
 
   (= (my-sort $Rel $SortAttrs $Tuples $Sorted)  
     (rel $Rel $Attrs)

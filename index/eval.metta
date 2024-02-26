@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  eval $_459408 index/eval.pl index/eval.metta)
+;                                           (convert-to-metta-file  eval $_166372 index/eval.pl index/eval.metta)
 
   (= (evaluate1 $P $IC $Answer)  
     (switched-on eval)
@@ -41,7 +41,7 @@
             (- $NTuples $NLarge)) $NTuples))))
 
 
-  (= (calc_acc1  () $NT $NT $NL $NL $MaxNP $MaxNP)  True)
+  (= (calc-acc1  () $NT $NT $NL $NL $MaxNP $MaxNP)  True)
   (= (calc-acc1 (Cons  $D $Ds) $NT0 $NT $NL0 $NL $MaxNP0 $MaxNP)  
     (eval2 $D 0 $Sum 0 $Largest 0 $NParts)
     (is $NT1 
@@ -70,5 +70,5 @@
     (eval2 $Ns $S1 $S $L1 $L $M1 $M))
 
 
-  (= (insert_ic  $L $IC $E (Cons  $IC $L))  True)
+  (= (insert-ic  $L $IC $E ([|]  $IC $L))  True)
 

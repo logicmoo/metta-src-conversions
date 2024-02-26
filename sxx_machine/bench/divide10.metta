@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  divide10 $_380398 sxx_machine/bench/divide10.pl sxx_machine/bench/divide10.metta)
+;                                           (convert-to-metta-file  divide10 $_69094 sxx_machine/bench/divide10.pl sxx_machine/bench/divide10.metta)
 ;
 ; generated: 7 March 1990
 ;
@@ -17,12 +17,11 @@
 ; symbolic derivative of ((((((((x/x)/x)/x)/x)/x)/x)/x)/x)/x
 
 
-  (= (top)  
-    (divide10))
+  (= top  divide10)
 
 
 
-  (= (divide10)  
+  (= divide10  
     (d 
       (/ 
         (/ 

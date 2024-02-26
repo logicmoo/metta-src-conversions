@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  evaluation $_266776 miles/evaluation.pl miles/evaluation.metta)
+;                                           (convert-to-metta-file  evaluation $_262676 miles/evaluation.pl miles/evaluation.metta)
 ;
 ; MODULE evaluation EXPORTS
 
@@ -199,7 +199,7 @@
     (make-unique $UA_List1 $UA_List))
 
 
-  (= (ip_list  () $L $L)  True)
+  (= (ip-list  () $L $L)  True)
   (= (ip-list (Cons  $E $R) $L $L2)  
     (ip0 $E $UAs)
     (append $L $UAs $L1)
@@ -394,7 +394,7 @@
     (insert-unique $I $A $L1 $L2))
 
 
-  (= (fp_list  () $L $L)  True)
+  (= (fp-list  () $L $L)  True)
   (= (fp-list (Cons  $G $R) $L $L2)  
     (fp-list $R $L $L1)
     (fp $G $L1 $L2))
@@ -472,7 +472,7 @@
     (or-subsets $Indices $TList $OR_List)
     (set-det)
     (best $OR_List $OR))
-  (= (fp_hyp  ())  True)
+  (= (fp-hyp  ())  True)
 
 
 ;
@@ -530,7 +530,7 @@
       (= $L2 $L1)))
 
 
-  (= (fp_hyp_list  () $L $L)  True)
+  (= (fp-hyp-list  () $L $L)  True)
   (= (fp-hyp-list (Cons  $G $R) $L $L2)  
     (fp-hyp-list $R $L $L1)
     (fp-hyp $G $L1 $L2))
@@ -667,7 +667,7 @@
         (= $X not-ok))))
 
 
-  (= (fpo_list  () $L $L ok)  True)
+  (= (fpo-list  () $L $L ok)  True)
   (= (fpo-list (Cons  $G $R) $L $L2 $X)  
     (fpo $G $L $L1 $Xg)
     (det-if-then-else 
@@ -718,14 +718,14 @@
 ; ***********************************************************************
 
 
-  (= (collect_indices  () $L $L)  True)
+  (= (collect-indices  () $L $L)  True)
   (= (collect-indices (Cons  $X $R) $L $L2)  
     (c-indices $X $L $L1)
     (collect-indices $R $L1 $L2))
 
 
-  (= (c_indices  () $L $L)  True)
-  (= (c-indices (Cons  (with_self  $I $_) $R) $L $L2)  
+  (= (c-indices  () $L $L)  True)
+  (= (c-indices (Cons  (with-self  $I $_) $R) $L $L2)  
     (c-indices $R $L $L1)
     (det-if-then-else 
       (member $I $L1) 
@@ -843,9 +843,9 @@
 ; ***********************************************************************
 
 
-  (= (initialize_or_subsets  () $_ $_ ())  True)
+  (= (initialize-or-subsets  () $_ $_ ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/evaluation.pl 478 41 15079))
 
 
@@ -898,10 +898,10 @@
 ; ***********************************************************************
 
 
-  (= (remove_conjuncts  $_ () () $A $A)  True)
+  (= (remove-conjuncts  $_ () () $A $A)  True)
   (= (remove-conjuncts $I (Cons  $X $R) $R1 $A $A2)  
     (member 
-      (with_self  $I $E) $X)
+      (with-self  $I $E) $X)
     (set-det)
     (append $E $A $A0)
     (identical-make-unique $A0 $A1)
@@ -956,20 +956,20 @@
 ; ***********************************************************************
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/evaluation.pl 541 20 17217))
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/evaluation.pl 543 20 17286))
 
 
-  (= (or_all_subsets  () $L $L)  True)
+  (= (or-all-subsets  () $L $L)  True)
 
 
-  (= (or_asubsets  () $_ $_ $_ ())  True)
+  (= (or-asubsets  () $_ $_ $_ ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/evaluation.pl 550 39 17474))
 
 
@@ -1016,7 +1016,7 @@
 
   (= (eval-pos-examples $Exlist)  
     ( (remove-all-atoms  &self 
-        (prooftrees  $_ $_ $_)) (findall (with_self  $I $Fact) (, (ex $I $Fact +) (solve-once $Fact fail $_)) $Exlist)))        
+        (prooftrees  $_ $_ $_)) (findall (with-self  $I $Fact) (, (ex $I $Fact +) (solve-once $Fact fail $_)) $Exlist)))        
 
 
 
@@ -1066,26 +1066,24 @@
 ; ******************************************************************************
 
 
-  (= (eval-examples)  
+  (= eval-examples  
     (evaluated yes)
     (set-det))
 
-  (= (eval-examples)  
+  (= eval-examples  
     ( (remove-all-atoms  &self 
-        (prooftrees  $_ $_ $_)) 
-      (eval-examples1) 
+        (prooftrees  $_ $_ $_)) eval-examples1 
       (set-det) 
       (change-evaluated yes)))
 
-  (= (eval-examples1)  
+  (= eval-examples1  
     ( (ex $I $Fact $_) 
       (solve $Fact $M $Proofs) 
-      (add-is-symbol  &self 
-        (prooftrees  $I $M $Proofs)) 
-      (fail)))
-  (= (eval-examples1)  
+      (add-atom  &self 
+        (prooftrees  $I $M $Proofs)) fail))
+  (= eval-examples1  
     (bagof 
-      (with_self  $I $Proofs) 
+      (with-self  $I $Proofs) 
       (prooftrees $I success $Proofs) $Plist)
     (findall 
       (known $J $H $B $Clist $L $_) 
@@ -1100,14 +1098,14 @@
 ; in case there are no examples
 
 
-  (= (clear-evaluation)  
+  (= clear-evaluation  
     ( (remove-all-atoms  &self 
         (prooftrees  $_ $_ $_)) (change-evaluated no)))
 
 
   (= (change-evaluated $X)  
     ( (remove-all-atoms  &self 
-        (evaluated  $_)) (add-is-symbol  &self (evaluated  $X)))) 
+        (evaluated  $_)) (add-atom  &self (evaluated  $X)))) 
 
 
 ;
@@ -1146,7 +1144,7 @@
 ; ***********************************************************************
 
 
-  (= (correct-chk)  
+  (= correct-chk  
     (det-if-then-else 
       (evaluated no) 
       (det-if-then-else 
@@ -1198,7 +1196,7 @@
 ; ***********************************************************************
 
 
-  (= (complete-chk)  
+  (= complete-chk  
     (det-if-then-else 
       (evaluated no) 
       (det-if-then-else 
@@ -1282,15 +1280,15 @@
 ; ***********************************************************************
 
 
-  (= (compute_evaluation  () $_ ())  True)
+  (= (compute-evaluation  () $_ ())  True)
   (= (compute-evaluation (Cons  (known $I $H $B $Clist $O $_) $R) $Plist (Cons  (known $I $H $B $Clist $O (evaluation $RA $NPos $Pos $NNeg $Neg $UNPos $UPos $UNNeg $UNeg)) $R1))  
     (compute-evaluation $R $Plist $R1)
     (compute-eval $Plist $I $RA $NPos $Pos $NNeg $Neg $UNPos $UPos $UNNeg $UNeg))
 
 
 
-  (= (compute_eval  () $_ 0 0 () 0 () 0 () 0 ())  True)
-  (= (compute-eval (Cons  (with_self  $I $Proofs) $R) $J $RA $NPos $Pos $NNeg $Neg $UNPos $UPos $UNNeg $UNeg)  
+  (= (compute-eval  () $_ 0 0 () 0 () 0 () 0 ())  True)
+  (= (compute-eval (Cons  (with-self  $I $Proofs) $R) $J $RA $NPos $Pos $NNeg $Neg $UNPos $UPos $UNNeg $UNeg)  
     (compute-eval $R $J $RA0 $NPos0 $Pos0 $NNeg0 $Neg0 $UNPos0 $UPos0 $UNNeg0 $UNeg0)
     (det-if-then-else 
       (ex $I $_ -) 
@@ -1307,7 +1305,7 @@
         (= $UNNeg $UNNeg0) 
         (= $UNeg $UNeg0))))
 
-  (= (compute_eval  () $_ $_ $_ $RA $RA $N $N $L $L $UN $UN $UL $UL)  True)
+  (= (compute-eval  () $_ $_ $_ $RA $RA $N $N $L $L $UN $UN $UL $UL)  True)
   (= (compute-eval (Cons  (:: $I $H $B) $R) $T $K $J $RA $RA3 $N $N3 $L $L3 $UN $UN3 $UL $UL3)  
     (compute-eval $R $T $K $J $RA $RA1 $N $N1 $L $L1 $UN $UN1 $UL $UL1)
     (compute-eval $B b $K $J $RA1 $RA2 $N1 $N2 $L1 $L2 $UN1 $UN2 $UL1 $UL2)
@@ -1320,7 +1318,7 @@
           (== $T t) 
           (det-if-then-else 
             (member 
-              (with_self  $_ $H) $L2) 
+              (with-self  $_ $H) $L2) 
             (, 
               (= $L3 $L2) 
               (= $N3 $N2) 
@@ -1331,12 +1329,12 @@
                 (+ $N2 1)) 
               (= $L3 
                 (Cons  
-                  (with_self  $K $H) $L2)) 
+                  (with-self  $K $H) $L2)) 
               (= $UN3 $UN2) 
               (= $UL3 $UL2))) 
           (det-if-then-else 
             (member 
-              (with_self  $_ $H) $UL2) 
+              (with-self  $_ $H) $UL2) 
             (, 
               (= $L3 $L2) 
               (= $N3 $N2) 
@@ -1347,7 +1345,7 @@
                 (+ $UN2 1)) 
               (= $UL3 
                 (Cons  
-                  (with_self  $K $H) $UL2)) 
+                  (with-self  $K $H) $UL2)) 
               (= $N3 $N2) 
               (= $L3 $L2))))) 
       (, 
@@ -1586,8 +1584,7 @@
   (= (complexity $Clause $C)  
     (= $Clause 
       (Cons  
-        (with_self  $H 
-          (p)) $_))
+        (with-self  $H p) $_))
     (compute-complexity $Clause $C)
     (set-det))
 
@@ -1805,8 +1802,8 @@
 ; ***********************************************************************
 
 
-  (= (compute_complexity  () 0)  True)
-  (= (compute-complexity (Cons  (with_self  $L $_) $More) $C)  
+  (= (compute-complexity  () 0)  True)
+  (= (compute-complexity (Cons  (with-self  $L $_) $More) $C)  
     (term-size $L $C1)
     (compute-complexity $More $C2)
     (is $C 
@@ -1895,7 +1892,7 @@
       (, 
         (get-clause $_ $_ $_ $CL $_) 
         (member 
-          (with_self  $F $_) $CL) 
+          (with-self  $F $_) $CL) 
         (functor $F $P $A)) $Predlist0)
     (make-unique $Predlist0 $Predlist)
     (max-arity $Predlist $A)
@@ -1956,7 +1953,7 @@
 
 
   (= (ivonEunterT $Predlist $CT $IET)  
-    (all-atoms $Predlist $CT $HT0)
+    (all-symbols $Predlist $CT $HT0)
     (mTplus $CT $MTP0)
     (is $HT 
       (float $HT0))
@@ -2031,7 +2028,7 @@
       (, 
         (get-clause $_ $_ $_ $CL $_) 
         (member 
-          (with_self  $F $_) $CL) 
+          (with-self  $F $_) $CL) 
         (functor $F $P $A)) $Predlist00)
     (findall 
       (/ $P1 $A1) 
@@ -2124,9 +2121,9 @@
 ; ***********************************************************************
 
 
-  (= (all_symbols  () $_ 0)  True)
-  (= (all-atoms (Cons  (/ $_ $A0) $R) $CT0 $HT)  
-    (all-atoms $R $CT0 $HT0)
+  (= (all-symbols  () $_ 0)  True)
+  (= (all-symbols (Cons  (/ $_ $A0) $R) $CT0 $HT)  
+    (all-symbols $R $CT0 $HT0)
     (is $CT 
       (float $CT0))
     (is $A 
@@ -2251,7 +2248,7 @@
       (herbrand-base-ff $IDlist $M1 $M2) 
       (= $M2 $M1)))
 
-  (= (herbrand_base_ff  () $_ $M $M not_changed)  True)
+  (= (herbrand-base-ff  () $_ $M $M not_changed)  True)
   (= (herbrand-base-ff (Cons  $ID $R) $M $M1 $M4 $Mark)  
     (herbrand-base-ff $R $M $M1 $M2 $Mark0)
     (get-clause $ID $H $B $_ $_)
@@ -2283,7 +2280,7 @@
 
   (= (reduce-hb $L $L1)  
     (reduce-hb $L $L $L1))
-  (= (reduce_hb  () $_ ())  True)
+  (= (reduce-hb  () $_ ())  True)
   (= (reduce-hb (Cons  $H $R) $L $R2)  
     (reduce-hb $R $L $R1)
     (det-if-then-else 
@@ -2350,7 +2347,7 @@
     (hb-plus $M $CT $MT))
 
 
-  (= (hb_plus  () $_ 0)  True)
+  (= (hb-plus  () $_ 0)  True)
   (= (hb-plus (Cons  $T $R) $CT0 $MT)  
     (hb-plus $R $CT0 $MT1)
     (vars $T $V)
@@ -2417,7 +2414,7 @@
       (* $N $L0)))
 
 
-  (= (code_length1  () 0)  True)
+  (= (code-length1  () 0)  True)
   (= (code-length1 (Cons  $F $R) $L)  
     (code-length1 $R $L0)
     (log2 $F $LF)
@@ -2428,7 +2425,7 @@
       (+ $L0 $L1)))
 
 
-  (= (relative_frequencies  () $N $N ())  True)
+  (= (relative-frequencies  () $N $N ())  True)
   (= (relative-frequencies (Cons  (/ (/ $_ $_) $M) $R) $N0 $N (Cons  $RM $R1))  
     (is $N1 
       (+ $N0 $M))
@@ -2456,7 +2453,7 @@
     (symbol-frequencies $Xn $L1 $L2))
 
 
-  (= (update_frequency_list  () $F $N ((/  (/  $F $N) 1)))  True)
+  (= (update-frequency-list  () $F $N ((/  (/  $F $N) 1)))  True)
   (= (update-frequency-list (Cons  (/ (/ $F $N) $M) $R) $F $N (Cons  (/ (/ $F $N) $M1) $R))  
     (set-det)
     (is $M1 
@@ -2556,7 +2553,7 @@
       (/ $Lits $LNF)))
 
 
-  (= (encoding-length-lits (Cons  (with_self  $H (p)) $R) $M)  
+  (= (encoding-length-lits (Cons  (with-self  $H p) $R) $M)  
     (functor $H $_ $N)
     (=.. $H 
       (Cons  $_ $Args))
@@ -2565,7 +2562,7 @@
     (is $M 
       (+ $M1 $LN)))
 
-  (= (encoding-length-lits (Cons  (with_self  $L $_) $R) $Args $M)  
+  (= (encoding-length-lits (Cons  (with-self  $L $_) $R) $Args $M)  
     (length $Args $LA)
     (log2 $LA $M0)
     (=.. $L 
@@ -2575,7 +2572,7 @@
     (encoding-length-lits $R $Args3 $M1)
     (is $M 
       (+ $M0 $M1)))
-  (= (encoding_length_lits  () $_ 0)  True) 
+  (= (encoding-length-lits  () $_ 0)  True) 
    
 
 

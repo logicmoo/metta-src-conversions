@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  matrix $_433166 sldr_dl/matrix.pl sldr_dl/matrix.metta)
+;                                           (convert-to-metta-file  matrix $_19254 sldr_dl/matrix.pl sldr_dl/matrix.metta)
 
   !(use-module (library clpfd))
 

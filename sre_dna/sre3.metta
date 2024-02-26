@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  sre3 $_417696 sre_dna/sre3.pl sre_dna/sre3.metta)
+;                                           (convert-to-metta-file  sre3 $_101464 sre_dna/sre3.pl sre_dna/sre3.metta)
 
 ;
 ; DCTG grammar for stochastic regular expressions
@@ -63,65 +63,65 @@
 
 
 
-  (= (<:>  (::=  expr (^^  iter_expr $A)) (,  (::-  (construct  $E) (^^  $A (construct  $E))) (,  (::-  (raw_generate  $S $SL1 $SL2) (^^  $A (raw_generate  $S $SL1 $SL2))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
+  (= (<:>  (::=  expr (^^  iter_expr $A)) (,  (::-  (construct  $E) (^^  $A (construct  $E))) (,  (::-  (raw-generate  $S $SL1 $SL2) (^^  $A (raw-generate  $S $SL1 $SL2))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
 
-  (= (<:>  (::=  expr (^^  noniter_expr $A)) (,  (::-  (construct  $E) (^^  $A (construct  $E))) (,  (::-  (raw_generate  $S $SL1 $SL2) (^^  $A (raw_generate  $S $SL1 $SL2))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
+  (= (<:>  (::=  expr (^^  noniter_expr $A)) (,  (::-  (construct  $E) (^^  $A (construct  $E))) (,  (::-  (raw-generate  $S $SL1 $SL2) (^^  $A (raw-generate  $S $SL1 $SL2))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
 
 ;
 ; -------------------------------------
 
-  (= (<:>  (::=  noniter_expr (a)) (,  (construct  a) (,  (::-  (raw_generate  (a) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  (Cons  a $T) $T $PrSoFar $PrSoFar) (check_prob  $PrSoFar)))))  True)
+  (= (<:>  (::=  noniter_expr (a)) (,  (construct  a) (,  (::-  (raw-generate  (a) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  ([|]  a $T) $T $PrSoFar $PrSoFar) (check-prob  $PrSoFar)))))  True)
 ; ; action a
 
-  (= (<:>  (::=  noniter_expr (b)) (,  (construct  b) (,  (::-  (raw_generate  (b) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  (Cons  b $T) $T $PrSoFar $PrSoFar) (check_prob  $PrSoFar)))))  True)
+  (= (<:>  (::=  noniter_expr (b)) (,  (construct  b) (,  (::-  (raw-generate  (b) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  ([|]  b $T) $T $PrSoFar $PrSoFar) (check-prob  $PrSoFar)))))  True)
 ; ; action b
 
 ;
 ; - - - -
 
-  (= (<:>  (::=  noniter_expr (,  (^^  guardedexpr_a $A1) (,  (^^  intval $B1) (,  (^^  guardedexpr_b $A2) (^^  intval $B2))))) (,  (::-  (construct  ((,  $E1 $N1) (,  $E2 $N2))) (,  (^^  $A1 (construct  $E1)) (,  (^^  $B1 (construct  $N1)) (,  (^^  $A2 (construct  $E2)) (^^  $B2 (construct  $N2)))))) (,  (::-  (raw_generate  $S $SL1 $SL2) (,  (^^  $B1 (construct  $N1)) (,  (^^  $B2 (construct  $N2)) (;  (->  (raw_select_term  ($N1 $N2) 1) (^^  $A1 (raw_generate  $S $SL1 $SL2))) (^^  $A2 (raw_generate  $S $SL1 $SL2)))))) (,  (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (^^  $B1 (construct  $Val1)) (,  (^^  $B2 (construct  $Val2)) (,  (is  $Pr2 (*  $PrSoFar (/  $Val1 (+  $Val1 $Val2)))) (,  (check_prob  $Pr2) (^^  $A1 (recognize  $S $S2 $Pr2 $Pr))))))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (^^  $B1 (construct  $Val1)) (,  (^^  $B2 (construct  $Val2)) (,  (is  $Pr2 (*  $PrSoFar (/  $Val2 (+  $Val1 $Val2)))) (,  (check_prob  $Pr2) (^^  $A2 (recognize  $S $S2 $Pr2 $Pr)))))))))))  True)
+  (= (<:>  (::=  noniter_expr (,  (^^  guardedexpr_a $A1) (,  (^^  intval $B1) (,  (^^  guardedexpr_b $A2) (^^  intval $B2))))) (,  (::-  (construct  ((,  $E1 $N1) (,  $E2 $N2))) (,  (^^  $A1 (construct  $E1)) (,  (^^  $B1 (construct  $N1)) (,  (^^  $A2 (construct  $E2)) (^^  $B2 (construct  $N2)))))) (,  (::-  (raw-generate  $S $SL1 $SL2) (,  (^^  $B1 (construct  $N1)) (,  (^^  $B2 (construct  $N2)) (;  (->  (raw-select-term  ($N1 $N2) 1) (^^  $A1 (raw-generate  $S $SL1 $SL2))) (^^  $A2 (raw-generate  $S $SL1 $SL2)))))) (,  (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (^^  $B1 (construct  $Val1)) (,  (^^  $B2 (construct  $Val2)) (,  (is  $Pr2 (*  $PrSoFar (/  $Val1 (+  $Val1 $Val2)))) (,  (check-prob  $Pr2) (^^  $A1 (recognize  $S $S2 $Pr2 $Pr))))))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (^^  $B1 (construct  $Val1)) (,  (^^  $B2 (construct  $Val2)) (,  (is  $Pr2 (*  $PrSoFar (/  $Val2 (+  $Val1 $Val2)))) (,  (check-prob  $Pr2) (^^  $A2 (recognize  $S $S2 $Pr2 $Pr)))))))))))  True)
 
 ;
 ; - - - -
 
-  (= (<:>  (::=  noniter_expr (,  (^^  expr $A) (^^  expr $B))) (,  (::-  (construct  (:  $E $F)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $F)))) (,  (::-  (raw_generate  $S $SL1 $SL2) (,  (^^  $A (raw_generate  $S1 $SL1 $SL3)) (,  (^^  $B (raw_generate  $S2 $SL3 $SL2)) (append  $S1 $S2 $S)))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (,  (^^  $A (recognize  $S $S3 $PrSoFar $Pr1)) (,  (check_prob  $Pr1) (^^  $B (recognize  $S3 $S2 $Pr1 $Pr)))))))))  True)
+  (= (<:>  (::=  noniter_expr (,  (^^  expr $A) (^^  expr $B))) (,  (::-  (construct  (:  $E $F)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $F)))) (,  (::-  (raw-generate  $S $SL1 $SL2) (,  (^^  $A (raw-generate  $S1 $SL1 $SL3)) (,  (^^  $B (raw-generate  $S2 $SL3 $SL2)) (append  $S1 $S2 $S)))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (,  (^^  $A (recognize  $S $S3 $PrSoFar $Pr1)) (,  (check-prob  $Pr1) (^^  $B (recognize  $S3 $S2 $Pr1 $Pr)))))))))  True)
 ; ; concat
 
 ;
 ; -------------------------------------
 
-  (= (<:>  (::=  iter_expr (,  (^^  noniter_expr $A) (^^  probval $B))) (,  (::-  (construct  (*  $E $P)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $P)))) (,  (::-  (raw_generate  $S $SL1 $SL2) (,  (^^  $B (construct  $P)) (,  (max_string_length_P  $MaxL) (raw_gen_loop  $A $P $MaxL $S $SL1 $SL2)))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (,  (^^  $B (construct  $Pr1)) (recognize_loop  $A $Pr1 $S $S2 $PrSoFar $Pr)))))))  True)
+  (= (<:>  (::=  iter_expr (,  (^^  noniter_expr $A) (^^  probval $B))) (,  (::-  (construct  (*  $E $P)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $P)))) (,  (::-  (raw-generate  $S $SL1 $SL2) (,  (^^  $B (construct  $P)) (,  (max-string-length-P  $MaxL) (raw-gen-loop  $A $P $MaxL $S $SL1 $SL2)))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (,  (^^  $B (construct  $Pr1)) (recognize-loop  $A $Pr1 $S $S2 $PrSoFar $Pr)))))))  True)
 ; ; star
 
 ;
 ; - - - -
 
-  (= (<:>  (::=  iter_expr (,  (^^  noniter_expr $A) (^^  probval $B))) (,  (::-  (construct  (+  $E $P)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $P)))) (,  (::-  (raw_generate  $S $SL1 $SL2) (,  (^^  $A (raw_generate  $S1 $SL1 $SL3)) (,  (^^  $B (construct  $P)) (,  (max_string_length_P  $MaxL) (,  (raw_gen_loop  $A $P $MaxL $S2 $SL3 $SL2) (,  (append  $S1 $S2 $S) !)))))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (,  (^^  $A (recognize  $S $S3 $PrSoFar $Pr1)) (,  (\+  (= $S  $S3)) (,  (check_prob  $Pr1) (,  (^^  $B (construct  $Pr2)) (recognize_loop  $A $Pr2 $S3 $S2 $Pr1 $Pr))))))))))  True)
+  (= (<:>  (::=  iter_expr (,  (^^  noniter_expr $A) (^^  probval $B))) (,  (::-  (construct  (+  $E $P)) (,  (^^  $A (construct  $E)) (^^  $B (construct  $P)))) (,  (::-  (raw-generate  $S $SL1 $SL2) (,  (^^  $A (raw-generate  $S1 $SL1 $SL3)) (,  (^^  $B (construct  $P)) (,  (max-string-length-P  $MaxL) (,  (raw-gen-loop  $A $P $MaxL $S2 $SL3 $SL2) (,  (append  $S1 $S2 $S) !)))))) (::-  (recognize  $S $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (,  (^^  $A (recognize  $S $S3 $PrSoFar $Pr1)) (,  (\+  (= $S  $S3)) (,  (check-prob  $Pr1) (,  (^^  $B (construct  $Pr2)) (recognize-loop  $A $Pr2 $S3 $S2 $Pr1 $Pr))))))))))  True)
 ; ; plus
 ; ; new
 
 ;
 ; -------------------------------------
 
-  (= (<:>  (::=  guardedexpr_a (a)) (,  (construct  a) (,  (::-  (raw_generate  (a) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  (Cons  a $T) $T $PrSoFar $PrSoFar) (check_prob  $PrSoFar)))))  True)
+  (= (<:>  (::=  guardedexpr_a (a)) (,  (construct  a) (,  (::-  (raw-generate  (a) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  ([|]  a $T) $T $PrSoFar $PrSoFar) (check-prob  $PrSoFar)))))  True)
 ; ; action a
 
-  (= (<:>  (::=  guardedexpr_a (,  (a) (^^  expr $A))) (,  (::-  (construct  (:  a $E)) (^^  $A (construct  $E))) (,  (::-  (raw_generate  (Cons  a $S) $SL1 $SL2) (,  (^^  $A (raw_generate  $S $SL1 $SL3)) (is  $SL2 (+  $SL3 1)))) (::-  (recognize  (Cons  a $S) $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
+  (= (<:>  (::=  guardedexpr_a (,  (a) (^^  expr $A))) (,  (::-  (construct  (:  a $E)) (^^  $A (construct  $E))) (,  (::-  (raw-generate  ([|]  a $S) $SL1 $SL2) (,  (^^  $A (raw-generate  $S $SL1 $SL3)) (is  $SL2 (+  $SL3 1)))) (::-  (recognize  ([|]  a $S) $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
 ; ; concat
 
-  (= (<:>  (::=  guardedexpr_b (b)) (,  (construct  b) (,  (::-  (raw_generate  (b) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  (Cons  b $T) $T $PrSoFar $PrSoFar) (check_prob  $PrSoFar)))))  True)
+  (= (<:>  (::=  guardedexpr_b (b)) (,  (construct  b) (,  (::-  (raw-generate  (b) $SL1 $SL2) (is  $SL2 (+  $SL1 1))) (::-  (recognize  ([|]  b $T) $T $PrSoFar $PrSoFar) (check-prob  $PrSoFar)))))  True)
 ; ; action b
 
-  (= (<:>  (::=  guardedexpr_b (,  (b) (^^  expr $A))) (,  (::-  (construct  (:  b $E)) (^^  $A (construct  $E))) (,  (::-  (raw_generate  (Cons  b $S) $SL1 $SL2) (,  (^^  $A (raw_generate  $S $SL1 $SL3)) (is  $SL2 (+  $SL3 1)))) (::-  (recognize  (Cons  b $S) $S2 $PrSoFar $Pr) (,  (check_prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
+  (= (<:>  (::=  guardedexpr_b (,  (b) (^^  expr $A))) (,  (::-  (construct  (:  b $E)) (^^  $A (construct  $E))) (,  (::-  (raw-generate  ([|]  b $S) $SL1 $SL2) (,  (^^  $A (raw-generate  $S $SL1 $SL3)) (is  $SL2 (+  $SL3 1)))) (::-  (recognize  ([|]  b $S) $S2 $PrSoFar $Pr) (,  (check-prob  $PrSoFar) (^^  $A (recognize  $S $S2 $PrSoFar $Pr)))))))  True)
 ; ; concat
 
 
 ;
 ; -------------------------------------
 
-  (= (<:>  (::=  intval (,  ($N) {(is_an_integer  $N) })) (construct  $N))  True)
+  (= (<:>  (::=  intval (,  ($N) {(is-an-integer  $N) })) (construct  $N))  True)
 
-  (= (<:>  (::=  probval (,  ($R) {(is_a_probability  $R) })) (construct  $R))  True)
+  (= (<:>  (::=  probval (,  ($R) {(is-a-probability  $R) })) (construct  $R))  True)
 
 ;
 ; ------------------------------------
@@ -148,7 +148,7 @@
     (random $Low $High $N))
 
 
-  (= (int_range  0 1000)  True)
+  (= (int-range  0 1000)  True)
 
 ;
 ; ------------------------------------
@@ -337,87 +337,69 @@
 
 
   (= (sre $Type $Expr $String $SL)  
-    (repeat)
-    (or 
-      (= $Type full) 
-      (= $Type grow))
-    (generate-tree expr $Type 12 $_ $Tree $_)
-    (^^ $Tree 
-      (construct $Expr))
-    (^^ $Tree 
-      (raw-generate $String 0 $SL))
-    (nl)
-    (sre-pp $Expr)
-    (nl)
-    (write 'tree ')
-    (write $Tree)
-    (nl)
-    (tree-depth $Tree $Depth)
-    (write 'Depth = ')
-    (write $Depth)
-    (nl))
+    (repeat 
+      (or 
+        (= $Type full) 
+        (= $Type grow)) 
+      (generate-tree expr $Type 12 $_ $Tree $_) 
+      (^^ $Tree 
+        (construct $Expr)) 
+      (^^ $Tree 
+        (raw-generate $String 0 $SL)) nl 
+      (sre-pp $Expr) nl 
+      (write 'tree ') 
+      (write $Tree) nl 
+      (tree-depth $Tree $Depth) 
+      (write 'Depth = ') 
+      (write $Depth) nl))
 
 
   (= (sre2 $Type $Expr $Input)  
-    (repeat)
-    (or 
-      (= $Type full) 
-      (= $Type grow))
-    (generate-tree expr $Type 12 $_ $Tree $_)
-    (^^ $Tree 
-      (construct $Expr))
-    (nl)
-    (write $Type)
-    (nl)
-    (sre-pp $Expr)
-    (nl)
-    (bagof 
-      (, $Leftover $Pr) 
+    (repeat 
+      (or 
+        (= $Type full) 
+        (= $Type grow)) 
+      (generate-tree expr $Type 12 $_ $Tree $_) 
       (^^ $Tree 
-        (recognize $Input $Leftover 1.0 $Pr)) $Rlist)
-    (write 'Recog list: ')
-    (nl)
-    (writelist $Rlist)
-    (nl))
+        (construct $Expr)) nl 
+      (write $Type) nl 
+      (sre-pp $Expr) nl 
+      (bagof 
+        (, $Leftover $Pr) 
+        (^^ $Tree 
+          (recognize $Input $Leftover 1.0 $Pr)) $Rlist) 
+      (write 'Recog list: ') nl 
+      (writelist $Rlist) nl))
 
 
   (= (sre2c $Type $Expr $Input)  
-    (repeat)
-    (or 
-      (= $Type full) 
-      (= $Type grow))
-    (generate-tree expr $Type 12 $_ $Tree $_)
-    (^^ $Tree 
-      (construct $Expr))
-    (nl)
-    (write $Type)
-    (nl)
-    (sre-pp $Expr)
-    (nl)
-    (bagof $Pr 
+    (repeat 
+      (or 
+        (= $Type full) 
+        (= $Type grow)) 
+      (generate-tree expr $Type 12 $_ $Tree $_) 
       (^^ $Tree 
-        (recognize $Input Nil 1.0 $Pr)) $Prlist)
-    (write 'Pr list: ')
-    (nl)
-    (writelist $Prlist)
-    (nl))
+        (construct $Expr)) nl 
+      (write $Type) nl 
+      (sre-pp $Expr) nl 
+      (bagof $Pr 
+        (^^ $Tree 
+          (recognize $Input Nil 1.0 $Pr)) $Prlist) 
+      (write 'Pr list: ') nl 
+      (writelist $Prlist) nl))
 
 
   (= (sre2b $Input)  
-    (generate-tree expr grow 8 $_ $Tree $_)
-    (^^ $Tree 
-      (construct $Expr))
-    (^^ $Tree 
-      (recognize $Input $Leftover 1.0 $Pr))
-    (nl)
-    (sre-pp $Expr)
-    (nl)
-    (write 'Prob = ')
-    (write $Pr)
-    (nl)
-    (write 'Leftover = ')
-    (write $Leftover)
-    (nl))
+    ( (generate-tree expr grow 8 $_ $Tree $_) 
+      (^^ $Tree 
+        (construct $Expr)) 
+      (^^ $Tree 
+        (recognize $Input $Leftover 1.0 $Pr)) nl 
+      (sre-pp $Expr) nl 
+      (write 'Prob = ') 
+      (write $Pr) nl 
+      (write 'Leftover = ') 
+      (write $Leftover) nl))
 
 ;
 ; ------------------------------------
@@ -437,7 +419,7 @@
     (write )+)
     (write $R)
     (set-det))
-  (= (sre-pp (with_self  $E $F))  
+  (= (sre-pp (with-self  $E $F))  
     (sre-pp $E)
     (write :)
     (sre-pp $F)

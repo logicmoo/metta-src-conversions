@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  nand $_85130 sxx_machine/bench/nand.pl sxx_machine/bench/nand.metta)
+;                                           (convert-to-metta-file  nand $_284052 sxx_machine/bench/nand.pl sxx_machine/bench/nand.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -63,7 +63,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (top)  
+  (= top  
     (main 0))
 
 
@@ -126,8 +126,7 @@
     (test-bounds $NumVars $NumGsOut $GsOut)
     (search $NumVars $NumGsOut $GsOut))
   (= (search $NumVars $NumGs $Gs)  
-    (update-bounds $NumVars $NumGs $Gs)
-    (fail))
+    ( (update-bounds $NumVars $NumGs $Gs) fail))
 ; ; output_results(NumVars, NumGs, Gs),
 
 ;
@@ -163,7 +162,7 @@
 	
 ;
 ; loop over vectors
-  (= (select_vector  () $_ $_ $_ $_ $Gj $V $Type $N $Gj $V $Type $N)  True)
+  (= (select-vector  () $_ $_ $_ $_ $Gj $V $Type $N $Gj $V $Type $N)  True)
   (= (select-vector (Cons  $V $Vs) $Gk $NumVars $NumGs $Gs $GjIn $Vin $TypeIn $Nin $GjOut $Vout $TypeOut $Nout)  
     (vector-cover-type $NumVars $Gs $Gk $V $Type $N)
     (best-vector $GjIn $Vin $TypeIn $Nin $Gk $V $Type $N $Gj2 $V2 $Type2 $N2)
@@ -178,7 +177,7 @@
     (cover-type2 $CIs $Gs $NumVars $Fj $Vector $T $N $Type $NumCovers))
 
 
-  (= (cover_type1  () $_ $_ $T $N $T $N)  True)
+  (= (cover-type1  () $_ $_ $T $N $T $N)  True)
   (= (cover-type1 (Cons  $I $IPs) $Gs $V $TypeIn $Nin $TypeOut $Nout)  
     (function $I $Gs $Gi)
     (true-set $Gi $Ti)
@@ -196,7 +195,7 @@
     (cover-type1 $IPs $Gs $V $TypeIn $Nin $TypeOut $Nout))
 
 
-  (= (cover_type2  () $_ $_ $_ $_ $T $N $T $N)  True)
+  (= (cover-type2  () $_ $_ $_ $_ $T $N $T $N)  True)
   (= (cover-type2 (Cons  $I $CIs) $Gs $NumVars $Fj $V $TypeIn $Nin $TypeOut $Nout)  
     (< $I $NumVars)
     (function $I $Gs $Gi)
@@ -296,34 +295,34 @@
 ; Order of types
 
 
-  (= (type_order  cov exp)  True)
-  (= (type_order  cov var)  True)
-  (= (type_order  cov fcn)  True)
-  (= (type_order  cov mcf)  True)
-  (= (type_order  cov exf)  True)
-  (= (type_order  cov exmcf)  True)
-  (= (type_order  cov nf)  True)
-  (= (type_order  exp var)  True)
-  (= (type_order  exp fcn)  True)
-  (= (type_order  exp mcf)  True)
-  (= (type_order  exp exf)  True)
-  (= (type_order  exp exmcf)  True)
-  (= (type_order  exp nf)  True)
-  (= (type_order  var fcn)  True)
-  (= (type_order  var mcf)  True)
-  (= (type_order  var exf)  True)
-  (= (type_order  var exmcf)  True)
-  (= (type_order  var nf)  True)
-  (= (type_order  fcn mcf)  True)
-  (= (type_order  fcn exf)  True)
-  (= (type_order  fcn exmcf)  True)
-  (= (type_order  fcn nf)  True)
-  (= (type_order  mcf exf)  True)
-  (= (type_order  mcf exmcf)  True)
-  (= (type_order  mcf nf)  True)
-  (= (type_order  exf exmcf)  True)
-  (= (type_order  exf nf)  True)
-  (= (type_order  exmcf nf)  True)
+  (= (type-order  cov exp)  True)
+  (= (type-order  cov var)  True)
+  (= (type-order  cov fcn)  True)
+  (= (type-order  cov mcf)  True)
+  (= (type-order  cov exf)  True)
+  (= (type-order  cov exmcf)  True)
+  (= (type-order  cov nf)  True)
+  (= (type-order  exp var)  True)
+  (= (type-order  exp fcn)  True)
+  (= (type-order  exp mcf)  True)
+  (= (type-order  exp exf)  True)
+  (= (type-order  exp exmcf)  True)
+  (= (type-order  exp nf)  True)
+  (= (type-order  var fcn)  True)
+  (= (type-order  var mcf)  True)
+  (= (type-order  var exf)  True)
+  (= (type-order  var exmcf)  True)
+  (= (type-order  var nf)  True)
+  (= (type-order  fcn mcf)  True)
+  (= (type-order  fcn exf)  True)
+  (= (type-order  fcn exmcf)  True)
+  (= (type-order  fcn nf)  True)
+  (= (type-order  mcf exf)  True)
+  (= (type-order  mcf exmcf)  True)
+  (= (type-order  mcf nf)  True)
+  (= (type-order  exf exmcf)  True)
+  (= (type-order  exf nf)  True)
+  (= (type-order  exmcf nf)  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -347,13 +346,13 @@
     (cover-vector $Type $IPs $CIs $Gj $Vector $NumVars $NumGsIn $GsIn $NumGsOut $GsOut))
 	
 
-  (= (vector_types  var)  True)
-  (= (vector_types  exp)  True)
-  (= (vector_types  fcn)  True)
-  (= (vector_types  mcf)  True)
-  (= (vector_types  exf)  True)
-  (= (vector_types  exmcf)  True)
-  (= (vector_types  nf)  True)
+  (= (vector-types  var)  True)
+  (= (vector-types  exp)  True)
+  (= (vector-types  fcn)  True)
+  (= (vector-types  mcf)  True)
+  (= (vector-types  exf)  True)
+  (= (vector-types  exmcf)  True)
+  (= (vector-types  nf)  True)
 
 
   (= (cover-vector exp (Cons  $I $_) $_ $Gj $V $_ $NumGs $GsIn $NumGs $GsOut)  
@@ -431,7 +430,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (update_circuit  () $_ $_ $_ $_ ())  True)
+  (= (update-circuit  () $_ $_ $_ $_ ())  True)
   (= (update-circuit (Cons  (function $K $Tk $Fk $CIk $IPk $ISk $Pk $Sk) $GsIn) $Gi $Gj $V $Gs (Cons  (function $K $Tko $Fko $CIko $IPko $ISko $Pko $Sko) $GsOut))  
     (= $Gi 
       (function $I $_ $Fi $_ $IPi $ISi $Pi $_))
@@ -504,7 +503,7 @@
     (update-circuit $GsIn $Gi $Gj $V $Gs $GsOut))
 
 
-  (= (exclude_if_vector_in_false_set  () $_ $_ ())  True)
+  (= (exclude-if-vector-in-false-set  () $_ $_ ())  True)
   (= (exclude-if-vector-in-false-set (Cons  $K $CIsIn) $Gs $V $CIsOut)  
     (function $K $Gs $Gk)
     (false-set $Gk $Fk)
@@ -550,7 +549,7 @@
     (= $GlOut 
       (function $L $Tl $Fl $CIlo $IPl $ISl $Pl $Sl)))
 	
-  (= (new_function_CIs  () $_ $_ $_ () $CIl $CIl)  True)
+  (= (new-function-CIs  () $_ $_ $_ () $CIl $CIl)  True)
   (= (new-function-CIs (Cons  (function $K $Tk $Fk $CIk $IPk $ISk $Pk $Sk) $GsIn) $L $Fl $NumVars (Cons  (function $K $Tk $Fk $CIko $IPk $ISk $Pk $Sk) $GsOut) $CIlIn $CIlOut)  
     (set-intersection $Fl $Fk Nil)
     (set-det)
@@ -619,16 +618,15 @@
 ; write('searching for a better solution...'), nl, nl.
 
 
-  (= (write_gates  ())  True)
+  (= (write-gates  ())  True)
   (= (write-gates (Cons  $Gi $Gs))  
-    (function-number $Gi $I)
-    (write 'gate #')
-    (write $I)
-    (write ' inputs:   ')
-    (immediate-predecessors $Gi $IPi)
-    (write $IPi)
-    (nl)
-    (write-gates $Gs))
+    ( (function-number $Gi $I) 
+      (write 'gate #') 
+      (write $I) 
+      (write ' inputs:   ') 
+      (immediate-predecessors $Gi $IPi) 
+      (write $IPi) nl 
+      (write-gates $Gs)))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -645,17 +643,17 @@
     (function $I $Gs $Gi))
 
 
-  (= (function_number  (function  $I $_ $_ $_ $_ $_ $_ $_) $I)  True)
+  (= (function-number  (function  $I $_ $_ $_ $_ $_ $_ $_) $I)  True)
 
-  (= (true_set  (function  $_ $T $_ $_ $_ $_ $_ $_) $T)  True)
+  (= (true-set  (function  $_ $T $_ $_ $_ $_ $_ $_) $T)  True)
 
-  (= (false_set  (function  $_ $_ $F $_ $_ $_ $_ $_) $F)  True)
+  (= (false-set  (function  $_ $_ $F $_ $_ $_ $_ $_) $F)  True)
 
-  (= (conceivable_inputs  (function  $_ $_ $_ $CI $_ $_ $_ $_) $CI)  True)
+  (= (conceivable-inputs  (function  $_ $_ $_ $CI $_ $_ $_ $_) $CI)  True)
 
-  (= (immediate_predecessors  (function  $_ $_ $_ $_ $IP $_ $_ $_) $IP)  True)
+  (= (immediate-predecessors  (function  $_ $_ $_ $_ $IP $_ $_ $_) $IP)  True)
 
-  (= (immediate_successors  (function  $_ $_ $_ $_ $_ $IS $_ $_) $IS)  True)
+  (= (immediate-successors  (function  $_ $_ $_ $_ $_ $IS $_ $_) $IS)  True)
 
   (= (predecessors  (function  $_ $_ $_ $_ $_ $_ $P $_) $P)  True)
 
@@ -669,9 +667,9 @@
 ; of integers.
 
 
-  (= (set_union  () () ())  True)
-  (= (set_union  () (Cons  $X $L2) (Cons  $X $L2))  True)
-  (= (set_union  (Cons  $X $L1) () (Cons  $X $L1))  True)
+  (= (set-union  () () ())  True)
+  (= (set-union  () ([|]  $X $L2) ([|]  $X $L2))  True)
+  (= (set-union  ([|]  $X $L1) () ([|]  $X $L1))  True)
   (= (set-union (Cons  $X $L1) (Cons  $X $L2) (Cons  $X $L3))  
     (set-union $L1 $L2 $L3))
   (= (set-union (Cons  $X $L1) (Cons  $Y $L2) (Cons  $X $L3))  
@@ -684,9 +682,9 @@
       (Cons  $X $L1) $L2 $L3))
 
 
-  (= (set_intersection  () () ())  True)
-  (= (set_intersection  () (Cons  $_ $_) ())  True)
-  (= (set_intersection  (Cons  $_ $_) () ())  True)
+  (= (set-intersection  () () ())  True)
+  (= (set-intersection  () ([|]  $_ $_) ())  True)
+  (= (set-intersection  ([|]  $_ $_) () ())  True)
   (= (set-intersection (Cons  $X $L1) (Cons  $X $L2) (Cons  $X $L3))  
     (set-intersection $L1 $L2 $L3))
   (= (set-intersection (Cons  $X $L1) (Cons  $Y $L2) $L3)  
@@ -699,9 +697,9 @@
       (Cons  $X $L1) $L2 $L3))
 
 
-  (= (set_difference  () () ())  True)
-  (= (set_difference  () (Cons  $_ $_) ())  True)
-  (= (set_difference  (Cons  $X $L1) () (Cons  $X $L1))  True)
+  (= (set-difference  () () ())  True)
+  (= (set-difference  () ([|]  $_ $_) ())  True)
+  (= (set-difference  ([|]  $X $L1) () ([|]  $X $L1))  True)
   (= (set-difference (Cons  $X $L1) (Cons  $X $L2) $L3)  
     (set-difference $L1 $L2 $L3))
   (= (set-difference (Cons  $X $L1) (Cons  $Y $L2) (Cons  $X $L3))  
@@ -714,7 +712,7 @@
       (Cons  $X $L1) $L2 $L3))
 
 
-  (= (set_subset  () $_)  True)
+  (= (set-subset  () $_)  True)
   (= (set-subset (Cons  $X $L1) (Cons  $X $L2))  
     (set-subset $L1 $L2))
   (= (set-subset (Cons  $X $L1) (Cons  $Y $L2))  
@@ -723,7 +721,7 @@
       (Cons  $X $L1) $L2))
 
 
-  (= (set_member  $X (Cons  $X $_))  True)
+  (= (set-member  $X ([|]  $X $_))  True)
   (= (set-member $X (Cons  $Y $T))  
     (> $X $Y)
     (set-member $X $T))

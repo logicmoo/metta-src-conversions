@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dctg_utils $_462940 sre_dna/dctg_utils.pl sre_dna/dctg_utils.metta)
+;                                           (convert-to-metta-file  dctg_utils $_80170 sre_dna/dctg_utils.pl sre_dna/dctg_utils.metta)
 
 ;
 ; Misc DCTG utilities.
@@ -67,10 +67,9 @@
 
 
   (= (listprint $Tree)  
-    (user-args-P $UserArgs)
-    (verification $Tree $UserArgs $List)
-    (writel2 $List)
-    (nl)
-    (set-det))
+    ( (user-args-P $UserArgs) 
+      (verification $Tree $UserArgs $List) 
+      (writel2 $List) nl 
+      (set-det)))
 
 

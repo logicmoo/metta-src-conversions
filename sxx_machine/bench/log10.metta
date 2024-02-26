@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  log10 $_305106 sxx_machine/bench/log10.pl sxx_machine/bench/log10.metta)
+;                                           (convert-to-metta-file  log10 $_502732 sxx_machine/bench/log10.pl sxx_machine/bench/log10.metta)
 ;
 ; generated: 25 October 1989
 ;
@@ -17,11 +17,10 @@
 ; symbolic derivative of log(log(log(log(log(log(log(log(log(log(x))))))))))
 
 
-  (= (top)  
-    (log10))
+  (= top  log10)
 
 
-  (= (log10)  
+  (= log10  
     (d 
       (log (log (log (log (log (log (log (log (log (log x)))))))))) x $_))
 

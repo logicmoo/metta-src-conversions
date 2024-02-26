@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex5 $_346650 miles/examples/ex5.pl miles/examples/ex5.metta)
+;                                           (convert-to-metta-file  ex5 $_452250 miles/examples/ex5.pl miles/examples/ex5.metta)
 ;
 ; MENDEL
 

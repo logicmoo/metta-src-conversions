@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex7 $_470340 miles/examples/ex7.pl miles/examples/ex7.metta)
+;                                           (convert-to-metta-file  ex7 $_67968 miles/examples/ex7.pl miles/examples/ex7.metta)
 
 ;
 ; ;;Examples for truncation ops
@@ -9,7 +9,7 @@
     (member $X $R)
     (member $X 
       (:: $X)))
-  (= (member  $X (Cons  $X $_))  True)
+  (= (member  $X ([|]  $X $_))  True)
 
 
   (= (app  (x a) (b c) (x a b c))  True)

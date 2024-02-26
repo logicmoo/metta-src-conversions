@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  nreverse $_111532 sxx_machine/bench/nreverse.pl sxx_machine/bench/nreverse.metta)
+;                                           (convert-to-metta-file  nreverse $_342172 sxx_machine/bench/nreverse.pl sxx_machine/bench/nreverse.metta)
 ;
 ; generated: 25 October 1989
 ;
@@ -17,11 +17,10 @@
 ; "naive"-reverse a list of 30 integers
 
 
-  (= (top)  
-    (nreverse))
+  (= top  nreverse)
 
 
-  (= (nreverse)  
+  (= nreverse  
     (nreverse 
       (:: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30) $_))
 

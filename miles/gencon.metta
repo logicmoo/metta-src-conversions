@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  gencon $_46512 miles/gencon.pl miles/gencon.metta)
+;                                           (convert-to-metta-file  gencon $_275992 miles/gencon.pl miles/gencon.metta)
 ;
 ; MODULE gencon EXPORTS
 
@@ -198,19 +198,13 @@
             (det-if-then-else 
               (== $GS spec) 
               (, 
-                (write Specialising) 
-                (nl) 
-                (write-list $PS) 
-                (nl) 
-                (nl) 
+                (write Specialising) nl 
+                (write-list $PS) nl nl 
                 (c-call $Spec 
                   (:: $PS $PSL))) 
               (, 
-                (write Generalising) 
-                (nl) 
-                (write-list $PS) 
-                (nl) 
-                (nl) 
+                (write Generalising) nl 
+                (write-list $PS) nl nl 
                 (c-call $Gen 
                   (:: $PS $PSL))))) 
           (c-call $L_newp 
@@ -227,13 +221,13 @@
     (c-mod $MPred $M $Pred)
     (=.. $Call 
       (Cons  $Pred $Arglist))
-    (call (with_self  $M $Call)))
+    (call (with-self  $M $Call)))
 
 
-  (= (c-mod (with_self  $M $Pred) $M $Pred)  
+  (= (c-mod (with-self  $M $Pred) $M $Pred)  
     (simple $Pred)
     (set-det))
-  (= (c-mod (with_self  $_ $P) $M1 $Pred)  
+  (= (c-mod (with-self  $_ $P) $M1 $Pred)  
     (set-det)
     (c-mod $P $M1 $Pred))
 

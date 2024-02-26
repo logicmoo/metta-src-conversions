@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  cobweb_2 $_240114 cobweb/cobweb_2.pl cobweb/cobweb_2.metta)
+;                                           (convert-to-metta-file  cobweb_2 $_380590 cobweb/cobweb_2.pl cobweb/cobweb_2.metta)
 
   (= (features  ((numeric ht) (numeric wid) (numeric txt)))  True)
 ; /********************************************************************/

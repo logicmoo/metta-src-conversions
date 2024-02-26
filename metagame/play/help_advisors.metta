@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  help_advisors $_378488 metagame/play/help_advisors.pl metagame/play/help_advisors.metta)
+;                                           (convert-to-metta-file  help_advisors $_256492 metagame/play/help_advisors.pl metagame/play/help_advisors.metta)
 ;
 ; ============================================================
 ;
@@ -9,12 +9,11 @@
 ; ============================================================
 
 
-  (= (help-advisors)  
-    (print-advisors))
+  (= help-advisors  print-advisors)
 
 
 
-  (= (print-advisors)  
+  (= print-advisors  
     (advisor-herald $H)
     (format "~s~n" 
       (:: $H))
@@ -24,7 +23,7 @@
 	
 
 
-  (= (advisor_herald  "Explanation of ADVISORS\n-----------------------\nFollowing is the list of all advisors with a brief explanation.\nAlso shown (in parens) is the current value for each advisor.\nFor more information, consult the papers or source-code.\n")  True)
+  (= (advisor-herald  "Explanation of ADVISORS\n-----------------------\nFollowing is the list of all advisors with a brief explanation.\nAlso shown (in parens) is the current value for each advisor.\nFor more information, consult the papers or source-code.\n")  True)
 
 
   (= (print-advisor $A)  

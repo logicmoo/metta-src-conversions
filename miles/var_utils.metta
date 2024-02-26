@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  var_utils $_473112 miles/var_utils.pl miles/var_utils.metta)
+;                                           (convert-to-metta-file  var_utils $_454808 miles/var_utils.pl miles/var_utils.metta)
 ;
 ; MODULE var_utils EXPORTS
 
@@ -337,7 +337,7 @@
     (only-vars1 $L1 $L))
 
 
-  (= (only_vars1  () ())  True)
+  (= (only-vars1  () ())  True)
   (= (only-vars1 (Cons  $X $R) (Cons  $X $R1))  
     (var $X)
     (set-det)
@@ -386,8 +386,8 @@
 ; ***********************************************************************
 
 
-  (= (typed_only_vars1  () ())  True)
-  (= (typed-only-vars1 (Cons  (with_self  $X $T) $R) (Cons  (with_self  $X $T) $R1))  
+  (= (typed-only-vars1  () ())  True)
+  (= (typed-only-vars1 (Cons  (with-self  $X $T) $R) (Cons  (with-self  $X $T) $R1))  
     (var $X)
     (set-det)
     (typed-only-vars1 $R $R1))
@@ -448,7 +448,7 @@
 
 
 
-  (= (do_replace  () $_ ())  True)
+  (= (do-replace  () $_ ())  True)
 
   (= (do-replace (Cons  $L $More) $S (Cons  $L1 $More1))  
     (do-replace1 $L $S $L1)
@@ -472,7 +472,7 @@
             (functor $T2 $F $N) 
             (do-replace1 $N $T1 $T2 $S))))))
 
-  (= (do_replace1  0 $_ $_ $_)  True)
+  (= (do-replace1  0 $_ $_ $_)  True)
 
   (= (do-replace1 $N $T1 $T2 $S)  
     (arg-quintus $N $T1 $A)
@@ -539,7 +539,7 @@
 
 
 
-  (= (do_inv_replace  () $_ ())  True)
+  (= (do-inv-replace  () $_ ())  True)
 
   (= (do-inv-replace (Cons  $L $More) $S (Cons  $L1 $More1))  
     (do-inv-replace1 $L $S $L1)
@@ -562,7 +562,7 @@
             (functor $T2 $F $N) 
             (do-inv-replace1 $N $T1 $T2 $S))))))
 
-  (= (do_inv_replace1  0 $_ $_ $_)  True)
+  (= (do-inv-replace1  0 $_ $_ $_)  True)
 
   (= (do-inv-replace1 $N $T1 $T2 $S)  
     (arg-quintus $N $T1 $A)
@@ -687,7 +687,7 @@
 ; ***********************************************************************
 
 
-  (= (contains_vars  () $_)  True)
+  (= (contains-vars  () $_)  True)
   (= (contains-vars (Cons  $V $Vars) $Term)  
     (contains-var $V $Term)
     (contains-vars $Vars $Term))
@@ -736,7 +736,7 @@
   (= (flagged-contains-vars $Vars $Term True)  
     (contains-vars $Vars $Term)
     (set-det))
-  (= (flagged_contains_vars  $Vars $Term false)  True)
+  (= (flagged-contains-vars  $Vars $Term false)  True)
 
 
 ;
@@ -789,7 +789,7 @@
 ; ***********************************************************************
 
 
-  (= (inverse_substitute  $Clause $Clause)  True)       ;
+  (= (inverse-substitute  $Clause $Clause)  True)       ;
 ; empty inverse substitution
 
   (= (inverse-substitute $ClauseIn $ClauseOut)  
@@ -843,14 +843,14 @@
 ; ***********************************************************************
 
 
-  (= (remove-type-literal (Cons  (with_self  $L_p (n)) $More) $More)  
+  (= (remove-type-literal (Cons  (with-self  $L_p n) $More) $More)  
     (functor $L_p $F $_)
     (string-append $_ -p $F))
 ; ; drop this literal
 
 
   
-  (= (remove-type-literal (Cons  (with_self  $L $S) $More) (Cons  (with_self  $L $S) $More1))  
+  (= (remove-type-literal (Cons  (with-self  $L $S) $More) (Cons  (with-self  $L $S) $More1))  
     (remove-type-literal $More $More1))
 ; ; drop another literal 
 
@@ -901,14 +901,14 @@
     (copy-term $CLin $CLin1)
     (clist-to-prolog $CLin1 $Clause)
     (mysetof 
-      (with_self  $Sub $Pos) 
+      (with-self  $Sub $Pos) 
       (, 
         (subterm-at-position $Clause $Sub Nil $Pos) 
         (not (part-of-clause $Sub $Clause)) 
         (nonvar $Sub)) $Sublist)
     (isub1-list $Sublist $Sublist1)
     (best $Sublist1 
-      (with_self  $T $Positions))
+      (with-self  $T $Positions))
     (do-inverse-sub1 $T $Positions $_ $Clause $Clause1)
     (clist-to-prolog $CLout $Clause1)
     (not (variant $CLout $CLin)))
@@ -917,14 +917,14 @@
 
 
 
-  (= (isub1_list  () ())  True)
-  (= (isub1-list (Cons  (with_self  $T $Pos) $R) (Cons  (with_self  $T (Cons  $Pos $Pos1)) $R2))  
+  (= (isub1-list  () ())  True)
+  (= (isub1-list (Cons  (with-self  $T $Pos) $R) (Cons  (with-self  $T (Cons  $Pos $Pos1)) $R2))  
     (isub1-l $T $R $R1 $Pos1)
     (isub1-list $R1 $R2))
 
 
-  (= (isub1_l  $_ () () ())  True)
-  (= (isub1-l $T (Cons  (with_self  $T1 $Pos) $R) $R2 $Pos1)  
+  (= (isub1-l  $_ () () ())  True)
+  (= (isub1-l $T (Cons  (with-self  $T1 $Pos) $R) $R2 $Pos1)  
     (isub1-l $T $R $R1 $Pos0)
     (det-if-then-else 
       (== $T $T1) 
@@ -935,7 +935,7 @@
       (, 
         (= $R2 
           (Cons  
-            (with_self  $T1 $Pos) $R1)) 
+            (with-self  $T1 $Pos) $R1)) 
         (= $Pos1 $Pos0))))
 
 
@@ -987,7 +987,7 @@
 ; ***********************************************************************
 
 
-  (= (do_inverse_sub1  $_ () $_ $Clause $Clause)  True)
+  (= (do-inverse-sub1  $_ () $_ $Clause $Clause)  True)
   (= (do-inverse-sub1 $T (Cons  $P $R) $Var $Clause $Clause2)  
     (do-inverse-sub1 $T $R $Var $Clause $Clause1)
     (do-isub1 $T $P $Var $Clause1 $Clause2))
@@ -995,7 +995,7 @@
     (do-inverse-sub1 $T $R $Var $Clause $Clause1))
 
 
-  (= (do_isub1  $_ () $Var $_ $Var)  True)
+  (= (do-isub1  $_ () $Var $_ $Var)  True)
   (= (do-isub1 $T (Cons  $P $R) $V $C $C1)  
     (functor $C $F $N)
     (functor $C1 $F $N)
@@ -1285,8 +1285,8 @@
         (, 
           (sub-term $Skolem $Term) 
           (atom $Skolem) 
-          (atom-concat sk-symbol $Rest $Skolem) 
-          (atom-length $Rest $Len))) $Skolems)
+          (symbol-concat sk-symbol $Rest $Skolem) 
+          (symbol-length $Rest $Len))) $Skolems)
     (set-det))
 ; ; q_substring(Skolem,sk_atom,0,Len)
   (= (skolems  $_ ())  True)
@@ -1346,7 +1346,7 @@
     (relevant-vars2 $AllVars $S1 $S2 $RelVars))
 
 
-  (= (relevant_vars2  () $_ $_ ())  True)
+  (= (relevant-vars2  () $_ $_ ())  True)
 
   (= (relevant-vars2 (Cons  $V $MoreVars) $S1 $S2 (Cons  $V $RelVars))  
     (or 
@@ -1490,7 +1490,7 @@
 
   (= (findargs Nil $Result $Result)  
     (set-det))
-  (= (findargs (Cons  (with_self  $Lit1 $_) $Rest) $Accu $Result)  
+  (= (findargs (Cons  (with-self  $Lit1 $_) $Rest) $Accu $Result)  
     (functor $Lit1 $_ $N)
     (allarg $N $Lit1 Nil $Args)
     (union $Accu $Args $Newaccu)
@@ -1721,8 +1721,7 @@
   (= (exi Nil $_ Nil $Flag)  
     (== $Flag yes))
   (= (exi Nil $_ Nil $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (exi (Cons  $X $R) $Y (Cons  $X $Z) yes)  
     (memberchk $X $Y)
     (set-det)
@@ -1768,7 +1767,7 @@
 ; ************************************************************************
 
 
-  (= (clean_subst  $_ () ())  True)
+  (= (clean-subst  $_ () ())  True)
   (= (clean-subst $CL (Cons  (/ $X $T) $R) $R2)  
     (clean-subst $CL $R $R1)
     (det-if-then-else 

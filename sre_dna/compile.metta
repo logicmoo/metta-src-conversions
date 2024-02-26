@@ -1,9 +1,9 @@
-;                                           (convert_to_metta_file  compile $_19512 sre_dna/compile.pl sre_dna/compile.metta)
+;                                           (convert-to-metta-file  compile $_110398 sre_dna/compile.pl sre_dna/compile.metta)
 
 
-  (= (?-  (use_module  (library  random)))  True)
-  (= (?-  (use_module  (library  system)))  True)
-  (= (?-  (use_module  (library  lists)))  True)
+  (= (?-  (use-module  (library  random)))  True)
+  (= (?-  (use-module  (library  system)))  True)
+  (= (?-  (use-module  (library  lists)))  True)
 
   (= (?-  (compile  dynamics))  True)
   (= (?-  (consult  dctg))  True)
@@ -12,7 +12,7 @@
   (= (?-  (consult  dctg_pp))  True)
   (= (?-  (compile  utils))  True)
 
-  (= (?-  (,  (dctg_file_P  $FileDCTG) (,  (grammar  $FileDCTG) make_grammar_table)))  True)
+  (= (?-  (,  (dctg-file-P  $FileDCTG) (,  (grammar  $FileDCTG) make_grammar_table)))  True)
   (= (?-  (,  (tell  compile_file.pl) (,  (write  '
 ?- use_module(library(lists)).
         ') (,  nl (,  listing told)))))  True)
@@ -31,7 +31,7 @@
 ;
 ; following must follow 'parameters_P' above.
 
-  (= (?-  (,  (fitness_func_P  $File) (compile  $File)))  True) 
+  (= (?-  (,  (fitness-func-P  $File) (compile  $File)))  True) 
 
   (= (?-  (:  fast (compile  compile_file.pl)))  True)
   (= (?-  clean_up)  True)

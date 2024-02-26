@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  logic $_313292 invers/logic.pl invers/logic.metta)
+;                                           (convert-to-metta-file  logic $_43412 invers/logic.pl invers/logic.metta)
 
   (= (substitution $Term1 $Term2 $Sub_List)  
     (implies $Term1 $Term2)
@@ -61,10 +61,10 @@
 ; /* Subst = List of minimal-sized substitutions */
 ; /* */
 ; /******************************************************************/
-; /* In PROLOG (and first-order logic), a term is recursively */
-; /* defined as being either a constant (in PROLOG a lower-case */
-; /* atom), a variable (in PROLOG a upper-case variable) or a */
-; /* function symbol (in PROLOG a relational expression of the form */
+; /* In MeTTa (and first-order logic), a term is recursively */
+; /* defined as being either a constant (in MeTTa a lower-case */
+; /* atom), a variable (in MeTTa a upper-case variable) or a */
+; /* function symbol (in MeTTa a relational expression of the form */
 ; /* 'p(a,b, ..., X)') which takes a number of terms as arguments. */
 ; /* Substitutions are unique mappings from variables to Terms, in */
 ; /* the following denoted by S, and written out as sets of */
@@ -79,7 +79,7 @@
 ; /******************************************************************/
        
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  invers/logic.pl 95 8 5563))
 
      
@@ -87,7 +87,7 @@
   (= (skolemize  () $N $N)  True)
   (= (skolemize (Cons  $Head $Tail) $N $M)  
     (= $Head 
-      ($var $N))
+      (%var $N))
     (skolemize $Tail 
       (s $N) $M)
     (set-det))
@@ -194,7 +194,7 @@
 ; /* call : covers(+Goal,+ClauseList) */
 ; /* */
 ; /* arguments : Goal = An instance */
-; /* ClauseList = Clauses in a special PROLOG-syntax */
+; /* ClauseList = Clauses in a special MeTTa-syntax */
 ; /* */
 ; /******************************************************************/
 ; /* An 'atomic formula' is defined as a predicate symbol which */
@@ -216,7 +216,7 @@
     (covers $T1 $P))
 
 
-  (= (covers_body  true $_)  True)
+  (= (covers-body  true $_)  True)
   (= (covers-body (, $H $B) $P)  
     (set-det)
     (covers 
@@ -230,15 +230,14 @@
   (= (copy $A $B)  
     (or 
       (, 
-        (add-is-symbol  &self 
-          (yap_inst  $A)) 
-        (remove-is-symbol  &self 
-          (yap_inst  $B)) 
+        (add-atom  &self 
+          (yap-inst  $A)) 
+        (remove-atom  &self 
+          (yap-inst  $B)) 
         (set-det)) 
       (, 
-        (remove-is-symbol  &self 
-          (yap_inst  $_)) 
-        (fail))))
+        (remove-atom  &self 
+          (yap-inst  $_)) fail)))
 
 
   (= (psubsumes $_ Nil)  
@@ -247,8 +246,8 @@
 ; /* */
 ; /* call : psubsumes(+PRG1,+PRG2) */
 ; /* */
-; /* arguments : PRG1 = A clause set in a special PROLOG-syntax */
-; /* PRG2 = A clause set in a special PROLOG-syntax */
+; /* arguments : PRG1 = A clause set in a special MeTTa-syntax */
+; /* PRG2 = A clause set in a special MeTTa-syntax */
 ; /* */
 ; /******************************************************************/
 ; /* MeTTa programs consist of a restricted form of clause called */
@@ -273,7 +272,7 @@
     (set-det))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  invers/logic.pl 229 7 11814))
 
 	     
@@ -283,10 +282,10 @@
   (= (body-units (, $Head1 $Tail1) (Cons  (= $Head1  True) $Tail2))  
     (body-units $Tail1 $Tail2)
     (set-det))
-  (= (body_units  $Head ((:-  $Head true)))  True)
+  (= (body-units  $Head ((:-  $Head true)))  True)
 
 
-  (= (goal_units  () ())  True)
+  (= (goal-units  () ())  True)
   (= (goal-units (Cons  $Head1 $Tail1) (Cons  (= $Head1  True) $Tail2))  
     (goal-units $Tail1 $Tail2)
     (set-det))
@@ -299,9 +298,9 @@
 ; /* */
 ; /* call : p_subsumes(+ClauseSet1,+Theory,+ClauseSet2) */
 ; /* */
-; /* arguments : ClauseSet1 = A set of clauses PROLOG-syntax */
-; /* ClauseSet2 = A set of clauses PROLOG-syntax */
-; /* Theory = A set of clauses PROLOG-syntax */
+; /* arguments : ClauseSet1 = A set of clauses MeTTa-syntax */
+; /* ClauseSet2 = A set of clauses MeTTa-syntax */
+; /* Theory = A set of clauses MeTTa-syntax */
 ; /* */
 ; /******************************************************************/
 ; /* This procedure implements the generalized subsumption between */
@@ -318,9 +317,9 @@
 ; /* */
 ; /* call : p_subsumes(+ClauseSet1,+Theory,+ClauseSet2) */
 ; /* */
-; /* arguments : ClauseSet1 = A set of clauses PROLOG-syntax */
-; /* ClauseSet2 = A set of clauses PROLOG-syntax */
-; /* Theory = A set of clauses PROLOG-syntax */
+; /* arguments : ClauseSet1 = A set of clauses MeTTa-syntax */
+; /* ClauseSet2 = A set of clauses MeTTa-syntax */
+; /* Theory = A set of clauses MeTTa-syntax */
 ; /* */
 ; /******************************************************************/
 ; /* This procedure implements equivalence based on the generalized */
@@ -330,13 +329,10 @@
      		    
 
 
-  (= (help)  
-    (write 'Load example calls with command: [Filename].')
-    (nl)
-    (write 'Call examples with: test1, test2, test3a, test3b,')
-    (nl)
-    (write '                    test4a, test4b, test4c, test4d, test5')
-    (nl))
+  (= help  
+    ( (write 'Load example calls with command: [Filename].') nl 
+      (write 'Call examples with: test1, test2, test3a, test3b,') nl 
+      (write '                    test4a, test4b, test4c, test4d, test5') nl))
 
 
   !(help *)

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  possess $_161576 metagame/learning/possess.pl metagame/learning/possess.metta)
+;                                           (convert-to-metta-file  possess $_315286 metagame/learning/possess.pl metagame/learning/possess.metta)
 ;
 ; ============================================================
 ;
@@ -78,7 +78,7 @@
 ;
 ; The white player is maximizing, so he will choose the last (highest) choice.
 
-  (= (reverse_for_player  opponent $Sorted $Sorted)  True)
+  (= (reverse-for-player  opponent $Sorted $Sorted)  True)
   (= (reverse-for-player player $Sorted $Ordered)  
     (reverse $Sorted $Ordered)) 
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  arch2 $_405988 arch2/arch2.pl arch2/arch2.metta)
+;                                           (convert-to-metta-file  arch2 $_488052 arch2/arch2.pl arch2/arch2.metta)
 
   (= (learn $Concept)  
     (findbag $X 
@@ -76,7 +76,7 @@
 ; /******************************************************************/
 
 
-  (= (process_examples  $ConceptDesc () $ConceptDesc)  True)
+  (= (process-examples  $ConceptDesc () $ConceptDesc)  True)
   (= (process-examples $CurDesc (Cons  $Example $Examples) $FinDesc)  
     (object-type $Example $Object $Type)
     (match $Object $CurDesc $Difference)
@@ -84,8 +84,8 @@
     (process-examples $NewDesc $Examples $FinDesc))
 	
 
-  (= (object_type  (+  $Object) $Object positive)  True)
-  (= (object_type  (-  $Object) $Object negative)  True)
+  (= (object-type  (+  $Object) $Object positive)  True)
+  (= (object-type  (-  $Object) $Object negative)  True)
 
 
   (= (match (object $OParts $ORels) (concept $CParts $Musts $Rels $MustNots) (+ $Missing $Extras))  
@@ -121,7 +121,7 @@
 ; /******************************************************************/
 	
 
-  (= (list_diff  $List () (+  () $List))  True)
+  (= (list-diff  $List () (+  () $List))  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : list_diff(+List1,+List2,-ListDiffs) */
@@ -137,7 +137,7 @@
       (+ $Miss11 $Extras)))
 	
 
-  (= (delete  () () $X $Dels (Cons  $X $Dels))  True)
+  (= (delete  () () $X $Dels ([|]  $X $Dels))  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : delete(+List1,+List2,+Descriptor,-List3,-List4) */
@@ -186,7 +186,7 @@
 ; /******************************************************************/
 
 
-  (= (update  negative (+  $_ ($ExtraRelation)) (concept  $Parts $Musts $Rels $MustNots) (concept  $Parts $Musts $Rels (Cons  $ExtraRelation $MustNots)))  True)
+  (= (update  negative (+  $_ ($ExtraRelation)) (concept  $Parts $Musts $Rels $MustNots) (concept  $Parts $Musts $Rels ([|]  $ExtraRelation $MustNots)))  True)
 ; /******************************************************************/
 ; /* */
 ; /* call : update(+TypeOfExample,+Difference,+CurrentDesc, */
@@ -278,12 +278,11 @@
 
 
   (= (findbag $X $G $_)  
-    ( (add-is-symbol  &self 
+    ( (add-atom  &self 
         (found  mark)) 
       (call $G) 
-      (add-is-symbol  &self 
-        (found  $X)) 
-      (fail)))                            
+      (add-atom  &self 
+        (found  $X)) fail))                            
   (= (findbag $_ $_ $L)  
     (collect-found Nil $L))                                     
                                                               
@@ -292,19 +291,17 @@
     (getnext $X)
     (collect-found 
       (Cons  $X $L) $L1))                      
-  (= (collect_found  $L $L)  True)                                        
+  (= (collect-found  $L $L)  True)                                        
                                                               
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  arch2/arch2.pl 268 30 14766))
 
 
 
-  (= (help)  
-    (write 'Load data set with command: [Filename].')
-    (nl)
-    (write 'Start arch2   with command: learn(X).')
-    (nl))
+  (= help  
+    ( (write 'Load data set with command: [Filename].') nl 
+      (write 'Start arch2   with command: learn(X).') nl))
 
 
   !(help *)

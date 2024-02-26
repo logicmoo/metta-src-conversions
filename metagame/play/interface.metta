@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  interface $_116354 metagame/play/interface.pl metagame/play/interface.metta)
+;                                           (convert-to-metta-file  interface $_16136 metagame/play/interface.pl metagame/play/interface.metta)
 ;
 ; ============================================================
 ;
@@ -84,19 +84,17 @@
     (process-command $MoveString com 
       (:: $Move $SIn $SOut)))
   (= (process-move-or-command $MoveString $Move $SIn $SOut)  
-    (nl)
-    (set-parsing-mode)
-    (move-notation $Move $MoveString)
-    (set-det)
-    (verbosely-format "~nTrying Move: ~p~n" 
-      (:: $Move))
-    (select-move $Move $SIn $SOut))
+    (nl set-parsing-mode 
+      (move-notation $Move $MoveString) 
+      (set-det) 
+      (verbosely-format "~nTrying Move: ~p~n" 
+        (:: $Move)) 
+      (select-move $Move $SIn $SOut)))
   (= (process-move-or-command $MoveString $Move $SIn $SOut)  
-    (format "Attempting to find a completion for move: " Nil)
-    (print-tokens $MoveString)
-    (nl)
-    (parameter completions on)
-    (choose-completed-move $MoveString $Move $SIn $SOut))
+    ( (format "Attempting to find a completion for move: " Nil) 
+      (print-tokens $MoveString) nl 
+      (parameter completions on) 
+      (choose-completed-move $MoveString $Move $SIn $SOut)))
 
 
 
@@ -114,8 +112,7 @@
     (det-if-then-else 
       (= $Answer abort) 
       (, 
-        (set-det) 
-        (fail)) 
+        (set-det) fail) 
       (= $Answer yes)))
 ; ; format("~nBefore:~n",[]), ; print_state(SIn),
 
@@ -220,29 +217,26 @@
 ; 
 
   (= (print-choice $Move $SIn $SOut)  
-    (current-output $O)
-    (flush-output $O)
-    (tracing-play state 
-      (print-state $SOut))
-    (tracing-play move 
-      (print-notation $Move))
-    (linebreak))
+    ( (current-output $O) 
+      (flush-output $O) 
+      (tracing-play state 
+        (print-state $SOut)) 
+      (tracing-play move 
+        (print-notation $Move)) linebreak))
 
 
-  (= (linebreak)  
+  (= linebreak  
     (format "\n===============================================================\n" Nil))
 
 
   (= (print-notation $Op)  
-    (set-printing-mode)
-    (with-alpha-squares (move-notation $Op $Notate))
-    (set-det)
-    (format "Notated Move played: ~n" Nil)
-    (print-tokens $Notate)
-    (nl)
-    (nl)
-    (verbosely-format "~n~nFull Move played: ~p~n" 
-      (:: $Op)))
+    (set-printing-mode 
+      (with-alpha-squares (move-notation $Op $Notate)) 
+      (set-det) 
+      (format "Notated Move played: ~n" Nil) 
+      (print-tokens $Notate) nl nl 
+      (verbosely-format "~n~nFull Move played: ~p~n" 
+        (:: $Op))))
   (= (print-notation $Op)  
     (format "Move played: ~p~n" 
       (:: $Op)))
@@ -250,11 +244,10 @@
 
 
   (= (print-move $Move)  
-    (set-printing-mode)
-    (with-alpha-squares (move-notation $Move $Notate))
-    (set-det)
-    (print-tokens $Notate)
-    (nl))
+    (set-printing-mode 
+      (with-alpha-squares (move-notation $Move $Notate)) 
+      (set-det) 
+      (print-tokens $Notate) nl))
   (= (print-move $Move)  
     (format "Move: ~p~n" 
       (:: $Move)))
@@ -280,8 +273,7 @@
     (det-if-then-else 
       (= $Answer abort) 
       (, 
-        (set-det) 
-        (fail)) 
+        (set-det) fail) 
       (, 
         (= $Answer yes) 
         (set-det))))
@@ -332,8 +324,7 @@
 
 
   (= (help-accept $Answer)  
-    (help-accept)
-    (ask-accept-choice $Answer))
+    (help-accept (ask-accept-choice $Answer)))
 
 
 ;
@@ -372,29 +363,23 @@
 
 
   (= (restart-com $_ $_ $_)  
-    (format "~nRestarting ...~n" Nil)
-    (metagame))
+    ( (format "~nRestarting ...~n" Nil) metagame))
 
 
-  (= (quit-com $_ $_ $_)  
-    (print-quit))
+  (= (quit-com $_ $_ $_)  print-quit)
 
 
 
-  (= (prolog-com $_ $_ $_)  
-    (print-abort))
+  (= (prolog-com $_ $_ $_)  print-abort)
 
 
-  (= (abort-com $_ $_ $_)  
-    (print-abort))
+  (= (abort-com $_ $_ $_)  print-abort)
 
 
-  (= (verbose-com $_ $_ $_)  
-    (set-verbose))
+  (= (verbose-com $_ $_ $_)  set-verbose)
 
 
-  (= (quiet-com $_ $_ $_)  
-    (set-quiet))
+  (= (quiet-com $_ $_ $_)  set-quiet)
 
 
 
@@ -405,8 +390,7 @@
   (= (set-com $_ $_ $_ $P $V)  
     (set-parameter $P $V))
 
-  (= (set-com $_ $_ $_)  
-    (show-parameters))
+  (= (set-com $_ $_ $_)  show-parameters)
 
 ;
 ; Setting globals.
@@ -416,8 +400,7 @@
     (add-global $P $V))
 
 
-  (= (showg-com $_ $_ $_)  
-    (showg))
+  (= (showg-com $_ $_ $_)  showg)
 
 
 
@@ -425,11 +408,10 @@
     (randomize $N))
 
 
-  (= (pieces-com $_ $_ $_)  
-    (show-piece-names))
+  (= (pieces-com $_ $_ $_)  show-piece-names)
 
 
-  (= (show-piece-names)  
+  (= show-piece-names  
     (player-current-game $Game)
     (game-piece-names $Game $Names)
     (format "\nThe current game has the following pieces: \n~p\nNote that pieces are displayed on the board by the their first letter. \n" 
@@ -446,33 +428,26 @@
 
 
   (= (show-piece-definition $PieceName)  
-    (player-current-game $G)
-    (game-piece-def $G $PieceName $Def)
-    (set-det)
-    (set-printing-mode)
-    (piece-def $Def $String Nil)
-    (set-parsing-mode)
-    (format "~nPiece <~p> is defined as follows: ~n~n" 
-      (:: $PieceName))
-    (print-tokens $String)
-    (nl)
-    (nl))
+    ( (player-current-game $G) 
+      (game-piece-def $G $PieceName $Def) 
+      (set-det) set-printing-mode 
+      (piece-def $Def $String Nil) set-parsing-mode 
+      (format "~nPiece <~p> is defined as follows: ~n~n" 
+        (:: $PieceName)) 
+      (print-tokens $String) nl nl))
   (= (show-piece-definition $PieceName)  
     (format "~nSorry, Piece <~p> is not defined in this game.~n~n" 
       (:: $PieceName)))
 
 
 
-  (= (rules-com $_ $_ $_)  
-    (show-rules))
+  (= (rules-com $_ $_ $_)  show-rules)
 
 
-  (= (board-com $_ $_ $_)  
-    (show-board))
+  (= (board-com $_ $_ $_)  show-board)
 
 
-  (= (goals-com $_ $_ $_)  
-    (show-game-goals))
+  (= (goals-com $_ $_ $_)  show-game-goals)
 
 
 
@@ -482,12 +457,10 @@
 
 
 
-  (= (pwd-com $_ $_ $_)  
-    (pwd-print))
+  (= (pwd-com $_ $_ $_)  pwd-print)
 
 
-  (= (ls-com $_ $_ $_)  
-    (ls))
+  (= (ls-com $_ $_ $_)  ls)
 
 ;
 ; -----------------------------------------------------------
@@ -531,8 +504,7 @@
       (call $SGoal) 
       (, 
         (format "*** Unknown_goal: ~w~n" 
-          (:: $SGoal)) 
-        (fail))))
+          (:: $SGoal)) fail)))
 
 
 
@@ -685,11 +657,10 @@
     (set-tracing $Module $Component off))
 
 
-  (= (list-tracing-com $_ $_ $_)  
-    (list-tracing))
+  (= (list-tracing-com $_ $_ $_)  list-tracing)
 
 
-  (= (list-tracing)  
+  (= list-tracing  
     (traced-modules $M)
     (format "The following modules are being traced: ~n~p~n" 
       (:: $M)))
@@ -760,7 +731,7 @@
 
 
 
-  (= (help-clock)  
+  (= help-clock  
     (format "\n============================================================================\nGame Clock Routines\n-------------------\nclock adjust <color> <msec> : increments time player has used this game\nclock reset: resets time used by each player to 0.\nclock print: prints time used and remaining for each player.\nclock unlimit: disables the clock by giving both players unlimited time.\n\nclock: short form for clock print. \n\nExample:\n     clock adjust white 2000.     : adds 2 secs to time white used.\n     clock adjust black '-2500'.  : subtracts 2.5 secs from time black used.\n============================================================================\n" Nil))
 
 
@@ -768,16 +739,12 @@
     (player-color $Player $Color)
     (adjust-player-clock $Player $Time))
 
-  (= (clock-com $_ $_ $_)  
-    (print-clock))
-  (= (clock-com $_ $_ $_ print)  
-    (print-clock))
+  (= (clock-com $_ $_ $_)  print-clock)
+  (= (clock-com $_ $_ $_ print)  print-clock)
 
-  (= (clock-com $_ $_ $_ reset)  
-    (reset-clock))
+  (= (clock-com $_ $_ $_ reset)  reset-clock)
 
-  (= (clock-com $_ $_ $_ unlimit)  
-    (clock-unlimit))
+  (= (clock-com $_ $_ $_ unlimit)  clock-unlimit)
 
 
 ;
@@ -834,10 +801,10 @@
       (play $Level) $Status))
 
 
-  (= (silent-play)  
+  (= silent-play  
     (all-play off))
 
-  (= (loud-play)  
+  (= loud-play  
     (all-play on))
 
 
@@ -847,13 +814,13 @@
     (set-play-verbosity clock $Status)) 
 
 
-  (= (trace-play-state)  
+  (= trace-play-state  
     (set-play-verbosity state on)) 
 
-  (= (trace-play-move)  
+  (= trace-play-move  
     (set-play-verbosity move on)) 
 
-  (= (trace-play-clock)  
+  (= trace-play-clock  
     (set-play-verbosity clock on)) 
 
 

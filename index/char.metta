@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  char $_80026 index/char.pl index/char.metta)
+;                                           (convert-to-metta-file  char $_292636 index/char.pl index/char.metta)
 
   (= (char $InICs $PosIn $NegIn $OutICs $PosOut $NegOut)  
     (char1 $InICs $PosIn $NegIn Nil $TmpICs $PosOut $NegOut)
@@ -82,18 +82,17 @@
     (queries $P2 $N2 $Ts $P1 $N1))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/char.pl 41 4 1180))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/char.pl 43 4 1267))
 
 
   (= (query $P $N (- $T) $P (Cons  $T $N))  
-    (switched-on cwa)
-    (write (- $T))
-    (nl))
+    ( (switched-on cwa) 
+      (write (- $T)) nl))
   (= (query  $P $N (+  $T) $P $N)  True)
 
 

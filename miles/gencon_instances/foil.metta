@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  foil $_163290 miles/gencon_instances/foil.pl miles/gencon_instances/foil.metta)
+;                                           (convert-to-metta-file  foil $_276262 miles/gencon_instances/foil.pl miles/gencon_instances/foil.metta)
 ;
 ; MODULE foil EXPORTS
 
@@ -88,7 +88,7 @@
 ; ************************************************************************
 
 
-  (= (learn-foil)  
+  (= learn-foil  
     (gilppi initialize stop-c quality-c update select add filter one-of spec gen l-newp output))
 
 
@@ -96,7 +96,7 @@
   !(dynamic (/ el-ex 1))
   !(dynamic (/ total-ex 1))
 
-  (= (initialize (:: (, (with_self  (:: $MGT) 0) (active))))  
+  (= (initialize (:: (, (with-self  (:: $MGT) 0) active)))  
     ( (mysetof 
         (, $P $N) 
         (^ $ID 
@@ -107,51 +107,49 @@
         (:: (, $P1 $N1))) 
       (functor $MGT $P1 $N1) 
       (encoding-length-examples $X) 
-      (add-is-symbol  &self 
-        (el_ex  $X)) 
+      (add-atom  &self 
+        (el-ex  $X)) 
       (mysetof $ID1 
         (^ $F1 
           (^ $L1 
             (get-example $ID1 $F1 $L1))) $IDL) 
       (length $IDL $TE) 
-      (add-is-symbol  &self 
-        (total_ex  $TE))))
+      (add-atom  &self 
+        (total-ex  $TE))))
 
 
 
-  (= (select  (Cons  (,  (:  $C $G) active) $R) $C active (Cons  (,  (:  $C $G) passive) $R))  True)
+  (= (select  ([|]  (,  (:  $C $G) active) $R) $C active ([|]  (,  (:  $C $G) passive) $R))  True)
   (= (select (Cons  $X $R) $C active (Cons  $X $R1))  
     (select $R $C active $R1))
 
 
 
   (= (quality-c (:: $C))  
-    (store-clause $C $_ usr $ID)
-    (eval-examples)
-    (get-clause $ID $H $B $CL $_)
-    (get-evaluation $ID $E)
-    (det-if-then-else 
-      (arg 5 $E Nil) 
-      (, 
-        (arg 3 $E $Pos) 
-        (remove-covered-ex $Pos)) 
-      (, 
-        (delete-clause $ID) 
-        (add-is-symbol  &self 
-          (known  $ID $H $B $CL hypo $E)) 
-        (set-det) 
-        (fail))))
+    ( (store-clause $C $_ usr $ID) eval-examples 
+      (get-clause $ID $H $B $CL $_) 
+      (get-evaluation $ID $E) 
+      (det-if-then-else 
+        (arg 5 $E Nil) 
+        (, 
+          (arg 3 $E $Pos) 
+          (remove-covered-ex $Pos)) 
+        (, 
+          (delete-clause $ID) 
+          (add-atom  &self 
+            (known  $ID $H $B $CL hypo $E)) 
+          (set-det) fail))))
 
 
-  (= (remove_covered_ex  ())  True)
-  (= (remove-covered-ex (Cons  (with_self  $ID $Fact) $R))  
+  (= (remove-covered-ex  ())  True)
+  (= (remove-covered-ex (Cons  (with-self  $ID $Fact) $R))  
     ( (delete-example $ID) 
-      (add-is-symbol  &self 
-        (saved_ex  $ID $Fact)) 
+      (add-atom  &self 
+        (saved-ex  $ID $Fact)) 
       (remove-covered-ex $R)))
 
 
-  (= (update $_ (:: (, (with_self  (:: $MGT) 0) (active))))  
+  (= (update $_ (:: (, (with-self  (:: $MGT) 0) active)))  
     (mysetof 
       (, $P $N) 
       (^ $ID 
@@ -164,7 +162,7 @@
   (= (update  $_ ())  True)
 
 
-  (= (one_of  $_ spec)  True)
+  (= (one-of  $_ spec)  True)
 
 
   (= (spec (:: $C) $PSL)  
@@ -178,12 +176,12 @@
     (add $PS0 $R $PS1))
 
 
-  (= (insert-by-gain (with_self  $C $G) (Cons  (, (with_self  $C1 $G1) $L) $R) (Cons  (, (with_self  $C1 $G1) $L) $R1))  
+  (= (insert-by-gain (with-self  $C $G) (Cons  (, (with-self  $C1 $G1) $L) $R) (Cons  (, (with-self  $C1 $G1) $L) $R1))  
     (< $G $G1)
     (set-det)
     (insert-by-gain 
-      (with_self  $C $G) $R $R1))
-  (= (insert_by_gain  (:  $C $G) $L (Cons  (,  (:  ($C) $G) active) $L))  True)
+      (with-self  $C $G) $R $R1))
+  (= (insert-by-gain  (:  $C $G) $L ([|]  (,  (:  ($C) $G) active) $L))  True)
 
 
 
@@ -199,29 +197,27 @@
     (> $N $X))
 
 
-  (= (stop_c1  () 0)  True)
+  (= (stop-c1  () 0)  True)
   (= (stop-c1 (Cons  (:: (= $H  $B)) $R) $M)  
     (stop-c1 $R $M0)
     (body2list $B $BL)
     (encoding-length-clause 
       (Cons  
-        (with_self  $H 
-          (p)) $BL) $M1)
+        (with-self  $H p) $BL) $M1)
     (is $M 
       (+ $M0 $M1)))
 
 
   (= (output $_)  
-    ( (remove-is-symbol  &self 
-        (saved_ex  $ID $Fact)) 
+    ( (remove-atom  &self 
+        (saved-ex  $ID $Fact)) 
       (store-ex $Fact + $ID) 
       (output $_)))
   (= (output $_)  
     ( (remove-all-atoms  &self 
-        (total_ex  $_)) 
+        (total-ex  $_)) 
       (remove-all-atoms  &self 
-        (el_ex  $_)) 
-      (show-kb)))
+        (el-ex  $_)) show-kb))
    
 
 
@@ -266,59 +262,53 @@
 
 
   (= (infogain $Clause $Ref_list $CL)  
-    (store-clause $Clause $_ gain $ID)
-    (eval-examples)
-    (get-evaluation $ID 
-      (evaluation $_ $Tip $_ $Tim $_ $_ $_ $_ $_))
-    (delete-clause $ID)
-    (is $OTi 
-      (/ $Tip 
-        (+ $Tip $Tim)))
-    (log2 $OTi $LNOTi)
-    (is $ITi 
-      (- $LNOTi))
-    (infogain1 $Ref_list $CL $ITi))
+    ( (store-clause $Clause $_ gain $ID) eval-examples 
+      (get-evaluation $ID 
+        (evaluation $_ $Tip $_ $Tim $_ $_ $_ $_ $_)) 
+      (delete-clause $ID) 
+      (is $OTi 
+        (/ $Tip 
+          (+ $Tip $Tim))) 
+      (log2 $OTi $LNOTi) 
+      (is $ITi 
+        (- $LNOTi)) 
+      (infogain1 $Ref_list $CL $ITi)))
 
 
   (= (infogain1  () () $_)  True)
   (= (infogain1 (Cons  $C $R) $R2 $ITi)  
-    (infogain1 $R $R1 $ITi)
-    (store-clause $C $_ gain $ID)
-    (eval-examples)
-    (get-evaluation $ID 
-      (evaluation $_ $Ti1p $_ $Ti1m $_ $_ $_ $_ $_))
-    (delete-clause $ID)
-    (det-if-then-else 
-      (= $Ti1p 0) 
-      (, 
-        (copy-term $C $C1) 
-        (numbervars $C1 0 $_) 
-        (write 'refuted: ') 
-        (write $C1) 
-        (nl) 
-        (nl) 
-        (= $R2 $R1)) 
-      (, 
-        (is $OTi1 
-          (/ $Ti1p 
-            (+ $Ti1p $Ti1m))) 
-        (log2 $OTi1 $LNOTi1) 
-        (is $ITi1 
-          (- $LNOTi1)) 
-        (is $IG 
-          (* $Ti1p 
-            (- $ITi $ITi1))) 
-        (copy-term $C $C1) 
-        (numbervars $C1 0 $_) 
-        (write 'refined clause: ') 
-        (write $C1) 
-        (write    ) 
-        (write $IG) 
-        (nl) 
-        (nl) 
-        (= $R2 
-          (Cons  
-            (with_self  $C $IG) $R1)))))
+    ( (infogain1 $R $R1 $ITi) 
+      (store-clause $C $_ gain $ID) eval-examples 
+      (get-evaluation $ID 
+        (evaluation $_ $Ti1p $_ $Ti1m $_ $_ $_ $_ $_)) 
+      (delete-clause $ID) 
+      (det-if-then-else 
+        (= $Ti1p 0) 
+        (, 
+          (copy-term $C $C1) 
+          (numbervars $C1 0 $_) 
+          (write 'refuted: ') 
+          (write $C1) nl nl 
+          (= $R2 $R1)) 
+        (, 
+          (is $OTi1 
+            (/ $Ti1p 
+              (+ $Ti1p $Ti1m))) 
+          (log2 $OTi1 $LNOTi1) 
+          (is $ITi1 
+            (- $LNOTi1)) 
+          (is $IG 
+            (* $Ti1p 
+              (- $ITi $ITi1))) 
+          (copy-term $C $C1) 
+          (numbervars $C1 0 $_) 
+          (write 'refined clause: ') 
+          (write $C1) 
+          (write    ) 
+          (write $IG) nl nl 
+          (= $R2 
+            (Cons  
+              (with-self  $C $IG) $R1))))))
 
 
   (= (infogain $Ref_list $CL)  
@@ -338,57 +328,51 @@
 
   (= (infogain2  () () $_)  True)
   (= (infogain2 (Cons  $C $R) $R2 $ITi)  
-    (infogain2 $R $R1 $ITi)
-    (store-clause $C $_ gain $ID)
-    (eval-examples)
-    (get-evaluation $ID 
-      (evaluation $_ $Ti1p $_ $Ti1m $_ $_ $_ $_ $_))
-    (encoding-length $Ti1p $X)
-    (det-if-then-else 
-      (= $C 
-        (= $H  $B)) 
-      (, 
-        (body2list $B $BL) 
+    ( (infogain2 $R $R1 $ITi) 
+      (store-clause $C $_ gain $ID) eval-examples 
+      (get-evaluation $ID 
+        (evaluation $_ $Ti1p $_ $Ti1m $_ $_ $_ $_ $_)) 
+      (encoding-length $Ti1p $X) 
+      (det-if-then-else 
+        (= $C 
+          (= $H  $B)) 
+        (, 
+          (body2list $B $BL) 
+          (encoding-length-clause 
+            (Cons  
+              (with-self  $H p) $BL) $XE)) 
         (encoding-length-clause 
-          (Cons  
-            (with_self  $H 
-              (p)) $BL) $XE)) 
-      (encoding-length-clause 
-        (:: (with_self  $C (p))) $XE))
-    (delete-clause $ID)
-    (det-if-then-else 
-      (or 
-        (= $Ti1p 0) 
-        (> $XE $X)) 
-      (, 
-        (copy-term $C $C1) 
-        (numbervars $C1 0 $_) 
-        (write 'refuted: ') 
-        (write $C1) 
-        (nl) 
-        (nl) 
-        (= $R2 $R1)) 
-      (, 
-        (is $OTi1 
-          (/ $Ti1p 
-            (+ $Ti1p $Ti1m))) 
-        (log2 $OTi1 $LNOTi1) 
-        (is $ITi1 
-          (- $LNOTi1)) 
-        (is $IG 
-          (* $Ti1p 
-            (- $ITi $ITi1))) 
-        (copy-term $C $C1) 
-        (numbervars $C1 0 $_) 
-        (write 'refined clause: ') 
-        (write $C1) 
-        (write    ) 
-        (write $IG) 
-        (nl) 
-        (nl) 
-        (= $R2 
-          (Cons  
-            (with_self  $C $IG) $R1)))))
+          (:: (with-self  $C p)) $XE)) 
+      (delete-clause $ID) 
+      (det-if-then-else 
+        (or 
+          (= $Ti1p 0) 
+          (> $XE $X)) 
+        (, 
+          (copy-term $C $C1) 
+          (numbervars $C1 0 $_) 
+          (write 'refuted: ') 
+          (write $C1) nl nl 
+          (= $R2 $R1)) 
+        (, 
+          (is $OTi1 
+            (/ $Ti1p 
+              (+ $Ti1p $Ti1m))) 
+          (log2 $OTi1 $LNOTi1) 
+          (is $ITi1 
+            (- $LNOTi1)) 
+          (is $IG 
+            (* $Ti1p 
+              (- $ITi $ITi1))) 
+          (copy-term $C $C1) 
+          (numbervars $C1 0 $_) 
+          (write 'refined clause: ') 
+          (write $C1) 
+          (write    ) 
+          (write $IG) nl nl 
+          (= $R2 
+            (Cons  
+              (with-self  $C $IG) $R1))))))
 
 
   (= (encoding-length $PN $X)  

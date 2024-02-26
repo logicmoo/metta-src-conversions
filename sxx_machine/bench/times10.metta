@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  times10 $_409734 sxx_machine/bench/times10.pl sxx_machine/bench/times10.metta)
+;                                           (convert-to-metta-file  times10 $_192426 sxx_machine/bench/times10.pl sxx_machine/bench/times10.metta)
 ;
 ; generated: 7 March 1990
 ;
@@ -17,11 +17,10 @@
 ; symbolic derivative of ((((((((x*x)*x)*x)*x)*x)*x)*x)*x)*x
 
 
-  (= (top)  
-    (times10))
+  (= top  times10)
 
 
-  (= (times10)  
+  (= times10  
     (d 
       (* 
         (* 

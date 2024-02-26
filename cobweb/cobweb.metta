@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  cobweb $_11954 cobweb/cobweb.pl cobweb/cobweb.metta)
+;                                           (convert-to-metta-file  cobweb $_115026 cobweb/cobweb.pl cobweb/cobweb.metta)
 
   !(dynamic (/ root 2))
 ; /******************************************************************/
@@ -59,14 +59,10 @@
   !(dynamic (/ acuity 1))
 
 
-  (= (learn)  
-    (initialize)
-    (get-case $X)
-    (cobweb $X)
-    (nl)
-    (nl)
-    (show-classes)
-    (fail))
+  (= learn  
+    (initialize 
+      (get-case $X) 
+      (cobweb $X) nl nl show-classes fail))
 ; /******************************************************************/
 ; /* QUINTUS MeTTa specific import of predicates `sqrt' and `abs' */
 ; /******************************************************************/
@@ -93,7 +89,7 @@
   (= learn  True)
 	
 
-  (= (initialize)  
+  (= initialize  
     (abolish node 3)
     (abolish d-sub 2)
     (abolish root 2)
@@ -103,10 +99,9 @@
     (set-det))
 
 
-  (= (learn-more)  
-    (get-case $X)
-    (cobweb $X)
-    (fail))
+  (= learn-more  
+    ( (get-case $X) 
+      (cobweb $X) fail))
 ; /******************************************************************/
 ; /* */
 ; /* call : learn_more */
@@ -130,7 +125,7 @@
   (= learn_more  True)
 
 
-  (= (nmember  $E (Cons  $E $L) 1)  True)
+  (= (nmember  $E ([|]  $E $L) 1)  True)
 ; /******************************************************************/
 ; /* QUINTUS MeTTa specific import of predicates `nth1' and */
 ; /* `nmember'. `nth1' for getting the nth-element of a list and */
@@ -143,7 +138,7 @@
       (+ $P 1)))
 	
 
-  (= (nth1  1 (Cons  $X $_) $X)  True)
+  (= (nth1  1 ([|]  $X $_) $X)  True)
   (= (nth1 $P1 (Cons  $_ $R) $X)  
     (> $P1 1)
     (is $P 
@@ -152,12 +147,10 @@
 
 
   (= (get-case $CaseID)  
-    (case (Cons  $CaseID $_))
-    (nl)
-    (nl)
-    (write ' Processing case ')
-    (write $CaseID)
-    (write  ...))
+    ( (case (Cons  $CaseID $_)) nl nl 
+      (write ' Processing case ') 
+      (write $CaseID) 
+      (write  ...)))
 ; /******************************************************************/
 ; /* */
 ; /* call : get_case(+Case) */
@@ -199,13 +192,12 @@
 	
 
   (= (cobweb $Case)  
-    (not (get-node $_))
-    (init-node)
-    (node $Root root 1 1)
-    (new-node-from-case $Case $Root)
-    (assert-node $Root)
-    (msgs (:: nl ' Root initialized with case: ' $Root))
-    (set-det))
+    ( (not (get-node $_)) init-node 
+      (node $Root root 1 1) 
+      (new-node-from-case $Case $Root) 
+      (assert-node $Root) 
+      (msgs (:: nl ' Root initialized with case: ' $Root)) 
+      (set-det)))
 ; /******************************************************************/
 ; /* */
 ; /* call : cobweb(+Case) */
@@ -625,7 +617,7 @@
 ; /******************************************************************/
 ; /* sum_value_counter(+ValuesCounter,+ValuesCounter,-ValuesCounter)*/
 ; /******************************************************************/
-  (= (sum_value_counter  () $ValuesCounter $ValuesCounter)  True)
+  (= (sum-value-counter  () $ValuesCounter $ValuesCounter)  True)
   (= (sum-value-counter (Cons  (- $Val $C1) $R1) (Cons  (- $Val $C2) $R2) (Cons  (- $Val $SumC) $Rest))  
     (is $SumC 
       (+ $C1 $C2))
@@ -645,7 +637,7 @@
         (- $Val1 $C1) $R1) $R2 $Rest))
 
 
-  (= (sum_score  () () $_ $Score $Score)  True)
+  (= (sum-score  () () $_ $Score $Score)  True)
 ; /******************************************************************/
 ; /* sum_score(+NodeList,+NodeList,+NormNode,+BaseScore,-FinalScore)*/
 ; /******************************************************************/
@@ -674,29 +666,28 @@
 
   (= (compute-prediction $Node)  
     ( (node-objects $Node $Objects) 
-      (add-is-symbol  &self 
-        (prediction_counter  0 0)) 
+      (add-atom  &self 
+        (prediction-counter  0 0)) 
       (get-node-nominal-attr $Node $_ $ValuesCounter) 
       (if 
-        (remove-is-symbol  &self 
-          (prediction_counter  $Sum $Count)) True) 
+        (remove-atom  &self 
+          (prediction-counter  $Sum $Count)) True) 
       (is $NCount 
         (+ $Count 1)) 
-      (add-is-symbol  &self 
-        (prediction_counter  $Sum $NCount)) 
+      (add-atom  &self 
+        (prediction-counter  $Sum $NCount)) 
       (member 
         (- $_ $C) $ValuesCounter) 
       (if 
-        (remove-is-symbol  &self 
-          (prediction_counter  $NNSum $NCount)) True) 
+        (remove-atom  &self 
+          (prediction-counter  $NNSum $NCount)) True) 
       (is $NSum 
         (+ $NNSum 
           (/ 
             (* $C $C) 
             (* $Objects $Objects)))) 
-      (add-is-symbol  &self 
-        (prediction_counter  $NSum $NCount)) 
-      (fail)))
+      (add-atom  &self 
+        (prediction-counter  $NSum $NCount)) fail))
 ; /******************************************************************/
 ; /* compute the prediction of Node */
 ; /******************************************************************/
@@ -705,8 +696,8 @@
   (= (compute-prediction $Node)  
     ( (get-node-numeric-attr $Node $_ $N $SumXiPow2 $SumXi) 
       (if 
-        (remove-is-symbol  &self 
-          (prediction_counter  $Sum $Count)) True) 
+        (remove-atom  &self 
+          (prediction-counter  $Sum $Count)) True) 
       (is $NCount 
         (+ $Count 1)) 
       (is $DeviationPow2 
@@ -728,16 +719,15 @@
       (is $NSum 
         (+ $Sum 
           (/ $Const $ScoreDeviation))) 
-      (add-is-symbol  &self 
-        (prediction_counter  $NSum $NCount)) 
-      (fail)))
+      (add-atom  &self 
+        (prediction-counter  $NSum $NCount)) fail))
 ; ; Deviation of one Instance is 0, so we use a minimum deviation of 1
 ; ; Here 'acuity' isn't longer hardcoded, instead an value is retieved
 ; ; from the database. A minimal acuity Const is used to ensure that
 ; ; Const/ScoreDeviation is in the interval [0,1]!
   (= (compute-prediction $Node)  
-    ( (remove-is-symbol  &self 
-        (prediction_counter  $Prediction $Count)) 
+    ( (remove-atom  &self 
+        (prediction-counter  $Prediction $Count)) 
       (is $NormPrediction 
         (/ $Prediction $Count)) 
       (node-prediction $Node $Prediction) 
@@ -750,24 +740,24 @@
         (= 
           (acuity  $Accuity) true) 
         (get-atoms  &self)) (set-det)))
-  (= (get_acuity  0)  True)
+  (= (get-acuity  0)  True)
 
 
-  (= (init-node)  
+  (= init-node  
     (abolish root 2)
     (abolish root 4)
     (or 
-      (remove-is-symbol  &self 
-        (gensym_counter  node_ $_)) True)
+      (remove-atom  &self 
+        (gensym-counter  node_ $_)) True)
     (or 
       (remove-all-atoms  &self 
         (node  root $_ $_)) True)
     (or 
       (remove-all-atoms  &self 
-        (d_sub  root $_)) True)
+        (d-sub  root $_)) True)
     (or 
       (remove-all-atoms  &self 
-        (d_sub  $_ root)) True)
+        (d-sub  $_ root)) True)
     (set-det))
 ; /******************************************************************/
 ; /* Internal Data Structures are: */
@@ -819,10 +809,10 @@
         (node  $Node $_ $_)) True)
     (or 
       (remove-all-atoms  &self 
-        (d_sub  $Node $_)) True)
+        (d-sub  $Node $_)) True)
     (or 
       (remove-all-atoms  &self 
-        (d_sub  $_ $Node)) True)
+        (d-sub  $_ $Node)) True)
     (set-det))
 
 
@@ -835,8 +825,7 @@
       (, 
         (remove-d-sub $Parent $Node) 
         (remove-d-sub $Node $Child) 
-        (assert-d-sub $Parent $Child) 
-        (fail)) True)
+        (assert-d-sub $Parent $Child) fail) True)
     (set-det))
 ; ; This asumes that there is mostly one ParentNode
 
@@ -846,9 +835,8 @@
 
 
   (= (move-subs $Source $Dest)  
-    (remove-d-sub $Source $Child)
-    (assert-d-sub $Dest $Child)
-    (fail))
+    ( (remove-d-sub $Source $Child) 
+      (assert-d-sub $Dest $Child) fail))
   (= (move-subs $Source $Dest)  
     (remove-d-sub $Parent $Source)
     (assert-d-sub $Parent $Dest)
@@ -917,11 +905,11 @@
 
 
   (= (assert-node (node $Node $Objects $Pred))  
-    ( (nonvar $Node) (add-is-symbol  &self (node  $Node $Objects $Pred))))
+    ( (nonvar $Node) (add-atom  &self (node  $Node $Objects $Pred))))
 
 
   (= (remove-node (node $Node $Objects $Pred))  
-    (remove-is-symbol  &self 
+    (remove-atom  &self 
       (node  $Node $Objects $Pred)))
 
 
@@ -951,14 +939,14 @@
         (get-atoms  &self))))
 
 
-  (= (assert_node_nominal_attr  $_ $_ ())  True)
+  (= (assert-node-nominal-attr  $_ $_ ())  True)
   (= (assert-node-nominal-attr (node $Node $_ $_) $Attr $ValuesCounter)  
     ( (nonvar $Node) 
       (nonvar $Attr) 
       (nonvar $ValuesCounter) 
       (=.. $Call 
         (:: $Node $Attr $ValuesCounter)) 
-      (add-is-symbol  &self $Call)))
+      (add-atom  &self $Call)))
 
 
   (= (remove-node-nominal-attr (node $Node $_ $_) $Attr $ValuesCounter)  
@@ -967,7 +955,7 @@
     (=.. $Call 
       (:: $Node $Attr $ValuesCounter))
     (or 
-      (remove-is-symbol  &self $Call) 
+      (remove-atom  &self $Call) 
       (if 
         (var $ValuesCounter) 
         (= $ValuesCounter Nil)))
@@ -976,7 +964,7 @@
     ( (nonvar $Node) 
       (=.. $Call 
         (:: $Node $Attr $ValuesCounter)) 
-      (remove-is-symbol  &self $Call)))
+      (remove-atom  &self $Call)))
 
 
   (= (get-node-numeric-attr (node $Node $_ $_) $Attr $N $SumXiPow2 $SumXi)  
@@ -1008,7 +996,7 @@
         (get-atoms  &self))))
 
 
-  (= (assert_node_numeric_attr  $_ $_ 0 $_ $_)  True)
+  (= (assert-node-numeric-attr  $_ $_ 0 $_ $_)  True)
   (= (assert-node-numeric-attr (node $Node $_ $_) $Attr $N $SumXiPow2 $SumXi)  
     ( (nonvar $Node) 
       (nonvar $Attr) 
@@ -1017,7 +1005,7 @@
       (nonvar $SumXi) 
       (=.. $Call 
         (:: $Node $Attr $N $SumXiPow2 $SumXi)) 
-      (add-is-symbol  &self $Call)))
+      (add-atom  &self $Call)))
 
 
   (= (remove-node-numeric-attr (node $Node $_ $_) $Attr $N $SumXiPow2 $SumXi)  
@@ -1026,7 +1014,7 @@
     (=.. $Call 
       (:: $Node $Attr $N $SumXiPow2 $SumXi))
     (or 
-      (remove-is-symbol  &self $Call) 
+      (remove-atom  &self $Call) 
       (if 
         (var $N) 
         (, 
@@ -1038,13 +1026,13 @@
     ( (nonvar $Node) 
       (=.. $Call 
         (:: $Node $Attr $N $SumXiPow2 $SumXi)) 
-      (remove-is-symbol  &self $Call)))
+      (remove-atom  &self $Call)))
 
 
   (= (get-d-sub (node $SuperNode $_ $_) (node $SubNode $_ $_))  
     (==  
       (= 
-        (d_sub  $SuperNode $SubNode) true) 
+        (d-sub  $SuperNode $SubNode) true) 
       (get-atoms  &self)))
 ; /******************************************************************/
 ; /* d_sub(SuperNode:Atom,SubNode:Atom) */
@@ -1052,13 +1040,13 @@
 
 
   (= (assert-d-sub (node $SuperNode $_ $_) (node $SubNode $_ $_))  
-    (add-is-symbol  &self 
-      (d_sub  $SuperNode $SubNode)))
+    (add-atom  &self 
+      (d-sub  $SuperNode $SubNode)))
 
 
   (= (remove-d-sub (node $SuperNode $_ $_) (node $SubNode $_ $_))  
-    (remove-is-symbol  &self 
-      (d_sub  $SuperNode $SubNode)))
+    (remove-atom  &self 
+      (d-sub  $SuperNode $SubNode)))
 
 
   (= (max-of (Cons  $F $R) $Max)  
@@ -1067,7 +1055,7 @@
 ; /******************************************************************/
 ; /* Miscealenous definitions */
 ; /******************************************************************/
-  (= (max_of  () $Max $Max)  True)
+  (= (max-of  () $Max $Max)  True)
   (= (max-of (Cons  $F $R) $Best $Max)  
     (=< $F $Best)
     (set-det)
@@ -1096,8 +1084,7 @@
     (set-det)
     (write $Var))
   (= (msg nl)  
-    (set-det)
-    (nl))
+    ( (set-det) nl))
   (= (msg (nl $N))  
     (set-det)
     (msg-repeat $N nl))
@@ -1129,21 +1116,19 @@
 
 
   (= (save-kb $FN)  
-    (concat $FN .pl $Y)
-    (tell $Y)
-    (print-kb)
-    (told)
-    (set-det))
+    ( (concat $FN .pl $Y) 
+      (tell $Y) print-kb told 
+      (set-det)))
 
 
   (= (load-kb $FN)  
-    (clear-kb)
-    (concat $FN .pl $Y)
-    (consult $Y)
-    (set-det))
+    (clear-kb 
+      (concat $FN .pl $Y) 
+      (consult $Y) 
+      (set-det)))
 
 
-  (= (print-kb)  
+  (= print-kb  
     ( (if 
         (= $Call 
           (d-sub $SuperNode $SubNode)) True) 
@@ -1153,16 +1138,14 @@
       (if 
         (, 
           (writeq $Call) 
-          (write .) 
-          (nl)) fail)))
-  (= (print-kb)  
+          (write .) nl) fail)))
+  (= print-kb  
     (get-node $Node)
     (if 
       (, 
         (writeq $Node) 
-        (write .) 
-        (nl)) fail))
-  (= (print-kb)  
+        (write .) nl) fail))
+  (= print-kb  
     ( (get-node $Node) 
       (if 
         (, 
@@ -1175,9 +1158,8 @@
       (if 
         (, 
           (writeq $Call) 
-          (write .) 
-          (nl)) fail)))
-  (= (print-kb)  
+          (write .) nl) fail)))
+  (= print-kb  
     ( (get-node $Node) 
       (if 
         (, 
@@ -1190,42 +1172,41 @@
       (if 
         (, 
           (writeq $Call) 
-          (write .) 
-          (nl)) fail)))
+          (write .) nl) fail)))
   (= print_kb  True)
 
 
-  (= (clear-kb)  
+  (= clear-kb  
     (get-node $Node)
     (if 
       (, 
         (node-name $Node $Name) 
         (abolish $Name 2) 
         (abolish $Name 4)) fail))
-  (= (clear-kb)  
+  (= clear-kb  
     ( (abolish node 3) 
       (abolish d-sub 2) 
       (or 
-        (remove-is-symbol  &self 
-          (gensym_counter  node_ $_)) True) 
-      (add-is-symbol  &self 
-        (gensym_counter  node_ 0)) 
+        (remove-atom  &self 
+          (gensym-counter  node_ $_)) True) 
+      (add-atom  &self 
+        (gensym-counter  node_ 0)) 
       (set-det)))
 
 
-  (= (show)  
+  (= show  
     (collect-tree root $Tree all)
     (display-tree $Tree)
     (set-det))
 
 
-  (= (show-classes)  
+  (= show-classes  
     (collect-tree root $Tree classes)
     (display-tree $Tree)
     (set-det))
 
 
-  (= (collect_tree  () () $_)  True)
+  (= (collect-tree  () () $_)  True)
   (= (collect-tree (Cons  $Node $Nodes) (Cons  $SubTree $SubTrees) $Type)  
     (collect-tree $Node $SubTree $Type)
     (set-det)
@@ -1243,7 +1224,7 @@
         (setof $Sub 
           (==  
             (= 
-              (d_sub  $Node $Sub) true) 
+              (d-sub  $Node $Sub) true) 
             (get-atoms  &self)) $Subs) 
         (, 
           (= $Type all) 
@@ -1253,13 +1234,12 @@
 
 
   (= (display-tree (:: $Node $Obj $SubTrees))  
-    (write 'Number of cases processed: ')
-    (write $Obj)
-    (nl)
-    (write $Node)
-    (name $Node $String)
-    (length $String $Offset)
-    (display-tree $SubTrees $Offset))
+    ( (write 'Number of cases processed: ') 
+      (write $Obj) nl 
+      (write $Node) 
+      (name $Node $String) 
+      (length $String $Offset) 
+      (display-tree $SubTrees $Offset)))
 
   (= (display-tree (:: $Node) $Offset)  
     (set-det)
@@ -1272,12 +1252,11 @@
 
 
   (= (display-tree-node (:: $Node $Obj Nil) $Offset)  
-    (set-det)
-    (write  <-- )
-    (write $Node)
-    (write  = )
-    (write $Obj)
-    (nl))
+    ( (set-det) 
+      (write  <-- ) 
+      (write $Node) 
+      (write  = ) 
+      (write $Obj) nl))
   (= (display-tree-node (:: $Node $Obj $Subtree) $Offset)  
     (write  <-- )
     (write $Node)
@@ -1335,16 +1314,16 @@
 
 
   (= (count $VAR $X)  
-    ( (remove-is-symbol  &self 
-        (gensym_counter  $VAR $N)) 
+    ( (remove-atom  &self 
+        (gensym-counter  $VAR $N)) 
       (is $X 
         (+ $N 1)) 
-      (add-is-symbol  &self 
-        (gensym_counter  $VAR $X)) 
+      (add-atom  &self 
+        (gensym-counter  $VAR $X)) 
       (set-det)))
   (= (count $VAR 1)  
-    (add-is-symbol  &self 
-      (gensym_counter  $VAR 1)))
+    (add-atom  &self 
+      (gensym-counter  $VAR 1)))
 
 
   (= (gensym $SYM)  
@@ -1359,28 +1338,25 @@
 
 
   (= (remove-all-atoms  &self $HEAD)  
-    (var $HEAD)
-    (set-det)
-    (fail))
+    ( (var $HEAD) 
+      (set-det) fail))
   (= (remove-all-atoms  &self (:-  $HEAD $BODY))  
     (var $BODY)
     (set-det)
     (or 
       (, 
-        (remove-is-symbol  &self 
-          (:-  $HEAD true)) 
-        (fail)) True)
+        (remove-atom  &self 
+          (:-  $HEAD true)) fail) True)
     (or 
       (, 
-        (remove-is-symbol  &self 
-          (:-  $HEAD $_)) 
-        (fail)) True)) 
+        (remove-atom  &self 
+          (:-  $HEAD $_)) fail) True)) 
   (= (remove-all-atoms  &self (:-  $HEAD true))  
-    ( (remove-is-symbol  &self 
-        (:-  $HEAD true)) (fail)))
+    ( (remove-atom  &self 
+        (:-  $HEAD true)) fail))
   (= (remove-all-atoms  &self (:-  $HEAD $BODY))  
-    ( (remove-is-symbol  &self 
-        (:-  $HEAD $BODY)) (fail)))
+    ( (remove-atom  &self 
+        (:-  $HEAD $BODY)) fail))
   (= (retractall  $_)  True)
 
 
@@ -1400,25 +1376,16 @@
       (sqrt $X)))
 
 
-  (= (help)  
-    (write ' Load data set                    : load-kb(Filename).')
-    (nl)
-    (write ' Process single   file            : learn.')
-    (nl)
-    (write ' Process multiple files           : learn-more.')
-    (nl)
-    (write ' Show hierarchy (classes & cases) : show.')
-    (nl)
-    (write ' Show hierarchy (classes only)    : show-classes.')
-    (nl)
-    (write ' Show node      (not yet impl.)   : show-node(NodeID).')
-    (nl)
-    (write ' Print  result  (cryptical)       : print-kb.')
-    (nl)
-    (write ' Store  result                    : save-kb(Filename).')
-    (nl)
-    (write ' Forget result                    : clear-kb.')
-    (nl))
+  (= help  
+    ( (write ' Load data set                    : load-kb(Filename).') nl 
+      (write ' Process single   file            : learn.') nl 
+      (write ' Process multiple files           : learn-more.') nl 
+      (write ' Show hierarchy (classes & cases) : show.') nl 
+      (write ' Show hierarchy (classes only)    : show-classes.') nl 
+      (write ' Show node      (not yet impl.)   : show-node(NodeID).') nl 
+      (write ' Print  result  (cryptical)       : print-kb.') nl 
+      (write ' Store  result                    : save-kb(Filename).') nl 
+      (write ' Forget result                    : clear-kb.') nl))
 
 
   !(help *)

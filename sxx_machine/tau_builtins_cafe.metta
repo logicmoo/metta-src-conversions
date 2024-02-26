@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tau_builtins_cafe $_440972 sxx_machine/tau_builtins_cafe.pl sxx_machine/tau_builtins_cafe.metta)
+;                                           (convert-to-metta-file  tau_builtins_cafe $_275812 sxx_machine/tau_builtins_cafe.pl sxx_machine/tau_builtins_cafe.metta)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -85,168 +85,163 @@
 
 
   (= (call $Term)  
-    ($get-current-B $Cut)
-    ($meta-call $Term user $Cut 0 interpret))
+    (%get-current-B $Cut)
+    (%meta-call $Term user $Cut 0 interpret))
 
 
-  (= ($meta-call $X $_ $_ $_ $_)  
+  (= (%meta-call $X $_ $_ $_ $_)  
     (var $X)
     (set-det)
     (illarg var 
       (call $X) 1))
-  (= ($meta-call $X $_ $_ $_ $_)  
+  (= (%meta-call $X $_ $_ $_ $_)  
     (closure $X)
     (set-det)
-    ($call-closure $X))
-  (= ($meta-call True $_ $_ $_ $_)  
+    (%call-closure $X))
+  (= (%meta-call True $_ $_ $_ $_)  
     (set-det))
-  (= ($meta-call trace $_ $_ $_ $_)  
-    (set-det)
-    (trace))
-  (= ($meta-call debug $_ $_ $_ $_)  
-    (set-det)
-    (debug))
-  (= ($meta-call notrace $_ $_ $_ $_)  
-    (set-det)
-    (notrace))
-  (= ($meta-call nodebug $_ $_ $_ $_)  
-    (set-det)
-    (nodebug))
-  (= ($meta-call (spy $L) $_ $_ $_ $_)  
+  (= (%meta-call trace $_ $_ $_ $_)  
+    ( (set-det) trace))
+  (= (%meta-call debug $_ $_ $_ $_)  
+    ( (set-det) debug))
+  (= (%meta-call notrace $_ $_ $_ $_)  
+    ( (set-det) notrace))
+  (= (%meta-call nodebug $_ $_ $_ $_)  
+    ( (set-det) nodebug))
+  (= (%meta-call (spy $L) $_ $_ $_ $_)  
     (set-det)
     (spy $L))
-  (= ($meta-call (nospy $L) $_ $_ $_ $_)  
+  (= (%meta-call (nospy $L) $_ $_ $_ $_)  
     (set-det)
     (nospy $L))
-  (= ($meta-call nospyall $_ $_ $_ $_)  
-    (set-det)
-    (nospyall))
-  (= ($meta-call (leash $L) $_ $_ $_ $_)  
+  (= (%meta-call nospyall $_ $_ $_ $_)  
+    ( (set-det) nospyall))
+  (= (%meta-call (leash $L) $_ $_ $_ $_)  
     (set-det)
     (leash $L))
-  (= ($meta-call (Cons  $X $Xs) $_ $_ $_ $_)  
+  (= (%meta-call (Cons  $X $Xs) $_ $_ $_ $_)  
     (set-det)
     (consult (Cons  $X $Xs)))
-  (= ($meta-call (^ $_ $X) $P $Cut $Depth $Mode)  
+  (= (%meta-call (^ $_ $X) $P $Cut $Depth $Mode)  
     (set-det)
-    ($meta-call $X $P $Cut $Depth $Mode))
-  (= ($meta-call (with_self  $P $X) $_ $Cut $Depth $Mode)  
+    (%meta-call $X $P $Cut $Depth $Mode))
+  (= (%meta-call (with-self  $P $X) $_ $Cut $Depth $Mode)  
     (set-det)
-    ($meta-call $X $P $Cut $Depth $Mode))
-  (= ($meta-call (set-det) $_ no $_ $_)  
+    (%meta-call $X $P $Cut $Depth $Mode))
+  (= (%meta-call (set-det) $_ no $_ $_)  
     (set-det)
     (illarg 
       (context if cut) 
       (set-det) 0))
-  (= ($meta-call (set-det) $_ $Cut $_ $_)  
+  (= (%meta-call (set-det) $_ $Cut $_ $_)  
     (set-det)
-    ($cut $Cut))
-  (= ($meta-call (, $X $Y) $P $Cut $Depth $Mode)  
+    (%cut $Cut))
+  (= (%meta-call (, $X $Y) $P $Cut $Depth $Mode)  
     (set-det)
-    ($meta-call $X $P $Cut $Depth $Mode)
-    ($meta-call $Y $P $Cut $Depth $Mode))
-  (= ($meta-call (det-if-then-else $X $Y $Z) $P $Cut $Depth $Mode)  
+    (%meta-call $X $P $Cut $Depth $Mode)
+    (%meta-call $Y $P $Cut $Depth $Mode))
+  (= (%meta-call (det-if-then-else $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (det-if-then-else 
-      ($meta-call $X $P no $Depth $Mode) 
-      ($meta-call $Y $P $Cut $Depth $Mode) 
-      ($meta-call $Z $P $Cut $Depth $Mode)))
-  (= ($meta-call (det-if-then $X $Y) $P $Cut $Depth $Mode)  
+      (%meta-call $X $P no $Depth $Mode) 
+      (%meta-call $Y $P $Cut $Depth $Mode) 
+      (%meta-call $Z $P $Cut $Depth $Mode)))
+  (= (%meta-call (det-if-then $X $Y) $P $Cut $Depth $Mode)  
     (set-det)
     (det-if-then 
-      ($meta-call $X $P no $Depth $Mode) 
-      ($meta-call $Y $P $Cut $Depth $Mode)))
-  (= ($meta-call (or $X $Y) $P $Cut $Depth $Mode)  
+      (%meta-call $X $P no $Depth $Mode) 
+      (%meta-call $Y $P $Cut $Depth $Mode)))
+  (= (%meta-call (or $X $Y) $P $Cut $Depth $Mode)  
     (set-det)
     (or 
-      ($meta-call $X $P $Cut $Depth $Mode) 
-      ($meta-call $Y $P $Cut $Depth $Mode)))
-  (= ($meta-call (not $X) $P $_ $Depth $Mode)  
+      (%meta-call $X $P $Cut $Depth $Mode) 
+      (%meta-call $Y $P $Cut $Depth $Mode)))
+  (= (%meta-call (not $X) $P $_ $Depth $Mode)  
     (set-det)
-    (not ($meta-call $X $P no $Depth $Mode)))
-  (= ($meta-call (findall $X $Y $Z) $P $Cut $Depth $Mode)  
+    (not (%meta-call $X $P no $Depth $Mode)))
+  (= (%meta-call (findall $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (findall $X 
-      ($meta-call $Y $P $Cut $Depth $Mode) $Z))
-  (= ($meta-call (bagof $X $Y $Z) $P $Cut $Depth $Mode)  
+      (%meta-call $Y $P $Cut $Depth $Mode) $Z))
+  (= (%meta-call (bagof $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (bagof $X 
-      ($meta-call $Y $P $Cut $Depth $Mode) $Z))
-  (= ($meta-call (setof $X $Y $Z) $P $Cut $Depth $Mode)  
+      (%meta-call $Y $P $Cut $Depth $Mode) $Z))
+  (= (%meta-call (setof $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (setof $X 
-      ($meta-call $Y $P $Cut $Depth $Mode) $Z))
-  (= ($meta-call (once $X) $P $Cut $Depth $Mode)  
+      (%meta-call $Y $P $Cut $Depth $Mode) $Z))
+  (= (%meta-call (once $X) $P $Cut $Depth $Mode)  
     (set-det)
-    (once ($meta-call $X $P $Cut $Depth $Mode)))
-  (= ($meta-call (on-exception $X $Y $Z) $P $Cut $Depth $Mode)  
+    (once (%meta-call $X $P $Cut $Depth $Mode)))
+  (= (%meta-call (on-exception $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (on-exception $X 
-      ($meta-call $Y $P $Cut $Depth $Mode) 
-      ($meta-call $Z $P $Cut $Depth $Mode)))
-  (= ($meta-call (catch $X $Y $Z) $P $Cut $Depth $Mode)  
+      (%meta-call $Y $P $Cut $Depth $Mode) 
+      (%meta-call $Z $P $Cut $Depth $Mode)))
+  (= (%meta-call (catch $X $Y $Z) $P $Cut $Depth $Mode)  
     (set-det)
     (catch 
-      ($meta-call $X $P $Cut $Depth $Mode) $Y 
-      ($meta-call $Z $P $Cut $Depth $Mode)))
+      (%meta-call $X $P $Cut $Depth $Mode) $Y 
+      (%meta-call $Z $P $Cut $Depth $Mode)))
 ;
 ; '$meta_call'(freeze(X,Y), P, Cut, Depth, Mode) :- !, ???
 ;
 ; freeze(X, '$meta_call'(Y, P, Cut, Depth, Mode)).
-  (= ($meta-call (synchronized $X $Y) $P $Cut $Depth $Mode)  
+  (= (%meta-call (synchronized $X $Y) $P $Cut $Depth $Mode)  
     (set-det)
     (synchronized $X 
-      ($meta-call $Y $P $Cut $Depth $Mode)))
-  (= ($meta-call (==  (= $X $Y) (get-atoms  &self)) $P $_ $_ $_)  
+      (%meta-call $Y $P $Cut $Depth $Mode)))
+  (= (%meta-call (==  (= $X $Y) (get-atoms  &self)) $P $_ $_ $_)  
     ( (set-det) (==  (= (:  $P $X) $Y) (get-atoms  &self))))
-  (= ($meta-call (add-is-symbol  &self $X) $P $_ $_ $_)  
-    ( (set-det) (add-is-symbol  &self (:  $P $X))))
-  (= ($meta-call (add-is-symbol  &self $X) $P $_ $_ $_)  
-    ( (set-det) (add-is-symbol  &self (:  $P $X))))
-  (= ($meta-call (add-is-symbol  &self $X) $P $_ $_ $_)  
-    ( (set-det) (add-is-symbol  &self (:  $P $X))))
-  (= ($meta-call (remove-is-symbol  &self $X) $P $_ $_ $_)  
-    ( (set-det) (remove-is-symbol  &self (:  $P $X))))
-  (= ($meta-call (abolish $X) $P $_ $_ $_)  
+  (= (%meta-call (add-atom  &self $X) $P $_ $_ $_)  
+    ( (set-det) (add-atom  &self (:  $P $X))))
+  (= (%meta-call (add-atom  &self $X) $P $_ $_ $_)  
+    ( (set-det) (add-atom  &self (:  $P $X))))
+  (= (%meta-call (add-atom  &self $X) $P $_ $_ $_)  
+    ( (set-det) (add-atom  &self (:  $P $X))))
+  (= (%meta-call (remove-atom  &self $X) $P $_ $_ $_)  
+    ( (set-det) (remove-atom  &self (:  $P $X))))
+  (= (%meta-call (abolish $X) $P $_ $_ $_)  
     (set-det)
-    (abolish (with_self  $P $X)))
-  (= ($meta-call (remove-all-atoms  &self $X) $P $_ $_ $_)  
+    (abolish (with-self  $P $X)))
+  (= (%meta-call (remove-all-atoms  &self $X) $P $_ $_ $_)  
     ( (set-det) (remove-all-atoms  &self (:  $P $X))))
-  (= ($meta-call $X $P $_ $Depth $Mode)  
+  (= (%meta-call $X $P $_ $Depth $Mode)  
     (atom $P)
     (callable $X)
     (set-det)
-    ($meta-call $Mode $Depth $P $X))
-  (= ($meta-call $X $P $_ $_ $_)  
+    (%meta-call $Mode $Depth $P $X))
+  (= (%meta-call $X $P $_ $_ $_)  
     (illarg 
       (type callable) 
-      (call (with_self  $P $X)) 1))
+      (call (with-self  $P $X)) 1))
 
-  (= ($meta-call trace $Depth $P $X)  
+  (= (%meta-call trace $Depth $P $X)  
     (set-det)
     (functor $X $F $A)
-    ($trace-goal $X $P 
+    (%trace-goal $X $P 
       (/ $F $A) $Depth))
-  (= ($meta-call interpret $Depth $P $X)  
+  (= (%meta-call interpret $Depth $P $X)  
     (functor $X $F $A)
-    ($call-internal $X $P 
+    (%call-internal $X $P 
       (/ $F $A) $Depth interpret))
 
 
-  (= ($call-internal $X $P $FA $Depth $Mode)  
-    ( ($new-internal-database $P) 
+  (= (%call-internal $X $P $FA $Depth $Mode)  
+    ( (%new-internal-database $P) 
       (hash-contains-key $P $FA) 
       (set-det) 
-      ($get-current-B $Cut) 
+      (%get-current-B $Cut) 
       (is $Depth1 
         (+ $Depth 1)) 
       (==  
         (= 
           (:  $P $X) $Body) 
         (get-atoms  &self)) 
-      ($meta-call $Body $P $Cut $Depth1 $Mode)))
-  (= ($call-internal $X $P $_ $_ $_)  
-    ($call $P $X))
+      (%meta-call $Body $P $Cut $Depth1 $Mode)))
+  (= (%call-internal $X $P $_ $_ $_)  
+    (%call $P $X))
 
 
 
@@ -265,29 +260,29 @@
   (= (on-exception $Catch $Goal $Recovery)  
     (callable $Goal)
     (set-det)
-    ($on-exception $Catch $Goal $Recovery))
+    (%on-exception $Catch $Goal $Recovery))
   (= (on-exception $Catch $Goal $Recovery)  
     (illarg 
       (type callable) 
       (on-exception $Catch $Goal $Recovery) 2))
 
 
-  (= ($on-exception $Catch $Goal $Recovery)  
-    ($set-exception %none)
-    ($begin-exception $L)
+  (= (%on-exception $Catch $Goal $Recovery)  
+    (%set-exception %none)
+    (%begin-exception $L)
     (call $Goal)
-    ($end-exception $L))
-  (= ($on-exception $Catch $Goal $Recovery)  
-    ($get-exception $Msg)
+    (%end-exception $L))
+  (= (%on-exception $Catch $Goal $Recovery)  
+    (%get-exception $Msg)
     (\== $Msg %none)
-    ($catch-and-throw $Msg $Catch $Recovery))
+    (%catch-and-throw $Msg $Catch $Recovery))
 
 
-  (= ($catch-and-throw $Msg $Msg $Recovery)  
+  (= (%catch-and-throw $Msg $Msg $Recovery)  
     (set-det)
-    ($set-exception %none)
+    (%set-exception %none)
     (call $Recovery))
-  (= ($catch-and-throw $Msg $_ $_)  
+  (= (%catch-and-throw $Msg $_ $_)  
     (raise-exception $Msg))
 
 ;
@@ -304,15 +299,15 @@
   (= (= $X $Y)  
     (= $X $Y))
 
-  (= ($unify $X $Y)  
-    ($unify $X $Y))
+  (= (%unify $X $Y)  
+    (%unify $X $Y))
 
 
   (= (\= $X $Y)  
     (\= $X $Y))
 
-  (= ($not-unifiable $X $Y)  
-    ($not-unifiable $X $Y))
+  (= (%not-unifiable $X $Y)  
+    (%not-unifiable $X $Y))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -321,7 +316,7 @@
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  !(public (, (/ var 1) (/ is-symbol 1) (/ integer 1) (/ long 1) (/ float 1) (/ symbolic 1) (/ compound 1) (/ nonvar 1) (/ number 1)))
+  !(public (, (/ var 1) (/ atom 1) (/ integer 1) (/ long 1) (/ float 1) (/ atomic 1) (/ compound 1) (/ nonvar 1) (/ number 1)))
   !(public (, (/ java 1) (/ java 2) (/ closure 1)))
   !(public (, (/ ground 1) (/ callable 1)))
 
@@ -413,66 +408,66 @@
   (= (== $X $Y)  
     (== $X $Y))
 
-  (= ($equality-of-term $X $Y)  
-    ($equality-of-term $X $Y))
+  (= (%equality-of-term $X $Y)  
+    (%equality-of-term $X $Y))
 
 
   (= (\== $X $Y)  
     (\== $X $Y))
 
-  (= ($inequality-of-term $X $Y)  
-    ($inequality-of-term $X $Y))
+  (= (%inequality-of-term $X $Y)  
+    (%inequality-of-term $X $Y))
 
 
   (= (@< $X $Y)  
     (@< $X $Y))
 
-  (= ($before $X $Y)  
-    ($before $X $Y))
+  (= (%before $X $Y)  
+    (%before $X $Y))
 
 
   (= (@> $X $Y)  
     (@> $X $Y))
 
-  (= ($after $X $Y)  
-    ($after $X $Y))
+  (= (%after $X $Y)  
+    (%after $X $Y))
 
 
   (= (@=< $X $Y)  
     (@=< $X $Y))
 
-  (= ($not-after $X $Y)  
-    ($not-after $X $Y))
+  (= (%not-after $X $Y)  
+    (%not-after $X $Y))
 
 
   (= (@>= $X $Y)  
     (@>= $X $Y))
 
-  (= ($not-before $X $Y)  
-    ($not-before $X $Y))
+  (= (%not-before $X $Y)  
+    (%not-before $X $Y))
 
 
   (= (?= $X $Y)  
     (?= $X $Y))
 
-  (= ($identical-or-cannot-unify $X $Y)  
-    ($identical-or-cannot-unify $X $Y))
+  (= (%identical-or-cannot-unify $X $Y)  
+    (%identical-or-cannot-unify $X $Y))
 
 
   (= (compare $Op $X $Y)  
-    ($compare0 $Op0 $X $Y)
-    ($map-compare-op $Op0 $Op))
+    (%compare0 $Op0 $X $Y)
+    (%map-compare-op $Op0 $Op))
 
 
-  (= ($map-compare-op $Op0 $Op)  
+  (= (%map-compare-op $Op0 $Op)  
     (=:= $Op0 0)
     (set-det)
     (= $Op =))
-  (= ($map-compare-op $Op0 $Op)  
+  (= (%map-compare-op $Op0 $Op)  
     (< $Op0 0)
     (set-det)
     (= $Op <))
-  (= ($map-compare-op $Op0 $Op)  
+  (= (%map-compare-op $Op0 $Op)  
     (> $Op0 0)
     (set-det)
     (= $Op >))
@@ -488,7 +483,7 @@
 ;
 ; :- public functor/3. --> written in Java
 
-  !(public (/ =.. 2))
+  !(public (/ atom_2_list 2))
   !(public (/ copy-term 2))
 
 
@@ -526,113 +521,113 @@
     (is $Z $Y))
 
 
-  (= ($abs $X $Y)  
-    ($abs $X $Y))
+  (= (%abs $X $Y)  
+    (%abs $X $Y))
 
-  (= ($asin $X $Y)  
-    ($asin $X $Y))
+  (= (%asin $X $Y)  
+    (%asin $X $Y))
 
-  (= ($acos $X $Y)  
-    ($acos $X $Y))
+  (= (%acos $X $Y)  
+    (%acos $X $Y))
 
-  (= ($atan $X $Y)  
-    ($atan $X $Y))
+  (= (%atan $X $Y)  
+    (%atan $X $Y))
 
-  (= ($bitwise-conj $X $Y $Z)  
-    ($bitwise-conj $X $Y $Z))
+  (= (%bitwise-conj $X $Y $Z)  
+    (%bitwise-conj $X $Y $Z))
 
-  (= ($bitwise-disj $X $Y $Z)  
-    ($bitwise-disj $X $Y $Z))
+  (= (%bitwise-disj $X $Y $Z)  
+    (%bitwise-disj $X $Y $Z))
 
-  (= ($bitwise-exclusive-or $X $Y $Z)  
-    ($bitwise-exclusive-or $X $Y $Z))
+  (= (%bitwise-exclusive-or $X $Y $Z)  
+    (%bitwise-exclusive-or $X $Y $Z))
 
-  (= ($bitwise-neg $X $Y)  
-    ($bitwise-neg $X $Y))
+  (= (%bitwise-neg $X $Y)  
+    (%bitwise-neg $X $Y))
 
-  (= ($ceil $X $Y)  
-    ($ceil $X $Y))
+  (= (%ceil $X $Y)  
+    (%ceil $X $Y))
 
-  (= ($cos $X $Y)  
-    ($cos $X $Y))
+  (= (%cos $X $Y)  
+    (%cos $X $Y))
 
-  (= ($degrees $X $Y)  
-    ($degrees $X $Y))
+  (= (%degrees $X $Y)  
+    (%degrees $X $Y))
 
-  (= ($exp $X $Y)  
-    ($exp $X $Y))
+  (= (%exp $X $Y)  
+    (%exp $X $Y))
 
-  (= ($float $X $Y)  
-    ($float $X $Y))
+  (= (%float $X $Y)  
+    (%float $X $Y))
 
-  (= ($float-integer-part $X $Y)  
-    ($float-integer-part $X $Y))
+  (= (%float-integer-part $X $Y)  
+    (%float-integer-part $X $Y))
 
-  (= ($float-fractional-part $X $Y)  
-    ($float-fractional-part $X $Y))
+  (= (%float-fractional-part $X $Y)  
+    (%float-fractional-part $X $Y))
 
-  (= ($float-quotient $X $Y $Z)  
-    ($float-quotient $X $Y $Z))
+  (= (%float-quotient $X $Y $Z)  
+    (%float-quotient $X $Y $Z))
 
-  (= ($floor $X $Y)  
-    ($floor $X $Y))
+  (= (%floor $X $Y)  
+    (%floor $X $Y))
 
-  (= ($int-quotient $X $Y $Z)  
-    ($int-quotient $X $Y $Z))
+  (= (%int-quotient $X $Y $Z)  
+    (%int-quotient $X $Y $Z))
 
-  (= ($log $X $Y)  
-    ($log $X $Y))
+  (= (%log $X $Y)  
+    (%log $X $Y))
 
-  (= ($max $X $Y $Z)  
-    ($max $X $Y $Z))
+  (= (%max $X $Y $Z)  
+    (%max $X $Y $Z))
 
-  (= ($min $X $Y $Z)  
-    ($min $X $Y $Z))
+  (= (%min $X $Y $Z)  
+    (%min $X $Y $Z))
 
-  (= ($minus $X $Y $Z)  
-    ($minus $X $Y $Z))
+  (= (%minus $X $Y $Z)  
+    (%minus $X $Y $Z))
 
-  (= ($mod $X $Y $Z)  
-    ($mod $X $Y $Z))
+  (= (%mod $X $Y $Z)  
+    (%mod $X $Y $Z))
 
-  (= ($multi $X $Y $Z)  
-    ($multi $X $Y $Z))
+  (= (%multi $X $Y $Z)  
+    (%multi $X $Y $Z))
 
-  (= ($plus $X $Y $Z)  
-    ($plus $X $Y $Z))
+  (= (%plus $X $Y $Z)  
+    (%plus $X $Y $Z))
 
-  (= ($pow $X $Y $Z)  
-    ($pow $X $Y $Z))
+  (= (%pow $X $Y $Z)  
+    (%pow $X $Y $Z))
 
-  (= ($radians $X $Y)  
-    ($radians $X $Y))
+  (= (%radians $X $Y)  
+    (%radians $X $Y))
 
-  (= ($rint $X $Y)  
-    ($rint $X $Y))
+  (= (%rint $X $Y)  
+    (%rint $X $Y))
 
-  (= ($round $X $Y)  
-    ($round $X $Y))
+  (= (%round $X $Y)  
+    (%round $X $Y))
 
-  (= ($shift-left $X $Y $Z)  
-    ($shift-left $X $Y $Z))
+  (= (%shift-left $X $Y $Z)  
+    (%shift-left $X $Y $Z))
 
-  (= ($shift-right $X $Y $Z)  
-    ($shift-right $X $Y $Z))
+  (= (%shift-right $X $Y $Z)  
+    (%shift-right $X $Y $Z))
 
-  (= ($sign $X $Y)  
-    ($sign $X $Y))
+  (= (%sign $X $Y)  
+    (%sign $X $Y))
 
-  (= ($sin $X $Y)  
-    ($sin $X $Y))
+  (= (%sin $X $Y)  
+    (%sin $X $Y))
 
-  (= ($sqrt $X $Y)  
-    ($sqrt $X $Y))
+  (= (%sqrt $X $Y)  
+    (%sqrt $X $Y))
 
-  (= ($tan $X $Y)  
-    ($tan $X $Y))
+  (= (%tan $X $Y)  
+    (%tan $X $Y))
 
-  (= ($truncate $X $Y)  
-    ($truncate $X $Y))
+  (= (%truncate $X $Y)  
+    (%truncate $X $Y))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -652,43 +647,43 @@
   (= (=:= $X $Y)  
     (=:= $X $Y))
 
-  (= ($arith-equal $X $Y)  
-    ($arith-equal $X $Y))
+  (= (%arith-equal $X $Y)  
+    (%arith-equal $X $Y))
 
 
   (= (=\= $X $Y)  
     (=\= $X $Y))
 
-  (= ($arith-not-equal $X $Y)  
-    ($arith-not-equal $X $Y))
+  (= (%arith-not-equal $X $Y)  
+    (%arith-not-equal $X $Y))
 
 
   (= (< $X $Y)  
     (< $X $Y))
 
-  (= ($less-than $X $Y)  
-    ($less-than $X $Y))
+  (= (%less-than $X $Y)  
+    (%less-than $X $Y))
 
 
   (= (=< $X $Y)  
     (=< $X $Y))
 
-  (= ($less-or-equal $X $Y)  
-    ($less-or-equal $X $Y))
+  (= (%less-or-equal $X $Y)  
+    (%less-or-equal $X $Y))
 
 
   (= (> $X $Y)  
     (> $X $Y))
 
-  (= ($greater-than $X $Y)  
-    ($greater-than $X $Y))
+  (= (%greater-than $X $Y)  
+    (%greater-than $X $Y))
 
 
   (= (>= $X $Y)  
     (>= $X $Y))
 
-  (= ($greater-or-equal $X $Y)  
-    ($greater-or-equal $X $Y))
+  (= (%greater-or-equal $X $Y)  
+    (%greater-or-equal $X $Y))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -703,18 +698,18 @@
 
 
   (= (==  (= $Head $B) (get-atoms  &self))  
-    ($head-to-term $Head $H 
-      (with_self  $P $PI) 
+    (%head-to-term $Head $H 
+      (with-self  $P $PI) 
       (==  
         (= $Head $B) 
         (get-atoms  &self)))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) access private-procedure 
+    (%new-internal-database $P)
+    (%check-procedure-permission 
+      (with-self  $P $PI) access private-procedure 
       (==  
         (= $Head $B) 
         (get-atoms  &self)))
-    ($clause-internal $P $PI $H $Cl $_)
+    (%clause-internal $P $PI $H $Cl $_)
     (copy-term $Cl 
       (= $H  $B)))
 ; ;(ground(Cl) -> Cl = (H :- B) ; copy_term(Cl, (H :- B))). ???
@@ -722,84 +717,83 @@
 ;
 ; head --> term
 
-  (= ($head-to-term $H $T (with_self  $Pkg (/ $F $A)) $Goal)  
-    ($head-to-term $H $T user $Pkg $Goal)
+  (= (%head-to-term $H $T (with-self  $Pkg (/ $F $A)) $Goal)  
+    (%head-to-term $H $T user $Pkg $Goal)
     (functor $T $F $A))
 
-  (= ($head-to-term $H $_ $_ $_ $Goal)  
+  (= (%head-to-term $H $_ $_ $_ $Goal)  
     (var $H)
     (set-det)
     (illarg var $Goal 1))
-  (= ($head-to-term (with_self  $P $H) $T $_ $Pkg $Goal)  
+  (= (%head-to-term (with-self  $P $H) $T $_ $Pkg $Goal)  
     (set-det)
-    ($head-to-term $H $T $P $Pkg $Goal))
-  (= ($head-to-term $H $H $Pkg $Pkg $_)  
+    (%head-to-term $H $T $P $Pkg $Goal))
+  (= (%head-to-term $H $H $Pkg $Pkg $_)  
     (callable $H)
     (atom $Pkg)
     (set-det))
-  (= ($head-to-term $_ $_ $_ $_ $Goal)  
+  (= (%head-to-term $_ $_ $_ $_ $Goal)  
     (illarg 
       (type callable) $Goal 1))
 
 ;
 ; creates an internal database for A if no exists.
 
-  (= ($new-internal-database $A)  
+  (= (%new-internal-database $A)  
     (atom $A)
-    ($get-hash-manager $HM)
-    ($new-internal-database $HM $A))
+    (%get-hash-manager $HM)
+    (%new-internal-database $HM $A))
 
-  (= ($new-internal-database $HM $A)  
+  (= (%new-internal-database $HM $A)  
     (hash-contains-key $HM $A)
     (set-det))
-  (= ($new-internal-database $_ $A)  
+  (= (%new-internal-database $_ $A)  
     (new-hash $_ 
       (:: (alias $A)))
-    ($init-internal-database $A))
+    (%init-internal-database $A))
 
 
-  (= ($init-internal-database $A)  
-    ($compiled-predicate $A %init 0)
+  (= (%init-internal-database $A)  
+    (%compiled-predicate $A %init 0)
     (findall $_ 
-      (with_self  $A 
-        (%init)) $_)
+      (with-self  $A %init) $_)
     (set-det))
-  (= (%init_internal_database  $_)  True)
+  (= (%init-internal-database  $_)  True)
 
 ;
 ; checks if the internal database of A exists.
 
-  (= ($defined-internal-database $A)  
+  (= (%defined-internal-database $A)  
     (atom $A)
-    ($get-hash-manager $HM)
+    (%get-hash-manager $HM)
     (hash-contains-key $HM $A))
 
 ;
 ; repeatedly finds dynamic clauses.
 
-  (= ($clause-internal $P $PI $H $Cl $Ref)  
+  (= (%clause-internal $P $PI $H $Cl $Ref)  
     (hash-contains-key $P $PI)
-    ($get-indices $P $PI $H $RevRefs)
-    ($get-instances $RevRefs $Cls_Refs)
-    ($clause-internal0 $Cls_Refs $Cl $Ref))
+    (%get-indices $P $PI $H $RevRefs)
+    (%get-instances $RevRefs $Cls_Refs)
+    (%clause-internal0 $Cls_Refs $Cl $Ref))
 ; ; ???
 ; ;length(Cls_Refs,N),
 ; ;'$fast_write'([clause_internal,N,for,P,PI]),nl,
 ; ;
 
 
-  (= (%clause_internal0  () $_ $_)  
+  (= (%clause-internal0  () $_ $_)  
     (empty))
-  (= ($clause-internal0 (:: (, $Cl $Ref)) $Cl $Ref)  
+  (= (%clause-internal0 (:: (, $Cl $Ref)) $Cl $Ref)  
     (set-det))
-  (= ($clause-internal0 $L $Cl $Ref)  
-    ($builtin-member 
+  (= (%clause-internal0 $L $Cl $Ref)  
+    (%builtin-member 
       (, $Cl $Ref) $L))
 
 
-  (= ($get-indices $P $PI $H $Refs)  
-    ($new-indexing-hash $P $PI $IH)
-    ($calc-indexing-key $H $Key)
+  (= (%get-indices $P $PI $H $Refs)  
+    (%new-indexing-hash $P $PI $IH)
+    (%calc-indexing-key $H $Key)
     (det-if-then-else 
       (hash-contains-key $IH $Key) 
       (hash-get $IH $Key $Refs) 
@@ -808,11 +802,11 @@
 ;
 ; finds the indexing hashtable for P:PI. creates it if no exist.
 
-  (= ($new-indexing-hash $P $PI $IH)  
+  (= (%new-indexing-hash $P $PI $IH)  
     (hash-contains-key $P $PI)
     (set-det)
     (hash-get $P $PI $IH))
-  (= ($new-indexing-hash $P $PI $IH)  
+  (= (%new-indexing-hash $P $PI $IH)  
     (new-hash $IH)
     (hash-put $IH all Nil)
     (hash-put $IH var Nil)
@@ -821,48 +815,48 @@
     (hash-put $P $PI $IH))
 
 
-  (= ($calc-indexing-key $H all)  
+  (= (%calc-indexing-key $H all)  
     (atom $H)
     (set-det))
-  (= ($calc-indexing-key $H $Key)  
+  (= (%calc-indexing-key $H $Key)  
     (arg 1 $H $A1)
-    ($calc-indexing-key0 $A1 $Key))
+    (%calc-indexing-key0 $A1 $Key))
 
 
-  (= ($calc-indexing-key0 $A1 all)  
+  (= (%calc-indexing-key0 $A1 all)  
     (var $A1)
     (set-det))
-  (= ($calc-indexing-key0 $A1 lis)  
+  (= (%calc-indexing-key0 $A1 lis)  
     (= $A1 
       (Cons  $_ $_))
     (set-det))
-  (= ($calc-indexing-key0 $A1 str)  
+  (= (%calc-indexing-key0 $A1 str)  
     (compound $A1)
     (set-det))
-  (= ($calc-indexing-key0 $A1 $Key)  
+  (= (%calc-indexing-key0 $A1 $Key)  
     (ground $A1)
     (set-det)
-    ($term-hash $A1 $Key))
-  (= ($calc-indexing-key0 $A1 $Key)  
+    (%term-hash $A1 $Key))
+  (= (%calc-indexing-key0 $A1 $Key)  
     (illarg 
       (type term) 
-      ($calc-indexing-key0 $A1 $Key) 1))
+      (%calc-indexing-key0 $A1 $Key) 1))
 
 ;
 ; checks the permission of predicate P:F/A.
 
-  (= ($check-procedure-permission (with_self  $P (/ $F $A)) $Operation $ObjType $Goal)  
+  (= (%check-procedure-permission (with-self  $P (/ $F $A)) $Operation $ObjType $Goal)  
     (hash-contains-key $P 
       (/ $F $A))
     (set-det))
-  (= ($check-procedure-permission (with_self  $P (/ $F $A)) $Operation $ObjType $Goal)  
-    ($compiled-predicate-or-builtin $P $F $A)
+  (= (%check-procedure-permission (with-self  $P (/ $F $A)) $Operation $ObjType $Goal)  
+    (%compiled-predicate-or-builtin $P $F $A)
     (set-det)
     (illarg 
       (permission $Operation $ObjType 
-        (with_self  $P 
+        (with-self  $P 
           (/ $F $A)) $_) $Goal $_))
-  (= (%check_procedure_permission  $_ $_ $_ $_)  True)
+  (= (%check-procedure-permission  $_ $_ $_ $_)  True)
 
 ;
 ; initialize internal databases of given packages.
@@ -871,7 +865,7 @@
     (set-det)
     (once $Goal))
   (= (initialization (Cons  $P $Ps) $Goal)  
-    ($new-internal-database $P)
+    (%new-internal-database $P)
     (initialization $Ps $Goal))
 
 ;
@@ -889,359 +883,355 @@
   !(public (/ retractall 1))
 
 
-  (= (add-is-symbol  &self $T)  
-    (add-is-symbol  &self $T))
+  (= (add-atom  &self $T)  
+    (add-atom  &self $T))
 
 
-  (= (add-is-symbol  &self $T)  
-    ($term-to-clause $T $Cl 
-      (with_self  $P $PI) 
-      (add-is-symbol  &self $T))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) modify static-procedure 
-      (add-is-symbol  &self $T))
-    (copy-term $Cl $NewCl)
-    ($insert $NewCl $Ref)
-    ($update-indexing $P $PI $Cl $Ref z)
-    (fail))
+  (= (add-atom  &self $T)  
+    ( (%term-to-clause $T $Cl 
+        (with-self  $P $PI) 
+        (add-atom  &self $T)) 
+      (%new-internal-database $P) 
+      (%check-procedure-permission 
+        (with-self  $P $PI) modify static-procedure 
+        (add-atom  &self $T)) 
+      (copy-term $Cl $NewCl) 
+      (%insert $NewCl $Ref) 
+      (%update-indexing $P $PI $Cl $Ref z) fail))
 ; ;'$fast_write'([intert,NewCl,Ref]), nl, ;???
   (= (assertz  $_)  True)
 
 
-  (= (add-is-symbol  &self $T)  
-    ($term-to-clause $T $Cl 
-      (with_self  $P $PI) 
-      (add-is-symbol  &self $T))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) modify static-procedure 
-      (add-is-symbol  &self $T))
-    (copy-term $Cl $NewCl)
-    ($insert $NewCl $Ref)
-    ($update-indexing $P $PI $Cl $Ref a)
-    (fail))
+  (= (add-atom  &self $T)  
+    ( (%term-to-clause $T $Cl 
+        (with-self  $P $PI) 
+        (add-atom  &self $T)) 
+      (%new-internal-database $P) 
+      (%check-procedure-permission 
+        (with-self  $P $PI) modify static-procedure 
+        (add-atom  &self $T)) 
+      (copy-term $Cl $NewCl) 
+      (%insert $NewCl $Ref) 
+      (%update-indexing $P $PI $Cl $Ref a) fail))
 ; ;'$fast_write'([insert,NewCl,Ref]), nl, ;???
   (= (asserta  $_)  True)
 
 
   (= (abolish $T)  
-    ($term-to-predicateindicator $T 
-      (with_self  $P $PI) 
-      (abolish $T))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) modify static-procedure 
-      (abolish $T))
-    ($new-indexing-hash $P $PI $IH)
-    (hash-get $IH all $Refs)
-    ($erase-all $Refs)
-    (hash-remove $P $PI)
-    (fail))
+    ( (%term-to-predicateindicator $T 
+        (with-self  $P $PI) 
+        (abolish $T)) 
+      (%new-internal-database $P) 
+      (%check-procedure-permission 
+        (with-self  $P $PI) modify static-procedure 
+        (abolish $T)) 
+      (%new-indexing-hash $P $PI $IH) 
+      (hash-get $IH all $Refs) 
+      (%erase-all $Refs) 
+      (hash-remove $P $PI) fail))
 ; ;'$fast_write'([erase_all,Refs]), nl, ;???
   (= (abolish  $_)  True)
 
 
-  (= (remove-is-symbol  &self $Cl)  
-    ($clause-to-term $Cl $T 
-      (with_self  $P $PI) 
-      (remove-is-symbol  &self $Cl))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) access static-procedure 
-      (remove-is-symbol  &self $Cl))
+  (= (remove-atom  &self $Cl)  
+    (%clause-to-term $Cl $T 
+      (with-self  $P $PI) 
+      (remove-atom  &self $Cl))
+    (%new-internal-database $P)
+    (%check-procedure-permission 
+      (with-self  $P $PI) access static-procedure 
+      (remove-atom  &self $Cl))
     (= $T 
       (= $H  $_))
-    ($clause-internal $P $PI $H $Cl0 $Ref)
+    (%clause-internal $P $PI $H $Cl0 $Ref)
     (copy-term $Cl0 $T)
-    ($erase $Ref)
-    ($rehash-indexing $P $PI $Ref))
+    (%erase $Ref)
+    (%rehash-indexing $P $PI $Ref))
 ; ;'$fast_write'([erase,Cl0,Ref]), nl, ;???
 
 
   (= (remove-all-atoms  &self $Head)  
-    ($head-to-term $Head $H 
-      (with_self  $P $PI) 
-      (remove-all-atoms  &self $Head))
-    ($new-internal-database $P)
-    ($check-procedure-permission 
-      (with_self  $P $PI) access static-procedure 
-      (remove-all-atoms  &self $Head))
-    ($clause-internal $P $PI $H $Cl $Ref)
-    (copy-term $Cl 
-      (= $H  $_))
-    ($erase $Ref)
-    ($rehash-indexing $P $PI $Ref)
-    (fail))
+    ( (%head-to-term $Head $H 
+        (with-self  $P $PI) 
+        (remove-all-atoms  &self $Head)) 
+      (%new-internal-database $P) 
+      (%check-procedure-permission 
+        (with-self  $P $PI) access static-procedure 
+        (remove-all-atoms  &self $Head)) 
+      (%clause-internal $P $PI $H $Cl $Ref) 
+      (copy-term $Cl 
+        (= $H  $_)) 
+      (%erase $Ref) 
+      (%rehash-indexing $P $PI $Ref) fail))
 ; ;'$fast_write'([erase,Cl,Ref]), nl, ;???
   (= (retractall  $_)  True)
 
 ;
 ; term --> clause (for assert)
 
-  (= ($term-to-clause $Cl0 $Cl (with_self  $Pkg (/ $F $A)) $Goal)  
-    ($term-to-clause $Cl0 $Cl user $Pkg $Goal)
+  (= (%term-to-clause $Cl0 $Cl (with-self  $Pkg (/ $F $A)) $Goal)  
+    (%term-to-clause $Cl0 $Cl user $Pkg $Goal)
     (= $Cl 
       (= $H  $_))
     (functor $H $F $A))
 
-  (= ($term-to-clause $Cl0 $_ $_ $_ $Goal)  
+  (= (%term-to-clause $Cl0 $_ $_ $_ $Goal)  
     (var $Cl0)
     (set-det)
     (illarg var $Goal 1))
-  (= ($term-to-clause $_ $_ $Pkg0 $_ $Goal)  
+  (= (%term-to-clause $_ $_ $Pkg0 $_ $Goal)  
     (var $Pkg0)
     (set-det)
     (illarg var $Goal 1))
-  (= ($term-to-clause (with_self  $P $Cl0) $Cl $_ $Pkg $Goal)  
+  (= (%term-to-clause (with-self  $P $Cl0) $Cl $_ $Pkg $Goal)  
     (set-det)
-    ($term-to-clause $Cl0 $Cl $P $Pkg $Goal))
-  (= ($term-to-clause $_ $_ $Pkg0 $_ $Goal)  
+    (%term-to-clause $Cl0 $Cl $P $Pkg $Goal))
+  (= (%term-to-clause $_ $_ $Pkg0 $_ $Goal)  
     (not (atom $Pkg0))
     (set-det)
     (illarg 
-      (type is-symbol) $Goal 1))
-  (= ($term-to-clause (= $H0  $B0) (= $H  $B) $Pkg $Pkg $Goal)  
+      (type atom) $Goal 1))
+  (= (%term-to-clause (= $H0  $B0) (= $H  $B) $Pkg $Pkg $Goal)  
     (set-det)
-    ($term-to-head $H0 $H $Pkg $Goal)
-    ($term-to-body $B0 $B $Pkg $Goal))
-  (= ($term-to-clause $H0 (= $H  True) $Pkg $Pkg $Goal)  
-    ($term-to-head $H0 $H $Pkg $Goal))
+    (%term-to-head $H0 $H $Pkg $Goal)
+    (%term-to-body $B0 $B $Pkg $Goal))
+  (= (%term-to-clause $H0 (= $H  True) $Pkg $Pkg $Goal)  
+    (%term-to-head $H0 $H $Pkg $Goal))
 
 
-  (= ($term-to-head $H $H $_ $_)  
+  (= (%term-to-head $H $H $_ $_)  
     (atom $H)
     (set-det))
-  (= ($term-to-head $H $H $_ $_)  
+  (= (%term-to-head $H $H $_ $_)  
     (compound $H)
     (set-det))
-  (= ($term-to-head $_ $_ $_ $Goal)  
+  (= (%term-to-head $_ $_ $_ $Goal)  
     (illarg 
       (type callable) $Goal 1))
 
 
-  (= ($term-to-body $B0 $B $Pkg $_)  
-    ($localize-body $B0 $Pkg $B))
+  (= (%term-to-body $B0 $B $Pkg $_)  
+    (%localize-body $B0 $Pkg $B))
 
 
-  (= ($localize-body $G $P $G1)  
+  (= (%localize-body $G $P $G1)  
     (var $G)
     (set-det)
-    ($localize-body 
+    (%localize-body 
       (call $G) $P $G1))
-  (= ($localize-body (with_self  $P $G) $_ $G1)  
+  (= (%localize-body (with-self  $P $G) $_ $G1)  
     (set-det)
-    ($localize-body $G $P $G1))
-  (= ($localize-body (, $X $Y) $P (, $X1 $Y1))  
+    (%localize-body $G $P $G1))
+  (= (%localize-body (, $X $Y) $P (, $X1 $Y1))  
     (set-det)
-    ($localize-body $X $P $X1)
-    ($localize-body $Y $P $Y1))
-  (= ($localize-body (det-if-then $X $Y) $P (det-if-then $X1 $Y1))  
+    (%localize-body $X $P $X1)
+    (%localize-body $Y $P $Y1))
+  (= (%localize-body (det-if-then $X $Y) $P (det-if-then $X1 $Y1))  
     (set-det)
-    ($localize-body $X $P $X1)
-    ($localize-body $Y $P $Y1))
-  (= ($localize-body (or $X $Y) $P (or $X1 $Y1))  
+    (%localize-body $X $P $X1)
+    (%localize-body $Y $P $Y1))
+  (= (%localize-body (or $X $Y) $P (or $X1 $Y1))  
     (set-det)
-    ($localize-body $X $P $X1)
-    ($localize-body $Y $P $Y1))
-  (= ($localize-body $G $P $G1)  
+    (%localize-body $X $P $X1)
+    (%localize-body $Y $P $Y1))
+  (= (%localize-body $G $P $G1)  
     (functor $G $F $A)
-    ($builtin-meta-predicates $F $A $M)
+    (%builtin-meta-predicates $F $A $M)
     (set-det)
     (=.. $G 
       (Cons  $F $As))
-    ($localize-args $M $As $P $As1)
+    (%localize-args $M $As $P $As1)
     (=.. $G1 
       (Cons  $F $As1)))
 ; ;???
-  (= ($localize-body $G $P (call (with_self  $P $G)))  
+  (= (%localize-body $G $P (call (with-self  $P $G)))  
     (var $P)
     (set-det))
-  (= ($localize-body $G user $G)  
+  (= (%localize-body $G user $G)  
     (set-det))
-  (= ($localize-body $G $_ $G)  
+  (= (%localize-body $G $_ $G)  
     (system-predicate $G)
     (set-det))
-  (= (%localize_body  $G $P (:  $P $G))  True)
+  (= (%localize-body  $G $P (:  $P $G))  True)
 
 
-  (= ($localize-args Nil Nil $_ Nil)  
+  (= (%localize-args Nil Nil $_ Nil)  
     (set-det))
-  (= ($localize-args (Cons  : $Ms) (Cons  $A $As) $P (Cons  (with_self  $P $A) $As1))  
+  (= (%localize-args (Cons  : $Ms) (Cons  $A $As) $P (Cons  (with-self  $P $A) $As1))  
     (or 
       (var $A) 
       (\= $A 
-        (with_self  $_ $_)))
+        (with-self  $_ $_)))
     (set-det)
-    ($localize-args $Ms $As $P $As1))
-  (= ($localize-args (Cons  $_ $Ms) (Cons  $A $As) $P (Cons  $A $As1))  
-    ($localize-args $Ms $As $P $As1))
+    (%localize-args $Ms $As $P $As1))
+  (= (%localize-args (Cons  $_ $Ms) (Cons  $A $As) $P (Cons  $A $As1))  
+    (%localize-args $Ms $As $P $As1))
 
 
-  (= (%builtin_meta_predicates  ^ 2 (? :))  True)
-  (= (%builtin_meta_predicates  call 1 (:))  True)
-  (= (%builtin_meta_predicates  once 1 (:))  True)
-  (= (%builtin_meta_predicates  \+ 1 (:))  True)
-  (= (%builtin_meta_predicates  findall 3 (? : ?))  True)
-  (= (%builtin_meta_predicates  setof 3 (? : ?))  True)
-  (= (%builtin_meta_predicates  bagof 3 (? : ?))  True)
-  (= (%builtin_meta_predicates  on_exception 3 (? : :))  True)
-  (= (%builtin_meta_predicates  catch 3 (: ? :))  True)
-  (= (%builtin_meta_predicates  synchronized 2 (? :))  True)
-  (= (%builtin_meta_predicates  freeze 2 (? :))  True)
+  (= (%builtin-meta-predicates  ^ 2 (? :))  True)
+  (= (%builtin-meta-predicates  call 1 (:))  True)
+  (= (%builtin-meta-predicates  once 1 (:))  True)
+  (= (%builtin-meta-predicates  \+ 1 (:))  True)
+  (= (%builtin-meta-predicates  findall 3 (? : ?))  True)
+  (= (%builtin-meta-predicates  setof 3 (? : ?))  True)
+  (= (%builtin-meta-predicates  bagof 3 (? : ?))  True)
+  (= (%builtin-meta-predicates  on_exception 3 (? : :))  True)
+  (= (%builtin-meta-predicates  catch 3 (: ? :))  True)
+  (= (%builtin-meta-predicates  synchronized 2 (? :))  True)
+  (= (%builtin-meta-predicates  freeze 2 (? :))  True)
 
 ;
 ; clause --> term (for retract)
 
-  (= ($clause-to-term $Cl $T (with_self  $Pkg (/ $F $A)) $Goal)  
-    ($clause-to-term $Cl $T user $Pkg $Goal)
+  (= (%clause-to-term $Cl $T (with-self  $Pkg (/ $F $A)) $Goal)  
+    (%clause-to-term $Cl $T user $Pkg $Goal)
     (= $T 
       (= $H  $_))
     (functor $H $F $A))
 
-  (= ($clause-to-term $Cl $_ $_ $_ $Goal)  
+  (= (%clause-to-term $Cl $_ $_ $_ $Goal)  
     (var $Cl)
     (set-det)
     (illarg var $Goal 1))
-  (= ($clause-to-term $_ $_ $Pkg $_ $Goal)  
+  (= (%clause-to-term $_ $_ $Pkg $_ $Goal)  
     (var $Pkg)
     (set-det)
     (illarg var $Goal 1))
-  (= ($clause-to-term (with_self  $P $Cl) $T $_ $Pkg $Goal)  
+  (= (%clause-to-term (with-self  $P $Cl) $T $_ $Pkg $Goal)  
     (set-det)
-    ($clause-to-term $Cl $T $P $Pkg $Goal))
-  (= ($clause-to-term $_ $_ $Pkg $_ $Goal)  
+    (%clause-to-term $Cl $T $P $Pkg $Goal))
+  (= (%clause-to-term $_ $_ $Pkg $_ $Goal)  
     (not (atom $Pkg))
     (set-det)
     (illarg 
-      (type is-symbol) $Goal 1))
-  (= ($clause-to-term (= $H0  $B) (= $H  $B) $Pkg $Pkg $Goal)  
+      (type atom) $Goal 1))
+  (= (%clause-to-term (= $H0  $B) (= $H  $B) $Pkg $Pkg $Goal)  
     (set-det)
-    ($head-to-term $H0 $H $_ $Goal))
+    (%head-to-term $H0 $H $_ $Goal))
 	;
 ; '$body_to_term'(B0, B, Goal).
-  (= ($clause-to-term $H0 (= $H  True) $Pkg $Pkg $Goal)  
-    ($head-to-term $H0 $H $_ $Goal))
+  (= (%clause-to-term $H0 (= $H  True) $Pkg $Pkg $Goal)  
+    (%head-to-term $H0 $H $_ $Goal))
 
 ;
 ; term --> predicate indicator (for abolish)
 
-  (= ($term-to-predicateindicator $T (with_self  $Pkg $PI) $Goal)  
-    ($term-to-predicateindicator $T $PI user $Pkg $Goal))
+  (= (%term-to-predicateindicator $T (with-self  $Pkg $PI) $Goal)  
+    (%term-to-predicateindicator $T $PI user $Pkg $Goal))
 
-  (= ($term-to-predicateindicator $T $_ $_ $_ $Goal)  
+  (= (%term-to-predicateindicator $T $_ $_ $_ $Goal)  
     (var $T)
     (set-det)
     (illarg var $Goal 1))
-  (= ($term-to-predicateindicator $_ $_ $Pkg $_ $Goal)  
+  (= (%term-to-predicateindicator $_ $_ $Pkg $_ $Goal)  
     (var $Pkg)
     (set-det)
     (illarg var $Goal 1))
-  (= ($term-to-predicateindicator (with_self  $P $T) $PI $_ $Pkg $Goal)  
+  (= (%term-to-predicateindicator (with-self  $P $T) $PI $_ $Pkg $Goal)  
     (set-det)
-    ($term-to-predicateindicator $T $PI $P $Pkg $Goal))
-  (= ($term-to-predicateindicator $T $_ $_ $_ $Goal)  
+    (%term-to-predicateindicator $T $PI $P $Pkg $Goal))
+  (= (%term-to-predicateindicator $T $_ $_ $_ $Goal)  
     (\= $T 
       (/ $_ $_))
     (set-det)
     (illarg 
       (type predicate-indicator) $Goal 1))
-  (= ($term-to-predicateindicator (/ $F $_) $_ $_ $_ $Goal)  
+  (= (%term-to-predicateindicator (/ $F $_) $_ $_ $_ $Goal)  
     (not (atom $F))
     (set-det)
     (illarg 
-      (type is-symbol) $Goal 1))
-  (= ($term-to-predicateindicator (/ $_ $A) $_ $_ $_ $Goal)  
+      (type atom) $Goal 1))
+  (= (%term-to-predicateindicator (/ $_ $A) $_ $_ $_ $Goal)  
     (not (integer $A))
     (set-det)
     (illarg 
       (type integer) $Goal 1))
-  (= (%term_to_predicateindicator  $T $T $Pkg $Pkg $_)  True)
+  (= (%term-to-predicateindicator  $T $T $Pkg $Pkg $_)  True)
 
 
-  (= ($update-indexing $P $PI $Cl $Ref $A_or_Z)  
-    ($new-indexing-hash $P $PI $IH)
-    ($gen-indexing-keys $Cl $IH $Keys)
-    ($update-indexing-hash $A_or_Z $Keys $IH $Ref))
+  (= (%update-indexing $P $PI $Cl $Ref $A_or_Z)  
+    (%new-indexing-hash $P $PI $IH)
+    (%gen-indexing-keys $Cl $IH $Keys)
+    (%update-indexing-hash $A_or_Z $Keys $IH $Ref))
 ; ;'$fast_write'([update_indexing,P,PI,Cl,Ref,Keys]), nl, ;???
 
 
-  (= ($gen-indexing-keys (= $H  $_) $_ (:: all))  
+  (= (%gen-indexing-keys (= $H  $_) $_ (:: all))  
     (atom $H)
     (set-det))
-  (= ($gen-indexing-keys (= $H  $_) $IT $Keys)  
+  (= (%gen-indexing-keys (= $H  $_) $IT $Keys)  
     (arg 1 $H $A1)
-    ($gen-indexing-keys0 $A1 $IT $Keys))
+    (%gen-indexing-keys0 $A1 $IT $Keys))
 
 
-  (= ($gen-indexing-keys0 $A1 $IT $Keys)  
+  (= (%gen-indexing-keys0 $A1 $IT $Keys)  
     (var $A1)
     (set-det)
     (hash-keys $IT $Keys))
-  (= ($gen-indexing-keys0 $A1 $_ (:: all lis))  
+  (= (%gen-indexing-keys0 $A1 $_ (:: all lis))  
     (= $A1 
       (Cons  $_ $_))
     (set-det))
-  (= ($gen-indexing-keys0 $A1 $_ (:: all str))  
+  (= (%gen-indexing-keys0 $A1 $_ (:: all str))  
     (compound $A1)
     (set-det))
-  (= ($gen-indexing-keys0 $A1 $IT (:: all $Key))  
+  (= (%gen-indexing-keys0 $A1 $IT (:: all $Key))  
     (ground $A1)
     (set-det)
-    ($term-hash $A1 $Key)
+    (%term-hash $A1 $Key)
     (det-if-then-else 
       (hash-contains-key $IT $Key) True 
       (, 
         (hash-get $IT var $L) 
         (hash-put $IT $Key $L))))
 ; ; get the hash code of A1
-  (= ($gen-indexing-keys0 $A1 $IT $Keys)  
+  (= (%gen-indexing-keys0 $A1 $IT $Keys)  
     (illarg 
       (type term) 
-      ($gen-indexing-keys0 $A1 $IT $Keys) 1))
+      (%gen-indexing-keys0 $A1 $IT $Keys) 1))
 
 
-  (= ($update-indexing-hash a $Keys $IH $Ref)  
+  (= (%update-indexing-hash a $Keys $IH $Ref)  
     (set-det)
-    ($hash-addz-all $Keys $IH $Ref))
-  (= ($update-indexing-hash z $Keys $IH $Ref)  
+    (%hash-addz-all $Keys $IH $Ref))
+  (= (%update-indexing-hash z $Keys $IH $Ref)  
     (set-det)
-    ($hash-adda-all $Keys $IH $Ref))
+    (%hash-adda-all $Keys $IH $Ref))
 
 
-  (= ($hash-adda-all Nil $_ $_)  
+  (= (%hash-adda-all Nil $_ $_)  
     (set-det))
-  (= ($hash-adda-all (Cons  $K $Ks) $H $X)  
-    ($hash-adda $H $K $X)
-    ($hash-adda-all $Ks $H $X))
+  (= (%hash-adda-all (Cons  $K $Ks) $H $X)  
+    (%hash-adda $H $K $X)
+    (%hash-adda-all $Ks $H $X))
 
 
-  (= ($hash-addz-all Nil $_ $_)  
+  (= (%hash-addz-all Nil $_ $_)  
     (set-det))
-  (= ($hash-addz-all (Cons  $K $Ks) $H $X)  
-    ($hash-addz $H $K $X)
-    ($hash-addz-all $Ks $H $X))
+  (= (%hash-addz-all (Cons  $K $Ks) $H $X)  
+    (%hash-addz $H $K $X)
+    (%hash-addz-all $Ks $H $X))
 
 
-  (= ($erase-all Nil)  
+  (= (%erase-all Nil)  
     (set-det))
-  (= ($erase-all (Cons  $R $Rs))  
-    ($erase $R)
-    ($erase-all $Rs))
+  (= (%erase-all (Cons  $R $Rs))  
+    (%erase $R)
+    (%erase-all $Rs))
 
 
-  (= ($rehash-indexing $P $PI $Ref)  
-    ($new-indexing-hash $P $PI $IH)
+  (= (%rehash-indexing $P $PI $Ref)  
+    (%new-indexing-hash $P $PI $IH)
     (hash-keys $IH $Keys)
-    ($remove-index-all $Keys $IH $Ref))
+    (%remove-index-all $Keys $IH $Ref))
 ; ;'$fast_write'([rehash_indexing,P,PI,Keys]), nl, ;???
 
 
-  (= ($remove-index-all Nil $_ $_)  
+  (= (%remove-index-all Nil $_ $_)  
     (set-det))
-  (= ($remove-index-all (Cons  $K $Ks) $IH $Ref)  
-    ($hash-remove-first $IH $K $Ref)
-    ($remove-index-all $Ks $IH $Ref))
+  (= (%remove-index-all (Cons  $K $Ks) $IH $Ref)  
+    (%hash-remove-first $IH $K $Ref)
+    (%remove-index-all $Ks $IH $Ref))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1261,19 +1251,18 @@
     (callable $Goal)
     (set-det)
     (new-hash $H)
-    ($findall $H $Template $Goal $Instances))
+    (%findall $H $Template $Goal $Instances))
   (= (findall $Template $Goal $Instances)  
     (illarg 
       (type callable) 
       (findall $Template $Goal $Instances) 2))
 
 
-  (= ($findall $H $Template $Goal $_)  
-    (call $Goal)
-    (copy-term $Template $CT)
-    ($hash-addz $H %FINDALL $CT)
-    (fail))
-  (= ($findall $H $_ $_ $Instances)  
+  (= (%findall $H $Template $Goal $_)  
+    ( (call $Goal) 
+      (copy-term $Template $CT) 
+      (%hash-addz $H %FINDALL $CT) fail))
+  (= (%findall $H $_ $_ $Instances)  
     (hash-get $H %FINDALL $Instances))
 
 ;
@@ -1282,7 +1271,7 @@
   (= (bagof $Template $Goal $Instances)  
     (callable $Goal)
     (set-det)
-    ($bagof $Template $Goal $Instances))
+    (%bagof $Template $Goal $Instances))
   (= (bagof $Template $Goal $Instances)  
     (illarg 
       (type callable) 
@@ -1292,7 +1281,7 @@
   (= (setof $Template $Goal $Instances)  
     (callable $Goal)
     (set-det)
-    ($bagof $Template $Goal $Instances0)
+    (%bagof $Template $Goal $Instances0)
     (sort $Instances0 $Instances))
   (= (setof $Template $Goal $Instances)  
     (illarg 
@@ -1300,58 +1289,58 @@
       (setof $Template $Goal $Instances) 2))
 
 
-  (= ($bagof $Template $Goal $Instances)  
-    ($free-variables-set $Goal $Template $FV)
+  (= (%bagof $Template $Goal $Instances)  
+    (%free-variables-set $Goal $Template $FV)
     (\== $FV Nil)
     (set-det)
     (=.. $Witness 
       (Cons  %witness $FV))
     (findall 
       (+ $Witness $Template) $Goal $S)
-    ($bagof-instances $S $Witness $Instances0)
+    (%bagof-instances $S $Witness $Instances0)
     (= $Instances $Instances0))
 ; ;write('Goal = '), write(Goal), nl,
 ; ;write('Free variables set = '), write(FV), nl,
-  (= ($bagof $Template $Goal $Instances)  
+  (= (%bagof $Template $Goal $Instances)  
     (findall $Template $Goal $Instances)
     (\== $Instances Nil))
 
 
-  (= (%bagof_instances  () $Witness $Instances)  
+  (= (%bagof-instances  () $Witness $Instances)  
     (empty))
-  (= ($bagof-instances $S0 $Witness $Instances)  
+  (= (%bagof-instances $S0 $Witness $Instances)  
     (= $S0 
       (Cons  
         (+ $W $T) $S))
-    ($variants-subset $S $W $WT_list $T_list $S_next)
-    ($bagof-instances0 $S_next $Witness $Instances 
+    (%variants-subset $S $W $WT_list $T_list $S_next)
+    (%bagof-instances0 $S_next $Witness $Instances 
       (Cons  
         (+ $W $T) $WT_list) 
       (Cons  $T $T_list)))
 
 
-  (= ($bagof-instances0 $_ $Witness $Instances $WT_list $T_list)  
-    ($unify-witness $WT_list $Witness)
+  (= (%bagof-instances0 $_ $Witness $Instances $WT_list $T_list)  
+    (%unify-witness $WT_list $Witness)
     (= $Instances $T_list))
-  (= ($bagof-instances0 $S_next $Witness $Instances $_ $_)  
-    ($bagof-instances $S_next $Witness $Instances))
+  (= (%bagof-instances0 $S_next $Witness $Instances $_ $_)  
+    (%bagof-instances $S_next $Witness $Instances))
 
 
-  (= ($variants-subset Nil $W Nil Nil Nil)  
+  (= (%variants-subset Nil $W Nil Nil Nil)  
     (set-det))
-  (= ($variants-subset (Cons  (+ $W0 $T0) $S) $W (Cons  (+ $W0 $T0) $WT_list) (Cons  $T0 $T_list) $S_next)  
-    ($term-variant $W $W0)
+  (= (%variants-subset (Cons  (+ $W0 $T0) $S) $W (Cons  (+ $W0 $T0) $WT_list) (Cons  $T0 $T_list) $S_next)  
+    (%term-variant $W $W0)
     (set-det)
-    ($variants-subset $S $W $WT_list $T_list $S_next))
-  (= ($variants-subset (Cons  $WT $S) $W $WT_list $T_list (Cons  $WT $S_next))  
-    ($variants-subset $S $W $WT_list $T_list $S_next))
+    (%variants-subset $S $W $WT_list $T_list $S_next))
+  (= (%variants-subset (Cons  $WT $S) $W $WT_list $T_list (Cons  $WT $S_next))  
+    (%variants-subset $S $W $WT_list $T_list $S_next))
 
 
-  (= ($term-variant $X $Y)  
+  (= (%term-variant $X $Y)  
     (new-hash $Hash)
-    ($term-variant $X $Y $Hash))
+    (%term-variant $X $Y $Hash))
 
-  (= ($term-variant $X $Y $Hash)  
+  (= (%term-variant $X $Y $Hash)  
     (var $X)
     (set-det)
     (det-if-then-else 
@@ -1362,75 +1351,74 @@
       (, 
         (var $Y) 
         (hash-put $Hash $X $Y))))
-  (= ($term-variant $X $Y $_)  
+  (= (%term-variant $X $Y $_)  
     (ground $X)
     (set-det)
     (== $X $Y))
-  (= ($term-variant $_ $Y $_)  
-    (var $Y)
+  (= (%term-variant $_ $Y $_)  
+    ( (var $Y) 
+      (set-det) fail))
+  (= (%term-variant (Cons  $X $Xs) (Cons  $Y $Ys) $Hash)  
     (set-det)
-    (fail))
-  (= ($term-variant (Cons  $X $Xs) (Cons  $Y $Ys) $Hash)  
-    (set-det)
-    ($term-variant $X $Y $Hash)
-    ($term-variant $Xs $Ys $Hash))
-  (= ($term-variant $X $Y $Hash)  
+    (%term-variant $X $Y $Hash)
+    (%term-variant $Xs $Ys $Hash))
+  (= (%term-variant $X $Y $Hash)  
     (=.. $X $Xs)
     (=.. $Y $Ys)
-    ($term-variant $Xs $Ys $Hash))
+    (%term-variant $Xs $Ys $Hash))
 
 
-  (= ($unify-witness Nil $_)  
+  (= (%unify-witness Nil $_)  
     (set-det))
-  (= ($unify-witness (Cons  (+ $W $_) $WT_list) $W)  
-    ($unify-witness $WT_list $W))
+  (= (%unify-witness (Cons  (+ $W $_) $WT_list) $W)  
+    (%unify-witness $WT_list $W))
 
 ;
 ; Variable set of a term
 
-  (= ($variables-set $X $Vs)  
-    ($variables-set $X Nil $Vs))
+  (= (%variables-set $X $Vs)  
+    (%variables-set $X Nil $Vs))
 
-  (= ($variables-set $X $Vs $Vs)  
+  (= (%variables-set $X $Vs $Vs)  
     (var $X)
-    ($builtin-memq $X $Vs)
+    (%builtin-memq $X $Vs)
     (set-det))
-  (= ($variables-set $X $Vs (Cons  $X $Vs))  
+  (= (%variables-set $X $Vs (Cons  $X $Vs))  
     (var $X)
     (set-det))
-  (= ($variables-set $X $Vs0 $Vs0)  
+  (= (%variables-set $X $Vs0 $Vs0)  
     (atomic $X)
     (set-det))
-  (= ($variables-set (Cons  $X $Xs) $Vs0 $Vs)  
+  (= (%variables-set (Cons  $X $Xs) $Vs0 $Vs)  
     (set-det)
-    ($variables-set $X $Vs0 $Vs1)
-    ($variables-set $Xs $Vs1 $Vs))
-  (= ($variables-set $X $Vs0 $Vs)  
+    (%variables-set $X $Vs0 $Vs1)
+    (%variables-set $Xs $Vs1 $Vs))
+  (= (%variables-set $X $Vs0 $Vs)  
     (=.. $X $Xs)
-    ($variables-set $Xs $Vs0 $Vs))
+    (%variables-set $Xs $Vs0 $Vs))
 
 
-  (= ($builtin-memq $X (Cons  $Y $_))  
+  (= (%builtin-memq $X (Cons  $Y $_))  
     (== $X $Y)
     (set-det))
-  (= ($builtin-memq $X (Cons  $_ $Ys))  
-    ($builtin-memq $X $Ys))
+  (= (%builtin-memq $X (Cons  $_ $Ys))  
+    (%builtin-memq $X $Ys))
 
 ;
 ; Existential variables set of a term
 
-  (= ($existential-variables-set $X $Vs)  
-    ($existential-variables-set $X Nil $Vs))
+  (= (%existential-variables-set $X $Vs)  
+    (%existential-variables-set $X Nil $Vs))
 
-  (= ($existential-variables-set $X $Vs $Vs)  
+  (= (%existential-variables-set $X $Vs $Vs)  
     (var $X)
     (set-det))
-  (= ($existential-variables-set $X $Vs $Vs)  
+  (= (%existential-variables-set $X $Vs $Vs)  
     (atomic $X)
     (set-det))
-  (= ($existential-variables-set (with_self  $_ $X) $Vs0 $Vs)  
+  (= (%existential-variables-set (with-self  $_ $X) $Vs0 $Vs)  
     (set-det)
-    ($existential-variables-set $X $Vs0 $Vs))
+    (%existential-variables-set $X $Vs0 $Vs))
 ;
 ; '$existential_variables_set'((X;Y), Vs0, Vs) :- !,
 ;
@@ -1449,48 +1437,48 @@
 ; '$existential_variables_set'(X, Vs0, Vs1),
 ;
 ; '$existential_variables_set'(Y, Vs1, Vs).
-  (= ($existential-variables-set (^ $V $G) $Vs0 $Vs)  
+  (= (%existential-variables-set (^ $V $G) $Vs0 $Vs)  
     (set-det)
-    ($variables-set $V $Vs0 $Vs1)
-    ($existential-variables-set $G $Vs1 $Vs))
-  (= ($existential-variables-set ($meta-call $G $_ $_ $_ $_) $Vs0 $Vs)  
+    (%variables-set $V $Vs0 $Vs1)
+    (%existential-variables-set $G $Vs1 $Vs))
+  (= (%existential-variables-set (%meta-call $G $_ $_ $_ $_) $Vs0 $Vs)  
     (set-det)
-    ($existential-variables-set $G $Vs0 $Vs))
+    (%existential-variables-set $G $Vs0 $Vs))
 ; ;???
-  (= (%existential_variables_set  $_ $Vs $Vs)  True)
+  (= (%existential-variables-set  $_ $Vs $Vs)  True)
 
 ;
 ; Free variables set of a term
 
-  (= ($free-variables-set $T $V $FV)  
-    ($variables-set $T $TV)
-    ($variables-set $V $VV)
-    ($existential-variables-set $T $VV $BV)
-    ($builtin-set-diff $TV $BV $FV)
+  (= (%free-variables-set $T $V $FV)  
+    (%variables-set $T $TV)
+    (%variables-set $V $VV)
+    (%existential-variables-set $T $VV $BV)
+    (%builtin-set-diff $TV $BV $FV)
     (set-det))
 
 
-  (= ($builtin-set-diff $L1 $L2 $L)  
+  (= (%builtin-set-diff $L1 $L2 $L)  
     (sort $L1 $SL1)
     (sort $L2 $SL2)
-    ($builtin-set-diff0 $SL1 $SL2 $L))
+    (%builtin-set-diff0 $SL1 $SL2 $L))
 
 
-  (= ($builtin-set-diff0 Nil $_ Nil)  
+  (= (%builtin-set-diff0 Nil $_ Nil)  
     (set-det))
-  (= ($builtin-set-diff0 $L1 Nil $L1)  
+  (= (%builtin-set-diff0 $L1 Nil $L1)  
     (set-det))
-  (= ($builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) $L)  
+  (= (%builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) $L)  
     (== $X $Y)
     (set-det)
-    ($builtin-set-diff0 $Xs $Ys $L))
-  (= ($builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $X $L))  
+    (%builtin-set-diff0 $Xs $Ys $L))
+  (= (%builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $X $L))  
     (@< $X $Y)
     (set-det)
-    ($builtin-set-diff0 $Xs 
+    (%builtin-set-diff0 $Xs 
       (Cons  $Y $Ys) $L))
-  (= ($builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $Y $L))  
-    ($builtin-set-diff0 
+  (= (%builtin-set-diff0 (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $Y $L))  
+    (%builtin-set-diff0 
       (Cons  $X $Xs) $Ys 
       (Cons  $Y $L)))
 
@@ -1527,7 +1515,7 @@
     (close $S_or_a Nil))
 
 
-  (= (flush-output)  
+  (= flush-output  
     (current-output $S)
     (flush-output $S))
 
@@ -1535,44 +1523,44 @@
   (= (stream-property $Stream $Stream_property)  
     (var $Stream_property)
     (set-det)
-    ($stream-property $Stream $Stream_property))
+    (%stream-property $Stream $Stream_property))
   (= (stream-property $Stream $Stream_property)  
-    ($stream-property-specifier $Stream_property)
+    (%stream-property-specifier $Stream_property)
     (set-det)
-    ($stream-property $Stream $Stream_property))
+    (%stream-property $Stream $Stream_property))
   (= (stream-property $Stream $Stream_property)  
     (illarg 
       (domain term stream-property) 
       (stream-property $Stream $Stream_property) 2))
 
 
-  (= ($stream-property $Stream $Stream_property)  
+  (= (%stream-property $Stream $Stream_property)  
     (var $Stream)
     (set-det)
-    ($get-stream-manager $SM)
+    (%get-stream-manager $SM)
     (hash-map $SM $Map)
-    ($builtin-member 
+    (%builtin-member 
       (, $Stream $Vs) $Map)
     (java $Stream)
-    ($builtin-member $Stream_property $Vs))
-  (= ($stream-property $Stream $Stream_property)  
+    (%builtin-member $Stream_property $Vs))
+  (= (%stream-property $Stream $Stream_property)  
     (java $Stream)
     (set-det)
-    ($get-stream-manager $SM)
+    (%get-stream-manager $SM)
     (hash-get $SM $Stream $Vs)
-    ($builtin-member $Stream_property $Vs))
-  (= ($stream-property $Stream $Stream_property)  
+    (%builtin-member $Stream_property $Vs))
+  (= (%stream-property $Stream $Stream_property)  
     (illarg 
       (domain stream stream) 
       (stream-property $Stream $Stream_property) 1))
 
 
-  (= (%stream_property_specifier  input)  True)
-  (= (%stream_property_specifier  output)  True)
-  (= (%stream_property_specifier  (alias  $_))  True)
-  (= (%stream_property_specifier  (mode  $_))  True)
-  (= (%stream_property_specifier  (type  $_))  True)
-  (= (%stream_property_specifier  (file_name  $_))  True)
+  (= (%stream-property-specifier  input)  True)
+  (= (%stream-property-specifier  output)  True)
+  (= (%stream-property-specifier  (alias  $_))  True)
+  (= (%stream-property-specifier  (mode  $_))  True)
+  (= (%stream-property-specifier  (type  $_))  True)
+  (= (%stream-property-specifier  (file-name  $_))  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1763,33 +1751,33 @@
 
 
   (= (read-token $S_or_a $Token)  
-    ($read-token0 $S_or_a $Type $Token0)
-    ($read-token1 
+    (%read-token0 $S_or_a $Type $Token0)
+    (%read-token1 
       (:: $Type) $Token0 $Token))
 
 
-  (= ($read-token1 (:: -2) $T (error $T))  
+  (= (%read-token1 (:: -2) $T (error $T))  
     (set-det)) ;
 ; error('message')
-  (= ($read-token1 "I" $T (number $T))  
+  (= (%read-token1 "I" $T (number $T))  
     (set-det)) ;
 ; number(intvalue)
-  (= ($read-token1 "L" $T (number $T))  
+  (= (%read-token1 "L" $T (number $T))  
     (set-det)) ;
 ; number(longvalue)
-  (= ($read-token1 "D" $T (number $T))  
+  (= (%read-token1 "D" $T (number $T))  
     (set-det)) ;
 ; number(floatvalue)
-  (= ($read-token1 "A" $T (atom $T))  
+  (= (%read-token1 "A" $T (atom $T))  
     (set-det)) ;
 ; atom('name')
-  (= ($read-token1 "V" $T (var $T))  
+  (= (%read-token1 "V" $T (var $T))  
     (set-det)) ;
 ; var('name')
-  (= ($read-token1 "S" $T (string $T))  
+  (= (%read-token1 "S" $T (string $T))  
     (set-det)) ;
 ; string("chars")
-  (= ($read-token1 $_ $T $T)  
+  (= (%read-token1 $_ $T $T)  
     (set-det)) ;
 ; others
 
@@ -1815,94 +1803,93 @@
 
 
   (= (read-tokens $Stream $Tokens $Vs)  
-    ($read-tokens $Stream $Tokens $Vs Nil)
+    (%read-tokens $Stream $Tokens $Vs Nil)
     (set-det))
 
 
-  (= ($read-tokens $Stream $Tokens $Vs $VI)  
+  (= (%read-tokens $Stream $Tokens $Vs $VI)  
     (read-token $Stream $Token)
-    ($read-tokens1 $Stream $Token $Tokens $Vs $VI))
+    (%read-tokens1 $Stream $Token $Tokens $Vs $VI))
 
 
-  (= ($read-tokens1 $Stream (error $Message) Nil $_ $_)  
-    (set-det)
-    (write user-error '{SYNTAX ERROR}')
-    (nl user-error)
-    (write user-error ** )
-    (write user-error $Message)
-    (write user-error  **)
-    (nl user-error)
-    (flush-output user-error)
-    ($read-tokens-until-fullstop $Stream)
-    (fail))
-  (= ($read-tokens1 $Stream end-of-file (:: end-of-file .) Nil $_)  
+  (= (%read-tokens1 $Stream (error $Message) Nil $_ $_)  
+    ( (set-det) 
+      (write user-error '{SYNTAX ERROR}') 
+      (nl user-error) 
+      (write user-error ** ) 
+      (write user-error $Message) 
+      (write user-error  **) 
+      (nl user-error) 
+      (flush-output user-error) 
+      (%read-tokens-until-fullstop $Stream) fail))
+  (= (%read-tokens1 $Stream end-of-file (:: end-of-file .) Nil $_)  
     (set-det))
-  (= ($read-tokens1 $Stream . (:: .) Nil $_)  
+  (= (%read-tokens1 $Stream . (:: .) Nil $_)  
     (set-det))
-  (= ($read-tokens1 $Stream (var -) (Cons  (var - $V) $Tokens) (Cons  (= - $V) $Vs) $VI0)  
+  (= (%read-tokens1 $Stream (var -) (Cons  (var - $V) $Tokens) (Cons  (= - $V) $Vs) $VI0)  
     (set-det)
-    ($read-tokens $Stream $Tokens $Vs 
+    (%read-tokens $Stream $Tokens $Vs 
       (Cons  
         (= - $V) $VI0)))
-  (= ($read-tokens1 $Stream (var $Name) (Cons  (var $Name $V) $Tokens) $Vs $VI)  
-    ($mem-pair 
+  (= (%read-tokens1 $Stream (var $Name) (Cons  (var $Name $V) $Tokens) $Vs $VI)  
+    (%mem-pair 
       (= $Name $V) $VI)
     (set-det)
-    ($read-tokens $Stream $Tokens $Vs $VI))
-  (= ($read-tokens1 $Stream (var $Name) (Cons  (var $Name $V) $Tokens) (Cons  (= $Name $V) $Vs) $VI0)  
+    (%read-tokens $Stream $Tokens $Vs $VI))
+  (= (%read-tokens1 $Stream (var $Name) (Cons  (var $Name $V) $Tokens) (Cons  (= $Name $V) $Vs) $VI0)  
     (set-det)
-    ($read-tokens $Stream $Tokens $Vs 
+    (%read-tokens $Stream $Tokens $Vs 
       (Cons  
         (= $Name $V) $VI0)))
-  (= ($read-tokens1 $Stream $Token (Cons  $Token $Tokens) $Vs $VI)  
-    ($read-tokens $Stream $Tokens $Vs $VI))
+  (= (%read-tokens1 $Stream $Token (Cons  $Token $Tokens) $Vs $VI)  
+    (%read-tokens $Stream $Tokens $Vs $VI))
 
 
-  (= ($mem-pair (= $X1 $V1) (Cons  (= $X2 $V2) $_))  
+  (= (%mem-pair (= $X1 $V1) (Cons  (= $X2 $V2) $_))  
     (== $X1 $X2)
     (set-det)
     (= $V1 $V2))
-  (= ($mem-pair $X (Cons  $_ $L))  
-    ($mem-pair $X $L))
+  (= (%mem-pair $X (Cons  $_ $L))  
+    (%mem-pair $X $L))
 ;
 ; '$mem_pair'(X, [_|L]) :- member(X, L).
 
 
-  (= ($read-tokens-until-fullstop $Stream)  
+  (= (%read-tokens-until-fullstop $Stream)  
     (read-token $Stream $Token)
-    ($read-tokens-until-fullstop $Stream $Token))
+    (%read-tokens-until-fullstop $Stream $Token))
 
-  (= ($read-tokens-until-fullstop $Stream end-of-file)  
+  (= (%read-tokens-until-fullstop $Stream end-of-file)  
     (set-det))
-  (= ($read-tokens-until-fullstop $Stream .)  
+  (= (%read-tokens-until-fullstop $Stream .)  
     (set-det))
-  (= ($read-tokens-until-fullstop $Stream $_)  
+  (= (%read-tokens-until-fullstop $Stream $_)  
     (read-token $Stream $Token)
-    ($read-tokens-until-fullstop $Stream $Token))
+    (%read-tokens-until-fullstop $Stream $Token))
 
 
   (= (parse-tokens $X $Tokens)  
     ( (remove-all-atoms  &self 
         (%tokens  $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (%tokens  $Tokens)) 
-      ($parse-tokens $X 1201 $Tokens 
+      (%parse-tokens $X 1201 $Tokens 
         (:: .)) 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (%tokens  $Tokens)) 
       (set-det)))
 
 ;
 ; '$parse_tokens'(X, Prec) parses the input whose precedecence =< Prec.
 
-  (= (-->  (%parse_tokens  $X $Prec0) (,  $parse_tokens_skip_spaces (,  (%parse_tokens1  $Prec0 $X1 $Prec1) (,  ! (,  $parse_tokens_skip_spaces (,  (%parse_tokens2  $Prec0 $X1 $Prec1 $X $Prec) !))))))  True)
+  (= (-->  (%parse-tokens  $X $Prec0) (,  $parse_tokens_skip_spaces (,  (%parse-tokens1  $Prec0 $X1 $Prec1) (,  ! (,  $parse_tokens_skip_spaces (,  (%parse-tokens2  $Prec0 $X1 $Prec1 $X $Prec) !))))))  True)
 
-  (= (-->  (%parse_tokens1  $Prec0 $X1 $Prec1) (,  (%parse_tokens_peep_next  $Next) (,  {(%parse_tokens_is_starter  $Next) } (,  ! (%parse_tokens_before_op  $Prec0 $X1 $Prec1)))))  True)
-  (= (-->  (%parse_tokens1  $_ $_ $_) (,  (%parse_tokens_peep_next  $Next) (%parse_tokens_error  ($Next cannot start an expression))))  True)
+  (= (-->  (%parse-tokens1  $Prec0 $X1 $Prec1) (,  (%parse-tokens-peep-next  $Next) (,  {(%parse-tokens-is-starter  $Next) } (,  ! (%parse-tokens-before-op  $Prec0 $X1 $Prec1)))))  True)
+  (= (-->  (%parse-tokens1  $_ $_ $_) (,  (%parse-tokens-peep-next  $Next) (%parse-tokens-error  ($Next cannot start an expression))))  True)
 
-  (= (-->  (%parse_tokens2  $Prec0 $X $Prec $X $Prec) (,  (%parse_tokens_peep_next  $Next) (,  {(%parse_tokens_is_terminator  $Next) } (,  {(=<  $Prec $Prec0) } !))))  True)
-  (= (-->  (%parse_tokens2  $Prec0 $X1 $Prec1 $X $Prec) (,  (%parse_tokens_peep_next  $Next) (,  {(%parse_tokens_is_post_in_op  $Next) } (,  ! (%parse_tokens_post_in_ops  $Prec0 $X1 $Prec1 $X $Prec)))))  True)
-  (= (-->  (%parse_tokens2  $_ $_ $_ $_ $_) (%parse_tokens_error  (operator expected after expression)))  True)
+  (= (-->  (%parse-tokens2  $Prec0 $X $Prec $X $Prec) (,  (%parse-tokens-peep-next  $Next) (,  {(%parse-tokens-is-terminator  $Next) } (,  {(=<  $Prec $Prec0) } !))))  True)
+  (= (-->  (%parse-tokens2  $Prec0 $X1 $Prec1 $X $Prec) (,  (%parse-tokens-peep-next  $Next) (,  {(%parse-tokens-is-post-in-op  $Next) } (,  ! (%parse-tokens-post-in-ops  $Prec0 $X1 $Prec1 $X $Prec)))))  True)
+  (= (-->  (%parse-tokens2  $_ $_ $_ $_ $_) (%parse-tokens-error  (operator expected after expression)))  True)
 
 ;
 ; '$parse_tokens_before_op'(Prec0, X, Prec)
@@ -1910,36 +1897,36 @@
 ; parses the input until infix or postfix operator,
 ;
 ; and returns X and Prec
-  (= (-->  (%parse_tokens_before_op  $Prec0 $X $Prec) (,  (' ') (,  ! (%parse_tokens_before_op  $Prec0 $X $Prec))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ end_of_file 0) (,  (end_of_file) !))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $N 0) (,  ((number  $N)) !))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $N 0) (,  ((is-symbol  -)) (,  ((number  $N0)) (,  ! {(is  $N (-  $N0)) }))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $V 0) (,  ((var  $_ $V)) !))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $S 0) (,  ((string  $S)) !))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $X 0) (,  (() (,  ! (,  (%parse_tokens  $X 1201) (%parse_tokens_expect  ))))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $X 0) (,  ({) (,  ! (,  $parse_tokens_skip_spaces (%parse_tokens_brace  $X)))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $X 0) (,  ([) (,  ! (,  $parse_tokens_skip_spaces (%parse_tokens_list  $X)))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $X 0) (,  ((is-symbol  $F)) (,  (() (,  ! (,  $parse_tokens_skip_spaces (,  (%parse_tokens_args  $Args) {(=..  $X (Cons  $F $Args)) }))))))  True)
-  (= (-->  (%parse_tokens_before_op  $Prec0 $X $PrecOp) (,  ((is-symbol  $F)) (,  {(current_op  $PrecOp fx $F) } (,  {(=<  $PrecOp $Prec0) } (,  $parse_tokens_skip_spaces (,  (%parse_tokens_peep_next  $Next) (,  {(%parse_tokens_is_starter  $Next) } (,  {(\+  (%parse_tokens_is_post_in_op  $Next)) } (,  ! (,  {(is  $Prec1 (-  $PrecOp 1)) } (,  (%parse_tokens  $Arg $Prec1) (,  {(functor  $X $F 1) } {(arg  1 $X $Arg) }))))))))))))  True)
-  (= (-->  (%parse_tokens_before_op  $Prec0 $X $PrecOp) (,  ((is-symbol  $F)) (,  {(current_op  $PrecOp fy $F) } (,  {(=<  $PrecOp $Prec0) } (,  $parse_tokens_skip_spaces (,  (%parse_tokens_peep_next  $Next) (,  {(%parse_tokens_is_starter  $Next) } (,  {(\+  (%parse_tokens_is_post_in_op  $Next)) } (,  ! (,  (%parse_tokens  $Arg $PrecOp) (,  {(functor  $X $F 1) } {(arg  1 $X $Arg) })))))))))))  True)
-  (= (-->  (%parse_tokens_before_op  $_ $A 0) ((is-symbol  $A)))  True)
+  (= (-->  (%parse-tokens-before-op  $Prec0 $X $Prec) (,  (' ') (,  ! (%parse-tokens-before-op  $Prec0 $X $Prec))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ end_of_file 0) (,  (end_of_file) !))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $N 0) (,  ((number  $N)) !))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $N 0) (,  ((atom  -)) (,  ((number  $N0)) (,  ! {(is  $N (-  $N0)) }))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $V 0) (,  ((var  $_ $V)) !))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $S 0) (,  ((string  $S)) !))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $X 0) (,  (() (,  ! (,  (%parse-tokens  $X 1201) (%parse-tokens-expect  ))))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $X 0) (,  ({) (,  ! (,  $parse_tokens_skip_spaces (%parse-tokens-brace  $X)))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $X 0) (,  ([) (,  ! (,  $parse_tokens_skip_spaces (%parse-tokens-list  $X)))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $X 0) (,  ((atom  $F)) (,  (() (,  ! (,  $parse_tokens_skip_spaces (,  (%parse-tokens-args  $Args) {(=..  $X ([|]  $F $Args)) }))))))  True)
+  (= (-->  (%parse-tokens-before-op  $Prec0 $X $PrecOp) (,  ((atom  $F)) (,  {(current-op  $PrecOp fx $F) } (,  {(=<  $PrecOp $Prec0) } (,  $parse_tokens_skip_spaces (,  (%parse-tokens-peep-next  $Next) (,  {(%parse-tokens-is-starter  $Next) } (,  {(\+  (%parse-tokens-is-post-in-op  $Next)) } (,  ! (,  {(is  $Prec1 (-  $PrecOp 1)) } (,  (%parse-tokens  $Arg $Prec1) (,  {(functor  $X $F 1) } {(arg  1 $X $Arg) }))))))))))))  True)
+  (= (-->  (%parse-tokens-before-op  $Prec0 $X $PrecOp) (,  ((atom  $F)) (,  {(current-op  $PrecOp fy $F) } (,  {(=<  $PrecOp $Prec0) } (,  $parse_tokens_skip_spaces (,  (%parse-tokens-peep-next  $Next) (,  {(%parse-tokens-is-starter  $Next) } (,  {(\+  (%parse-tokens-is-post-in-op  $Next)) } (,  ! (,  (%parse-tokens  $Arg $PrecOp) (,  {(functor  $X $F 1) } {(arg  1 $X $Arg) })))))))))))  True)
+  (= (-->  (%parse-tokens-before-op  $_ $A 0) ((atom  $A)))  True)
 
-  (= (-->  (%parse_tokens_brace  {}) (,  (}) !))  True)
-  (= (-->  (%parse_tokens_brace  $X) (,  (%parse_tokens  $X1 1201) (,  (%parse_tokens_expect  }) {(= $X  
+  (= (-->  (%parse-tokens-brace  {}) (,  (}) !))  True)
+  (= (-->  (%parse-tokens-brace  $X) (,  (%parse-tokens  $X1 1201) (,  (%parse-tokens-expect  }) {(= $X  
     {$X1 }) })))  True)
 
-  (= (-->  (%parse_tokens_list  []) (,  (]) !))  True)
-  (= (-->  (%parse_tokens_list  (Cons  $X $Xs)) (,  (%parse_tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse_tokens_list_rest  $Xs))))  True)
+  (= (-->  (%parse-tokens-list  []) (,  (]) !))  True)
+  (= (-->  (%parse-tokens-list  ([|]  $X $Xs)) (,  (%parse-tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse-tokens-list-rest  $Xs))))  True)
 
-  (= (-->  (%parse_tokens_list_rest  $Xs) (,  (|) (,  ! (,  (%parse_tokens  $Xs 999) (%parse_tokens_expect  ])))))  True)
-  (= (-->  (%parse_tokens_list_rest  (Cons  $X $Xs)) (,  (,) (,  ! (,  (%parse_tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse_tokens_list_rest  $Xs))))))  True)
-  (= (-->  (%parse_tokens_list_rest  []) (%parse_tokens_expect  ]))  True)
+  (= (-->  (%parse-tokens-list-rest  $Xs) (,  (|) (,  ! (,  (%parse-tokens  $Xs 999) (%parse-tokens-expect  ])))))  True)
+  (= (-->  (%parse-tokens-list-rest  ([|]  $X $Xs)) (,  (,) (,  ! (,  (%parse-tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse-tokens-list-rest  $Xs))))))  True)
+  (= (-->  (%parse-tokens-list-rest  []) (%parse-tokens-expect  ]))  True)
 
-  (= (-->  (%parse_tokens_args  []) (,  ()) !))  True)
-  (= (-->  (%parse_tokens_args  (Cons  $X $Xs)) (,  (%parse_tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse_tokens_args_rest  $Xs))))  True)
+  (= (-->  (%parse-tokens-args  []) (,  ()) !))  True)
+  (= (-->  (%parse-tokens-args  ([|]  $X $Xs)) (,  (%parse-tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse-tokens-args-rest  $Xs))))  True)
 
-  (= (-->  (%parse_tokens_args_rest  (Cons  $X $Xs)) (,  (,) (,  ! (,  (%parse_tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse_tokens_args_rest  $Xs))))))  True)
-  (= (-->  (%parse_tokens_args_rest  []) (%parse_tokens_expect  )))  True)
+  (= (-->  (%parse-tokens-args-rest  ([|]  $X $Xs)) (,  (,) (,  ! (,  (%parse-tokens  $X 999) (,  $parse_tokens_skip_spaces (%parse-tokens-args-rest  $Xs))))))  True)
+  (= (-->  (%parse-tokens-args-rest  []) (%parse-tokens-expect  )))  True)
 
 ;
 ; '$parse_tokens_post_in_op'(Prec0, X1, Prec1, X, Prec)
@@ -1947,131 +1934,130 @@
 ; parses the input beginning from infix or postfix operator,
 ;
 ; and returns X and Prec
-  (= (-->  (%parse_tokens_post_in_ops  $Prec0 $X1 $Prec1 $X $Prec) (,  $parse_tokens_skip_spaces (,  ($Op) (,  (%parse_tokens_op  $Op $Prec0 $X1 $Prec1 $X2 $Prec2) (%parse_tokens_post_in_ops  $Prec0 $X2 $Prec2 $X $Prec)))))  True)
-  (= (-->  (%parse_tokens_post_in_ops  $Prec0 $X $Prec $X $Prec) {(=<  $Prec $Prec0) })  True)
+  (= (-->  (%parse-tokens-post-in-ops  $Prec0 $X1 $Prec1 $X $Prec) (,  $parse_tokens_skip_spaces (,  ($Op) (,  (%parse-tokens-op  $Op $Prec0 $X1 $Prec1 $X2 $Prec2) (%parse-tokens-post-in-ops  $Prec0 $X2 $Prec2 $X $Prec)))))  True)
+  (= (-->  (%parse-tokens-post-in-ops  $Prec0 $X $Prec $X $Prec) {(=<  $Prec $Prec0) })  True)
 
-  (= (-->  (%parse_tokens_op  , $Prec0 $X1 $Prec1 $X $PrecOp) (,  ! (%parse_tokens_op  (is-symbol  ,) $Prec0 $X1 $Prec1 $X $PrecOp)))  True)
-  (= (-->  (%parse_tokens_op  | $Prec0 $X1 $Prec1 $X $PrecOp) (,  ! (%parse_tokens_op  (is-symbol  ;) $Prec0 $X1 $Prec1 $X $PrecOp)))  True)
-  (= (-->  (%parse_tokens_op  (is-symbol  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current_op  $PrecOp xf $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(functor  $X $Op 1) } {(arg  1 $X $X1) })))))  True)
-  (= (-->  (%parse_tokens_op  (is-symbol  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current_op  $PrecOp yf $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(=<  $Prec1 $PrecOp) } (,  {(functor  $X $Op 1) } {(arg  1 $X $X1) })))))  True)
-  (= (-->  (%parse_tokens_op  (is-symbol  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current_op  $PrecOp xfx $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(is  $Prec2 (-  $PrecOp 1)) } (,  (%parse_tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
-  (= (-->  (%parse_tokens_op  (is-symbol  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current_op  $PrecOp xfy $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(is  $Prec2 $PrecOp) } (,  (%parse_tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
-  (= (-->  (%parse_tokens_op  (is-symbol  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current_op  $PrecOp yfx $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(=<  $Prec1 $PrecOp) } (,  {(is  $Prec2 (-  $PrecOp 1)) } (,  (%parse_tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
-
-
-  (= (%parse_tokens_is_starter  end_of_file)  True)
-  (= (%parse_tokens_is_starter  ()  True)
-  (= (%parse_tokens_is_starter  [)  True)
-  (= (%parse_tokens_is_starter  {)  True)
-  (= (%parse_tokens_is_starter  (number  $_))  True)
-  (= (%parse_tokens_is_starter  (is-symbol  $_))  True)
-  (= (%parse_tokens_is_starter  (var  $_ $_))  True)
-  (= (%parse_tokens_is_starter  (string  $_))  True)
+  (= (-->  (%parse-tokens-op  , $Prec0 $X1 $Prec1 $X $PrecOp) (,  ! (%parse-tokens-op  (atom  ,) $Prec0 $X1 $Prec1 $X $PrecOp)))  True)
+  (= (-->  (%parse-tokens-op  | $Prec0 $X1 $Prec1 $X $PrecOp) (,  ! (%parse-tokens-op  (atom  ;) $Prec0 $X1 $Prec1 $X $PrecOp)))  True)
+  (= (-->  (%parse-tokens-op  (atom  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current-op  $PrecOp xf $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(functor  $X $Op 1) } {(arg  1 $X $X1) })))))  True)
+  (= (-->  (%parse-tokens-op  (atom  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current-op  $PrecOp yf $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(=<  $Prec1 $PrecOp) } (,  {(functor  $X $Op 1) } {(arg  1 $X $X1) })))))  True)
+  (= (-->  (%parse-tokens-op  (atom  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current-op  $PrecOp xfx $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(is  $Prec2 (-  $PrecOp 1)) } (,  (%parse-tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
+  (= (-->  (%parse-tokens-op  (atom  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current-op  $PrecOp xfy $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(<  $Prec1 $PrecOp) } (,  {(is  $Prec2 $PrecOp) } (,  (%parse-tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
+  (= (-->  (%parse-tokens-op  (atom  $Op) $Prec0 $X1 $Prec1 $X $PrecOp) (,  {(current-op  $PrecOp yfx $Op) } (,  {(=<  $PrecOp $Prec0) } (,  {(=<  $Prec1 $PrecOp) } (,  {(is  $Prec2 (-  $PrecOp 1)) } (,  (%parse-tokens  $X2 $Prec2) (,  ! (,  {(functor  $X $Op 2) } (,  {(arg  1 $X $X1) } {(arg  2 $X $X2) })))))))))  True)
 
 
-  (= (%parse_tokens_is_terminator  ))  True)
-  (= (%parse_tokens_is_terminator  ])  True)
-  (= (%parse_tokens_is_terminator  })  True)
-  (= (%parse_tokens_is_terminator  .)  True)
+  (= (%parse-tokens-is-starter  end_of_file)  True)
+  (= (%parse-tokens-is-starter  ()  True)
+  (= (%parse-tokens-is-starter  [)  True)
+  (= (%parse-tokens-is-starter  {)  True)
+  (= (%parse-tokens-is-starter  (number  $_))  True)
+  (= (%parse-tokens-is-starter  (atom  $_))  True)
+  (= (%parse-tokens-is-starter  (var  $_ $_))  True)
+  (= (%parse-tokens-is-starter  (string  $_))  True)
 
 
-  (= ($parse-tokens-is-post-in-op ,)  
+  (= (%parse-tokens-is-terminator  ))  True)
+  (= (%parse-tokens-is-terminator  ])  True)
+  (= (%parse-tokens-is-terminator  })  True)
+  (= (%parse-tokens-is-terminator  .)  True)
+
+
+  (= (%parse-tokens-is-post-in-op ,)  
     (set-det))
-  (= ($parse-tokens-is-post-in-op |)  
+  (= (%parse-tokens-is-post-in-op |)  
     (set-det))
-  (= ($parse-tokens-is-post-in-op (atom $Op))  
+  (= (%parse-tokens-is-post-in-op (atom $Op))  
     (current-op $_ $Type $Op)
-    ($parse-tokens-post-in-type $Type)
+    (%parse-tokens-post-in-type $Type)
     (set-det))
 
 
-  (= (%parse_tokens_post_in_type  xfx)  True)
-  (= (%parse_tokens_post_in_type  xfy)  True)
-  (= (%parse_tokens_post_in_type  yfx)  True)
-  (= (%parse_tokens_post_in_type  xf)  True)
-  (= (%parse_tokens_post_in_type  yf)  True)
+  (= (%parse-tokens-post-in-type  xfx)  True)
+  (= (%parse-tokens-post-in-type  xfy)  True)
+  (= (%parse-tokens-post-in-type  yfx)  True)
+  (= (%parse-tokens-post-in-type  xf)  True)
+  (= (%parse-tokens-post-in-type  yf)  True)
 
 
-  (= (-->  (%parse_tokens_expect  $Token) (,  $parse_tokens_skip_spaces (,  ($Token) !)))  True)
-  (= (-->  (%parse_tokens_expect  $Token) (%parse_tokens_error  ($Token expected)))  True)
+  (= (-->  (%parse-tokens-expect  $Token) (,  $parse_tokens_skip_spaces (,  ($Token) !)))  True)
+  (= (-->  (%parse-tokens-expect  $Token) (%parse-tokens-error  ($Token expected)))  True)
 
   (= (-->  $parse_tokens_skip_spaces (,  (' ') (,  ! $parse_tokens_skip_spaces)))  True)
   (= (-->  $parse_tokens_skip_spaces ())  True)
 
 
-  (= ($parse-tokens-peep-next $Next $S $S)  
+  (= (%parse-tokens-peep-next $Next $S $S)  
     (= $S 
       (Cons  $Next $_)))
 
 
-  (= ($parse-tokens-error $Message $S0 $S)  
+  (= (%parse-tokens-error $Message $S0 $S)  
     ( (write user-error '{SYNTAX ERROR}') 
       (nl user-error) 
       (write user-error ** ) 
-      ($parse-tokens-write-message user-error $Message) 
+      (%parse-tokens-write-message user-error $Message) 
       (write user-error  **) 
       (nl user-error) 
-      ($parse-tokens-error1 Nil $S0) 
+      (%parse-tokens-error1 Nil $S0) 
       (==  
         (= 
           (%tokens  $Tokens) $_) 
         (get-atoms  &self)) 
-      ($parse-tokens-error1 $Tokens $S0) 
-      (flush-output user-error) 
-      (fail)))
+      (%parse-tokens-error1 $Tokens $S0) 
+      (flush-output user-error) fail))
 
 
-  (= ($parse-tokens-error1 Nil $_)  
+  (= (%parse-tokens-error1 Nil $_)  
     (set-det))
-  (= ($parse-tokens-error1 $Tokens $S0)  
+  (= (%parse-tokens-error1 $Tokens $S0)  
     (== $Tokens $S0)
     (set-det)
     (nl user-error)
     (write user-error '** here **')
     (nl user-error)
-    ($parse-tokens-error1 $Tokens Nil)
+    (%parse-tokens-error1 $Tokens Nil)
     (nl user-error))
-  (= ($parse-tokens-error1 (Cons  $Token $Tokens) $S0)  
-    ($parse-tokens-error2 $Token)
-    ($parse-tokens-error1 $Tokens $S0))
+  (= (%parse-tokens-error1 (Cons  $Token $Tokens) $S0)  
+    (%parse-tokens-error2 $Token)
+    (%parse-tokens-error1 $Tokens $S0))
 
 
-  (= ($parse-tokens-error2 (number $X))  
+  (= (%parse-tokens-error2 (number $X))  
     (set-det)
     (write $X))
-  (= ($parse-tokens-error2 (atom $X))  
+  (= (%parse-tokens-error2 (atom $X))  
     (set-det)
     (writeq $X))
-  (= ($parse-tokens-error2 (var $X $_))  
+  (= (%parse-tokens-error2 (var $X $_))  
     (set-det)
     (write $X))
-  (= ($parse-tokens-error2 (string $X))  
+  (= (%parse-tokens-error2 (string $X))  
     (set-det)
     (write user-error ")
-    ($parse-tokens-write-string user-error $X)
+    (%parse-tokens-write-string user-error $X)
     (write user-error "))
-  (= ($parse-tokens-error2 $X)  
+  (= (%parse-tokens-error2 $X)  
     (write user-error $X))
 
 
-  (= (%parse_tokens_write_string  $_ ())  True)
-  (= ($parse-tokens-write-string $S (Cons  $C $Cs))  
+  (= (%parse-tokens-write-string  $_ ())  True)
+  (= (%parse-tokens-write-string $S (Cons  $C $Cs))  
     (= 
       (:: $C) "\"")
     (set-det)
     (put-code $S $C)
     (put-code $S $C)
-    ($parse-tokens-write-string $S $Cs))
-  (= ($parse-tokens-write-string $S (Cons  $C $Cs))  
+    (%parse-tokens-write-string $S $Cs))
+  (= (%parse-tokens-write-string $S (Cons  $C $Cs))  
     (put-code $S $C)
-    ($parse-tokens-write-string $S $Cs))
+    (%parse-tokens-write-string $S $Cs))
 
 
-  (= (%parse_tokens_write_message  $_ ())  True)
-  (= ($parse-tokens-write-message $S (Cons  $X $Xs))  
+  (= (%parse-tokens-write-message  $_ ())  True)
+  (= (%parse-tokens-write-message $S (Cons  $X $Xs))  
     (write $S $X)
     (write $S ' ')
-    ($parse-tokens-write-message $S $Xs))
+    (%parse-tokens-write-message $S $Xs))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2129,46 +2115,45 @@
     (write-term $S $Term $Options))
 
   (= (write-term $S_or_a $Term $Options)  
-    ($write-term $S_or_a $Term $Options)
-    (fail))
-  (= (write_term  $_ $_ $_)  True)
+    ( (%write-term $S_or_a $Term $Options) fail))
+  (= (write-term  $_ $_ $_)  True)
 
 
-  (= ($write-term $S_or_a $Term $Options)  
-    ($write-term0 $Term 1200 punct $_ $Options $S_or_a)
+  (= (%write-term $S_or_a $Term $Options)  
+    (%write-term0 $Term 1200 punct $_ $Options $S_or_a)
     (set-det))
 
 
-  (= ($write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
+  (= (%write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
     (var $Term)
     (set-det)
-    ($write-space-if-needed $Type0 alpha $S_or_a)
-    ($fast-write $S_or_a $Term))
-  (= ($write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
+    (%write-space-if-needed $Type0 alpha $S_or_a)
+    (%fast-write $S_or_a $Term))
+  (= (%write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
     (java $Term)
     (set-det)
-    ($write-space-if-needed $Type0 alpha $S_or_a)
-    ($fast-write $S_or_a $Term))
-  (= ($write-term0 $Term $Prec $Type0 alpha $Style $S_or_a)  
+    (%write-space-if-needed $Type0 alpha $S_or_a)
+    (%fast-write $S_or_a $Term))
+  (= (%write-term0 $Term $Prec $Type0 alpha $Style $S_or_a)  
     (= $Term $VN)
     (integer $VN)
     (>= $VN 0)
-    ($builtin-member 
+    (%builtin-member 
       (numbervars True) $Style)
     (set-det)
-    ($write-space-if-needed $Type0 alpha $S_or_a)
-    ($write-VAR $VN $S_or_a))
-  (= ($write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
+    (%write-space-if-needed $Type0 alpha $S_or_a)
+    (%write-VAR $VN $S_or_a))
+  (= (%write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
     (number $Term)
     (< $Term 0)
     (set-det)
-    ($write-space-if-needed $Type0 symbol $S_or_a)
-    ($fast-write $S_or_a $Term))
-  (= ($write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
+    (%write-space-if-needed $Type0 symbol $S_or_a)
+    (%fast-write $S_or_a $Term))
+  (= (%write-term0 $Term $Prec $Type0 alpha $_ $S_or_a)  
     (number $Term)
     (set-det)
-    ($write-space-if-needed $Type0 alpha $S_or_a)
-    ($fast-write $S_or_a $Term))
+    (%write-space-if-needed $Type0 alpha $S_or_a)
+    (%fast-write $S_or_a $Term))
 ;
 ; '$write_term0'(Term, Prec, Type0, punct, _, S_or_a) :-
 ;
@@ -2189,219 +2174,219 @@
 ; '$write_atom'(Term, punct, _, _, S_or_a),
 ;
 ; put_char(S_or_a, ')').
-  (= ($write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
+  (= (%write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
     (atom $Term)
     (set-det)
-    ($write-atom $Term $Type0 $Type $Style $S_or_a))
-  (= ($write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
-    (not ($builtin-member (ignore-ops True) $Style))
-    ($write-is-operator $Term $Op $Args $OpType)
+    (%write-symbol $Term $Type0 $Type $Style $S_or_a))
+  (= (%write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
+    (not (%builtin-member (ignore-ops True) $Style))
+    (%write-is-operator $Term $Op $Args $OpType)
     (set-det)
-    ($write-term-op $Op $OpType $Args $Prec $Type0 $Type $Style $S_or_a))
-  (= ($write-term0 $Term $Prec $Type0 punct $Style $S_or_a)  
+    (%write-term-op $Op $OpType $Args $Prec $Type0 $Type $Style $S_or_a))
+  (= (%write-term0 $Term $Prec $Type0 punct $Style $S_or_a)  
     (= $Term 
       (Cons  $_ $_))
-    (not ($builtin-member (ignore-ops True) $Style))
+    (not (%builtin-member (ignore-ops True) $Style))
     (set-det)
-    ($write-space-if-needed $Type0 punct $S_or_a)
+    (%write-space-if-needed $Type0 punct $S_or_a)
     (put-char $S_or_a [)
-    ($write-term-list-args $Term punct $_ $Style $S_or_a)
+    (%write-term-list-args $Term punct $_ $Style $S_or_a)
     (put-char $S_or_a ]))
-  (= ($write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
+  (= (%write-term0 $Term $Prec $Type0 $Type $Style $S_or_a)  
     (= $Term 
       {$Term1 })
-    (not ($builtin-member (ignore-ops True) $Style))
+    (not (%builtin-member (ignore-ops True) $Style))
     (set-det)
-    ($write-space-if-needed $Type0 punct $S_or_a)
+    (%write-space-if-needed $Type0 punct $S_or_a)
     (put-char $S_or_a {)
-    ($write-term0 $Term1 1200 punct $_ $Style $S_or_a)
+    (%write-term0 $Term1 1200 punct $_ $Style $S_or_a)
     (put-char $S_or_a }))
-  (= ($write-term0 $Term $Prec $Type0 punct $Style $S_or_a)  
+  (= (%write-term0 $Term $Prec $Type0 punct $Style $S_or_a)  
     (=.. $Term 
       (Cons  $F $Args))
-    ($write-atom $F $Type0 $_ $Style $S_or_a)
+    (%write-symbol $F $Type0 $_ $Style $S_or_a)
     (put-char $S_or_a ()
-    ($write-term-args $Args punct $_ $Style $S_or_a)
+    (%write-term-args $Args punct $_ $Style $S_or_a)
     (put-char $S_or_a )))
 
 
-  (= ($write-space-if-needed punct $_ $_)  
+  (= (%write-space-if-needed punct $_ $_)  
     (set-det))
-  (= ($write-space-if-needed $X $X $S_or_a)  
+  (= (%write-space-if-needed $X $X $S_or_a)  
     (set-det)
     (put-char $S_or_a ' '))
-  (= ($write-space-if-needed other alpha $S_or_a)  
+  (= (%write-space-if-needed other alpha $S_or_a)  
     (set-det)
     (put-char $S_or_a ' '))
-  (= (%write_space_if_needed  $_ $_ $_)  True)
+  (= (%write-space-if-needed  $_ $_ $_)  True)
 
 
-  (= ($write-VAR $VN $S_or_a)  
+  (= (%write-VAR $VN $S_or_a)  
     (< $VN 26)
     (set-det)
     (is $Letter 
       (+ 
         (mod $VN 26) "A"))
     (put-code $S_or_a $Letter))
-  (= ($write-VAR $VN $S_or_a)  
+  (= (%write-VAR $VN $S_or_a)  
     (is $Letter 
       (+ 
         (mod $VN 26) "A"))
     (put-code $S_or_a $Letter)
     (is $Rest 
       (// $VN 26))
-    ($fast-write $S_or_a $Rest))
+    (%fast-write $S_or_a $Rest))
 
 
-  (= ($write-atom $Atom $Type0 $Type $Style $S_or_a)  
-    ($builtin-member 
+  (= (%write-symbol $Atom $Type0 $Type $Style $S_or_a)  
+    (%builtin-member 
       (quoted True) $Style)
     (set-det)
-    ($atom-type $Atom $Type)
-    ($write-space-if-needed $Type0 $Type $S_or_a)
-    ($fast-writeq $S_or_a $Atom))
-  (= ($write-atom $Atom $Type0 $Type $_ $S_or_a)  
-    ($atom-type $Atom $Type)
-    ($write-space-if-needed $Type0 $Type $S_or_a)
-    ($fast-write $S_or_a $Atom))
+    (%symbol-type $Atom $Type)
+    (%write-space-if-needed $Type0 $Type $S_or_a)
+    (%fast-writeq $S_or_a $Atom))
+  (= (%write-symbol $Atom $Type0 $Type $_ $S_or_a)  
+    (%symbol-type $Atom $Type)
+    (%write-space-if-needed $Type0 $Type $S_or_a)
+    (%fast-write $S_or_a $Atom))
 
 
-  (= ($atom-type $X alpha)  
-    ($atom-type0 $X 0)
+  (= (%symbol-type $X alpha)  
+    (%symbol-type0 $X 0)
     (set-det))
-  (= ($atom-type $X symbol)  
-    ($atom-type0 $X 1)
+  (= (%symbol-type $X symbol)  
+    (%symbol-type0 $X 1)
     (set-det))
-  (= ($atom-type $X punct)  
-    ($atom-type0 $X 2)
+  (= (%symbol-type $X punct)  
+    (%symbol-type0 $X 2)
     (set-det))
-  (= ($atom-type $X other)  
-    ($atom-type0 $X 3)
+  (= (%symbol-type $X other)  
+    (%symbol-type0 $X 3)
     (set-det))
 
 
-  (= ($write-is-operator $Term $Op $Args $OpType)  
+  (= (%write-is-operator $Term $Op $Args $OpType)  
     (functor $Term $Op $Arity)
-    ($write-op-type $Arity $OpType)
+    (%write-op-type $Arity $OpType)
     (current-op $_ $OpType $Op)
     (=.. $Term 
       (Cons  $_ $Args))
     (set-det))
 
 
-  (= (%write_op_type  1 fx)  True)
-  (= (%write_op_type  1 fy)  True)
-  (= (%write_op_type  1 xf)  True)
-  (= (%write_op_type  1 yf)  True)
-  (= (%write_op_type  2 xfx)  True)
-  (= (%write_op_type  2 xfy)  True)
-  (= (%write_op_type  2 yfx)  True)
+  (= (%write-op-type  1 fx)  True)
+  (= (%write-op-type  1 fy)  True)
+  (= (%write-op-type  1 xf)  True)
+  (= (%write-op-type  1 yf)  True)
+  (= (%write-op-type  2 xfx)  True)
+  (= (%write-op-type  2 xfy)  True)
+  (= (%write-op-type  2 yfx)  True)
 
 
-  (= ($write-term-op $Op $OpType $Args $Prec $Type0 punct $Style $S_or_a)  
+  (= (%write-term-op $Op $OpType $Args $Prec $Type0 punct $Style $S_or_a)  
     (current-op $PrecOp $OpType $Op)
     (> $PrecOp $Prec)
     (set-det)
-    ($write-space-if-needed $Type0 punct $S_or_a)
+    (%write-space-if-needed $Type0 punct $S_or_a)
     (put-char $S_or_a ()
-    ($write-term-op1 $Op $OpType $Args $PrecOp punct $_ $Style $S_or_a)
+    (%write-term-op1 $Op $OpType $Args $PrecOp punct $_ $Style $S_or_a)
     (put-char $S_or_a )))
-  (= ($write-term-op $Op $OpType $Args $Prec $Type0 $Type $Style $S_or_a)  
+  (= (%write-term-op $Op $OpType $Args $Prec $Type0 $Type $Style $S_or_a)  
     (current-op $PrecOp $OpType $Op)
-    ($write-term-op1 $Op $OpType $Args $PrecOp $Type0 $Type $Style $S_or_a))
+    (%write-term-op1 $Op $OpType $Args $PrecOp $Type0 $Type $Style $S_or_a))
 
 
-  (= ($write-term-op1 $Op fx (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
+  (= (%write-term-op1 $Op fx (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
-    ($write-atom $Op $Type0 $Type1 $Style $S_or_a)
+    (%write-symbol $Op $Type0 $Type1 $Style $S_or_a)
     (is $Prec1 
       (- $PrecOp 1))
-    ($write-term0 $A1 $Prec1 $Type1 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op fy (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type1 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op fy (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
-    ($write-atom $Op $Type0 $Type1 $Style $S_or_a)
+    (%write-symbol $Op $Type0 $Type1 $Style $S_or_a)
     (is $Prec1 $PrecOp)
-    ($write-term0 $A1 $Prec1 $Type1 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op xf (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type1 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op xf (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
     (is $Prec1 
       (- $PrecOp 1))
-    ($write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
-    ($write-atom $Op $Type1 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op yf (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
+    (%write-symbol $Op $Type1 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op yf (:: $A1) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
     (is $Prec1 $PrecOp)
-    ($write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
-    ($write-atom $Op $Type1 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op xfx (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
+    (%write-symbol $Op $Type1 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op xfx (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
     (is $Prec1 
       (- $PrecOp 1))
     (is $Prec2 
       (- $PrecOp 1))
-    ($write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
-    ($write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
-    ($write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op xfy (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
+    (%write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
+    (%write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op xfy (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
     (is $Prec1 
       (- $PrecOp 1))
     (is $Prec2 $PrecOp)
-    ($write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
-    ($write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
-    ($write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
-  (= ($write-term-op1 $Op yfx (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
+    (%write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
+    (%write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
+  (= (%write-term-op1 $Op yfx (:: $A1 $A2) $PrecOp $Type0 $Type $Style $S_or_a)  
     (set-det)
     (is $Prec1 $PrecOp)
     (is $Prec2 
       (- $PrecOp 1))
-    ($write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
-    ($write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
-    ($write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
+    (%write-term0 $A1 $Prec1 $Type0 $Type1 $Style $S_or_a)
+    (%write-term-infix-op $Op $Type1 $Type2 $Style $S_or_a)
+    (%write-term0 $A2 $Prec2 $Type2 $Type $Style $S_or_a))
 
 
-  (= ($write-term-infix-op , $Type0 punct $_ $S_or_a)  
+  (= (%write-term-infix-op , $Type0 punct $_ $S_or_a)  
     (set-det)
-    ($write-space-if-needed $Type0 punct $S_or_a)
+    (%write-space-if-needed $Type0 punct $S_or_a)
     (put-char $S_or_a ,))
-  (= ($write-term-infix-op $Op $Type0 $Type $Style $S_or_a)  
-    ($write-atom $Op $Type0 $Type $Style $S_or_a))
+  (= (%write-term-infix-op $Op $Type0 $Type $Style $S_or_a)  
+    (%write-symbol $Op $Type0 $Type $Style $S_or_a))
 
 
-  (= ($write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
+  (= (%write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
     (nonvar $As)
     (= $As 
       (Cons  $_ $_))
     (set-det)
-    ($write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
-    ($write-space-if-needed $Type1 punct $S_or_a)
+    (%write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
+    (%write-space-if-needed $Type1 punct $S_or_a)
     (put-char $S_or_a ,)
-    ($write-term-list-args $As punct $Type $Style $S_or_a))
+    (%write-term-list-args $As punct $Type $Style $S_or_a))
 
-  (= ($write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
+  (= (%write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
     (nonvar $As)
     (= $As Nil)
     (set-det)
-    ($write-term0 $A 999 $Type0 $Type $Style $S_or_a))
+    (%write-term0 $A 999 $Type0 $Type $Style $S_or_a))
 
-  (= ($write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
-    ($write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
-    ($write-space-if-needed $Type1 punct $S_or_a)
+  (= (%write-term-list-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
+    (%write-space-if-needed $Type1 punct $S_or_a)
     (put-char $S_or_a |)
-    ($write-term0 $As 999 punct $Type $Style $S_or_a))
+    (%write-term0 $As 999 punct $Type $Style $S_or_a))
 
 
-  (= ($write-term-args Nil $Type $Type $_ $_)  
+  (= (%write-term-args Nil $Type $Type $_ $_)  
     (set-det))
-  (= ($write-term-args (:: $A) $Type0 $Type $Style $S_or_a)  
+  (= (%write-term-args (:: $A) $Type0 $Type $Style $S_or_a)  
     (set-det)
-    ($write-term0 $A 999 $Type0 $Type $Style $S_or_a))
-  (= ($write-term-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
+    (%write-term0 $A 999 $Type0 $Type $Style $S_or_a))
+  (= (%write-term-args (Cons  $A $As) $Type0 $Type $Style $S_or_a)  
     (set-det)
-    ($write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
-    ($write-space-if-needed $Type1 punct $S_or_a)
+    (%write-term0 $A 999 $Type0 $Type1 $Style $S_or_a)
+    (%write-space-if-needed $Type1 punct $S_or_a)
     (put-char $S_or_a ,)
-    ($write-term-args $As punct $Type $Style $S_or_a))
+    (%write-term-args $As punct $Type $Style $S_or_a))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2420,7 +2405,7 @@
     (=< 0 $Priority)
     (=< $Priority 1200)
     (set-det)
-    ($op1 $Priority $Op_specifier $Operator))
+    (%op1 $Priority $Op_specifier $Operator))
   (= (op $Priority $Op_specifier $Operator)  
     (illarg 
       (domain integer 
@@ -2428,150 +2413,148 @@
       (op $Priority $Op_specifier $Operator) 1))
 
 
-  (= ($op1 $Priority $Op_specifier $Operator)  
+  (= (%op1 $Priority $Op_specifier $Operator)  
     (nonvar $Op_specifier)
-    ($op-specifier $Op_specifier $_)
+    (%op-specifier $Op_specifier $_)
     (set-det)
-    ($op2 $Priority $Op_specifier $Operator))
-  (= ($op1 $Priority $Op_specifier $Operator)  
+    (%op2 $Priority $Op_specifier $Operator))
+  (= (%op1 $Priority $Op_specifier $Operator)  
     (findall $X 
-      ($op-specifier $X $_) $Domain)
+      (%op-specifier $X $_) $Domain)
     (illarg 
       (domain term $Domain) 
       (op $Priority $Op_specifier $Operator) 2))
 
 
-  (= ($op2 $Priority $Op_specifier $Operator)  
+  (= (%op2 $Priority $Op_specifier $Operator)  
     (atom $Operator)
     (set-det)
-    ($add-operators 
+    (%add-operators 
       (:: $Operator) $Priority $Op_specifier))
-  (= ($op2 $Priority $Op_specifier $Operator)  
-    ($op-atom-list $Operator $Atoms)
+  (= (%op2 $Priority $Op_specifier $Operator)  
+    (%op-symbol-list $Operator $Atoms)
     (set-det)
-    ($add-operators $Atoms $Priority $Op_specifier))
-  (= ($op2 $Priority $Op_specifier $Operator)  
+    (%add-operators $Atoms $Priority $Op_specifier))
+  (= (%op2 $Priority $Op_specifier $Operator)  
     (illarg 
-      (type (list is-symbol)) 
+      (type (list atom)) 
       (op $Priority $Op_specifier $Operator) 3))
 
 
-  (= ($add-operators Nil $_ $_)  
+  (= (%add-operators Nil $_ $_)  
     (set-det))
-  (= ($add-operators (Cons  $A $As) $Priority $Op_specifier)  
-    ($add-op $A $Priority $Op_specifier)
-    ($add-operators $As $Priority $Op_specifier))
+  (= (%add-operators (Cons  $A $As) $Priority $Op_specifier)  
+    (%add-op $A $Priority $Op_specifier)
+    (%add-operators $As $Priority $Op_specifier))
 
 
-  (= ($add-op , $Priority $Op_specifier)  
+  (= (%add-op , $Priority $Op_specifier)  
     (set-det)
     (illarg 
       (permission modify operator , $_) 
       (op $Priority $Op_specifier ,) 3))
-  (= ($add-op $A $_ $Op_specifier)  
+  (= (%add-op $A $_ $Op_specifier)  
     ( (==  
         (= 
-          (%current_operator  $_ $Op_specifier0 $A) $_) 
+          (%current-operator  $_ $Op_specifier0 $A) $_) 
         (get-atoms  &self)) 
-      ($op-specifier $Op_specifier $Class) 
-      ($op-specifier $Op_specifier0 $Class0) 
+      (%op-specifier $Op_specifier $Class) 
+      (%op-specifier $Op_specifier0 $Class0) 
       (= $Class $Class0) 
-      (remove-is-symbol  &self 
-        (%current_operator  $_ $Op_specifier0 $A)) 
-      (fail)))
-  (= ($add-op $_ 0 $_)  
+      (remove-atom  &self 
+        (%current-operator  $_ $Op_specifier0 $A)) fail))
+  (= (%add-op $_ 0 $_)  
     (set-det))
-  (= ($add-op $A $Priority $Op_specifier)  
-    (add-is-symbol  &self 
-      (%current_operator  $Priority $Op_specifier $A)))
+  (= (%add-op $A $Priority $Op_specifier)  
+    (add-atom  &self 
+      (%current-operator  $Priority $Op_specifier $A)))
 
 
-  (= (%op_specifier  fx prefix)  True)
-  (= (%op_specifier  fy prefix)  True)
-  (= (%op_specifier  xfx infix)  True)
-  (= (%op_specifier  xfy infix)  True)
-  (= (%op_specifier  yfx infix)  True)
-  (= (%op_specifier  xf postfix)  True)
-  (= (%op_specifier  yf postfix)  True)
+  (= (%op-specifier  fx prefix)  True)
+  (= (%op-specifier  fy prefix)  True)
+  (= (%op-specifier  xfx infix)  True)
+  (= (%op-specifier  xfy infix)  True)
+  (= (%op-specifier  yfx infix)  True)
+  (= (%op-specifier  xf postfix)  True)
+  (= (%op-specifier  yf postfix)  True)
 
 
-  (= ($op-atom-list $X $_)  
-    (var $X)
-    (set-det)
-    (fail))
-  (= ($op-atom-list Nil Nil)  
+  (= (%op-symbol-list $X $_)  
+    ( (var $X) 
+      (set-det) fail))
+  (= (%op-symbol-list Nil Nil)  
     (set-det))
-  (= ($op-atom-list (Cons  $X $Xs) (Cons  $X $As))  
+  (= (%op-symbol-list (Cons  $X $Xs) (Cons  $X $As))  
     (atom $X)
     (set-det)
-    ($op-atom-list $Xs $As))
+    (%op-symbol-list $Xs $As))
 
 
   (= (current-op $Priority $Op_specifier $Operator)  
     (==  
       (= 
-        (%current_operator  $Priority $Op_specifier $Operator) $_) 
+        (%current-operator  $Priority $Op_specifier $Operator) $_) 
       (get-atoms  &self)))
 
 
-  (= (%current_operator  1200 xfx :-)  True)
-  (= (%current_operator  1200 xfx -->)  True)
-  (= (%current_operator  1200 fx :-)  True)
-  (= (%current_operator  1200 fx ?-)  True)
-  (= (%current_operator  1150 fx package)  True)
-  (= (%current_operator  1150 fx import)  True)
-  (= (%current_operator  1150 fx include)  True)
-  (= (%current_operator  1150 fx include_resource)  True)
-  (= (%current_operator  1150 fx constant)  True)
-  (= (%current_operator  1150 fx public)  True)
-  (= (%current_operator  1150 fx dynamic)  True)
-  (= (%current_operator  1150 fx meta_predicate)  True)
-  (= (%current_operator  1150 fx mode)  True)
-  (= (%current_operator  1150 fx multifile)  True)
-  (= (%current_operator  1150 fx block)  True)
-  (= (%current_operator  1150 fx ifdef)  True)
-  (= (%current_operator  1150 fx ifndef)  True)
-  (= (%current_operator  1150 fx domain)  True)
-  (= (%current_operator  1150 fx database)  True)
-  (= (%current_operator  1100 xfy ;)  True)
-  (= (%current_operator  1050 xfy ->)  True)
-  (= (%current_operator  1000 xfy ,)  True)
-  (= (%current_operator  900 fy \+)  True)
-  (= (%current_operator  700 xfx =)  True)
-  (= (%current_operator  700 xfx \=)  True)
-  (= (%current_operator  700 xfx ==)  True)
-  (= (%current_operator  700 xfx \==)  True)
-  (= (%current_operator  700 xfx @<)  True)
-  (= (%current_operator  700 xfx @>)  True)
-  (= (%current_operator  700 xfx @=<)  True)
-  (= (%current_operator  700 xfx @>=)  True)
-  (= (%current_operator  700 xfx =..)  True)
-  (= (%current_operator  700 xfx is)  True)
-  (= (%current_operator  700 xfx =:=)  True)
-  (= (%current_operator  700 xfx =\=)  True)
-  (= (%current_operator  700 xfx <)  True)
-  (= (%current_operator  700 xfx >)  True)
-  (= (%current_operator  700 xfx =<)  True)
-  (= (%current_operator  700 xfx >=)  True)
-  (= (%current_operator  550 xfy :)  True)
-  (= (%current_operator  500 yfx +)  True)
-  (= (%current_operator  500 yfx -)  True)
-  (= (%current_operator  500 yfx #)  True)
-  (= (%current_operator  500 yfx /\)  True)
-  (= (%current_operator  500 yfx \/)  True)
-  (= (%current_operator  500 fx +)  True)
-  (= (%current_operator  400 yfx *)  True)
-  (= (%current_operator  400 yfx /)  True)
-  (= (%current_operator  400 yfx //)  True)
-  (= (%current_operator  400 yfx mod)  True)
-  (= (%current_operator  400 yfx rem)  True)
-  (= (%current_operator  400 yfx <<)  True)
-  (= (%current_operator  400 yfx >>)  True)
-  (= (%current_operator  300 xfx ~)  True)
-  (= (%current_operator  200 xfx **)  True)
-  (= (%current_operator  200 xfy ^)  True)
-  (= (%current_operator  200 fy \)  True)
-  (= (%current_operator  200 fy -)  True)
+  (= (%current-operator  1200 xfx :-)  True)
+  (= (%current-operator  1200 xfx -->)  True)
+  (= (%current-operator  1200 fx :-)  True)
+  (= (%current-operator  1200 fx ?-)  True)
+  (= (%current-operator  1150 fx package)  True)
+  (= (%current-operator  1150 fx import)  True)
+  (= (%current-operator  1150 fx include)  True)
+  (= (%current-operator  1150 fx include_resource)  True)
+  (= (%current-operator  1150 fx constant)  True)
+  (= (%current-operator  1150 fx public)  True)
+  (= (%current-operator  1150 fx dynamic)  True)
+  (= (%current-operator  1150 fx meta_predicate)  True)
+  (= (%current-operator  1150 fx mode)  True)
+  (= (%current-operator  1150 fx multifile)  True)
+  (= (%current-operator  1150 fx block)  True)
+  (= (%current-operator  1150 fx ifdef)  True)
+  (= (%current-operator  1150 fx ifndef)  True)
+  (= (%current-operator  1150 fx domain)  True)
+  (= (%current-operator  1150 fx database)  True)
+  (= (%current-operator  1100 xfy ;)  True)
+  (= (%current-operator  1050 xfy ->)  True)
+  (= (%current-operator  1000 xfy ,)  True)
+  (= (%current-operator  900 fy \+)  True)
+  (= (%current-operator  700 xfx =)  True)
+  (= (%current-operator  700 xfx \=)  True)
+  (= (%current-operator  700 xfx ==)  True)
+  (= (%current-operator  700 xfx \==)  True)
+  (= (%current-operator  700 xfx @<)  True)
+  (= (%current-operator  700 xfx @>)  True)
+  (= (%current-operator  700 xfx @=<)  True)
+  (= (%current-operator  700 xfx @>=)  True)
+  (= (%current-operator  700 xfx =..)  True)
+  (= (%current-operator  700 xfx is)  True)
+  (= (%current-operator  700 xfx =:=)  True)
+  (= (%current-operator  700 xfx =\=)  True)
+  (= (%current-operator  700 xfx <)  True)
+  (= (%current-operator  700 xfx >)  True)
+  (= (%current-operator  700 xfx =<)  True)
+  (= (%current-operator  700 xfx >=)  True)
+  (= (%current-operator  550 xfy :)  True)
+  (= (%current-operator  500 yfx +)  True)
+  (= (%current-operator  500 yfx -)  True)
+  (= (%current-operator  500 yfx #)  True)
+  (= (%current-operator  500 yfx /\)  True)
+  (= (%current-operator  500 yfx \/)  True)
+  (= (%current-operator  500 fx +)  True)
+  (= (%current-operator  400 yfx *)  True)
+  (= (%current-operator  400 yfx /)  True)
+  (= (%current-operator  400 yfx //)  True)
+  (= (%current-operator  400 yfx mod)  True)
+  (= (%current-operator  400 yfx rem)  True)
+  (= (%current-operator  400 yfx <<)  True)
+  (= (%current-operator  400 yfx >>)  True)
+  (= (%current-operator  300 xfx ~)  True)
+  (= (%current-operator  200 xfx **)  True)
+  (= (%current-operator  200 xfy ^)  True)
+  (= (%current-operator  200 fy \)  True)
+  (= (%current-operator  200 fy -)  True)
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2586,15 +2569,13 @@
 
 
   (= (not $G)  
-    (call $G)
-    (set-det)
-    (fail))
+    ( (call $G) 
+      (set-det) fail))
   (= (\+  $_)  True)
 
 
   (= repeat  True)
-  (= (repeat)  
-    (repeat))
+  (= repeat  repeat)
 
 
   (= (once $G)  
@@ -2628,12 +2609,12 @@
   !(public (/ regex-matches 2))
 
 
-  (= (sub-atom $Atom $Before $Length $After $Sub_atom)  
-    (atom-concat $AtomL $X $Atom)
-    (atom-length $AtomL $Before)
-    (atom-concat $Sub_atom $AtomR $X)
-    (atom-length $Sub_atom $Length)
-    (atom-length $AtomR $After))
+  (= (sub-symbol $Atom $Before $Length $After $Sub_atom)  
+    (symbol-concat $AtomL $X $Atom)
+    (symbol-length $AtomL $Before)
+    (symbol-concat $Sub_atom $AtomR $X)
+    (symbol-length $Sub_atom $Length)
+    (symbol-length $AtomR $After))
 
 
   (= (name $Constant $Chars)  
@@ -2643,9 +2624,9 @@
       (number-codes $Constant $Chars) 
       (det-if-then-else 
         (atomic $Constant) 
-        (atom-codes $Constant $Chars) 
+        (symbol-codes $Constant $Chars) 
         (illarg 
-          (type symbolic) 
+          (type atomic) 
           (name $Constant $Chars) 1))))
   (= (name $Constant $Chars)  
     (var $Constant)
@@ -2653,7 +2634,7 @@
       (number-codes $Constant0 $Chars) 
       (= $Constant $Constant0) 
       (det-if-then-else 
-        (atom-codes $Constant0 $Chars) 
+        (symbol-codes $Constant0 $Chars) 
         (= $Constant $Constant0) 
         (illarg 
           (type (list char)) 
@@ -2661,8 +2642,7 @@
 
 
   (= (regex-matches $_ Nil $_)  
-    (set-det)
-    (fail))
+    ( (set-det) fail))
   (= (regex-matches $Pattern $List $Result)  
     (= $List 
       (Cons  $_ $_))
@@ -2706,81 +2686,81 @@
   (= (set-prolog-flag $Flag $Value)  
     (atom $Flag)
     (set-det)
-    ($set-prolog-flag0 $Flag $Value))
+    (%set-prolog-flag0 $Flag $Value))
   (= (set-prolog-flag $Flag $Value)  
     (illarg 
-      (type is-symbol) 
+      (type atom) 
       (set-prolog-flag $Flag $Value) 1))
 
 
-  (= ($set-prolog-flag0 $Flag $Value)  
-    ($prolog-impl-flag $Flag $Mode 
+  (= (%set-prolog-flag0 $Flag $Value)  
+    (%prolog-impl-flag $Flag $Mode 
       (changeable $YN))
     (set-det)
-    ($set-prolog-flag0 $YN $Flag $Value $Mode))
-  (= ($set-prolog-flag0 $Flag $Value)  
+    (%set-prolog-flag0 $YN $Flag $Value $Mode))
+  (= (%set-prolog-flag0 $Flag $Value)  
     (illarg 
-      (domain is-symbol prolog-flag) 
+      (domain atom prolog-flag) 
       (set-prolog-flag $Flag $Value) 1))
 
-  (= ($set-prolog-flag0 no $Flag $Value $_)  
+  (= (%set-prolog-flag0 no $Flag $Value $_)  
     (set-det)
     (illarg 
       (permission modify flag $Flag $_) 
       (set-prolog-flag $Flag $Value) $_))
-  (= ($set-prolog-flag0 $_ $Flag $Value $Mode)  
-    ($builtin-member $Value $Mode)
+  (= (%set-prolog-flag0 $_ $Flag $Value $Mode)  
+    (%builtin-member $Value $Mode)
     (set-det)
-    ($set-prolog-impl-flag $Flag $Value))
-  (= ($set-prolog-flag0 $_ $Flag $Value $_)  
+    (%set-prolog-impl-flag $Flag $Value))
+  (= (%set-prolog-flag0 $_ $Flag $Value $_)  
     (illarg 
-      (domain is-symbol flag-value) 
+      (domain atom flag-value) 
       (set-prolog-flag $Flag $Value) 2))
 
 
   (= (current-prolog-flag $Flag $Term)  
     (var $Flag)
     (set-det)
-    ($prolog-impl-flag $Flag $_ $_)
-    ($get-prolog-impl-flag $Flag $Term))
+    (%prolog-impl-flag $Flag $_ $_)
+    (%get-prolog-impl-flag $Flag $Term))
   (= (current-prolog-flag $Flag $Term)  
     (atom $Flag)
     (set-det)
     (det-if-then-else 
-      ($prolog-impl-flag $Flag $_ $_) 
-      ($get-prolog-impl-flag $Flag $Term) 
+      (%prolog-impl-flag $Flag $_ $_) 
+      (%get-prolog-impl-flag $Flag $Term) 
       (illarg 
-        (domain is-symbol prolog-flag) 
+        (domain atom prolog-flag) 
         (current-prolog-flag $Flag $Term) 1)))
   (= (current-prolog-flag $Flag $Term)  
     (illarg 
-      (type is-symbol) 
+      (type atom) 
       (current-prolog-flag $Flag $Term) 1))
 
 ;
 ; '$MeTTa_impl_flag'(bounded, _, changeable(no)).
 
-  (= (%prolog_impl_flag  max_integer $_ (changeable  no))  True)
-  (= (%prolog_impl_flag  min_integer $_ (changeable  no))  True)
+  (= (%prolog-impl-flag  max_integer $_ (changeable  no))  True)
+  (= (%prolog-impl-flag  min_integer $_ (changeable  no))  True)
 ;
 ; '$MeTTa_impl_flag'(integer_rounding_function, [down,toward_zero], changeable(no)).
 ;
 ; '$MeTTa_impl_flag'(char_conversion, [on,off], changeable(no)).
-  (= (%prolog_impl_flag  debug (on off) (changeable  yes))  True)
-  (= (%prolog_impl_flag  max_arity $_ (changeable  no))  True)
-  (= (%prolog_impl_flag  unknown (error fail warning) (changeable  yes))  True)
-  (= (%prolog_impl_flag  double_quotes (chars codes atom) (changeable  no))  True)
-  (= (%prolog_impl_flag  print_stack_trace (on off) (changeable  yes))  True)
+  (= (%prolog-impl-flag  debug (on off) (changeable  yes))  True)
+  (= (%prolog-impl-flag  max_arity $_ (changeable  no))  True)
+  (= (%prolog-impl-flag  unknown (error fail warning) (changeable  yes))  True)
+  (= (%prolog-impl-flag  double_quotes (chars codes atom) (changeable  no))  True)
+  (= (%prolog-impl-flag  print_stack_trace (on off) (changeable  yes))  True)
 
 
   !(public (/ halt 0))
   !(public (/ abort 0))
 
 
-  (= (halt)  
+  (= halt  
     (halt 0))
 
-  (= (abort)  
+  (= abort  
     (raise-exception 'Execution aborted'))
 
 ;
@@ -2793,7 +2773,7 @@
   !(public (, (/ C 3) (/ expand-term 2)))
 
 
-  (= (C  (Cons  $X $S) $X $S)  True)
+  (= (C  ([|]  $X $S) $X $S)  True)
 
 
   (= (expand-term $Dcg $Cl)  
@@ -2801,17 +2781,17 @@
     (set-det)
     (= $Dcg $Cl))
   (= (expand-term $Dcg $Cl)  
-    ($dcg-expansion $Dcg $Cl0)
+    (%dcg-expansion $Dcg $Cl0)
     (set-det)
     (= $Cl0 $Cl))
-  (= (expand_term  $Dcg $Dcg)  True)
+  (= (expand-term  $Dcg $Dcg)  True)
 
 
-  (= ($dcg-expansion $Dcg $Cl)  
+  (= (%dcg-expansion $Dcg $Cl)  
     (var $Dcg)
     (set-det)
     (= $Dcg $Cl))
-  (= ($dcg-expansion (--> $Head $B) (= $H1  
+  (= (%dcg-expansion (--> $Head $B) (= $H1  
     ($G1 $G2)))  
     (nonvar $Head)
     (= $Head 
@@ -2819,92 +2799,92 @@
     (= $List 
       (Cons  $_ $_))
     (set-det)
-    ($dcg-translation-atom $H $H1 $S0 $S1)
-    ($dcg-translation $B $G1 $S0 $S)
-    ($dcg-translation $List $G2 $S1 $S))
-  (= ($dcg-expansion (--> $H $B) (= $H1  $B1))  
-    ($dcg-translation-atom $H $H1 $S0 $S)
-    ($dcg-translation $B $B1 $S0 $S))
+    (%dcg-translation-symbol $H $H1 $S0 $S1)
+    (%dcg-translation $B $G1 $S0 $S)
+    (%dcg-translation $List $G2 $S1 $S))
+  (= (%dcg-expansion (--> $H $B) (= $H1  $B1))  
+    (%dcg-translation-symbol $H $H1 $S0 $S)
+    (%dcg-translation $B $B1 $S0 $S))
 
 
-  (= ($dcg-translation-atom $X (phrase $X $S0 $S) $S0 $S)  
+  (= (%dcg-translation-symbol $X (phrase $X $S0 $S) $S0 $S)  
     (var $X)
     (set-det))
-  (= ($dcg-translation-atom (with_self  $M $X) (with_self  $M $X1) $S0 $S)  
+  (= (%dcg-translation-symbol (with-self  $M $X) (with-self  $M $X1) $S0 $S)  
     (set-det)
-    ($dcg-translation-atom $X $X1 $S0 $S))
-  (= ($dcg-translation-atom $X $X1 $S0 $S)  
+    (%dcg-translation-symbol $X $X1 $S0 $S))
+  (= (%dcg-translation-symbol $X $X1 $S0 $S)  
     (=.. $X 
       (Cons  $F $As))
-    ($builtin-append $As 
+    (%builtin-append $As 
       (:: $S0 $S) $As1)
     (=.. $X1 
       (Cons  $F $As1)))
 
 
-  (= ($dcg-translation $X $Y $S0 $S)  
-    ($dcg-trans $X $Y0 $T $S0 $S)
-    ($dcg-trans0 $Y0 $Y $T $S0 $S))
+  (= (%dcg-translation $X $Y $S0 $S)  
+    (%dcg-trans $X $Y0 $T $S0 $S)
+    (%dcg-trans0 $Y0 $Y $T $S0 $S))
 
 
-  (= ($dcg-trans0 $Y $Y $T $S0 $T)  
+  (= (%dcg-trans0 $Y $Y $T $S0 $T)  
     (\== $T $S0)
     (set-det))
-  (= ($dcg-trans0 $Y0 $Y $T $_ $S)  
-    ($dcg-concat $Y0 
+  (= (%dcg-trans0 $Y0 $Y $T $_ $S)  
+    (%dcg-concat $Y0 
       (= $S $T) $Y))
 
 
-  (= ($dcg-concat $X $Y $Z)  
+  (= (%dcg-concat $X $Y $Z)  
     (== $X True)
     (set-det)
     (= $Z $Y))
-  (= ($dcg-concat $X $Y $Z)  
+  (= (%dcg-concat $X $Y $Z)  
     (== $Y True)
     (set-det)
     (= $Z $X))
-  (= (%dcg_concat  $X $Y (,  $X $Y))  True)
+  (= (%dcg-concat  $X $Y (,  $X $Y))  True)
 
 
-  (= ($dcg-trans $X $X1 $S $S0 $S)  
+  (= (%dcg-trans $X $X1 $S $S0 $S)  
     (var $X)
     (set-det)
-    ($dcg-translation-atom $X $X1 $S0 $S))
-  (= ($dcg-trans (with_self  $M $X) (with_self  $M $Y) $T $S0 $S)  
+    (%dcg-translation-symbol $X $X1 $S0 $S))
+  (= (%dcg-trans (with-self  $M $X) (with-self  $M $Y) $T $S0 $S)  
     (set-det)
-    ($dcg-trans $X $Y $T $S0 $S))
-  (= ($dcg-trans Nil True $S0 $S0 $_)  
+    (%dcg-trans $X $Y $T $S0 $S))
+  (= (%dcg-trans Nil True $S0 $S0 $_)  
     (set-det))
-  (= ($dcg-trans (Cons  $X $Y) $Z $T $S0 $S)  
+  (= (%dcg-trans (Cons  $X $Y) $Z $T $S0 $S)  
     (set-det)
-    ($dcg-trans $Y $Y1 $T $S1 $S)
-    ($dcg-concat 
+    (%dcg-trans $Y $Y1 $T $S1 $S)
+    (%dcg-concat 
       (C $S0 $X $S1) $Y1 $Z))
-  (= ($dcg-trans (not $X) (det-if-then-else $X1 fail (= $S $S0)) $S $S0 $S)  
+  (= (%dcg-trans (not $X) (det-if-then-else $X1 fail (= $S $S0)) $S $S0 $S)  
     (set-det)
-    ($dcg-trans $X $X1 $S1 $S0 $S1))
-  (= ($dcg-trans (, $X $Y) $Z $T $S0 $S)  
+    (%dcg-trans $X $X1 $S1 $S0 $S1))
+  (= (%dcg-trans (, $X $Y) $Z $T $S0 $S)  
     (set-det)
-    ($dcg-trans $X $X1 $S1 $S0 $S1)
-    ($dcg-trans $Y $Y1 $T $S1 $S)
-    ($dcg-concat $X1 $Y1 $Z))
-  (= ($dcg-trans (det-if-then $X $Y) (det-if-then $X1 $Y1) $T $S0 $S)  
+    (%dcg-trans $X $X1 $S1 $S0 $S1)
+    (%dcg-trans $Y $Y1 $T $S1 $S)
+    (%dcg-concat $X1 $Y1 $Z))
+  (= (%dcg-trans (det-if-then $X $Y) (det-if-then $X1 $Y1) $T $S0 $S)  
     (set-det)
-    ($dcg-trans $X $X1 $S1 $S0 $S1)
-    ($dcg-trans $Y $Y1 $T $S1 $S))
-  (= ($dcg-trans (or $X $Y) (or $X1 $Y1) $S $S0 $S)  
+    (%dcg-trans $X $X1 $S1 $S0 $S1)
+    (%dcg-trans $Y $Y1 $T $S1 $S))
+  (= (%dcg-trans (or $X $Y) (or $X1 $Y1) $S $S0 $S)  
     (set-det)
-    ($dcg-translation $X $X1 $S0 $S)
-    ($dcg-translation $Y $Y1 $S0 $S))
-  (= ($dcg-trans (set-det) (set-det) $S0 $S0 $_)  
+    (%dcg-translation $X $X1 $S0 $S)
+    (%dcg-translation $Y $Y1 $S0 $S))
+  (= (%dcg-trans (set-det) (set-det) $S0 $S0 $_)  
     (set-det))
-  (= ($dcg-trans {$G } (call $G) $S0 $S0 $_)  
+  (= (%dcg-trans {$G } (call $G) $S0 $S0 $_)  
     (var $G)
     (set-det))
-  (= ($dcg-trans {$G } $G $S0 $S0 $_)  
+  (= (%dcg-trans {$G } $G $S0 $S0 $_)  
     (set-det))
-  (= ($dcg-trans $X $X1 $S $S0 $S)  
-    ($dcg-translation-atom $X $X1 $S0 $S))
+  (= (%dcg-trans $X $X1 $S $S0 $S)  
+    (%dcg-translation-symbol $X $X1 $S0 $S))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2936,7 +2916,7 @@
 
   (= (hash-exists $Alias)  
     (atom $Alias)
-    ($get-hash-manager $HM)
+    (%get-hash-manager $HM)
     (hash-contains-key $HM $Alias))
 
 ;
@@ -3047,9 +3027,9 @@
 
 
   (= (synchronized $Object $Goal)  
-    ($begin-sync $Object $Ref)
+    (%begin-sync $Object $Ref)
     (call $Goal)
-    ($end-sync $Ref))
+    (%end-sync $Ref))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -3093,125 +3073,114 @@
 ;
 ; ;; Main
 
-  (= (cafeteria)  
-    (%cafeteria-init)
-    (repeat)
-    (%toplvel-loop)
-    (on-exception $Msg 
-      ($cafeteria $Goal) 
-      (print-message error $Msg))
-    (== $Goal end-of-file)
-    (set-det)
-    (nl)
-    ($fast-write bye)
-    (nl))
+  (= cafeteria  
+    (%cafeteria-init repeat %toplvel-loop 
+      (on-exception $Msg 
+        (%cafeteria $Goal) 
+        (print-message error $Msg)) 
+      (== $Goal end-of-file) 
+      (set-det) nl 
+      (%fast-write bye) nl))
 
 
-  (= (%cafeteria-init)  
+  (= %cafeteria-init  
     ( (remove-all-atoms  &self 
-        (%leap_flag  $_)) 
+        (%leap-flag  $_)) 
       (remove-all-atoms  &self 
-        (%current_leash  $_)) 
+        (%current-leash  $_)) 
       (remove-all-atoms  &self 
-        (%current_spypoint  $_ $_ $_)) 
+        (%current-spypoint  $_ $_ $_)) 
       (remove-all-atoms  &self 
-        (%consulted_file  $_)) 
+        (%consulted-file  $_)) 
       (remove-all-atoms  &self 
-        (%consulted_package  $_)) 
+        (%consulted-package  $_)) 
       (remove-all-atoms  &self 
-        (%consulted_predicate  $_ $_ $_)) 
-      (add-is-symbol  &self 
-        (%leap_flag  no)) 
-      (add-is-symbol  &self 
-        (%current_leash  call)) 
-      (add-is-symbol  &self 
-        (%current_leash  exit)) 
-      (add-is-symbol  &self 
-        (%current_leash  redo)) 
-      (add-is-symbol  &self 
-        (%current_leash  fail)) 
+        (%consulted-predicate  $_ $_ $_)) 
+      (add-atom  &self 
+        (%leap-flag  no)) 
+      (add-atom  &self 
+        (%current-leash  call)) 
+      (add-atom  &self 
+        (%current-leash  exit)) 
+      (add-atom  &self 
+        (%current-leash  redo)) 
+      (add-atom  &self 
+        (%current-leash  fail)) 
       (set-det)))
 
 
-  (= (%toplvel-loop)  
-    (current-prolog-flag debug $Mode)
-    (det-if-then-else 
-      (== $Mode off) True 
-      (print-message info 
-        (:: debug)))
-    ($fast-write | ?- )
-    (flush-output))
+  (= %toplvel-loop  
+    ( (current-prolog-flag debug $Mode) 
+      (det-if-then-else 
+        (== $Mode off) True 
+        (print-message info 
+          (:: debug))) 
+      (%fast-write | ?- ) flush-output))
 
 
-  (= ($cafeteria $Goal)  
+  (= (%cafeteria $Goal)  
     (read-with-variables $Goal $Vars)
-    ($process-order $Goal $Vars))
+    (%process-order $Goal $Vars))
 
 
-  (= ($process-order $G $_)  
+  (= (%process-order $G $_)  
     (var $G)
     (set-det)
     (illarg var 
       ! (?-  $G) 1))
-  (= ($process-order end-of-file $_)  
+  (= (%process-order end-of-file $_)  
     (set-det))
-  (= ($process-order (Cons  $File $Files) $_)  
+  (= (%process-order (Cons  $File $Files) $_)  
     (set-det)
     (consult (Cons  $File $Files)))
-  (= ($process-order $G $Vars)  
-    (current-prolog-flag debug $Mode)
-    (det-if-then-else 
-      (== $Mode off) 
-      (call $G) 
-      ($trace-goal $G))
-    (nl)
-    ($rm-redundant-vars $Vars $Vars1)
-    ($give-answers-with-prompt $Vars1)
-    (set-det)
-    ($fast-write yes)
-    (nl))
-  (= ($process-order $_ $_)  
-    (nl)
-    ($fast-write no)
-    (nl))
+  (= (%process-order $G $Vars)  
+    ( (current-prolog-flag debug $Mode) 
+      (det-if-then-else 
+        (== $Mode off) 
+        (call $G) 
+        (%trace-goal $G)) nl 
+      (%rm-redundant-vars $Vars $Vars1) 
+      (%give-answers-with-prompt $Vars1) 
+      (set-det) 
+      (%fast-write yes) nl))
+  (= (%process-order $_ $_)  
+    (nl 
+      (%fast-write no) nl))
 
 
-  (= ($rm-redundant-vars Nil Nil)  
+  (= (%rm-redundant-vars Nil Nil)  
     (set-det))
-  (= ($rm-redundant-vars (Cons  (= - $_) $Xs) $Vs)  
+  (= (%rm-redundant-vars (Cons  (= - $_) $Xs) $Vs)  
     (set-det)
-    ($rm-redundant-vars $Xs $Vs))
-  (= ($rm-redundant-vars (Cons  $X $Xs) (Cons  $X $Vs))  
-    ($rm-redundant-vars $Xs $Vs))
+    (%rm-redundant-vars $Xs $Vs))
+  (= (%rm-redundant-vars (Cons  $X $Xs) (Cons  $X $Vs))  
+    (%rm-redundant-vars $Xs $Vs))
 
 
-  (= ($give-answers-with-prompt Nil)  
+  (= (%give-answers-with-prompt Nil)  
     (set-det))
-  (= ($give-answers-with-prompt $Vs)  
-    ($give-an-answer $Vs)
-    ($fast-write  ? )
-    (flush-output)
-    (read-line $Str)
-    (\== $Str ";")
-    (nl))
+  (= (%give-answers-with-prompt $Vs)  
+    ( (%give-an-answer $Vs) 
+      (%fast-write  ? ) flush-output 
+      (read-line $Str) 
+      (\== $Str ";") nl))
 
 
-  (= ($give-an-answer Nil)  
+  (= (%give-an-answer Nil)  
     (set-det)
-    ($fast-write True))
-  (= ($give-an-answer (:: $X))  
+    (%fast-write True))
+  (= (%give-an-answer (:: $X))  
     (set-det)
-    ('$print-an answer' $X))
-  (= ($give-an-answer (Cons  $X $Xs))  
-    ('$print-an answer' $X)
-    ($fast-write ,)
-    (nl)
-    ($give-an-answer $Xs))
+    ('%print-an answer' $X))
+  (= (%give-an-answer (Cons  $X $Xs))  
+    ( ('%print-an answer' $X) 
+      (%fast-write ,) nl 
+      (%give-an-answer $Xs)))
 
 
-  (= ('$print-an answer' (= $N $V))  
+  (= ('%print-an answer' (= $N $V))  
     (write $N)
-    ($fast-write  = )
+    (%fast-write  = )
     (writeq $V))
 
 ;
@@ -3231,11 +3200,11 @@
   (= (consult $File)  
     (atom $File)
     (set-det)
-    ($consult $File))
+    (%consult $File))
 
 
-  (= ($consult $F)  
-    ($prolog-file-name $F $PF)
+  (= (%consult $F)  
+    (%prolog-file-name $F $PF)
     (open $PF read $In)
     (stream-property $In 
       (file-name $File))
@@ -3251,241 +3220,233 @@
 
 
   (= (consult-stream $File $In)  
-    ($consult-init $File)
-    (repeat)
-    (read $In $Cl)
-    ($consult-clause $Cl)
-    (== $Cl end-of-file)
-    (set-det))
+    ( (%consult-init $File) repeat 
+      (read $In $Cl) 
+      (%consult-clause $Cl) 
+      (== $Cl end-of-file) 
+      (set-det)))
 
 
-  (= ($prolog-file-name $File $File)  
-    (sub-atom $File $_ $_ $After .)
+  (= (%prolog-file-name $File $File)  
+    (sub-symbol $File $_ $_ $After .)
     (> $After 0)
     (set-det))
-  (= ($prolog-file-name $File0 $File)  
-    (atom-concat $File0 .pl $File))
+  (= (%prolog-file-name $File0 $File)  
+    (symbol-concat $File0 .pl $File))
 
 
-  (= ($consult-init $File)  
+  (= (%consult-init $File)  
     ( (remove-all-atoms  &self 
-        (%consulted_file  $_)) 
+        (%consulted-file  $_)) 
       (remove-all-atoms  &self 
-        (%consulted_package  $_)) 
+        (%consulted-package  $_)) 
       (remove-all-atoms  &self 
-        (%consulted_import  $File $_)) 
-      (remove-is-symbol  &self 
-        (%consulted_predicate  $P $PI $File)) 
-      (abolish (with_self  $P $PI)) 
-      (fail)))
-  (= ($consult-init $File)  
-    ( (add-is-symbol  &self 
-        (%consulted_file  $File)) (add-is-symbol  &self (%consulted_package  user))))
+        (%consulted-import  $File $_)) 
+      (remove-atom  &self 
+        (%consulted-predicate  $P $PI $File)) 
+      (abolish (with-self  $P $PI)) fail))
+  (= (%consult-init $File)  
+    ( (add-atom  &self 
+        (%consulted-file  $File)) (add-atom  &self (%consulted-package  user))))
 
 
-  (= ($consult-clause end-of-file)  
+  (= (%consult-clause end-of-file)  
     (set-det))
-  (= ($consult-clause !(module $P $_))  
+  (= (%consult-clause !(module $P $_))  
     (set-det)
-    ($assert-consulted-package $P))
-  (= ($consult-clause !(package $P))  
+    (%assert-consulted-package $P))
+  (= (%consult-clause !(package $P))  
     (set-det)
-    ($assert-consulted-package $P))
-  (= ($consult-clause !(import $P))  
+    (%assert-consulted-package $P))
+  (= (%consult-clause !(import $P))  
     (set-det)
-    ($assert-consulted-import $P))
-  (= ($consult-clause !(dynamic $_))  
+    (%assert-consulted-import $P))
+  (= (%consult-clause !(dynamic $_))  
     (set-det))
-  (= ($consult-clause !(public $_))  
+  (= (%consult-clause !(public $_))  
     (set-det))
-  (= ($consult-clause !(meta-predicate $_))  
+  (= (%consult-clause !(meta-predicate $_))  
     (set-det))
-  (= ($consult-clause !(mode $_))  
+  (= (%consult-clause !(mode $_))  
     (set-det))
-  (= ($consult-clause !(multifile $_))  
+  (= (%consult-clause !(multifile $_))  
     (set-det))
-  (= ($consult-clause !(block $_))  
+  (= (%consult-clause !(block $_))  
     (set-det))
-  (= ($consult-clause !$G)  
+  (= (%consult-clause !$G)  
     ( (set-det) 
       (==  
         (= 
-          (%consulted_package  $P) $_) 
+          (%consulted-package  $P) $_) 
         (get-atoms  &self)) 
-      (once (with_self  $P $G))))
-  (= ($consult-clause $Clause0)  
-    ($consult-preprocess $Clause0 $Clause)
-    ($consult-cls $Clause))
+      (once (with-self  $P $G))))
+  (= (%consult-clause $Clause0)  
+    (%consult-preprocess $Clause0 $Clause)
+    (%consult-cls $Clause))
 
 
-  (= ($assert-consulted-package $P)  
+  (= (%assert-consulted-package $P)  
     ( (==  
         (= 
-          (%consulted_package  $P) $_) 
+          (%consulted-package  $P) $_) 
         (get-atoms  &self)) (set-det)))
-  (= ($assert-consulted-package $P)  
+  (= (%assert-consulted-package $P)  
     ( (remove-all-atoms  &self 
-        (%consulted_package  $_)) (add-is-symbol  &self (%consulted_package  $P))))
+        (%consulted-package  $_)) (add-atom  &self (%consulted-package  $P))))
 
 
-  (= ($assert-consulted-import $P)  
+  (= (%assert-consulted-import $P)  
     ( (==  
         (= 
-          (%consulted_file  $File) $_) 
-        (get-atoms  &self)) (add-is-symbol  &self (%consulted_import  $File $P))))
+          (%consulted-file  $File) $_) 
+        (get-atoms  &self)) (add-atom  &self (%consulted-import  $File $P))))
 
 
-  (= ($consult-preprocess $Clause0 $Clause)  
+  (= (%consult-preprocess $Clause0 $Clause)  
     (expand-term $Clause0 $Clause))
 
 
-  (= ($consult-cls (= $H  $G))  
+  (= (%consult-cls (= $H  $G))  
     (set-det)
-    ($assert-consulted-clause (= $H  $G)))
-  (= ($consult-cls $H)  
-    ($assert-consulted-clause (= $H  True)))
+    (%assert-consulted-clause (= $H  $G)))
+  (= (%consult-cls $H)  
+    (%assert-consulted-clause (= $H  True)))
 
 
-  (= ($assert-consulted-clause $Clause)  
+  (= (%assert-consulted-clause $Clause)  
     ( (= $Clause 
         (= $H  $_)) 
       (functor $H $F $A) 
       (==  
         (= 
-          (%consulted_file  $File) $_) 
+          (%consulted-file  $File) $_) 
         (get-atoms  &self)) 
       (==  
         (= 
-          (%consulted_package  $P) $_) 
+          (%consulted-package  $P) $_) 
         (get-atoms  &self)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (:  $P $Clause)) 
-      (add-is-symbol  &self 
-        (%consulted_predicate  $P 
+      (add-atom  &self 
+        (%consulted-predicate  $P 
           (/  $F $A) $File)) 
       (set-det)))
 
 ;
 ; ;; Trace
 
-  (= (trace)  
+  (= trace  
     (current-prolog-flag debug on)
     (set-det))
-  (= (trace)  
-    (set-prolog-flag debug on)
-    (%trace-init)
-    ($fast-write '{Small debugger is switch on}')
-    (nl)
-    (set-det))
-
-
-  (= (%trace-init)  
-    ( (remove-all-atoms  &self 
-        (%leap_flag  $_)) 
-      (remove-all-atoms  &self 
-        (%current_leash  $_)) 
-      (remove-all-atoms  &self 
-        (%current_spypoint  $_ $_ $_)) 
-      (add-is-symbol  &self 
-        (%leap_flag  no)) 
-      (add-is-symbol  &self 
-        (%current_leash  call)) 
-      (add-is-symbol  &self 
-        (%current_leash  exit)) 
-      (add-is-symbol  &self 
-        (%current_leash  redo)) 
-      (add-is-symbol  &self 
-        (%current_leash  fail)) 
+  (= trace  
+    ( (set-prolog-flag debug on) %trace-init 
+      (%fast-write '{Small debugger is switch on}') nl 
       (set-det)))
 
 
-  (= (notrace)  
+  (= %trace-init  
+    ( (remove-all-atoms  &self 
+        (%leap-flag  $_)) 
+      (remove-all-atoms  &self 
+        (%current-leash  $_)) 
+      (remove-all-atoms  &self 
+        (%current-spypoint  $_ $_ $_)) 
+      (add-atom  &self 
+        (%leap-flag  no)) 
+      (add-atom  &self 
+        (%current-leash  call)) 
+      (add-atom  &self 
+        (%current-leash  exit)) 
+      (add-atom  &self 
+        (%current-leash  redo)) 
+      (add-atom  &self 
+        (%current-leash  fail)) 
+      (set-det)))
+
+
+  (= notrace  
     (current-prolog-flag debug off)
     (set-det))
-  (= (notrace)  
-    (set-prolog-flag debug off)
-    ($fast-write '{Small debugger is switch off}')
-    (nl)
-    (set-det))
+  (= notrace  
+    ( (set-prolog-flag debug off) 
+      (%fast-write '{Small debugger is switch off}') nl 
+      (set-det)))
 
 
-  (= (debug)  
-    (trace))
+  (= debug  trace)
 
-  (= (nodebug)  
-    (notrace))
+  (= nodebug  notrace)
 
 ;
 ; ;; Spy-Points
 
   (= (spy $T)  
-    ($term-to-predicateindicator $T $PI 
-      (spy $T))
-    (trace)
-    ($assert-spypoint $PI)
-    ($set-debug-flag leap yes)
-    (set-det))
+    ( (%term-to-predicateindicator $T $PI 
+        (spy $T)) trace 
+      (%assert-spypoint $PI) 
+      (%set-debug-flag leap yes) 
+      (set-det)))
 
 
-  (= ($assert-spypoint (with_self  $P (/ $F $A)))  
+  (= (%assert-spypoint (with-self  $P (/ $F $A)))  
     ( (==  
         (= 
-          (%current_spypoint  $P $F $A) $_) 
+          (%current-spypoint  $P $F $A) $_) 
         (get-atoms  &self)) 
       (print-message info 
         (:: spypoint 
-          (with_self  $P 
+          (with-self  $P 
             (/ $F $A)) is already added)) 
       (set-det)))
-  (= ($assert-spypoint (with_self  $P (/ $F $A)))  
+  (= (%assert-spypoint (with-self  $P (/ $F $A)))  
     ( (==  
         (= 
-          (%consulted_predicate  $P 
+          (%consulted-predicate  $P 
             (/  $F $A) $_) $_) 
         (get-atoms  &self)) 
-      (add-is-symbol  &self 
-        (%current_spypoint  $P $F $A)) 
+      (add-atom  &self 
+        (%current-spypoint  $P $F $A)) 
       (print-message info 
         (:: spypoint 
-          (with_self  $P 
+          (with-self  $P 
             (/ $F $A)) is added)) 
       (set-det)))
-  (= ($assert-spypoint (with_self  $P (/ $F $A)))  
+  (= (%assert-spypoint (with-self  $P (/ $F $A)))  
     (print-message warning 
       (:: no matching predicate for spy 
-        (with_self  $P 
+        (with-self  $P 
           (/ $F $A)))))
 
 
   (= (nospy $T)  
-    ($term-to-predicateindicator $T $PI 
+    (%term-to-predicateindicator $T $PI 
       (nospy $T))
-    ($retract-spypoint $PI)
-    ($set-debug-flag leap no)
+    (%retract-spypoint $PI)
+    (%set-debug-flag leap no)
     (set-det))
 
 
-  (= ($retract-spypoint (with_self  $P (/ $F $A)))  
-    ( (remove-is-symbol  &self 
-        (%current_spypoint  $P $F $A)) 
+  (= (%retract-spypoint (with-self  $P (/ $F $A)))  
+    ( (remove-atom  &self 
+        (%current-spypoint  $P $F $A)) 
       (print-message info 
         (:: spypoint 
-          (with_self  $P 
+          (with-self  $P 
             (/ $F $A)) is removed)) 
       (set-det)))
-  (= (%retract_spypoint  $_)  True)
+  (= (%retract-spypoint  $_)  True)
 
 
-  (= (nospyall)  
+  (= nospyall  
     ( (remove-all-atoms  &self 
-        (%current_spypoint  $_ $_ $_)) ($set-debug-flag leap no)))
+        (%current-spypoint  $_ $_ $_)) (%set-debug-flag leap no)))
 
 ;
 ; ;; Leash
 
   (= (leash $L)  
     (nonvar $L)
-    ($leash $L)
+    (%leash $L)
     (set-det))
   (= (leash $L)  
     (illarg 
@@ -3493,174 +3454,158 @@
       (leash $L) 1))
 
 
-  (= ($leash Nil)  
+  (= (%leash Nil)  
     ( (set-det) 
       (remove-all-atoms  &self 
-        (%current_leash  $_)) 
+        (%current-leash  $_)) 
       (print-message info 
         (:: no leashing))))
-  (= ($leash $Ms)  
+  (= (%leash $Ms)  
     ( (remove-all-atoms  &self 
-        (%current_leash  $_)) 
-      ($assert-leash $Ms) 
+        (%current-leash  $_)) 
+      (%assert-leash $Ms) 
       (print-message info 
         (:: leashing stopping on $Ms))))
 
 
-  (= ($assert-leash Nil)  
+  (= (%assert-leash Nil)  
     (set-det))
-  (= ($assert-leash (Cons  $X $Xs))  
-    ( ($leash-specifier $X) 
-      (add-is-symbol  &self 
-        (%current_leash  $X)) 
-      ($assert-leash $Xs)))
+  (= (%assert-leash (Cons  $X $Xs))  
+    ( (%leash-specifier $X) 
+      (add-atom  &self 
+        (%current-leash  $X)) 
+      (%assert-leash $Xs)))
 
 
-  (= (%leash_specifier  call)  True)
-  (= (%leash_specifier  exit)  True)
-  (= (%leash_specifier  redo)  True)
-  (= (%leash_specifier  fail)  True)
+  (= (%leash-specifier  call)  True)
+  (= (%leash-specifier  exit)  True)
+  (= (%leash-specifier  redo)  True)
+  (= (%leash-specifier  fail)  True)
 ;
 ; '$leash_specifier'(exception).
 
 ;
 ; ;; Trace a Goal
 
-  (= ($trace-goal $Term)  
-    ($set-debug-flag leap no)
-    ($get-current-B $Cut)
-    ($meta-call $Term user $Cut 0 trace))
+  (= (%trace-goal $Term)  
+    (%set-debug-flag leap no)
+    (%get-current-B $Cut)
+    (%meta-call $Term user $Cut 0 trace))
 
-  (= ($trace-goal $X $P $FA $Depth)  
+  (= (%trace-goal $X $P $FA $Depth)  
     (print-procedure-box call $X $P $FA $Depth)
-    ($call-internal $X $P $FA $Depth trace)
+    (%call-internal $X $P $FA $Depth trace)
     (print-procedure-box exit $X $P $FA $Depth)
     (redo-procedure-box $X $P $FA $Depth))
-  (= ($trace-goal $X $P $FA $Depth)  
-    (print-procedure-box fail $X $P $FA $Depth)
-    (fail))
+  (= (%trace-goal $X $P $FA $Depth)  
+    ( (print-procedure-box fail $X $P $FA $Depth) fail))
 
 
   (= (print-procedure-box $Mode $G $P (/ $F $A) $Depth)  
     ( (==  
         (= 
-          (%current_spypoint  $P $F $A) $_) 
+          (%current-spypoint  $P $F $A) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      ($builtin-message (:: + $Depth $Mode : (with_self  $P $G))) 
-      ($read-blocked (print-procedure-box $Mode $G $P (/ $F $A) $Depth))))
+      (%builtin-message (:: + $Depth $Mode : (with-self  $P $G))) 
+      (%read-blocked (print-procedure-box $Mode $G $P (/ $F $A) $Depth))))
   (= (print-procedure-box $Mode $G $P $FA $Depth)  
     ( (==  
         (= 
-          (%leap_flag  no) $_) 
+          (%leap-flag  no) $_) 
         (get-atoms  &self)) 
       (set-det) 
-      ($builtin-message (:: ' ' $Depth $Mode : (with_self  $P $G))) 
+      (%builtin-message (:: ' ' $Depth $Mode : (with-self  $P $G))) 
       (det-if-then-else 
         (==  
           (= 
-            (%current_leash  $Mode) $_) 
+            (%current-leash  $Mode) $_) 
           (get-atoms  &self)) 
-        ($read-blocked (print-procedure-box $Mode $G $P $FA $Depth)) nl)))
-  (= (print_procedure_box  $_ $_ $_ $_ $_)  True)
+        (%read-blocked (print-procedure-box $Mode $G $P $FA $Depth)) nl)))
+  (= (print-procedure-box  $_ $_ $_ $_ $_)  True)
 
 
-  (= (redo_procedure_box  $_ $_ $_ $_)  True)
+  (= (redo-procedure-box  $_ $_ $_ $_)  True)
   (= (redo-procedure-box $X $P $FA $Depth)  
-    (print-procedure-box redo $X $P $FA $Depth)
-    (fail))
+    ( (print-procedure-box redo $X $P $FA $Depth) fail))
 
 
-  (= ($read-blocked $G)  
-    ($fast-write  ? )
-    (flush-output)
-    (read-line $C)
-    (det-if-then-else 
-      (== $C Nil) 
-      (= $DOP 99) 
-      (= $C 
-        (Cons  $DOP $_)))
-    ($debug-option $DOP $G))
+  (= (%read-blocked $G)  
+    ( (%fast-write  ? ) flush-output 
+      (read-line $C) 
+      (det-if-then-else 
+        (== $C Nil) 
+        (= $DOP 99) 
+        (= $C 
+          (Cons  $DOP $_))) 
+      (%debug-option $DOP $G)))
 
 
-  (= ($debug-option 97 $_)  
-    (set-det)
-    (notrace)
-    (abort))               ;
+  (= (%debug-option 97 $_)  
+    ( (set-det) notrace abort))               ;
 ; a for abort
-  (= ($debug-option 99 $_)  
+  (= (%debug-option 99 $_)  
     (set-det)
-    ($set-debug-flag leap no))  ;
+    (%set-debug-flag leap no))  ;
 ; c for creep
-  (= ($debug-option 108 $_)  
+  (= (%debug-option 108 $_)  
     (set-det)
-    ($set-debug-flag leap yes)) ;
+    (%set-debug-flag leap yes)) ;
 ; l for leap
-  (= ($debug-option 43 (print-procedure-box $Mode $G $P $FA $Depth))  
+  (= (%debug-option 43 (print-procedure-box $Mode $G $P $FA $Depth))  
     (set-det)
-    (spy (with_self  $P $FA))
+    (spy (with-self  $P $FA))
     (call (print-procedure-box $Mode $G $P $FA $Depth)))
 ; ; + for spy this
-  (= ($debug-option 45 (print-procedure-box $Mode $G $P $FA $Depth))  
+  (= (%debug-option 45 (print-procedure-box $Mode $G $P $FA $Depth))  
     (set-det)
-    (nospy (with_self  $P $FA))
+    (nospy (with-self  $P $FA))
     (call (print-procedure-box $Mode $G $P $FA $Depth)))
 ; ; - for nospy this
-  (= ($debug-option 63 $G)  
-    (set-det)
-    (%show-debug-option)
-    (call $G))
-  (= ($debug-option 104 $G)  
-    (set-det)
-    (%show-debug-option)
-    (call $G))
-  (= (%debug_option  $_ $_)  True)
+  (= (%debug-option 63 $G)  
+    ( (set-det) %show-debug-option 
+      (call $G)))
+  (= (%debug-option 104 $G)  
+    ( (set-det) %show-debug-option 
+      (call $G)))
+  (= (%debug-option  $_ $_)  True)
 
 
-  (= (%show-debug-option)  
-    (tab 4)
-    ($fast-write 'Debuggin options:')
-    (nl)
-    (tab 4)
-    ($fast-write 'a      abort')
-    (nl)
-    (tab 4)
-    ($fast-write 'RET    creep')
-    (nl)
-    (tab 4)
-    ($fast-write 'c      creep')
-    (nl)
-    (tab 4)
-    ($fast-write 'l      leap')
-    (nl)
-    (tab 4)
-    ($fast-write '+      spy this')
-    (nl)
-    (tab 4)
-    ($fast-write '-      nospy this')
-    (nl)
-    (tab 4)
-    ($fast-write '?      help')
-    (nl)
-    (tab 4)
-    ($fast-write 'h      help')
-    (nl))
+  (= %show-debug-option  
+    ( (tab 4) 
+      (%fast-write 'Debuggin options:') nl 
+      (tab 4) 
+      (%fast-write 'a      abort') nl 
+      (tab 4) 
+      (%fast-write 'RET    creep') nl 
+      (tab 4) 
+      (%fast-write 'c      creep') nl 
+      (tab 4) 
+      (%fast-write 'l      leap') nl 
+      (tab 4) 
+      (%fast-write '+      spy this') nl 
+      (tab 4) 
+      (%fast-write '-      nospy this') nl 
+      (tab 4) 
+      (%fast-write '?      help') nl 
+      (tab 4) 
+      (%fast-write 'h      help') nl))
 
 
-  (= ($set-debug-flag leap $Flag)  
+  (= (%set-debug-flag leap $Flag)  
     ( (==  
         (= 
-          (%leap_flag  $Flag) $_) 
+          (%leap-flag  $Flag) $_) 
         (get-atoms  &self)) (set-det)))
-  (= ($set-debug-flag leap $Flag)  
+  (= (%set-debug-flag leap $Flag)  
     ( (remove-all-atoms  &self 
-        (%leap_flag  $_)) (add-is-symbol  &self (%leap_flag  $Flag))))
+        (%leap-flag  $_)) (add-atom  &self (%leap-flag  $Flag))))
 
 ;
 ; ;; Listing
 
-  (= (listing)  
-    ($listing $_ user))
+  (= listing  
+    (%listing $_ user))
 
   (= (listing $T)  
     (var $T)
@@ -3670,120 +3615,106 @@
   (= (listing $P)  
     (atom $P)
     (set-det)
-    ($listing $_ $P))
+    (%listing $_ $P))
   (= (listing (/ $F $A))  
     (set-det)
-    ($listing 
+    (%listing 
       (/ $F $A) user))
-  (= (listing (with_self  $P $PI))  
+  (= (listing (with-self  $P $PI))  
     (atom $P)
     (set-det)
-    ($listing $PI $P))
+    (%listing $PI $P))
   (= (listing $T)  
     (illarg 
       (type predicate-indicator) 
       (listing $T) 1))
 
 
-  (= ($listing $PI $P)  
+  (= (%listing $PI $P)  
     (var $PI)
     (set-det)
-    ($listing-dynamic-clause $P $_))
-  (= ($listing (/ $F $A) $P)  
+    (%listing-dynamic-clause $P $_))
+  (= (%listing (/ $F $A) $P)  
     (atom $F)
     (integer $A)
     (set-det)
-    ($listing-dynamic-clause $P 
+    (%listing-dynamic-clause $P 
       (/ $F $A)))
-  (= ($listing $PI $P)  
+  (= (%listing $PI $P)  
     (illarg 
       (type predicate-indicator) 
-      (listing (with_self  $P $PI)) 1))
+      (listing (with-self  $P $PI)) 1))
 
 
-  (= ($listing-dynamic-clause $P $PI)  
-    ($new-internal-database $P)
-    (hash-keys $P $Keys)
-    ($builtin-member $PI $Keys)
-    (= $PI 
-      (/ $F $A))
-    (functor $H $F $A)
-    ($clause-internal $P $PI $H $Cl $_)
-    ($write-dynamic-clause $P $Cl)
-    (fail))
-  (= (%listing_dynamic_clause  $_ $_)  True)
+  (= (%listing-dynamic-clause $P $PI)  
+    ( (%new-internal-database $P) 
+      (hash-keys $P $Keys) 
+      (%builtin-member $PI $Keys) 
+      (= $PI 
+        (/ $F $A)) 
+      (functor $H $F $A) 
+      (%clause-internal $P $PI $H $Cl $_) 
+      (%write-dynamic-clause $P $Cl) fail))
+  (= (%listing-dynamic-clause  $_ $_)  True)
 
 
-  (= ($write-dynamic-clause $_ $Cl)  
-    (var $Cl)
-    (set-det)
-    (fail))
-  (= ($write-dynamic-clause $P (= $H  True))  
-    (set-det)
-    (numbervars $H 0 $_)
-    ($write-dynamic-head $P $H)
-    (write .)
-    (nl))
-  (= ($write-dynamic-clause $P (= $H  $B))  
-    (set-det)
-    (numbervars 
-      (= $H  $B) 0 $_)
-    ($write-dynamic-head $P $H)
-    (write  :-)
-    (nl)
-    ($write-dynamic-body $B 8)
-    (write .)
-    (nl))
+  (= (%write-dynamic-clause $_ $Cl)  
+    ( (var $Cl) 
+      (set-det) fail))
+  (= (%write-dynamic-clause $P (= $H  True))  
+    ( (set-det) 
+      (numbervars $H 0 $_) 
+      (%write-dynamic-head $P $H) 
+      (write .) nl))
+  (= (%write-dynamic-clause $P (= $H  $B))  
+    ( (set-det) 
+      (numbervars 
+        (= $H  $B) 0 $_) 
+      (%write-dynamic-head $P $H) 
+      (write  :-) nl 
+      (%write-dynamic-body $B 8) 
+      (write .) nl))
 
 
-  (= ($write-dynamic-head user $H)  
+  (= (%write-dynamic-head user $H)  
     (set-det)
     (writeq $H))
-  (= ($write-dynamic-head $P $H)  
+  (= (%write-dynamic-head $P $H)  
     (write $P)
     (write :)
     (writeq $H))
 
 
-  (= ($write-dynamic-body (, $G1 $G2) $N)  
-    (set-det)
-    ($write-dynamic-body $G1 $N)
-    (write ,)
-    (nl)
-    ($write-dynamic-body $G2 $N))
-  (= ($write-dynamic-body (or $G1 $G2) $N)  
-    (set-det)
-    (is $N1 
-      (+ $N 4))
-    (tab $N)
-    (write ()
-    (nl)
-    ($write-dynamic-body $G1 $N1)
-    (nl)
-    (tab $N)
-    (write or)
-    (nl)
-    ($write-dynamic-body $G2 $N1)
-    (nl)
-    (tab $N)
-    (write )))
-  (= ($write-dynamic-body (det-if-then $G1 $G2) $N)  
-    (set-det)
-    (is $N1 
-      (+ $N 4))
-    (tab $N)
-    (write ()
-    (nl)
-    ($write-dynamic-body $G1 $N1)
-    (nl)
-    (tab $N)
-    (write ->)
-    (nl)
-    ($write-dynamic-body $G2 $N1)
-    (nl)
-    (tab $N)
-    (write )))
-  (= ($write-dynamic-body $B $N)  
+  (= (%write-dynamic-body (, $G1 $G2) $N)  
+    ( (set-det) 
+      (%write-dynamic-body $G1 $N) 
+      (write ,) nl 
+      (%write-dynamic-body $G2 $N)))
+  (= (%write-dynamic-body (or $G1 $G2) $N)  
+    ( (set-det) 
+      (is $N1 
+        (+ $N 4)) 
+      (tab $N) 
+      (write () nl 
+      (%write-dynamic-body $G1 $N1) nl 
+      (tab $N) 
+      (write or) nl 
+      (%write-dynamic-body $G2 $N1) nl 
+      (tab $N) 
+      (write ))))
+  (= (%write-dynamic-body (det-if-then $G1 $G2) $N)  
+    ( (set-det) 
+      (is $N1 
+        (+ $N 4)) 
+      (tab $N) 
+      (write () nl 
+      (%write-dynamic-body $G1 $N1) nl 
+      (tab $N) 
+      (write ->) nl 
+      (%write-dynamic-body $G2 $N1) nl 
+      (tab $N) 
+      (write ))))
+  (= (%write-dynamic-body $B $N)  
     (tab $N)
     (writeq $B))
 
@@ -3810,80 +3741,80 @@
   (= (length $L $N)  
     (var $N)
     (set-det)
-    ($length $L 0 $N))
+    (%length $L 0 $N))
   (= (length $L $N)  
-    ($length0 $L 0 $N))
+    (%length0 $L 0 $N))
 
 
   (= (%length  () $I $I)  True)
-  (= ($length (Cons  $_ $L) $I0 $I)  
+  (= (%length (Cons  $_ $L) $I0 $I)  
     (is $I1 
       (+ $I0 1))
-    ($length $L $I1 $I))
+    (%length $L $I1 $I))
 
 
-  (= ($length0 Nil $I $I)  
+  (= (%length0 Nil $I $I)  
     (set-det))
-  (= ($length0 (Cons  $_ $L) $I0 $I)  
+  (= (%length0 (Cons  $_ $L) $I0 $I)  
     (< $I0 $I)
     (is $I1 
       (+ $I0 1))
-    ($length0 $L $I1 $I))
+    (%length0 $L $I1 $I))
 
 
   (= (numbervars $X $VI $VN)  
     (integer $VI)
     (>= $VI 0)
     (set-det)
-    ($numbervars $X $VI $VN))
+    (%numbervars $X $VI $VN))
 
 
-  (= ($numbervars $X $VI $VN)  
+  (= (%numbervars $X $VI $VN)  
     (var $X)
     (set-det)
     (= $X $VI)
     (is $VN 
       (+ $VI 1)))
 ; ; This structure is checked in write
-  (= ($numbervars $X $VI $VI)  
+  (= (%numbervars $X $VI $VI)  
     (atomic $X)
     (set-det))
-  (= ($numbervars $X $VI $VI)  
+  (= (%numbervars $X $VI $VI)  
     (java $X)
     (set-det))
-  (= ($numbervars $X $VI $VN)  
+  (= (%numbervars $X $VI $VN)  
     (functor $X $_ $N)
-    ($numbervars-str 1 $N $X $VI $VN))
+    (%numbervars-str 1 $N $X $VI $VN))
 
 
-  (= ($numbervars-str $I $I $X $VI $VN)  
+  (= (%numbervars-str $I $I $X $VI $VN)  
     (set-det)
     (arg $I $X $A)
-    ($numbervars $A $VI $VN))
-  (= ($numbervars-str $I $N $X $VI $VN)  
+    (%numbervars $A $VI $VN))
+  (= (%numbervars-str $I $N $X $VI $VN)  
     (arg $I $X $A)
-    ($numbervars $A $VI $VN1)
+    (%numbervars $A $VI $VN1)
     (is $I1 
       (+ $I 1))
-    ($numbervars-str $I1 $N $X $VN1 $VN))
+    (%numbervars-str $I1 $N $X $VN1 $VN))
 
 
   (= (statistics $Key $Value)  
     (nonvar $Key)
-    ($statistics-mode $Key)
+    (%statistics-mode $Key)
     (set-det)
-    ($statistics $Key $Value))
+    (%statistics $Key $Value))
   (= (statistics $Key $Value)  
     (findall $M 
-      ($statistics-mode $M) $Domain)
+      (%statistics-mode $M) $Domain)
     (illarg 
-      (domain is-symbol $Domain) 
+      (domain atom $Domain) 
       (statistics $Key $Value) 1))
 
 
-  (= (%statistics_mode  runtime)  True)
-  (= (%statistics_mode  trail)  True)
-  (= (%statistics_mode  choice)  True)
+  (= (%statistics-mode  runtime)  True)
+  (= (%statistics-mode  trail)  True)
+  (= (%statistics-mode  choice)  True)
 
 
   (= (print-message $Type $Message)  
@@ -3893,177 +3824,175 @@
       (print-message $Type $Message) 1))
   (= (print-message error $Message)  
     (set-det)
-    ($error-message $Message))
+    (%error-message $Message))
   (= (print-message info $Message)  
-    (set-det)
-    ($fast-write {)
-    ($builtin-message $Message)
-    ($fast-write })
-    (nl))
+    ( (set-det) 
+      (%fast-write {) 
+      (%builtin-message $Message) 
+      (%fast-write }) nl))
   (= (print-message warning $Message)  
-    (set-det)
-    ($fast-write '{WARNING: ')
-    ($builtin-message $Message)
-    ($fast-write })
-    (nl))
+    ( (set-det) 
+      (%fast-write '{WARNING: ') 
+      (%builtin-message $Message) 
+      (%fast-write }) nl))
 
 
-  (= ($error-message (instantiation-error $Goal 0))  
+  (= (%error-message (instantiation-error $Goal 0))  
     (set-det)
-    ($fast-write user-error '{INSTANTIATION ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error })
+    (%fast-write user-error '{INSTANTIATION ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (instantiation-error $Goal $ArgNo))  
+  (= (%error-message (instantiation-error $Goal $ArgNo))  
     (set-det)
-    ($fast-write user-error '{INSTANTIATION ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error })
+    (%fast-write user-error '{INSTANTIATION ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (type-error $Goal $ArgNo $Type $Culprit))  
+  (= (%error-message (type-error $Goal $ArgNo $Type $Culprit))  
     (set-det)
-    ($fast-write user-error '{TYPE ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ': expected ')
-    ($fast-write user-error $Type)
-    ($fast-write user-error ', found ')
+    (%fast-write user-error '{TYPE ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ': expected ')
+    (%fast-write user-error $Type)
+    (%fast-write user-error ', found ')
     (write user-error $Culprit)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (domain-error $Goal $ArgNo $Domain $Culprit))  
+  (= (%error-message (domain-error $Goal $ArgNo $Domain $Culprit))  
     (set-det)
-    ($fast-write user-error '{DOMAIN ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ': expected ')
-    ($fast-write user-error $Domain)
-    ($fast-write user-error ', found ')
+    (%fast-write user-error '{DOMAIN ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ': expected ')
+    (%fast-write user-error $Domain)
+    (%fast-write user-error ', found ')
     (write user-error $Culprit)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (existence-error $Goal 0 $ObjType $Culprit $Message))  
+  (= (%error-message (existence-error $Goal 0 $ObjType $Culprit $Message))  
     (set-det)
-    ($fast-write user-error '{EXISTENCE ERROR: ')
-    ($fast-write user-error $ObjType)
-    ($fast-write user-error ' ')
+    (%fast-write user-error '{EXISTENCE ERROR: ')
+    (%fast-write user-error $ObjType)
+    (%fast-write user-error ' ')
     (write user-error $Culprit)
-    ($fast-write user-error ' does not exist')
-    ($fast-write user-error })
+    (%fast-write user-error ' does not exist')
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (existence-error $Goal $ArgNo $ObjType $Culprit $Message))  
+  (= (%error-message (existence-error $Goal $ArgNo $ObjType $Culprit $Message))  
     (set-det)
-    ($fast-write user-error '{EXISTENCE ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error : )
-    ($fast-write user-error $ObjType)
-    ($fast-write user-error ' ')
+    (%fast-write user-error '{EXISTENCE ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error : )
+    (%fast-write user-error $ObjType)
+    (%fast-write user-error ' ')
     (write user-error $Culprit)
-    ($fast-write user-error ' does not exist')
-    ($fast-write user-error })
+    (%fast-write user-error ' does not exist')
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (permission-error $Goal $Operation $ObjType $Culprit $Message))  
+  (= (%error-message (permission-error $Goal $Operation $ObjType $Culprit $Message))  
     (set-det)
-    ($fast-write user-error '{PERMISSION ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - can not ')
-    ($fast-write user-error $Operation)
-    ($fast-write user-error ' ')
-    ($fast-write user-error $ObjType)
-    ($fast-write user-error ' ')
+    (%fast-write user-error '{PERMISSION ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - can not ')
+    (%fast-write user-error $Operation)
+    (%fast-write user-error ' ')
+    (%fast-write user-error $ObjType)
+    (%fast-write user-error ' ')
     (write user-error $Culprit)
-    ($fast-write user-error : )
-    ($fast-write user-error $Message)
-    ($fast-write user-error })
+    (%fast-write user-error : )
+    (%fast-write user-error $Message)
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (representation-error $Goal $ArgNo $Flag))  
+  (= (%error-message (representation-error $Goal $ArgNo $Flag))  
     (set-det)
-    ($fast-write user-error '{REPRESENTATION ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ': limit of ')
-    ($fast-write user-error $Flag)
-    ($fast-write user-error ' is breached')
-    ($fast-write user-error })
+    (%fast-write user-error '{REPRESENTATION ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ': limit of ')
+    (%fast-write user-error $Flag)
+    (%fast-write user-error ' is breached')
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (evaluation-error $Goal $ArgNo $Type))  
+  (= (%error-message (evaluation-error $Goal $ArgNo $Type))  
     (set-det)
-    ($fast-write user-error '{EVALUATION ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ', found ')
-    ($fast-write user-error $Type)
-    ($fast-write user-error })
+    (%fast-write user-error '{EVALUATION ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ', found ')
+    (%fast-write user-error $Type)
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (syntax-error $Goal $ArgNo $Type $Culprit $Message))  
+  (= (%error-message (syntax-error $Goal $ArgNo $Type $Culprit $Message))  
     (set-det)
-    ($fast-write user-error '{SYNTAX ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ': expected ')
-    ($fast-write user-error $Type)
-    ($fast-write user-error ', found ')
+    (%fast-write user-error '{SYNTAX ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ': expected ')
+    (%fast-write user-error $Type)
+    (%fast-write user-error ', found ')
     (write user-error $Culprit)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (system-error $Message))  
+  (= (%error-message (system-error $Message))  
     (set-det)
-    ($fast-write user-error '{SYSTEM ERROR: ')
+    (%fast-write user-error '{SYSTEM ERROR: ')
     (write user-error $Message)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (internal-error $Message))  
+  (= (%error-message (internal-error $Message))  
     (set-det)
-    ($fast-write user-error '{INTERNAL ERROR: ')
+    (%fast-write user-error '{INTERNAL ERROR: ')
     (write user-error $Message)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
-  (= ($error-message (java-error $Goal $ArgNo $Exception))  
+  (= (%error-message (java-error $Goal $ArgNo $Exception))  
     (set-det)
-    ($fast-write user-error '{JAVA ERROR: ')
-    ($write-goal user-error $Goal)
-    ($fast-write user-error ' - arg ')
-    ($fast-write user-error $ArgNo)
-    ($fast-write user-error ', found ')
-    ($write-goal user-error $Exception)
-    ($fast-write user-error })
+    (%fast-write user-error '{JAVA ERROR: ')
+    (%write-goal user-error $Goal)
+    (%fast-write user-error ' - arg ')
+    (%fast-write user-error $ArgNo)
+    (%fast-write user-error ', found ')
+    (%write-goal user-error $Exception)
+    (%fast-write user-error })
     (nl user-error)
-    ($print-stack-trace $Exception)
+    (%print-stack-trace $Exception)
     (flush-output user-error))
-  (= ($error-message $Message)  
-    ($fast-write user-error {)
+  (= (%error-message $Message)  
+    (%fast-write user-error {)
     (write user-error $Message)
-    ($fast-write user-error })
+    (%fast-write user-error })
     (nl user-error)
     (flush-output user-error))
 
 
-  (= ($write-goal $S $Goal)  
+  (= (%write-goal $S $Goal)  
     (java $Goal)
     (set-det)
-    ($write-toString $S $Goal))
-  (= ($write-goal $S $Goal)  
+    (%write-toString $S $Goal))
+  (= (%write-goal $S $Goal)  
     (write $S $Goal))
 
 
@@ -4085,7 +4014,7 @@
   (= (illarg (domain $Type $ExpDomain) $Goal $ArgNo)  
     (arg $ArgNo $Goal $Arg)
     (det-if-then-else 
-      ($match-type $Type $Arg) 
+      (%match-type $Type $Arg) 
       (= $Error 
         (domain-error $Goal $ArgNo $ExpDomain $Arg)) 
       (det-if-then-else 
@@ -4115,66 +4044,66 @@
     (raise-exception $Msg))
 
 
-  (= (%match_type  term $_)  True)
-  (= ($match-type variable $X)  
+  (= (%match-type  term $_)  True)
+  (= (%match-type variable $X)  
     (var $X))
-  (= ($match-type is-symbol $X)  
+  (= (%match-type atom $X)  
     (atom $X))
-  (= ($match-type symbolic $X)  
+  (= (%match-type atomic $X)  
     (atomic $X))
-  (= ($match-type byte $X)  
+  (= (%match-type byte $X)  
     (integer $X)
     (=< 0 $X)
     (=< $X 255))
-  (= ($match-type in-byte $X)  
+  (= (%match-type in-byte $X)  
     (integer $X)
     (=< -1 $X)
     (=< $X 255))
-  (= ($match-type character $X)  
+  (= (%match-type character $X)  
     (atom $X)
-    (atom-length $X 1))
-  (= ($match-type in-character $X)  
+    (symbol-length $X 1))
+  (= (%match-type in-character $X)  
     (or 
       (== $X end-of-file) 
-      ($match-type character $X)))
-  (= ($match-type number $X)  
+      (%match-type character $X)))
+  (= (%match-type number $X)  
     (number $X))
-  (= ($match-type integer $X)  
+  (= (%match-type integer $X)  
     (integer $X))
-  (= ($match-type long $X)  
+  (= (%match-type long $X)  
     (long $X))
-  (= ($match-type float $X)  
+  (= (%match-type float $X)  
     (float $X))
-  (= ($match-type callable $X)  
+  (= (%match-type callable $X)  
     (callable $X))
-  (= ($match-type compound $X)  
+  (= (%match-type compound $X)  
     (compound $X))
-  (= ($match-type list $X)  
+  (= (%match-type list $X)  
     (nonvar $X)
     (or 
       (= $X Nil) 
       (= $X 
         (Cons  $_ $_))))
-  (= ($match-type java $X)  
+  (= (%match-type java $X)  
     (java $X))
-  (= ($match-type stream $X)  
+  (= (%match-type stream $X)  
     (or 
       (java $X java.io.PushbackReader) 
       (java $X java.io.PrintWriter)))
-  (= ($match-type stream-or-alias $X)  
+  (= (%match-type stream-or-alias $X)  
     (or 
       (atom $X) 
-      ($match-type stream $X)))
-  (= ($match-type hash $X)  
+      (%match-type stream $X)))
+  (= (%match-type hash $X)  
     (java $X com.googlecode.prolog-cafe.lang.HashtableOfTerm))
-  (= ($match-type hash-or-alias $X)  
+  (= (%match-type hash-or-alias $X)  
     (or 
       (atom $X) 
-      ($match-type hash $X)))
-  (= ($match-type predicate-indicator $X)  
+      (%match-type hash $X)))
+  (= (%match-type predicate-indicator $X)  
     (nonvar $X)
     (= $X 
-      (with_self  $P 
+      (with-self  $P 
         (/ $F $A)))
     (atom $P)
     (atom $F)
@@ -4199,7 +4128,7 @@
     (not (java $M))
     (set-det)
     (illarg 
-      (type is-symbol) 
+      (type atom) 
       (with-mutex $M $G) 1))
   (= (with-mutex $M $G)  
     (var $G)
@@ -4226,9 +4155,9 @@
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (= (%builtin_append  () $Zs $Zs)  True)
-  (= ($builtin-append (Cons  $X $Xs) $Ys (Cons  $X $Zs))  
-    ($builtin-append $Xs $Ys $Zs))
+  (= (%builtin-append  () $Zs $Zs)  True)
+  (= (%builtin-append (Cons  $X $Xs) $Ys (Cons  $X $Zs))  
+    (%builtin-append $Xs $Ys $Zs))
 
 ;
 ; '$builtin_member'(X, [X|_]).
@@ -4236,20 +4165,20 @@
 ; '$builtin_member'(X, [_|L]) :- '$builtin_member'(X, L).
 
 
-  (= ($builtin-message Nil)  
+  (= (%builtin-message Nil)  
     (set-det))
-  (= ($builtin-message (:: $M))  
+  (= (%builtin-message (:: $M))  
     (set-det)
     (write $M))
-  (= ($builtin-message (Cons  $M $Ms))  
+  (= (%builtin-message (Cons  $M $Ms))  
     (write $M)
-    ($fast-write ' ')
-    ($builtin-message $Ms))
+    (%fast-write ' ')
+    (%builtin-message $Ms))
 
 
-  (= ($member-in-reverse $X (Cons  $_ $L))  
-    ($member-in-reverse $X $L))
-  (= (%member_in_reverse  $X (Cons  $X $_))  True)
+  (= (%member-in-reverse $X (Cons  $_ $L))  
+    (%member-in-reverse $X $L))
+  (= (%member-in-reverse  $X ([|]  $X $_))  True)
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;

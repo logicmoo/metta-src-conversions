@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  index $_209758 index/index.pl index/index.metta)
+;                                           (convert-to-metta-file  index $_415744 index/index.pl index/index.metta)
 
   !(unknown $_ fail)
   !(no-style-check all)
@@ -14,17 +14,17 @@
   !(dynamic (/ level-set 2))
 
 
-  (= (switched_on  cwa)  True)
-  (= (switched_on  eval)  True)
-  (= (switched_on  debug)  True)
+  (= (switched-on  cwa)  True)
+  (= (switched-on  eval)  True)
+  (= (switched-on  debug)  True)
 
 
-  (= (level_set  acc (+  0.8))  True)
-  (= (level_set  conf (+  2))  True)
-  (= (level_set  split (/  0.5 0.1))  True)
+  (= (level-set  acc (+  0.8))  True)
+  (= (level-set  conf (+  2))  True)
+  (= (level-set  split (/  0.5 0.1))  True)
 
 
-  (= (run)  
+  (= run  
     (commands Nil Nil Nil))
 ; /* modules */
 ; /* :-compile(utils),compile(char),compile(eval),compile(hooks), compile(object),compile(sort),compile(decomp). :-compile(inter),compile(commands). */
@@ -75,7 +75,7 @@
   (= (setof0  $T $G ())  True)
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 67 4 1074))
 
 
@@ -83,7 +83,7 @@
   (= (add-if $X $Ys $Ys)  
     (member $X $Ys)
     (set-det))
-  (= (add_if  $X $Ys (Cons  $X $Ys))  True)
+  (= (add-if  $X $Ys ([|]  $X $Ys))  True)
 
 
   (= (flatten $Xs $Ys)  
@@ -96,7 +96,7 @@
     (set-det)
     (flatten-dl $Xs $Ys0 $Ys1)
     (flatten-dl $X $Ys1 $Ys))
-  (= (flatten_dl  $X $Xs (Cons  $X $Xs))  True)
+  (= (flatten-dl  $X $Xs ([|]  $X $Xs))  True)
 
   (= (char $InICs $PosIn $NegIn $OutICs $PosOut $NegOut)  
     (char1 $InICs $PosIn $NegIn Nil $TmpICs $PosOut $NegOut)
@@ -180,18 +180,17 @@
     (queries $P2 $N2 $Ts $P1 $N1))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 122 4 2503))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 124 4 2590))
 
 
   (= (query $P $N (- $T) $P (Cons  $T $N))  
-    (switched-on cwa)
-    (write (- $T))
-    (nl))
+    ( (switched-on cwa) 
+      (write (- $T)) nl))
   (= (query  $P $N (+  $T) $P $N)  True)
 
 
@@ -316,7 +315,7 @@
             (- $NTuples $NLarge)) $NTuples))))
 
 
-  (= (calc_acc1  () $NT $NT $NL $NL $MaxNP $MaxNP)  True)
+  (= (calc-acc1  () $NT $NT $NL $NL $MaxNP $MaxNP)  True)
   (= (calc-acc1 (Cons  $D $Ds) $NT0 $NT $NL0 $NL $MaxNP0 $MaxNP)  
     (eval2 $D 0 $Sum 0 $Largest 0 $NParts)
     (is $NT1 
@@ -345,7 +344,7 @@
     (eval2 $Ns $S1 $S $L1 $L $M1 $M))
 
 
-  (= (insert_ic  $L $IC $E (Cons  $IC $L))  True)
+  (= (insert-ic  $L $IC $E ([|]  $IC $L))  True)
 
   !(op 900 xfx :)
   !(op 800 xfx -->)
@@ -471,7 +470,7 @@
     (set-det)
     (display $R $DR)
     (ic-spec $IC $Rs))
-  (= (ic_spec  $IC ())  True)
+  (= (ic-spec  $IC ())  True)
 
 
   (= (subsumed (fd $Rel $From1 $To) (fd $Rel $From2 $To))  
@@ -512,16 +511,16 @@
   (= (dep  (mvd  $Rel $From $To) mvd $Rel $From $To)  True)
 
 
-  (= (display (fd $Rel $From $To) (with_self  $Rel (--> $From $To)))  
+  (= (display (fd $Rel $From $To) (with-self  $Rel (--> $From $To)))  
     (set-det))
 ; /* display form */
-  (= (display (mvd $Rel $From $To) (with_self  $Rel (->-> $From $To)))  
+  (= (display (mvd $Rel $From $To) (with-self  $Rel (->-> $From $To)))  
     (set-det))
   (= (display (join $Rel $R1 $R2) (>< (= $Rel $R1) $R2))  
     (set-det))
   (= (display (plus $Rel $List) (= $Rel $List))  
     (set-det))
-  (= (display (proc $Rel) (with_self  (calculated *) $Rel))  
+  (= (display (proc $Rel) (with-self  (calculated *) $Rel))  
     (set-det))
   (= (display  $X $X)  True)
 
@@ -718,7 +717,7 @@
     (det-if-then-else 
       (= $Answer -) 
       (, 
-        (concat-atom $AListIn $R) 
+        (concat-symbol $AListIn $R) 
         (= $AListOut $AListIn)) 
       (det-if-then-else 
         (= $Answer +) 
@@ -754,7 +753,7 @@
 ; ; divides(SplitPos,Dep,NewPos,Numbers),
 
 
-  (= (decomp_again  () $Dep $Pos $Pos $ICs $ICs)  True)
+  (= (decomp-again  () $Dep $Pos $Pos $ICs $ICs)  True)
   (= (decomp-again (Cons  $Name $Names) $Dep $PosIn $PosOut $InICs $OutICs)  
     (det-if-then-else 
       (yesno (:: 'Decompose ' $Name ? )) 
@@ -832,13 +831,13 @@
     (yesno (:: 'Proceed? ')))
 
 
-  (= (new_preds  $Rel () $New $New $Names $Names)  True)
+  (= (new-preds  $Rel () $New $New $Names $Names)  True)
   (= (new-preds $Rel (Cons  $H $T) $New0 $New $Names0 $Names)  
     (new-preds1 $Rel $H $New0 $New1 $Names0 $Names1)
     (new-preds $Rel $T $New1 $New $Names1 $Names))
 
 
-  (= (new_preds1  $Rel () $New $New $Names $Names)  True)
+  (= (new-preds1  $Rel () $New $New $Names $Names)  True)
   (= (new-preds1 $Rel (Cons  $R $Rs) $New0 $New $Names0 $Names)  
     (show-list $Rel 'partial relation' $R)
     (prompt-read 'relation name' $N)
@@ -864,14 +863,14 @@
     (set-det)
     (=.. $NewT 
       (Cons  $N $Args)))
-  (= (new_tuple  $Rel $T $N $T)  True)	;
+  (= (new-tuple  $Rel $T $N $T)  True)	;
 ; tuple from other relation
 
   (= (show-lists $Filter $Texts $Lists)  
     (show-lists $Filter $Texts 1 Nil $Lists))
 ; /* interaction */
 
-  (= (show_lists  $Filter $Words $N $Text ())  True)
+  (= (show-lists  $Filter $Words $N $Text ())  True)
   (= (show-lists $Filter Nil $N $Text (Cons  $H $T))  
     (show-list $Filter $Text 
       (Cons  $H $T)))
@@ -893,14 +892,12 @@
     (show-list $Text $Filtered))
 
   (= (show-list $Text Nil)  
-    (set-det)
-    (write-list (:: 'There are no ' $Text .))
-    (nl))
+    ( (set-det) 
+      (write-list (:: 'There are no ' $Text .)) nl))
   (= (show-list $Text $List)  
-    (write-list (:: $Text :))
-    (display-list $List $List1)
-    (show-items $List1)
-    (nl))
+    ( (write-list (:: $Text :)) 
+      (display-list $List $List1) 
+      (show-items $List1) nl))
 
 
   (= (choose-list $Text $List $Sel)  
@@ -912,8 +909,7 @@
       (nths $List $Ns Nil $Sel) True 
       (det-if-then otherwise 
         (, 
-          (write 'Wrong number! Try again.') 
-          (nl) 
+          (write 'Wrong number! Try again.') nl 
           (choose-list $Text $List $Sel)))))
 
 
@@ -946,27 +942,26 @@
     (nths $R $N1 $Tmp $Out))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 607 6 16533))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 611 6 16631))
 
 
 
-  (= (choose-items $N Nil)  
-    (nl))
+  (= (choose-items $N Nil)  nl)
 ; ; nl,write_list([' ',N,'. Other...']),
   (= (choose-items $N (Cons  $H $T))  
-    (nl)
-    (write-list (::     $N .  $H))
-    (is $N1 
-      (+ $N 1))
-    (choose-items $N1 $T))
+    (nl 
+      (write-list (::     $N .  $H)) 
+      (is $N1 
+        (+ $N 1)) 
+      (choose-items $N1 $T)))
 
 
-  (= (display_list  () ())  True)
+  (= (display-list  () ())  True)
   (= (display-list (Cons  $H $T) (Cons  $DH $DT))  
     (det-if-then-else 
       (switched-on horn) 
@@ -1003,15 +998,14 @@
             (yesno $Question))))))
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 647 4 17368))
 
 
   (= (write-debug $Message)  
-    (switched-on debug)
-    (write 	| )
-    (write-list $Message)
-    (nl))
+    ( (switched-on debug) 
+      (write 	| ) 
+      (write-list $Message) nl))
 
 
   (= (write-list $List)  
@@ -1019,14 +1013,13 @@
     (write-list1 $FList))
 
 
-  (= (write_list1  ())  True)
+  (= (write-list1  ())  True)
   (= (write-list1 (Cons  $H $T))  
     (write $H)
     (write-list1 $T))
 
 
-  (= (quit)  
-    (abort))
+  (= quit  abort)
 
   (= (keyword1  save '   	save in Prolog database')  True)
 ; /* commands */
@@ -1082,10 +1075,9 @@
     (set-det)
     (commands $OutICs $PosOut $NegOut))
   (= (commands $InICs $PosIn $NegIn)  
-    (write no)
-    (nl)
-    (set-det)
-    (commands $InICs $PosIn $NegIn))
+    ( (write no) nl 
+      (set-det) 
+      (commands $InICs $PosIn $NegIn)))
 
 
   (= (do-command (save $X) $ICs $Pos $Neg $ICs $Pos $Neg)  
@@ -1177,13 +1169,12 @@
 
 
   (= (count-command $Filter $ICs $Pos $Neg)  
-    (get-list $Filter $ICs $Pos $Neg $List $Text)
-    (length $List $N)
-    (write-list (:: 'There are ' $N ' ' $Text .))
-    (nl))
+    ( (get-list $Filter $ICs $Pos $Neg $List $Text) 
+      (length $List $N) 
+      (write-list (:: 'There are ' $N ' ' $Text .)) nl))
 
 
-  (= (del_command  all $ICs $Pos $Neg () () ())  True)
+  (= (del-command  all $ICs $Pos $Neg () () ())  True)
   (= (del-command (ics $F) $InICs $Pos $Neg $OutICs $Pos $Neg)  
     (filter $InICs $F $Deleted $OutICs))
   (= (del-command (pos $Rel) $ICs $PosIn $Neg $ICs $PosOut $Neg)  
@@ -1191,7 +1182,7 @@
   (= (del-command (neg $Rel) $ICs $Pos $NegIn $ICs $Pos $NegOut)  
     (filter $NegIn $Rel $Deleted $NegOut))
   (= (del-command (rel $R) $ICs $PosIn $NegIn $ICs $PosOut $NegOut)  
-    ( (remove-is-symbol  &self 
+    ( (remove-atom  &self 
         (rel  $R $AList)) 
       (filter $PosIn $Rel $_ $PosOut) 
       (filter $NegIn $Rel $_ $NegOut)))
@@ -1202,8 +1193,8 @@
 
   (= (add-command (ics $DisplayIC) $ICs $Pos $Neg (Cons  $IC $ICs) $Pos $Neg)  
     (display $IC $DisplayIC))
-  (= (add_command  (pos  $Tuple) $ICs $Pos $Neg $ICs (Cons  $Tuple $Pos) $Neg)  True)
-  (= (add_command  (neg  $Tuple) $ICs $Pos $Neg $ICs $Pos (Cons  $Tuple $Neg))  True)
+  (= (add-command  (pos  $Tuple) $ICs $Pos $Neg $ICs ([|]  $Tuple $Pos) $Neg)  True)
+  (= (add-command  (neg  $Tuple) $ICs $Pos $Neg $ICs $Pos ([|]  $Tuple $Neg))  True)
   (= (add-command (rel $R $AList) $ICs $Pos $Neg $ICs $Pos $Neg)  
     (new-rel $R $AList))
   (= (add-command (calc $Rel) $InICs $PosIn $Neg (Cons  (proc $Rel) $OutICs) $PosOut $Neg)  
@@ -1242,25 +1233,25 @@
   (= (help-command commands)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (keyword1 $W $T) $L)
     (show-list Commands $L))
   (= (help-command filters)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (keyword2 $W $T) $L)
     (show-list Filters $L))
   (= (help-command switches)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (switch $W $T) $L)
     (show-list Switches $L))
   (= (help-command levels)  
     (set-det)
     (bagof0 
-      (with_self  $W $T) 
+      (with-self  $W $T) 
       (level $W $T) $L)
     (show-list Levels $L))
   (= (help-command $_)  
@@ -1293,23 +1284,21 @@
     (rel $R $Attrs)
     (set-det))
   (= (new-rel $R $Attrs)  
-    (rel $R $A)
-    (set-det)
-    (write 'Error: relation name already in use')
-    (nl)
-    (fail))
+    ( (rel $R $A) 
+      (set-det) 
+      (write 'Error: relation name already in use') nl fail))
   (= (new-rel $R $Attrs)  
-    (add-is-symbol  &self 
+    (add-atom  &self 
       (rel  $R $Attrs)))
 
 
   (= (ask-proc $Rel)  
     ( (prompt-read clause $Clause) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (proc  $Rel $Clause)) 
       (set-det) 
       (ask-proc $Rel)))
-  (= (ask_proc  $Rel)  True)
+  (= (ask-proc  $Rel)  True)
 
 
   (= (get-pos $Rel $Pos)  
@@ -1361,38 +1350,33 @@
       (det-if-then-else 
         (= $Answer keep) 
         (, 
-          (write ' is satisfied') 
-          (nl)) 
+          (write ' is satisfied') nl) 
         (det-if-then-else 
           (= $Answer 
             (keep $E)) 
           (, 
-            (write-list (:: ' looks promising: ' $E)) 
-            (nl)) 
+            (write-list (:: ' looks promising: ' $E)) nl) 
           (det-if-then 
             (= $Answer 
               (ignore $E)) 
             (, 
-              (write-list (:: ' has low confirmation: ' $E)) 
-              (nl)))))))
+              (write-list (:: ' has low confirmation: ' $E)) nl))))))
 
 
   (= (switch $X)  
     ( (switch $X $T) 
-      (remove-is-symbol  &self 
-        (switched_on  $X)) 
+      (remove-atom  &self 
+        (switched-on  $X)) 
       (set-det) 
-      (write-list (:: $X ' is now off.')) 
-      (nl)))
+      (write-list (:: $X ' is now off.')) nl))
   (= (switch $X)  
     ( (switch $X $T) 
       (set-det) 
-      (add-is-symbol  &self 
-        (switched_on  $X)) 
-      (write-list (:: $X ' is now on.')) 
-      (nl)))
+      (add-atom  &self 
+        (switched-on  $X)) 
+      (write-list (:: $X ' is now on.')) nl))
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/index.pl 912 28 25372))
 
 
@@ -1408,17 +1392,16 @@
       (, 
         (or 
           (, 
-            (remove-is-symbol  &self 
-              (level_set  $Level $V)) 
+            (remove-atom  &self 
+              (level-set  $Level $V)) 
             (set-det)) True) 
-        (add-is-symbol  &self 
-          (level_set  $Level $Value))) 
+        (add-atom  &self 
+          (level-set  $Level $Value))) 
       (det-if-then 
         (= $Rest Nil) 
         (, 
           (get-level $Level $L) 
-          (write (= $Level $L)) 
-          (nl)))))
+          (write (= $Level $L)) nl))))
   (= (set $_)  
     (setof0 
       (= $L $V) 
@@ -1462,9 +1445,7 @@
             (>= $Value $Lower)) 
           (det-if-then otherwise 
             (, 
-              (write-list (:: 'Wrong level: ' (= $Level $L))) 
-              (nl) 
-              (break)))))))
+              (write-list (:: 'Wrong level: ' (= $Level $L))) nl break))))))
 
 
 

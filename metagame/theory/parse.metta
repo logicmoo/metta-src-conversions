@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  parse $_504968 metagame/theory/parse.pl metagame/theory/parse.metta)
+;                                           (convert-to-metta-file  parse $_92602 metagame/theory/parse.pl metagame/theory/parse.metta)
 ;
 ; ============================================================
 ;
@@ -127,7 +127,7 @@
     (random-assignment-decision $As)
     (set-det)
     (random-assignment $Assignments))
-  (= (full_assignment_if_random  $As $As)  True)
+  (= (full-assignment-if-random  $As $As)  True)
 
 
 
@@ -136,7 +136,7 @@
 ;
 ; True if current game starts with a random setup.
 
-  (= (current-random-setup-game)  
+  (= current-random-setup-game  
     (player-current-game $Game)
     (random-setup-game $Game))
 

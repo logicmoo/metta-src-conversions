@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  potent $_272126 metagame/learning/potent.pl metagame/learning/potent.metta)
+;                                           (convert-to-metta-file  potent $_430796 metagame/learning/potent.pl metagame/learning/potent.metta)
 ;
 ; ============================================================
 ;
@@ -351,7 +351,7 @@
 
 
 
-  (= (align_for_type  planar $X $X)  True)
+  (= (align-for-type  planar $X $X)  True)
   (= (align-for-type vertical-cylinder $X1 $X)  
     (current-board-size $XN $YN)
     (is $X 

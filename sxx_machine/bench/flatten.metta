@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  flatten $_102036 sxx_machine/bench/flatten.pl sxx_machine/bench/flatten.metta)
+;                                           (convert-to-metta-file  flatten $_295534 sxx_machine/bench/flatten.pl sxx_machine/bench/flatten.metta)
 ;
 ; preprocessing phase to eliminate disjunctions from the code
 
@@ -12,7 +12,7 @@
 ; Link is the uninstantiated last cdr of this list
 
 
-  (= (top)  
+  (= top  
     (eliminate-disjunctions 
       (:: (= (a $A $B $C)  
         (or 
@@ -35,7 +35,7 @@
     (treat-disj $Disj $NewClauses $Link))
 
 
-  (= (gather_disj  () () $Link $Link)  True)
+  (= (gather-disj  () () $Link $Link)  True)
   (= (gather-disj (Cons  $C $Cs) $NewProc $Disj $Link)  
     (extract-disj $C $NewC $Disj $Rest)
     (= $NewProc 
@@ -63,7 +63,7 @@
     (set-det)
     (= $CtrIn 0)
     (extract-disj $Body $NewBody $Disj $Link $C $CtrIn $CtrOut))
-  (= (extract_disj  $Head $Head $Link $Link)  True)
+  (= (extract-disj  $Head $Head $Link $Link)  True)
 
   (= (extract-disj (, $C1 $C2) (, $NewC1 $NewC2) $Disj $Link $C $CtrIn $CtrOut)  
     (extract-disj $C1 $NewC1 $Disj $Link1 $C $CtrIn $Ctr)
@@ -77,15 +77,15 @@
         (disj $NewGoal $CtrIn $X $C) $Link))
     (is $CtrOut 
       (+ $CtrIn 1)))
-  (= (extract_disj  $Goal $Goal $Link $Link $_ $CtrIn $CtrIn)  True)
+  (= (extract-disj  $Goal $Goal $Link $Link $_ $CtrIn $CtrIn)  True)
 
 
   (= (is-disj (det-if-then-else $C1 $C2 $C3) (or (, $C1 (set-det) $C2) $C3))  
     (set-det))
-  (= (is_disj  (;  $C1 $C2) (;  $C1 $C2))  True)
-  (= (is_disj  (not  $C) (;  (,  $C (,  ! fail)) true))  True)
-  (= (is_disj  (\+  $C) (;  (,  $C (,  ! fail)) true))  True)
-  (= (is_disj  (\=  $C1 $C2) (;  (,  (= $C1  $C2) (,  ! fail)) true))  True)
+  (= (is-disj  (;  $C1 $C2) (;  $C1 $C2))  True)
+  (= (is-disj  (not  $C) (;  (,  $C (,  ! fail)) true))  True)
+  (= (is-disj  (\+  $C) (;  (,  $C (,  ! fail)) true))  True)
+  (= (is-disj  (\=  $C1 $C2) (;  (,  (= $C1  $C2) (,  ! fail)) true))  True)
 
 ;
 ; given a list of disj((A;B),N,X,C), for each, do the following:
@@ -104,7 +104,7 @@
 ;
 ; 7) add new clauses [(dummy:-A)),(dummy:-B))]
 
-  (= (treat_disj  () $Link $Link)  True)
+  (= (treat-disj  () $Link $Link)  True)
   (= (treat-disj (Cons  (disj (or $A $B) $N $X $C) $Disjs) $DummyClauses $Link)  
     (find-vars 
       (or $A $B) $Vars)
@@ -207,7 +207,7 @@
     (retrieve-sym $V $Sym $X))
 
 
-  (= (make_sym  () ())  True)
+  (= (make-sym  () ())  True)
   (= (make-sym (Cons  $V $L) (Cons  (p $V $_) $S))  
     (make-sym $L $S))
 
@@ -237,7 +237,7 @@
     (inst-vars-list $Vars $A))
 
 
-  (= (inst_vars_list  () $_)  True)
+  (= (inst-vars-list  () $_)  True)
   (= (inst-vars-list (Cons  $T $L) $N)  
     (name $T 
       (:: $N))
@@ -248,7 +248,7 @@
 
   (= (sort-vars $V $Out)  
     (sort-vars $V $Out Nil))
-  (= (sort_vars  () $Link $Link)  True)
+  (= (sort-vars  () $Link $Link)  True)
   (= (sort-vars (Cons  $V $Vs) $Result $Link)  
     (split-vars $Vs $V $Smaller $Bigger)
     (sort-vars $Smaller $Result 
@@ -258,7 +258,7 @@
 
   (= (intersect-sorted-vars Nil $_ Nil)  
     (set-det))
-  (= (intersect_sorted_vars  $_ () ())  True)
+  (= (intersect-sorted-vars  $_ () ())  True)
   (= (intersect-sorted-vars (Cons  $X $Xs) (Cons  $Y $Ys) (Cons  $X $Rs))  
     (== $X $Y)
     (set-det)
@@ -276,7 +276,7 @@
 
 
 
-  (= (split_vars  () $_ () ())  True)
+  (= (split-vars  () $_ () ())  True)
   (= (split-vars (Cons  $V $Vs) $A (Cons  $V $Ss) $Bs)  
     (@< $V $A)
     (set-det)

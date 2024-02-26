@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  yap_compat $_386360 sldr_dl/yap_compat.pl sldr_dl/yap_compat.metta)
+;                                           (convert-to-metta-file  yap_compat $_480996 sldr_dl/yap_compat.pl sldr_dl/yap_compat.metta)
 ;
 ; :- statistics( walltime, [X,Y]), XY is X+Y, srandom(X),!.
 

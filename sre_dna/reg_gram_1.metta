@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  reg_gram_1 $_259542 sre_dna/reg_gram_1.pl sre_dna/reg_gram_1.metta)
+;                                           (convert-to-metta-file  reg_gram_1 $_450222 sre_dna/reg_gram_1.pl sre_dna/reg_gram_1.metta)
 
   (= (?-  (dynamic  (/  testset 2)))  True)
 
@@ -110,31 +110,30 @@
 ; This should be called once per GP generation.
 
 
-  (= (generate-testset)  
+  (= generate-testset  
     ( (or 
-        (remove-is-symbol  &self 
+        (remove-atom  &self 
           (testset  $_ $_)) True) 
       (gen-set-size-P $Size) 
       (gen-set $Size $S) 
       (sre-mintestcnt-P $MC) 
       (tabulate-set $S $MC $Sum $T) 
       (normalize $Sum $T $T2) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (testset  $Sum $T2)) 
       (set-det)))
 ; ; was 250
 
 
-  (= (gen_set  0 ())  True)
+  (= (gen-set  0 ())  True)
   (= (gen-set $K (Cons  $S $R))  
-    (> $K 0)
-    (repeat)
-    (max-string-length-P $Max)
-    (gen-string s 0 $Max $S)
-    (is $K2 
-      (- $K 1))
-    (set-det)
-    (gen-set $K2 $R))
+    ( (> $K 0) repeat 
+      (max-string-length-P $Max) 
+      (gen-string s 0 $Max $S) 
+      (is $K2 
+        (- $K 1)) 
+      (set-det) 
+      (gen-set $K2 $R)))
 
 
   (= (gen-string $NonTerm $Len $Max $String)  
@@ -173,7 +172,7 @@
 ; count for processing.
 
 
-  (= (tabulate_set  () $_ 0 ())  True)
+  (= (tabulate-set  () $_ 0 ())  True)
   (= (tabulate-set (Cons  $A $R) $Min $Sum (Cons  (, $A $C2) $S))  
     (once (count-and-remove $A $R $R2 $C))
     (is $C2 
@@ -192,26 +191,22 @@
   !(dynamic (/ chisquare 4))
 
   (= (temp-test $Fitness)  
-    (generate-tree expr full 12 $_ $Tree1 $_)
-    (write 'Mining 1... ')
-    (mine $Tree1 500 $MineSet1)
-    (repeat)
-    (generate-tree expr full 12 $_ $Tree2 $_)
-    (nl)
-    (write 'Mining 2... ')
-    (mine $Tree2 500 $MineSet2)
-    (nl)
-    (write 'chi square...')
-    (chisquare $MineSet1 $MineSet2 0.0 $Fitness)
-    (nl)
-    (^^ $Tree1 
-      (construct $Expr1))
-    (^^ $Tree2 
-      (construct $Expr2))
-    (write 'Expr 1:')
-    (sre-pp $Expr1)
-    (write 'Expr 2:')
-    (sre-pp $Expr2))
+    ( (generate-tree expr full 12 $_ $Tree1 $_) 
+      (write 'Mining 1... ') 
+      (mine $Tree1 500 $MineSet1) repeat 
+      (generate-tree expr full 12 $_ $Tree2 $_) nl 
+      (write 'Mining 2... ') 
+      (mine $Tree2 500 $MineSet2) nl 
+      (write 'chi square...') 
+      (chisquare $MineSet1 $MineSet2 0.0 $Fitness) nl 
+      (^^ $Tree1 
+        (construct $Expr1)) 
+      (^^ $Tree2 
+        (construct $Expr2)) 
+      (write 'Expr 1:') 
+      (sre-pp $Expr1) 
+      (write 'Expr 2:') 
+      (sre-pp $Expr2)))
 
 
   (= (chisquare-2bins Nil Nil $Fit $Fit)  

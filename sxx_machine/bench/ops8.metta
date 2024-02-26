@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ops8 $_181942 sxx_machine/bench/ops8.pl sxx_machine/bench/ops8.metta)
+;                                           (convert-to-metta-file  ops8 $_413090 sxx_machine/bench/ops8.pl sxx_machine/bench/ops8.metta)
 ;
 ; generated: 25 October 1989
 ;
@@ -17,11 +17,10 @@
 ; symbolic derivative of (x+1)*((^(x,2)+2)*(^(x,3)+3))
 
 
-  (= (top)  
-    (ops8))
+  (= top  ops8)
 
 
-  (= (ops8)  
+  (= ops8  
     (d 
       (* 
         (+ x 1) 

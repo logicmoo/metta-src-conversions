@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  aq1_1 $_340696 aq1/aq1_1.pl aq1/aq1_1.metta)
+;                                           (convert-to-metta-file  aq1_1 $_344736 aq1/aq1_1.pl aq1/aq1_1.metta)
 
   (= (domaintype  color nominal)  True)
 

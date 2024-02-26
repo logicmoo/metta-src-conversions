@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ccs_utils $_453856 sre_dna/ccs_utils.pl sre_dna/ccs_utils.metta)
+;                                           (convert-to-metta-file  ccs_utils $_46034 sre_dna/ccs_utils.pl sre_dna/ccs_utils.metta)
 
   (= (trace-append $R $S $T)  
     (tappend $R $S $T))

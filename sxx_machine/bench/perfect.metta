@@ -1,9 +1,9 @@
-;                                           (convert_to_metta_file  perfect $_270242 sxx_machine/bench/perfect.pl sxx_machine/bench/perfect.metta)
+;                                           (convert-to-metta-file  perfect $_501030 sxx_machine/bench/perfect.pl sxx_machine/bench/perfect.metta)
 ;
 ; Create perfect numbers
 
 
-  (= (top)  
+  (= top  
     (findall $C 
       (perfect 100 $C) $X)
     (ok $X))

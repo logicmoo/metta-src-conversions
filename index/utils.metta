@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  utils $_467354 index/utils.pl index/utils.metta)
+;                                           (convert-to-metta-file  utils $_170070 index/utils.pl index/utils.metta)
 
   (= (listdiff  $L () $L)  True)
 ; /* utilities */
@@ -44,7 +44,7 @@
   (= (setof0  $T $G ())  True)
 
 ;                                           (error
-;                                             (syntax_error  operator_expected)
+;                                             (syntax-error  operator_expected)
 ;                                             (file  index/utils.pl 37 4 521))
 
 
@@ -52,7 +52,7 @@
   (= (add-if $X $Ys $Ys)  
     (member $X $Ys)
     (set-det))
-  (= (add_if  $X $Ys (Cons  $X $Ys))  True)
+  (= (add-if  $X $Ys ([|]  $X $Ys))  True)
 
 
   (= (flatten $Xs $Ys)  
@@ -65,5 +65,5 @@
     (set-det)
     (flatten-dl $Xs $Ys0 $Ys1)
     (flatten-dl $X $Ys1 $Ys))
-  (= (flatten_dl  $X $Xs (Cons  $X $Xs))  True)
+  (= (flatten-dl  $X $Xs ([|]  $X $Xs))  True)
 

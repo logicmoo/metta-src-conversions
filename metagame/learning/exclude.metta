@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  exclude $_91940 metagame/learning/exclude.pl metagame/learning/exclude.metta)
+;                                           (convert-to-metta-file  exclude $_215464 metagame/learning/exclude.pl metagame/learning/exclude.metta)
 ;
 ; ============================================================
 ;

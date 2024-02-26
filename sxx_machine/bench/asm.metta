@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  asm $_496536 sxx_machine/bench/asm.pl sxx_machine/bench/asm.metta)
+;                                           (convert-to-metta-file  asm $_167076 sxx_machine/bench/asm.pl sxx_machine/bench/asm.metta)
 ;
 ; File : asm.pl
 ;
@@ -19,12 +19,10 @@
 
 
   (= (asm-bp $Infile $Outfile)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (global-set %asm-bp 0 1)) 
       (see $Infile) 
-      (asm-getaslist $Insts) 
-      (seen) 
+      (asm-getaslist $Insts) seen 
       (tell $Outfile) 
       (asm0 $Insts $Prog $Index 0 $NIndex) 
       (functor $Psctable csym 255) 
@@ -35,20 +33,16 @@
       (asm-putnum $Npsc 4) 
       (asm-putnum $Ntext 4) 
       (asm-putnum $NIndex 4) 
-      (asm-pass2 $Prog $Index $Psctable $Labeltable) 
-      (asm-mark-eot) 
-      (global-del %asm-bp 0) 
-      (told)))
+      (asm-pass2 $Prog $Index $Psctable $Labeltable) asm-mark-eot 
+      (global-del %asm-bp 0) told))
 ; ; output_mess('==>asm_pass1'),
 ; ; output_mess('==>asm_pass2'),
 
 
   (= (asm $Infile $Outfile)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (see $Infile)) 
-      (asm-getaslist $Insts) 
-      (seen) 
+      (asm-getaslist $Insts) seen 
       (tell $Outfile) 
       (asm0 $Insts $Prog $Index 0 $NIndex) 
       (functor $Psctable csym 255) 
@@ -59,26 +53,21 @@
       (asm-putnum $Npsc 4) 
       (asm-putnum $Ntext 4) 
       (asm-putnum $NIndex 4) 
-      (asm-pass2 $Prog $Index $Psctable $Labeltable) 
-      (asm-mark-eot) 
-      (told)))
+      (asm-pass2 $Prog $Index $Psctable $Labeltable) asm-mark-eot told))
 ; ; output_mess('==>asm_pass1'),
 ; ; output_mess('==>asm_pass2'),
 
 
   (= (asm-getaslist $Insts)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (read $Inst)) (asm-getaslist1 $Inst $Insts)))
 
 
   (= (asm-getaslist1 end-of-file $Insts)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (:= $Insts Nil)))
   (= (asm-getaslist1 $Inst $Insts)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (:= $Insts 
           (Cons  $Inst $Insts1))) 
       (read $Inst1) 
@@ -86,8 +75,7 @@
 
 
   (= (asm $Insts)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm0 $Insts $Prog $Index 0 $NIndex)) 
       (functor $Psctable csym 255) 
       (functor $Labeltable lsym 255) 
@@ -97,20 +85,18 @@
       (asm-putnum $Npsc 4) 
       (asm-putnum $Ntext 4) 
       (asm-putnum $NIndex 4) 
-      (asm-pass2 $Prog $Index $Psctable $Labeltable) 
-      (asm-mark-eot)))
+      (asm-pass2 $Prog $Index $Psctable $Labeltable) asm-mark-eot))
 ; ; output_mess('==>asm_pass1'),
 ; ; output_mess('==>asm_pass2'),
 
 
   (= (asm0 Nil $Prog $Index $NIndex0 $NIndex)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (:= $Prog Nil)) 
       (:= $Index Nil) 
       (:= $NIndex $NIndex0)))
   (= (asm0 (Cons  $Inst $Insts) $Prog $Index $NIndex0 $NIndex)  
-    ( (with_self  
+    ( (with-self  
         (asm-index-inst $Inst $Size) 
         (is $NIndex1 
           (+ $NIndex0 $Size))) 
@@ -118,15 +104,13 @@
         (Cons  $Inst $Index1)) 
       (asm0 $Insts $Prog $Index1 $NIndex1 $NIndex)))
   (= (asm0 (Cons  $Inst $Insts) $Prog $Index $NIndex0 $NIndex)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (:= $Prog 
           (Cons  $Inst $Prog1))) (asm0 $Insts $Prog1 $Index $NIndex0 $NIndex)))
 
 
   (= (asm-pass1 $AsmInsts $Index $Csym $Lsym $Ntext $Npsc)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-pass11 $AsmInsts $Lsym $Csym 0 $Ntext)) 
       (asm-index-pass1 $Index $Csym) 
       (asmpass1-fillin $Lsym 255 $Csym) 
@@ -134,8 +118,7 @@
 
 
   (= (asm-pass1-bp $AsmInsts $Index $Csym $Lsym $Ntext $Npsc)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-pass11 $AsmInsts $Lsym $Csym 0 $Ntext)) 
       (asm-index-pass1 $Index $Csym) 
       (asmpass1-fillin-bp $Lsym 255 $Csym) 
@@ -143,20 +126,18 @@
 
 
   (= (asm-pass11 Nil $_ $_ $Lc $NLc)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (:= $NLc $Lc)))
   (= (asm-pass11 (Cons  $Inst $Rest) $Lsym $Csym $Lc $NLc)  
     ( (<= 
-        (label $X) $Inst) (with_self  (lab-member1 (lab $X $Lc) $Lsym) (asm-pass11 $Rest $Lsym $Csym $Lc $NLc))))
+        (label $X) $Inst) (with-self  (lab-member1 (lab $X $Lc) $Lsym) (asm-pass11 $Rest $Lsym $Csym $Lc $NLc))))
   (= (asm-pass11 (Cons  $Inst $Rest) $Lsym $Csym $Lc $NLc)  
-    ( (with_self  
+    ( (with-self  
         (<= 
           (label $X) $Inst) 
         (error-double-define $X)) (asm-pass11 $Rest $Lsym $Csym $Lc $NLc)))
   (= (asm-pass11 (Cons  $Inst $Rest) $Lsym $Csym $Lc $NLc)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-pass12 $Inst $Csym $N)) 
       (is $Lc0 
         (+ $Lc $N)) 
@@ -164,44 +145,38 @@
 
 
   (= (error-double-define (, $Pred $Arity $_))  
-    (with_self  
-      (True *) True))
+    (with-self  True True))
   (= (error-double-define (, $Pred $Arity))  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (cmp-error (:: 'The predicate ' (/ $Pred $Arity) ' is doubly defined'))))
 
 
   (= (asm-index-pass1 Nil $_)  
-    (with_self  
-      (True *) True))
+    (with-self  True True))
   (= (asm-index-pass1 (Cons  (pred $_ $_ $_ $_) $Rest) $Csym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asm-index-pass1 $Rest $Csym)))
   (= (asm-index-pass1 (Cons  (arglabel $T $Val $Label) $Rest) $Csym)  
-    ( (with_self  
+    ( (with-self  
         (== $T c) 
         (sym-member1 
           (sym $Val 0 $_ $_) $Csym)) (asm-index-pass1 $Rest $Csym)))
   (= (asm-index-pass1 (Cons  (arglabel $T (, $Str $Ar) $Label) $Rest) $Csym)  
-    ( (with_self  
+    ( (with-self  
         (== $T s) 
         (sym-member1 
           (sym $Str $Ar $_ $_) $Csym)) (asm-index-pass1 $Rest $Csym)))
   (= (asm-index-pass1 (Cons  (arglabel $T $Val $Label) $Rest) $Csym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asm-index-pass1 $Rest $Csym)))
 
 
   (= (asmpass1-fillin $Lsym $N $_)  
-    (with_self  
+    (with-self  
       (< $N 1) True))
 ; /* Fill in the values of any predicates which are defined within this module.*/
   (= (asmpass1-fillin $Lsym $N $Csym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (arg $N $Lsym $L)) 
       (asmpass1-fillin $L $Csym) 
       (is $N1 
@@ -209,26 +184,23 @@
       (asmpass1-fillin $Lsym $N1 $Csym)))
     
   (= (asmpass1-fillin $L $_)  
-    (with_self  
+    (with-self  
       (var $L) True))
   (= (asmpass1-fillin (Cons  (lab (, $_ $_ $_) $LcValue) $Rest) $Table)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asmpass1-fillin $Rest $Table)))
   (= (asmpass1-fillin (Cons  (lab (, $Name $Arity) $LcValue) $Rest) $Table)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (sym-member1 
           (sym $Name $Arity $LcValue $_) $Table)) (asmpass1-fillin $Rest $Table)))
 
 
 
   (= (asmpass1-fillin-bp $Lsym $N $_)  
-    (with_self  
+    (with-self  
       (< $N 1) True))
   (= (asmpass1-fillin-bp $Lsym $N $Csym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (arg $N $Lsym $L)) 
       (asmpass1-fillin-bp $L $Csym) 
       (is $N1 
@@ -236,32 +208,29 @@
       (asmpass1-fillin-bp $Lsym $N1 $Csym)))
     
   (= (asmpass1-fillin-bp $L $_)  
-    (with_self  
+    (with-self  
       (var $L) True))
   (= (asmpass1-fillin-bp (Cons  (lab (, $_ $_ $_) $LcValue) $Rest) $Table)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asmpass1-fillin-bp $Rest $Table)))
   (= (asmpass1-fillin-bp (Cons  (lab (, $Name $Arity) $LcValue) $Rest) $Table)  
-    ( (with_self  
+    ( (with-self  
         (predefined $Name $Arity) 
         (sym-member1 
           (sym $Name $Arity $LcValue $_) $Table)) (asmpass1-fillin-bp $Rest $Table)))
   (= (asmpass1-fillin-bp (Cons  (lab (, $Name $Arity) $LcValue) $Rest) $Table)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asmpass1-fillin-bp $Rest $Table)))
 
 
   (= (asmpass1-setundef $Csym $N $S0 $S)  
-    (with_self  
+    (with-self  
       (< $N 1) 
       (= $S $S0)))
 ; /* asmpass1_fillin([lab((Name, Arity),LcValue)|Rest],Table) :- true : cmp_error(['the predicate ', Name/Arity, ' is doubly defined']), asmpass1_fillin(Rest, Table). */
 ; /* Fill in the values of any symbols which have not been defined with the value -2. */
   (= (asmpass1-setundef $Csym $N $S0 $S)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (arg $N $Csym $L)) 
       (asmpass1-setundef $L $S0 $S1) 
       (is $N1 
@@ -269,11 +238,11 @@
       (asmpass1-setundef $Csym $N1 $S1 $S)))
 
   (= (asmpass1-setundef $Tab $S0 $S)  
-    (with_self  
+    (with-self  
       (var $Tab) 
       (= $S $S0)))
   (= (asmpass1-setundef (Cons  (sym $Pred $Arity $Val $_) $Rest) $S0 $S)  
-    ( (with_self  
+    ( (with-self  
         (var $Val) 
         (:= $Val -2)) 
       (b-GET-LENGTH-cf $Pred $L) 
@@ -282,8 +251,7 @@
           (+ $S0 $L) 6)) 
       (asmpass1-setundef $Rest $S1 $S)))
   (= (asmpass1-setundef (Cons  (sym $Pred $Arity $Val $_) $Rest) $S0 $S)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (b-GET-LENGTH-cf $Pred $L)) 
       (is $S1 
         (+ 
@@ -293,9 +261,9 @@
 
   !(mode (asm-pass12 c d f))
 
-  (= (asm_pass12  (label  $_) $_ 0)  True)
+  (= (asm-pass12  (label  $_) $_ 0)  True)
 
-  (= (asm_pass12  (jmp  $_) $_ 2)  True)
+  (= (asm-pass12  (jmp  $_) $_ 2)  True)
 ; /* Conditional Jump */
   (= (asm-pass12 (jmpn-eq-struct-x $_ (, $S $N) $_ $_) $Csym 5)  
     (sym-member1 
@@ -303,49 +271,49 @@
   (= (asm-pass12 (jmpn-eq-struct-y $_ (, $S $N) $_ $_) $Csym 5)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm-pass12 (jmpn-eq-atom-x $_ $C $_ $_) $Csym 5)  
+  (= (asm-pass12 (jmpn-eq-symbol-x $_ $C $_ $_) $Csym 5)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm-pass12 (jmpn-eq-atom-y $_ $C $_ $_) $Csym 5)  
+  (= (asm-pass12 (jmpn-eq-symbol-y $_ $C $_ $_) $Csym 5)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (jmpn_nil_x  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_nil_y  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (switch_list_x  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (switch_list_y  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (switch_list_yxx  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (switch_list_yxy  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (switch_list_yyx  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (switch_list_yyy  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (jmpn_eq_int_x  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (jmpn_eq_int_y  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (jmpn_eql  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmp_eql  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmp_eql_yy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_gt  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_gt_yy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_ge  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_ge_yy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_id  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmp_id  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (jmpn_var_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_var_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmp_var_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmp_var_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_symbol_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_symbol_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_symbolic_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_symbolic_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_num_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_num_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_int_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_int_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_float_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (jmpn_float_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (hash_jmpn_nil  $_) $_ 2)  True)
-  (= (asm_pass12  (hash_jmpn_list  $_) $_ 2)  True)
-  (= (asm_pass12  (hash_jmpn_int  $_ $_) $_ 3)  True)
-  (= (asm-pass12 (hash-jmpn-atom $C $_) $Csym 3)  
+  (= (asm-pass12  (jmpn-nil-x  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-nil-y  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (switch-list-x  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (switch-list-y  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (switch-list-yxx  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (switch-list-yxy  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (switch-list-yyx  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (switch-list-yyy  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (jmpn-eq-int-x  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (jmpn-eq-int-y  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (jmpn-eql  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmp-eql  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmp-eql-yy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-gt  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-gt-yy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-ge  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-ge-yy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-id  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmp-id  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (jmpn-var-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-var-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmp-var-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmp-var-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-symbol-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-symbol-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-symbolic-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-symbolic-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-num-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-num-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-int-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-int-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-float-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (jmpn-float-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (hash-jmpn-nil  $_) $_ 2)  True)
+  (= (asm-pass12  (hash-jmpn-list  $_) $_ 2)  True)
+  (= (asm-pass12  (hash-jmpn-int  $_ $_) $_ 3)  True)
+  (= (asm-pass12 (hash-jmpn-symbol $C $_) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
   (= (asm-pass12 (hash-jmpn-struct (, $S $N) $_) $Csym 3)  
@@ -377,102 +345,102 @@
   (= (asm-pass12 (unify-struct-y $_ (, $S $N)) $Csym 3)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (unify_list_x  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_list_y  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_nil_x  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_nil_y  $_) $_ 2)  True)
-  (= (asm-pass12 (unify-atom-x $_ $C) $Csym 3)  
+  (= (asm-pass12  (unify-list-x  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-list-y  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-nil-x  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-nil-y  $_) $_ 2)  True)
+  (= (asm-pass12 (unify-symbol-x $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm-pass12 (unify-atom-y $_ $C) $Csym 3)  
+  (= (asm-pass12 (unify-symbol-y $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (unify_int_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_int_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_ux_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_ux_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_uy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_cons_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_cons_y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-int-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-int-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-ux-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-ux-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-uy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-cons-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-cons-y  $_ $_) $_ 3)  True)
 
   (= (asm-pass12 (fork-unify-struct-y $_ (, $S $N) $_) $Csym 4)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (fork_unify_list_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (fork_unify_nil_y  $_ $_) $_ 3)  True)
-  (= (asm-pass12 (fork-unify-atom-y $_ $C $_) $Csym 4)  
+  (= (asm-pass12  (fork-unify-list-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (fork-unify-nil-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12 (fork-unify-symbol-y $_ $C $_) $Csym 4)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (fork_unify_int_y  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (fork_unify_ux_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (fork_unify_uy_uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unify-int-y  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unify-ux-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unify-uy-uy  $_ $_ $_) $_ 4)  True)
 
   (= (asm-pass12 (fork-unicut-struct-y $_ (, $S $N) $_) $Csym 4)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (fork_unicut_list_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (fork_unicut_nil_y  $_ $_) $_ 3)  True)
-  (= (asm-pass12 (fork-unicut-atom-y $_ $C $_) $Csym 4)  
+  (= (asm-pass12  (fork-unicut-list-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (fork-unicut-nil-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12 (fork-unicut-symbol-y $_ $C $_) $Csym 4)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (fork_unicut_int_y  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (fork_unicut_ux_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (fork_unicut_uy_uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unicut-int-y  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unicut-ux-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (fork-unicut-uy-uy  $_ $_ $_) $_ 4)  True)
 
 
   (= (asm-pass12 (unify0-struct-y $_ (, $S $N)) $Csym 3)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (unify0_list_y  $_) $_ 2)  True)
-  (= (asm_pass12  (unify0_nil_y  $_) $_ 2)  True)
-  (= (asm-pass12 (unify0-atom-y $_ $C) $Csym 3)  
+  (= (asm-pass12  (unify0-list-y  $_) $_ 2)  True)
+  (= (asm-pass12  (unify0-nil-y  $_) $_ 2)  True)
+  (= (asm-pass12 (unify0-symbol-y $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (unify0_int_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify0_ux_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify0_uy_uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify0-int-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify0-ux-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify0-uy-uy  $_ $_) $_ 3)  True)
   (= (asm-pass12 (unicut-struct-y $_ (, $S $N)) $Csym 3)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (unicut_list_y  $_) $_ 2)  True)
-  (= (asm_pass12  (unicut_nil_y  $_) $_ 2)  True)
-  (= (asm-pass12 (unicut-atom-y $_ $C) $Csym 3)  
+  (= (asm-pass12  (unicut-list-y  $_) $_ 2)  True)
+  (= (asm-pass12  (unicut-nil-y  $_) $_ 2)  True)
+  (= (asm-pass12 (unicut-symbol-y $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (unicut_int_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unicut_uy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  unicut $_ 1)  True)
+  (= (asm-pass12  (unicut-int-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unicut-uy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  unicut $_ 1)  True)
 
-  (= (asm_pass12  unify_arg_nil $_ 1)  True)
+  (= (asm-pass12  unify_arg_nil $_ 1)  True)
 ; /* Unify argument */
-  (= (asm-pass12 (unify-arg-atom $C) $Csym 2)  
+  (= (asm-pass12 (unify-arg-symbol $C) $Csym 2)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (unify_arg_int  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_ux_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_ux  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_ux_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_ux_vx  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_uy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_uy  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_vx  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_vy  $_) $_ 2)  True)
-  (= (asm_pass12  unify_arg_list $_ 1)  True)
+  (= (asm-pass12  (unify-arg-int  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-ux-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-ux  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-ux-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-ux-vx  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-uy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-uy  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-vx  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-vy  $_) $_ 2)  True)
+  (= (asm-pass12  unify_arg_list $_ 1)  True)
   (= (asm-pass12 (unify-arg-struct (, $S $N)) $Csym 2)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  unify_arg_void_one $_ 1)  True)
-  (= (asm_pass12  (unify_arg_void  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_wy  $_) $_ 2)  True)
-  (= (asm_pass12  (unify_arg_vx_vx  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vx_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vx_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vx_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vy_vx  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vy_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vy_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_vy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (unify_arg_iii  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  unify_arg_void_one $_ 1)  True)
+  (= (asm-pass12  (unify-arg-void  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-wy  $_) $_ 2)  True)
+  (= (asm-pass12  (unify-arg-vx-vx  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vx-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vx-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vx-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vy-vx  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vy-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vy-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-vy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (unify-arg-iii  $_ $_ $_) $_ 4)  True)
 
   (= (asm-pass12 (move-struct-x $_ (, $S $N)) $Csym 3)  
     (sym-member1 
@@ -481,178 +449,176 @@
   (= (asm-pass12 (move-struct-y $_ (, $S $N)) $Csym 3)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (move_list_x  $_) $_ 2)  True)
-  (= (asm_pass12  (move_list_y  $_) $_ 2)  True)
-  (= (asm_pass12  (move_nil_x  $_) $_ 2)  True)
-  (= (asm_pass12  (move_nil_y  $_) $_ 2)  True)
-  (= (asm-pass12 (move-atom-x $_ $C) $Csym 3)  
+  (= (asm-pass12  (move-list-x  $_) $_ 2)  True)
+  (= (asm-pass12  (move-list-y  $_) $_ 2)  True)
+  (= (asm-pass12  (move-nil-x  $_) $_ 2)  True)
+  (= (asm-pass12  (move-nil-y  $_) $_ 2)  True)
+  (= (asm-pass12 (move-symbol-x $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm-pass12 (move-atom-y $_ $C) $Csym 3)  
+  (= (asm-pass12 (move-symbol-y $_ $C) $Csym 3)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (move_int_x  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_int_y  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_x_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_x_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_y_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_y_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_vx  $_) $_ 2)  True)
-  (= (asm_pass12  (move_vy  $_) $_ 2)  True)
-  (= (asm_pass12  (move_x_wy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_y_wy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (move_yy_yw  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (move_yw_yy  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (move_yy_yy  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (move_yy_yy_yy  $_ $_ $_ $_ $_ $_) $_ 7)  True)
+  (= (asm-pass12  (move-int-x  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-int-y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-x-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-x-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-y-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-y-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-vx  $_) $_ 2)  True)
+  (= (asm-pass12  (move-vy  $_) $_ 2)  True)
+  (= (asm-pass12  (move-x-wy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-y-wy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (move-yy-yw  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (move-yw-yy  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (move-yy-yy  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (move-yy-yy-yy  $_ $_ $_ $_ $_ $_) $_ 7)  True)
 
-  (= (asm_pass12  (and  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (and  $_ $_ $_) $_ 4)  True)
 ; /* Numeric */
-  (= (asm_pass12  (or  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (lshiftl  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (lshiftr  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (complement  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (add  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (add1_y  $_) $_ 2)  True)
-  (= (asm_pass12  (sub  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (sub1_y  $_) $_ 2)  True)
-  (= (asm_pass12  (mul  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (div  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (idiv  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (mod  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (or  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (lshiftl  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (lshiftr  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (complement  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (add  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (add1-y  $_) $_ 2)  True)
+  (= (asm-pass12  (sub  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (sub1-y  $_) $_ 2)  True)
+  (= (asm-pass12  (mul  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (div  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (idiv  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (mod  $_ $_ $_) $_ 4)  True)
 
   (= (asm-pass12 (para-struct (, $S $N)) $Csym 2)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
 ; /*Parameter passing */
-  (= (asm_pass12  para_list $_ 1)  True)
-  (= (asm_pass12  para_nil $_ 1)  True)
-  (= (asm-pass12 (para-atom $C) $Csym 2)  
+  (= (asm-pass12  para_list $_ 1)  True)
+  (= (asm-pass12  para_nil $_ 1)  True)
+  (= (asm-pass12 (para-symbol $C) $Csym 2)  
     (sym-member1 
       (sym $C 0 $_ $_) $Csym))
-  (= (asm_pass12  (para_int  $_) $_ 2)  True)
-  (= (asm_pass12  (para_ux  $_) $_ 2)  True)
-  (= (asm_pass12  (para_uy  $_) $_ 2)  True)
-  (= (asm_pass12  (para_vx  $_) $_ 2)  True)
-  (= (asm_pass12  (para_vy  $_) $_ 2)  True)
-  (= (asm_pass12  para_void_one $_ 1)  True)
-  (= (asm_pass12  (para_void  $_) $_ 2)  True)
-  (= (asm_pass12  (para_vy_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_vy_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_vy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_ux_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_ux_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_ux_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_uy_vy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_uy_ux  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_uy_uy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (para_ux_ux_ux  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_ux_ux_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_ux_uy_ux  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_ux_uy_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_uy_ux_ux  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_uy_ux_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_uy_uy_ux  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_uy_uy_uy  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (para_uy_uy_uy_uy  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (para-int  $_) $_ 2)  True)
+  (= (asm-pass12  (para-ux  $_) $_ 2)  True)
+  (= (asm-pass12  (para-uy  $_) $_ 2)  True)
+  (= (asm-pass12  (para-vx  $_) $_ 2)  True)
+  (= (asm-pass12  (para-vy  $_) $_ 2)  True)
+  (= (asm-pass12  para_void_one $_ 1)  True)
+  (= (asm-pass12  (para-void  $_) $_ 2)  True)
+  (= (asm-pass12  (para-vy-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-vy-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-vy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-ux-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-ux-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-ux-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-uy-vy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-uy-ux  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-uy-uy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (para-ux-ux-ux  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-ux-ux-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-ux-uy-ux  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-ux-uy-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-uy-ux-ux  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-uy-ux-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-uy-uy-ux  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-uy-uy-uy  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (para-uy-uy-uy-uy  $_ $_ $_ $_) $_ 5)  True)
 
   (= (asm-pass12 (call (, $P $N)) $Csym 2)  
     (asm-pass12-call $P $N $Csym))
 ; /* Procedural */
-  (= (asm_pass12  (callv  $_) $_ 2)  True)
+  (= (asm-pass12  (callv  $_) $_ 2)  True)
   (= (asm-pass12 (execute (, $P $N)) $Csym 2)  
     (asm-pass12-call $P $N $Csym))
-  (= (asm_pass12  (executev  $_) $_ 2)  True)
-  (= (asm_pass12  return_a $_ 1)  True)
-  (= (asm_pass12  return_b $_ 1)  True)
-  (= (asm_pass12  (jmpn_det  $L) $_ 2)  True)
-  (= (asm_pass12  (save_ht_jmp  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (executev  $_) $_ 2)  True)
+  (= (asm-pass12  return_a $_ 1)  True)
+  (= (asm-pass12  return_b $_ 1)  True)
+  (= (asm-pass12  (jmpn-det  $L) $_ 2)  True)
+  (= (asm-pass12  (save-ht-jmp  $_ $_) $_ 3)  True)
 
-  (= (asm_pass12  (allocate_flat  $N) $_ 2)  True)
+  (= (asm-pass12  (allocate-flat  $N) $_ 2)  True)
 ; /* Allocate */
-  (= (asm_pass12  (allocate_nonflat  $N) $_ 2)  True)
-  (= (asm_pass12  (allocate_nondet  $N) $_ 2)  True)
-  (= (asm_pass12  (flat_to_nondet  $N) $_ 2)  True)
+  (= (asm-pass12  (allocate-nonflat  $N) $_ 2)  True)
+  (= (asm-pass12  (allocate-nondet  $N) $_ 2)  True)
+  (= (asm-pass12  (flat-to-nondet  $N) $_ 2)  True)
 
-  (= (asm_pass12  fail $_ 1)  True)
+  (= (asm-pass12  fail $_ 1)  True)
 ; /* Backtracking */
-  (= (asm_pass12  fail0 $_ 1)  True)
+  (= (asm-pass12  fail0 $_ 1)  True)
 
-  (= (asm_pass12  (fork  $_) $_ 2)  True)
+  (= (asm-pass12  (fork  $_) $_ 2)  True)
 
-  (= (asm_pass12  commit $_ 1)  True)
-  (= (asm_pass12  cut $_ 1)  True)
-  (= (asm_pass12  cut_fail $_ 1)  True)
-  (= (asm_pass12  cut_return $_ 1)  True)
-  (= (asm_pass12  save_b $_ 1)  True)
-  (= (asm_pass12  (getbreg  $_) $_ 2)  True)
-  (= (asm_pass12  (getpbreg  $_) $_ 2)  True)
-  (= (asm_pass12  (putbreg  $_) $_ 2)  True)
+  (= (asm-pass12  commit $_ 1)  True)
+  (= (asm-pass12  cut $_ 1)  True)
+  (= (asm-pass12  cut_fail $_ 1)  True)
+  (= (asm-pass12  cut_return $_ 1)  True)
+  (= (asm-pass12  save_b $_ 1)  True)
+  (= (asm-pass12  (getbreg  $_) $_ 2)  True)
+  (= (asm-pass12  (getpbreg  $_) $_ 2)  True)
+  (= (asm-pass12  (putbreg  $_) $_ 2)  True)
 
-  (= (asm_pass12  (hash_x  $_ $_) $_ 5)  True)
+  (= (asm-pass12  (hash-x  $_ $_) $_ 5)  True)
 ; /* Hashing */
-  (= (asm_pass12  (hash_y  $_ $_) $_ 5)  True)
-  (= (asm_pass12  (tabsize  $_) $_ 2)  True)
+  (= (asm-pass12  (hash-y  $_ $_) $_ 5)  True)
+  (= (asm-pass12  (tabsize  $_) $_ 2)  True)
 
-  (= (asm_pass12  (arg  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (arg  $_ $_ $_) $_ 4)  True)
 ; /* builtin */
-  (= (asm_pass12  (arg0  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (setarg  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (setarg0  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (functor  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (builtin0  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (builtin1  $_ $_ $_) $_ 4)  True)
-  (= (asm_pass12  (builtin2  $_ $_ $_ $_) $_ 5)  True)
-  (= (asm_pass12  (builtin3  $_ $_ $_ $_ $_) $_ 6)  True)
-  (= (asm_pass12  (builtin4  $_ $_ $_ $_ $_ $_) $_ 7)  True)
-  (= (asm_pass12  (func_arity  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (arg0  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (setarg  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (setarg0  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (functor  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (builtin0  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (builtin1  $_ $_ $_) $_ 4)  True)
+  (= (asm-pass12  (builtin2  $_ $_ $_ $_) $_ 5)  True)
+  (= (asm-pass12  (builtin3  $_ $_ $_ $_ $_) $_ 6)  True)
+  (= (asm-pass12  (builtin4  $_ $_ $_ $_ $_ $_) $_ 7)  True)
+  (= (asm-pass12  (func-arity  $_ $_) $_ 3)  True)
 
-  (= (asm_pass12  halt $_ 1)  True)
+  (= (asm-pass12  halt $_ 1)  True)
 ; /* Miscellaneous */
-  (= (asm_pass12  endfile $_ 1)  True)
-  (= (asm_pass12  (gethtreg  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (puthtreg  $_ $_) $_ 3)  True)
-  (= (asm_pass12  endfile $_ 1)  True)
-  (= (asm_pass12  get_ar_cps $_ 1)  True)
-  (= (asm_pass12  (put_ar_cps  $_) $_ 2)  True)
-  (= (asm_pass12  (move_ar_cps  $_) $_ 2)  True)
-  (= (asm_pass12  (jmpn_det_get_ar_cps  $L) $_ 2)  True)
-  (= (asm_pass12  (allocate_susp  $N) $_ 2)  True)
-  (= (asm_pass12  (susp_var_x  $_) $_ 2)  True)
-  (= (asm_pass12  (susp_var_y  $_) $_ 2)  True)
+  (= (asm-pass12  endfile $_ 1)  True)
+  (= (asm-pass12  (gethtreg  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (puthtreg  $_ $_) $_ 3)  True)
+  (= (asm-pass12  endfile $_ 1)  True)
+  (= (asm-pass12  get_ar_cps $_ 1)  True)
+  (= (asm-pass12  (put-ar-cps  $_) $_ 2)  True)
+  (= (asm-pass12  (move-ar-cps  $_) $_ 2)  True)
+  (= (asm-pass12  (jmpn-det-get-ar-cps  $L) $_ 2)  True)
+  (= (asm-pass12  (allocate-susp  $N) $_ 2)  True)
+  (= (asm-pass12  (susp-var-x  $_) $_ 2)  True)
+  (= (asm-pass12  (susp-var-y  $_) $_ 2)  True)
   (= (asm-pass12 (delay (, $S $N) $_) $Csym 3)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))	
   (= (asm-pass12 (susp-var-delay $_ (, $S $N) $_ $_) $Csym 5)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  end_delay $_ 1)  True)
+  (= (asm-pass12  end_delay $_ 1)  True)
 
-  (= (asm_pass12  (nondet  $_) $_ 2)  True)
-  (= (asm_pass12  (jmp_susp  $_) $_ 2)  True)
-  (= (asm_pass12  (jmpn_dvar_y  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (nondet  $_) $_ 2)  True)
+  (= (asm-pass12  (jmp-susp  $_) $_ 2)  True)
+  (= (asm-pass12  (jmpn-dvar-y  $_ $_) $_ 3)  True)
   (= (asm-pass12 (susp-var2-delay $_ (, $S $N) $_ $_) $Csym 5)  
     (sym-member1 
       (sym $S $N $_ $_) $Csym))
-  (= (asm_pass12  (domain_set_false_yy  $_ $_) $_ 3)  True)
-  (= (asm_pass12  (domain_set_false_yx  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (domain-set-false-yy  $_ $_) $_ 3)  True)
+  (= (asm-pass12  (domain-set-false-yx  $_ $_) $_ 3)  True)
 
   (= (asm-pass12-call $P $N $Csym)  
     ( (isglobal %asm-bp 0) 
       (b-GET-SYM-TYPE-ccf $P $N $Type) 
-      (with_self  
+      (with-self  
         (=\= $Type 3) True)))
 ; /* no a call to a c function */
   (= (asm-pass12-call $P $N $Csym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (sym-member1 
         (sym $P $N $_ $_) $Csym)))
 
 
   (= (asm-pass2 $Prog $Index $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-rearange-csym $Csym 255 $_ $Csym1)) 
       (asm-symbol $Csym1) 
       (asm-pass2a $Prog $Csym $Lsym) 
@@ -663,30 +629,27 @@
 
 
   (= (asm-index Nil $_ $_)  
-    (with_self  
-      (True *) True))
+    (with-self  True True))
   (= (asm-index (Cons  $Inst $Index) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-proc-index $Inst $Csym $Lsym)) (asm-index $Index $Csym $Lsym)))
 
 
   (= (asm-proc-index (pred $HashLab $Op $Num $Alt) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op $XY)) 
       (asm-lookup-ltab $HashLab $Lsym $Val1) 
       (asm-lookup-ltab $Alt $Lsym $Val2) 
       (b-ASPN4-cccc $Val1 $XY $Num $Val2)))
   (= (asm-proc-index (arglabel $T $Val $Label) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (== $T c) 
         (asm-lookup-ctab $Val 0 $Csym $Nval)) 
       (asm-lookup-ltab $Label $Lsym $L) 
       (writename $T) 
       (b-ASPN2-cc $Nval $L)))
   (= (asm-proc-index (arglabel $T $Val $Label) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (== $T s) 
         (= $Val 
           (, $Str $Arity))) 
@@ -695,34 +658,29 @@
       (writename $T) 
       (b-ASPN2-cc $Nval $L)))
   (= (asm-proc-index (arglabel $T $Val $Label) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $Label $Lsym $L)) 
       (writename $T) 
       (b-ASPN2-cc $Val $L)))
 
 
   (= (asm-pass2a Nil $_ $_)  
-    (with_self  
-      (True *) True))
+    (with-self  True True))
   (= (asm-pass2a (Cons  $Inst $Insts) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-pass2-inst $Inst $Csym $Lsym)) (asm-pass2a $Insts $Csym $Lsym)))
 
 
 
   (= (asm-pass2-inst (label $_) $_ $_)  
-    (with_self  
-      (True *) True))
+    (with-self  True True))
 ; /* asm_pass2_inst(X,_,_) :- true ? output_mess(X), fail. */
   (= (asm-pass2-inst (call $Lab) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (asm-lookup-ltab $Lab $Lsym $EPaddr) 
         (opcode call-d $X)) (b-ASPN2-cc $X $EPaddr)))
   (= (asm-pass2-inst (call (, $P $N)) $Csym $Lsym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (det-if-then-else 
         (asm-lookup-ctab $P $N $Csym $Index) 
         (, 
@@ -730,12 +688,11 @@
           (b-ASPN2-cc $X $Index)) 
         (warning (:: (/ $P $N) ' is called but not defined')))))
   (= (asm-pass2-inst (execute $Lab) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (asm-lookup-ltab $Lab $Lsym $EPaddr) 
         (opcode djmp $X)) (b-ASPN2-cc $X $EPaddr)))
   (= (asm-pass2-inst (execute (, $P $N)) $Csym $Lsym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (det-if-then-else 
         (asm-lookup-ctab $P $N $Csym $Index) 
         (, 
@@ -743,16 +700,15 @@
           (b-ASPN2-cc $X $Index)) 
         (warning (:: (/ $P $N) ' is called but not defined')))))
   (= (asm-pass2-inst (jmp $L) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (asm-lookup-ltab $L $Lsym $Val) 
         (opcode jmp $X)) (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (jmp-susp $L) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (asm-lookup-ltab $L $Lsym $Val) 
         (opcode jmp-susp $X)) (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (jmpn-eq-struct-x $Op (, $S $N) $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
@@ -760,26 +716,23 @@
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst (jmpn-eq-struct-y $Op (, $S $N) $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-eq-struct-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
-  (= (asm-pass2-inst (jmpn-eq-atom-x $Op $C $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-eq-symbol-x $Op $C $L1 $L2) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-eq-symbol-x $X) 
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
-  (= (asm-pass2-inst (jmpn-eq-atom-y $Op $C $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-eq-symbol-y $Op $C $L1 $L2) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
@@ -787,22 +740,19 @@
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst (jmpn-nil-x $Op $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-nil-x $X) 
       (b-ASPN4-cccc $X $Op $Val1 $Val2)))
   (= (asm-pass2-inst (jmpn-nil-y $Op $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-nil-y $X) 
       (b-ASPN4-cccc $X $Op $Val1 $Val2)))
   (= (asm-pass2-inst (switch-list-x $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -810,8 +760,7 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (switch-list-y $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -819,8 +768,7 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (switch-list-yxx $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -828,8 +776,7 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (switch-list-yxy $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -837,8 +784,7 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (switch-list-yyx $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -846,8 +792,7 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (switch-list-yyy $Op $L1 $L2 $L3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (asm-lookup-ltab $L3 $Lsym $Val3) 
@@ -855,625 +800,534 @@
       (b-ASPN4-cccc $X $Op $Val1 $Val2) 
       (b-ASPN-c $Val3)))
   (= (asm-pass2-inst (jmpn-eq-int-x $Op $I $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-eq-int-x $X) 
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst (jmpn-eq-int-y $Op $I $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode jmpn-eq-int-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst (jmpn-eql $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmpn-eql $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmp-eql $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmp-eql $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmp-eql-yy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmp-eql-yy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (jmpn-gt $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmpn-gt $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmpn-gt-yy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-gt-yy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (jmpn-ge $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmpn-ge $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmpn-ge-yy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-ge-yy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (jmpn-id $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmpn-id $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmp-id $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (opcode jmp-id $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $Val)))
   (= (asm-pass2-inst (jmpn-var-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-var-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-var-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-var-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmp-var-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmp-var-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmp-var-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmp-var-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (jmpn-atom-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-symbol-x $Op $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-symbol-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (jmpn-atom-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-symbol-y $Op $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-symbol-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (jmpn-atomic-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-symbolic-x $Op $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-symbolic-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (jmpn-atomic-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (jmpn-symbolic-y $Op $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-symbolic-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-num-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-num-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-num-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-num-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-float-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-float-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-float-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-float-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-int-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-int-x $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (jmpn-int-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-int-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (hash-jmpn-nil $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode hash-jmpn-nil $X) 
       (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (hash-jmpn-list $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode hash-jmpn-list $X) 
       (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (hash-jmpn-int $I $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode hash-jmpn-int $X) 
       (b-ASPN3-ccc $X $I $Val)))
-  (= (asm-pass2-inst (hash-jmpn-atom $C $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (hash-jmpn-symbol $C $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-symbol $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-x (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-x $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-y (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-y $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-xx (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-xx $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-xy (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-xy $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-yx (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-yx $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (hash-jmpn-struct-yy (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode hash-jmpn-struct-yy $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (jmpn-det $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-det $X) 
       (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (jmpn-det-get-ar-cps $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-det-get-ar-cps $X) 
       (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (save-ht-jmp $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L1 $Lsym $Val1)) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
       (opcode save-ht-jmp $X) 
       (b-ASPN3-ccc $X $Val1 $Val2)))
   (= (asm-pass2-inst (unify-struct-x $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode unify-struct-x $X) 
       (b-ASPN3-ccc $X $Op $I)))
   (= (asm-pass2-inst (unify-struct-y $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode unify-struct-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
   (= (asm-pass2-inst (unify0-struct-y $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode unify0-struct-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
   (= (asm-pass2-inst (unicut-struct-y $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode unicut-struct-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (unify-atom-x $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (unify-symbol-x $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode unify-symbol-x $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (unify-atom-y $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (unify-symbol-y $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode unify-symbol-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (unify0-atom-y $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (unify0-symbol-y $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode unify0-symbol-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (unicut-atom-y $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (unicut-symbol-y $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode unicut-symbol-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (unify-arg-atom $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (unify-arg-symbol $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode unify-arg-symbol $X) 
       (b-ASPN2-cc $X $I)))
   (= (asm-pass2-inst (unify-arg-struct (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode unify-arg-struct $X) 
       (b-ASPN2-cc $X $I)))
 
   (= (asm-pass2-inst (move-struct-x $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode move-struct-x $X) 
       (b-ASPN3-ccc $X $Op $I)))
   (= (asm-pass2-inst (move-struct-y $Op (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode move-struct-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (move-atom-x $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (move-symbol-x $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode move-symbol-x $X) 
       (b-ASPN3-ccc $X $Op $I)))
-  (= (asm-pass2-inst (move-atom-y $Op $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (move-symbol-y $Op $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode move-symbol-y $X) 
       (b-ASPN3-ccc $X $Op $I)))
   (= (asm-pass2-inst (and $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode and $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (or $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode or $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (lshiftl $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode lshiftl $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (lshiftr $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode lshiftr $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (complement $Op1 $Op2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (opcode complement $X) 
       (b-ASPN3-ccc $X $XY1 $XY2)))
   (= (asm-pass2-inst (add $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode add $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (sub $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode sub $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (mul $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode mul $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (div $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode div $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (idiv $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode idiv $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (mod $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (x-or-y $Op1 $XY1)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (opcode mod $X) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (para-struct (, $S $N)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (opcode para-struct $X) 
       (b-ASPN2-cc $X $I)))
-  (= (asm-pass2-inst (para-atom $C) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (para-symbol $C) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (opcode para-symbol $X) 
       (b-ASPN2-cc $X $I)))
   (= (asm-pass2-inst (fork $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork $X) 
       (b-ASPN2-cc $X $Val)))
   (= (asm-pass2-inst (fork-unify-struct-y $Op (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (asm-lookup-ctab $S $N $Csym $I) 
       (opcode fork-unify-struct-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val)))
   (= (asm-pass2-inst (fork-unify-list-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unify-list-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (fork-unify-nil-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unify-nil-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (fork-unify-atom-y $Op $C $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (fork-unify-symbol-y $Op $C $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode fork-unify-symbol-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val)))
   (= (asm-pass2-inst (fork-unify-int-y $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unify-int-y $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (fork-unify-uy-uy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unify-uy-uy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
 
   (= (asm-pass2-inst (fork-unicut-struct-y $Op (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (asm-lookup-ctab $S $N $Csym $I) 
       (opcode fork-unicut-struct-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val)))
   (= (asm-pass2-inst (fork-unicut-list-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unicut-list-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (fork-unicut-nil-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unicut-nil-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
-  (= (asm-pass2-inst (fork-unicut-atom-y $Op $C $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+  (= (asm-pass2-inst (fork-unicut-symbol-y $Op $C $L) $Csym $Lsym)  
+    ( (with-self  True 
         (asm-lookup-ctab $C 0 $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode fork-unicut-symbol-y $X) 
       (b-ASPN4-cccc $X $Op $I $Val)))
   (= (asm-pass2-inst (fork-unicut-int-y $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unicut-int-y $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (fork-unicut-ux-uy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unicut-ux-uy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
   (= (asm-pass2-inst (fork-unicut-uy-uy $Op1 $Op2 $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode fork-unicut-uy-uy $X) 
       (b-ASPN4-cccc $X $Op1 $Op2 $Val)))
 
   (= (asm-pass2-inst (hash-x $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode hash-x $X)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (b-ASPN4-cccc $X $Op 0 0) 
       (b-ASPN-c $Val)))
   (= (asm-pass2-inst (hash-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode hash-y $X)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (b-ASPN4-cccc $X $Op 0 0) 
       (b-ASPN-c $Val)))
   (= (asm-pass2-inst (callv $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode callv $X)) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN2-cc $X $XY1)))
   (= (asm-pass2-inst (executev $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode executev $X)) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN2-cc $X $XY1)))
   (= (asm-pass2-inst (functor $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode functor $X)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (func-arity $Op1 $Op2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode func-arity $X)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (b-ASPN3-ccc $X $XY1 $XY2)))
   (= (asm-pass2-inst (arg0 $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (integer $Op1) 
         (opcode arg0 $X)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (b-ASPN4-cccc $X $Op1 $XY2 $XY3)))
   (= (asm-pass2-inst (arg $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode arg $X)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (setarg0 $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (integer $Op1) 
         (opcode setarg0 $X)) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (b-ASPN4-cccc $X $Op1 $XY2 $XY3)))
   (= (asm-pass2-inst (setarg $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode setarg $X)) 
       (x-or-y $Op1 $XY1) 
       (x-or-y $Op2 $XY2) 
       (x-or-y $Op3 $XY3) 
       (b-ASPN4-cccc $X $XY1 $XY2 $XY3)))
   (= (asm-pass2-inst (builtin0 $N $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode builtin0 $X) 
       (b-ASPN3-ccc $X $N $Val)))
   (= (asm-pass2-inst (builtin1 $N $L $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode builtin1 $X) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN4-cccc $X $N $Val $XY1)))
   (= (asm-pass2-inst (builtin2 $N $L $Op1 $Op2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode builtin2 $X) 
       (x-or-y $Op1 $XY1) 
@@ -1481,8 +1335,7 @@
       (b-ASPN4-cccc $X $N $Val $XY1) 
       (b-ASPN-c $XY2)))
   (= (asm-pass2-inst (builtin3 $N $L $Op1 $Op2 $Op3) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode builtin3 $X) 
       (x-or-y $Op1 $XY1) 
@@ -1491,8 +1344,7 @@
       (b-ASPN4-cccc $X $N $Val $XY1) 
       (b-ASPN2-cc $XY2 $XY3)))
   (= (asm-pass2-inst (builtin4 $N $L $Op1 $Op2 $Op3 $Op4) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode builtin4 $X) 
       (x-or-y $Op1 $XY1) 
@@ -1502,41 +1354,34 @@
       (b-ASPN4-cccc $X $N $Val $XY1) 
       (b-ASPN3-ccc $XY2 $XY3 $XY4)))
   (= (asm-pass2-inst (getbreg $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode getbreg $X)) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN2-cc $X $XY1)))
   (= (asm-pass2-inst (getpbreg $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode getpbreg $X)) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN2-cc $X $XY1)))
   (= (asm-pass2-inst (putbreg $Op1) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode putbreg $X)) 
       (x-or-y $Op1 $XY1) 
       (b-ASPN2-cc $X $XY1)))
   (= (asm-pass2-inst (gethtreg (y $X1) (y $X2)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode gethtreg $X)) (b-ASPN3-ccc $X $X1 $X2)))
   (= (asm-pass2-inst (puthtreg (y $X1) (y $X2)) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (opcode puthtreg $X)) (b-ASPN3-ccc $X $X1 $X2)))
   (= (asm-pass2-inst (delay (, $S $N) $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L $Lsym $Val) 
       (opcode delay $X) 
       (b-ASPN3-ccc $X $I $Val)))
   (= (asm-pass2-inst (susp-var-delay $Op (, $S $N) $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
@@ -1544,14 +1389,12 @@
       (b-ASPN4-cccc $X $Op $I $Val1) 
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst (jmpn-dvar-y $Op $L) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ltab $L $Lsym $Val)) 
       (opcode jmpn-dvar-y $X) 
       (b-ASPN3-ccc $X $Op $Val)))
   (= (asm-pass2-inst (susp-var2-delay $Op (, $S $N) $L1 $L2) $Csym $Lsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-lookup-ctab $S $N $Csym $I)) 
       (asm-lookup-ltab $L1 $Lsym $Val1) 
       (asm-lookup-ltab $L2 $Lsym $Val2) 
@@ -1560,22 +1403,20 @@
       (b-ASPN-c $Val2)))
   (= (asm-pass2-inst $Inst $Csym $Lsym)  
     ( (functor $Inst $F $N) 
-      (with_self  
+      (with-self  
         (opcode $F $X) 
         (b-ASPN-c $X)) 
       (asm-pass2-inst-op $Inst 0 $N)))
   (= (asm-pass2-inst $Inst $Csym $Lsym)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (cmp-error (:: 'error in asm pass2 :' $Inst 'is not defined'))))
 
 
   (= (asm-pass2-inst-op $Inst $N0 $N1)  
-    (with_self  
+    (with-self  
       (=:= $N0 $N1) True))
   (= (asm-pass2-inst-op $Inst $N0 $Nn)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (is $N1 
           (+ $N0 1))) 
       (arg $N1 $Inst $Op) 
@@ -1584,8 +1425,7 @@
 
 
   (= (asm-magic $N)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-putnum 17 1)) 
       (asm-putnum 18 1) 
       (asm-putnum 19 1) 
@@ -1593,29 +1433,24 @@
 
 
   (= (asm-index-inst (pred $_ $_ $_ $_) $Size)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (= $Size 16)))
   (= (asm-index-inst (arglabel i $_ $_) $N)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (:= $N 9)))
   (= (asm-index-inst (arglabel c $_ $_) $N)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (:= $N 9)))
   (= (asm-index-inst (arglabel s $_ $_) $N)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (:= $N 9)))
 
 
   (= (asm-symbol $Tab)  
-    (with_self  
+    (with-self  
       (var $Tab) True))
   (= (asm-symbol (Cons  (sym $Pred $Arity $Val $_) $Symtab))  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (b-ASPN-c $Val)) 
       (asm-putnum $Arity 1) 
       (b-GET-LENGTH-cf $Pred $L) 
@@ -1625,7 +1460,7 @@
 
 
   (= (asm-putnum $Num $NBytes)  
-    ( (with_self  
+    ( (with-self  
         (> $NBytes 1) 
         (is $Byte 
           (/\ $Num 255))) 
@@ -1640,20 +1475,18 @@
 ; /* aspn(X):- true : write((X,4)),nl. asm_putnum(X,Bytes):- true : write((X,Bytes)),nl. */
 ; /* aspn(Num):- true : asm_putnum(Num,4). */
   (= (asm-putnum $Num $NBytes)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (put $Num)))
 ; ; Num < 256 :
 
 
-  (= (asm-mark-eot)  
-    ( (with_self  
-        (True *) 
+  (= asm-mark-eot  
+    ( (with-self  True 
         (opcode endfile $X)) (b-ASPN2-cc $X 0)))
 
 
   (= (sym-member1 $Sym $Csym)  
-    ( (with_self  
+    ( (with-self  
         (<= 
           (sym $F $N $Val $I) $Sym) 
         (asm-hash-value $F $HashVal)) 
@@ -1666,20 +1499,18 @@
 ; /* local utilities */
 
   (= (sym-member1 $F $N $Sym $List)  
-    ( (with_self  
+    ( (with-self  
         (var $List) 
         (next-sym-no $I)) 
       (arg 4 $Sym $I) 
       (:= $List 
         (Cons  $Sym $_))))
   (= (sym-member1 $F $N $Sym (Cons  (sym $F $N $Val2 $I) $List))  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (= $Sym 
         (sym $F $N $Val2 $I))))
   (= (sym-member1 $F $N $Sym (Cons  $X1 $List))  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (sym-member1 $F $N $Sym $List)))
 
     
@@ -1688,7 +1519,7 @@
 
 
   (= (lab-member1 $Lab $Lsym)  
-    ( (with_self  
+    ( (with-self  
         (<= 
           (lab $X $Val) $Lab) 
         (asm-hash-value $X $HashVal)) 
@@ -1700,18 +1531,16 @@
 ; ; write(user,Index),nl(user),
 
   (= (lab-member1 $X $Lab $List)  
-    (with_self  
+    (with-self  
       (var $List) 
       (:= $List 
         (Cons  $Lab $_))))
   (= (lab-member1 $X $Lab (Cons  (lab $X $Val2) $List))  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (= $Lab 
         (lab $X $Val2))))
   (= (lab-member1 $X $Lab (Cons  $_ $List))  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (lab-member1 $X $Lab $List)))
 
 
@@ -1720,8 +1549,7 @@
 
 
   (= (asm-lookup-ltab $Lab $Lsym $Val1)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-hash-value $Lab $HashVal)) 
       (is $Index 
         (+ 
@@ -1731,16 +1559,13 @@
     
 
   (= (asm-lookup-ltab1 $Lab $Var $Val1)  
-    (with_self  
-      (var $Var) 
-      (fail)))
+    (with-self  
+      (var $Var) fail))
   (= (asm-lookup-ltab1 $Lab (Cons  (lab $Lab $Val) $_) $Val1)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (= $Val1 $Val)))
   (= (asm-lookup-ltab1 $Lab (Cons  $_ $Tab) $Val)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asm-lookup-ltab1 $Lab $Tab $Val)))
 
 
@@ -1749,8 +1574,7 @@
 
 
   (= (asm-lookup-ctab $F $N $Csym $I)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (asm-hash-value $F $HashVal)) 
       (is $Index 
         (+ 
@@ -1761,24 +1585,21 @@
 
 
   (= (asm-lookup-ctab1 $F $N (Cons  (sym $F $N $Val $I) $L) $I1)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (= $I1 $I)))
   (= (asm-lookup-ctab1 $F $N (Cons  $_ $L) $I)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (asm-lookup-ctab1 $F $N $L $I)))
 
 ;
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (= (asm-rearange-csym $Csym $N $LCsym0 $LCsym)  
-    (with_self  
+    (with-self  
       (< $N 1) 
       (= $LCsym $LCsym0)))
   (= (asm-rearange-csym $Csym $N $LCsym0 $LCsym)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (arg $N $Csym $L)) 
       (asm-merge $L $LCsym0 $LCsym1) 
       (is $N1 
@@ -1787,11 +1608,11 @@
 
 
   (= (asm-merge $L1 $L2 $L3)  
-    (with_self  
+    (with-self  
       (var $L1) 
       (= $L3 $L2)))
   (= (asm-merge $L1 $L2 $L3)  
-    (with_self  
+    (with-self  
       (var $L2) 
       (= $L3 $L1)))
   (= (asm-merge $L1 $L2 $L3)  
@@ -1803,7 +1624,7 @@
         (sym $F1 $N1 $Val1 $I1) $Sym1) 
       (<= 
         (sym $F2 $N2 $Val2 $I2) $Sym2) 
-      (with_self  
+      (with-self  
         (< $I1 $I2) 
         (:= $L3 
           (Cons  $Sym1 $L4))) 
@@ -1811,7 +1632,7 @@
   (= (asm-merge $L1 $L2 $L3)  
     ( (<= 
         (Cons  $Sym1 $T1) $L1) 
-      (with_self  
+      (with-self  
         (<= 
           (Cons  $Sym2 $T2) $L2) 
         (:= $L3 
@@ -1822,8 +1643,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (= (next-sym-no $I)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (global-get %sym-no 0 $I)) 
       (is $I1 
         (+ $I 1)) 
@@ -1832,34 +1652,29 @@
 
 
   (= (x-or-y (vx $X) $Code)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (is $Code 
         (<< $X 3))))
 ; ; xv
   (= (x-or-y (x $X) $Code)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (is $Code 
         (+ 
           (<< $X 3) 1))))
 ; ; ux
   (= (x-or-y (vy $Y) $Code)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (is $Code 
         (\/ 
           (<< $Y 3) 3))))
 ; ;vy
   (= (x-or-y (y $Y) $Code)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (is $Code 
         (\/ 
           (<< $Y 3) 7))))
   (= (x-or-y $Op $Code)  
-    (with_self  
-      (True *) 
+    (with-self  True 
       (is $Code 
         (\/ 
           (<< $Op 2) 2))))
@@ -2105,19 +1920,16 @@
 
 
   (= (output-mess $Mess)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (telling $X)) 
       (tell user) 
-      (write $Mess) 
-      (nl) 
+      (write $Mess) nl 
       (tell $X)))
 ; /* opcode(X,N):- true : cmp_error(['no this instruction : ',X]). */
 
 
   (= (is-unify-arg-inst $Inst)  
-    ( (with_self  
-        (True *) 
+    ( (with-self  True 
         (functor $Inst $F $N)) 
       (opcode $F $Code) 
       (>= $Code 91) 

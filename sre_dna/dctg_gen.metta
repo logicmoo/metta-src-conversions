@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  dctg_gen $_354356 sre_dna/dctg_gen.pl sre_dna/dctg_gen.metta)
+;                                           (convert-to-metta-file  dctg_gen $_448246 sre_dna/dctg_gen.pl sre_dna/dctg_gen.metta)
 ;
 ; DCTG based tree generation for GP
 ;
@@ -41,7 +41,7 @@
 
 
   (= (generate-tree $TopGoal $TreeType $MaxDepth $UserArgs $Tree $Expr)  
-    ( (with_self  
+    ( (with-self  
         (fast *) 
         (dctg-rule-info $TopGoal $_ $RuleHead $_ $_)) 
       (=.. $RuleHead 
@@ -129,7 +129,7 @@
         (Cons  $RuleName $_)) 
       (shuffle-rule-list $RuleName $TreeType $RuleList) 
       (member $ID $RuleList) 
-      (with_self  
+      (with-self  
         (fast *) 
         (dctg-rule-info $_ $ID $RuleHead $MinDepth $_)) 
       (=< $MinDepth $MaxDepth) 
@@ -159,13 +159,13 @@
 
 
   (= (shuffle-rule-list $RuleName grow $RuleList)  
-    ( (with_self  
+    ( (with-self  
         (fast *) 
         (dctg-id-table $RuleName $IDList $_ $_)) 
       (random-permutation $IDList $RuleList) 
       (set-det)))
   (= (shuffle-rule-list $RuleName full $RuleList)  
-    ( (with_self  
+    ( (with-self  
         (fast *) 
         (dctg-id-table $RuleName $_ $TermList $NontermList)) 
       (random-permutation $TermList $T1) 

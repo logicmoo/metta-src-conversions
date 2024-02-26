@@ -1,9 +1,9 @@
-;                                           (convert_to_metta_file  constrained_clauses_ex $_30708 miles/gencon_instances/constrained_clauses_ex.pl miles/gencon_instances/constrained_clauses_ex.metta)
+;                                           (convert-to-metta-file  constrained_clauses_ex $_139576 miles/gencon_instances/constrained_clauses_ex.pl miles/gencon_instances/constrained_clauses_ex.metta)
 
-  (= (type_restriction  (male  $A) ((is-symbol  $A)))  True)
+  (= (type-restriction  (male  $A) ((atom  $A)))  True)
 ; /* type_restriction((A < B),[number(A),number(B)]). ex(merge([1],[2],[1,2]),'+'). ex(merge([6],[4],[4,6]),'+'). ex(merge([2,3,4,5],[4,7],[2,3,4,4,5,7]),'+'). ex(merge([44,55,66],[22,33,44,55],[22,33,44,44,55,55,66]),'+'). ex(merge([],[54,66,77,88,97],[54,66,77,88,97]),'+'). ex(merge([],[4],[4]),'+'). ex(merge([],[],[]),'+'). ex(merge([22,23,24,25],[],[22,23,24,25]),'+'). ex(merge([24],[],[24]),'+'). ex(merge([29,39,49,59],[37,79,99],[29,37,39,49,59,79,99]),'+'). ex(merge([2],[4,7],[2,4,7]),'+'). ex(merge([1],[2],[2,1]),'-'). ex(merge([6],[4],[6,4]),'-'). ex(merge([8],[7],[8]),'-'). ex(merge([2,3,4,5],[4,7],[4,3,2,4,5,7]),'-'). ex(merge([44,55,66],[22,33,44,55],[22,44,55,33,55,44,66]),'-'). ex(merge([29,39,49,59],[37,79,99],[37,39,29,59,79,49,99]),'-'). ex(merge([2],[4,7],[4,2]),'-'). ex(merge([1,2],[3,4],[1,3,2,4]),'-'). */
-  (= (type_restriction  (female  $A) ((is-symbol  $A)))  True)
-  (= (type_restriction  (parent  $A $B) ((is-symbol  $A) (is-symbol  $B)))  True)
+  (= (type-restriction  (female  $A) ((atom  $A)))  True)
+  (= (type-restriction  (parent  $A $B) ((atom  $A) (atom  $B)))  True)
 
 
 

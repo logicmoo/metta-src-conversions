@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  mygraphs $_153056 metagame/misc/mygraphs.pl metagame/misc/mygraphs.metta)
+;                                           (convert-to-metta-file  mygraphs $_412068 metagame/misc/mygraphs.pl metagame/misc/mygraphs.metta)
 ;
 ; ============================================================
 ;
@@ -70,7 +70,7 @@
   (= (p-to-s-group (Cons  (- $V $X) $Edges) $V (Cons  $X $Neibs) $RestEdges)  
     (set-det)
     (p-to-s-group $Edges $V $Neibs $RestEdges))
-  (= (p_to_s_group  $Edges $_ () $Edges)  True)
+  (= (p-to-s-group  $Edges $_ () $Edges)  True)
 
 
 
@@ -156,7 +156,7 @@
   (= (transpose-s (Cons  $Head $SoFar) $Neibs $Vertex (Cons  $Head $Transpose))  
     (set-det)
     (transpose-s $SoFar $Neibs $Vertex $Transpose))
-  (= (transpose_s  () () $_ ())  True)
+  (= (transpose-s  () () $_ ())  True)
 
 
 
@@ -265,6 +265,6 @@
 
 
 ;                                           (error
-;                                             (syntax_error  end_of_file_in_block_comment)
-;                                             (stream  <stream>(0x55c987c85400) 0 1 0))
+;                                             (syntax-error  end_of_file_in_block_comment)
+;                                             (stream  <stream>(0x5630f7228a00) 0 1 0))
 

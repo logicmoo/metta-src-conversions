@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  ex4 $_271132 miles/examples/ex4.pl miles/examples/ex4.metta)
+;                                           (convert-to-metta-file  ex4 $_375568 miles/examples/ex4.pl miles/examples/ex4.metta)
 ;
 ; diverse
 
@@ -51,16 +51,16 @@
     (cat $X))
 
 
-  (= (ex  (cuddly_pet  cathy_the_cat) +)  True)
-  (= (ex  (cuddly_pet  rosi_the_rabbit) +)  True)
-  (= (ex  (cuddly_pet  tom_the_turtle) -)  True)
+  (= (ex  (cuddly-pet  cathy_the_cat) +)  True)
+  (= (ex  (cuddly-pet  rosi_the_rabbit) +)  True)
+  (= (ex  (cuddly-pet  tom_the_turtle) -)  True)
 
 ;
 ; index 10-13
 
-  (= (has_wings  p)  True)
+  (= (has-wings  p)  True)
 
-  (= (has_beak  p)  True)
+  (= (has-beak  p)  True)
 
   (= (has-wings $X)  
     (bird $X))

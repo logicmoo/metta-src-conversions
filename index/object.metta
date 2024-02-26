@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  object $_215068 index/object.pl index/object.metta)
+;                                           (convert-to-metta-file  object $_430040 index/object.pl index/object.metta)
 
   (= (diff $Tuple1 $Tuple2 $Diff)  
     (diff $Tuple1 $Tuple2 $Rel $Equal $Diff))

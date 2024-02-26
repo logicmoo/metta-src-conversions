@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  interpreter $_170804 miles/interpreter.pl miles/interpreter.metta)
+;                                           (convert-to-metta-file  interpreter $_407784 miles/interpreter.pl miles/interpreter.metta)
 
 ;
 ; MODULE interpreter EXPORTS
@@ -136,7 +136,7 @@
   (= (ip-part1 $Goal $Proof)  
     ( (remove-all-atoms  &self 
         (tag  $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (tag  $Goal)) 
       (gen-depth $D $Delta) 
       (ipp1 $Goal $D $Delta $Proof $Proof Nil)))
@@ -163,9 +163,8 @@
     (det-if-then-else 
       (> $D 0) True 
       (, 
-        (add-is-symbol  &self 
-          (tag  $A)) 
-        (fail)))
+        (add-atom  &self 
+          (tag  $A)) fail))
     (det-if-then-else 
       (identical-member $A $Ancestors) 
       (= $Poi 
@@ -247,27 +246,27 @@
     (ip-part2 $R $Goal $UA))
 
 
-  (= (ipp2 (:: $I $H looping) $_ $L (Cons  (with_self  $I $H) $L))  
+  (= (ipp2 (:: $I $H looping) $_ $L (Cons  (with-self  $I $H) $L))  
     (set-det))
-  (= (ipp2 (:: sys $_ fail) (Cons  (with_self  $I $A) $_) $L (Cons  (with_self  $I $A) $L))  
+  (= (ipp2 (:: sys $_ fail) (Cons  (with-self  $I $A) $_) $L (Cons  (with-self  $I $A) $L))  
     (set-det))
   (= (ipp2 (:: $_ $_ Nil) $_ $L $L)  
     (set-det))
-  (= (ipp2 (:: $_ $H no-rules) $_ $L (Cons  (with_self  -1 $H) $L))  
+  (= (ipp2 (:: $_ $H no-rules) $_ $L (Cons  (with-self  -1 $H) $L))  
     (set-det))
   (= (ipp2 (:: $I $H $SG) $Ancestors $L $L1)  
     (det-if-then-else 
       (satisfiable $SG) 
       (ipp2-list $SG 
         (Cons  
-          (with_self  $I $H) $Ancestors) $L $L1) 
+          (with-self  $I $H) $Ancestors) $L $L1) 
       (= $L1 
         (Cons  
-          (with_self  $I $H) $L))))
+          (with-self  $I $H) $L))))
 
 
 
-  (= (ipp2_list  () $_ $L $L)  True)
+  (= (ipp2-list  () $_ $L $L)  True)
   (= (ipp2-list (Cons  $G $R) $A $L $L2)  
     (ipp2 $G $A $L $L1)
     (ipp2-list $R $A $L1 $L2))
@@ -340,9 +339,9 @@
     (=.. $A 
       (Cons  $T1 $_))
     (or 
-      (= $T1 is-symbol) 
+      (= $T1 atom) 
       (or 
-        (= $T1 symbolic) 
+        (= $T1 atomic) 
         (= $T1 number)))
     (set-det)
     (call $A))
@@ -401,10 +400,10 @@
     (=.. $C 
       (Cons  $P $_))
     (or 
-      (= $P is-symbol) 
+      (= $P atom) 
       (or 
         (= $P number) 
-        (= $P symbolic)))
+        (= $P atomic)))
     (set-det)
     (call $C))
   (= (t-interpreter $C $CL)  
@@ -480,8 +479,7 @@
       (ground $H) 
       (solve $B $Mark $Proofs) 
       (, 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
   (= (solve $Goal $Mark $Proofs)  
     (det-if-then-else 
@@ -546,8 +544,7 @@
       (ground $H) 
       (solve-once $B $Mark $Proofs) 
       (, 
-        (set-det) 
-        (fail))))
+        (set-det) fail)))
 
   (= (solve-once $Goal $Mark $Proofs)  
     (det-if-then-else 
@@ -652,9 +649,9 @@
     ( (remove-all-atoms  &self 
         (tag  $_)) 
       (remove-all-atoms  &self 
-        (failed_proof  $_)) 
+        (failed-proof  $_)) 
       (remove-all-atoms  &self 
-        (depth_exceeded  $_ $_ $_)) 
+        (depth-exceeded  $_ $_ $_)) 
       (remove-all-atoms  &self depth_exceeded) 
       (gen-depth $D $Delta) 
       (solve2 $Goal $D $Delta $Proof $Proof Nil)))
@@ -680,11 +677,10 @@
     (det-if-then-else 
       (= $D 0) 
       (, 
-        (add-is-symbol  &self 
+        (add-atom  &self 
           (tag  $A)) 
-        (add-is-symbol  &self 
-          (depth_exceeded  $A $Proof $Poi)) 
-        (fail)) 
+        (add-atom  &self 
+          (depth-exceeded  $A $Proof $Poi)) fail) 
       (det-if-then-else 
         (identical-member $A $Ancestors) 
         (, 
@@ -692,9 +688,8 @@
             (:: (:: -1 $A looping))) 
           (det-if-then-else 
             (< $D $Delta) 
-            (add-is-symbol  &self 
-              (failed_proof  $Proof)) True) 
-          (fail)) 
+            (add-atom  &self 
+              (failed-proof  $Proof)) True) fail) 
         (, 
           (is $D1 
             (- $D 1)) 
@@ -718,9 +713,8 @@
           (:: (:: sys $A fail))) 
         (det-if-then-else 
           (< $D $Delta) 
-          (add-is-symbol  &self 
-            (failed_proof  $Proof)) True) 
-        (fail))))
+          (add-atom  &self 
+            (failed-proof  $Proof)) True) fail)))
 ; ; A is built-in
 ; ; exception handling
 
@@ -729,9 +723,8 @@
     ( (not depth-exceeded) 
       (= $Poi 
         (:: (:: -1 $A no-rules))) 
-      (add-is-symbol  &self 
-        (failed_proof  $Proof)) 
-      (fail)))
+      (add-atom  &self 
+        (failed-proof  $Proof)) fail))
 ; ; no rules at all for initial goal
 
 
@@ -783,13 +776,12 @@
     (get-clause $I $A1 $B $_ $_)
     (unify $A $A1))
   (= (solve-rule $D $Delta $Proof $Poi $_ $A $_)  
-    (= $Poi 
-      (:: (:: -1 $A no-more-rules)))
-    (det-if-then-else 
-      (< $D $Delta) 
-      (add-is-symbol  &self 
-        (failed_proof  $Proof)) True)
-    (fail))
+    ( (= $Poi 
+        (:: (:: -1 $A no-more-rules))) 
+      (det-if-then-else 
+        (< $D $Delta) 
+        (add-atom  &self 
+          (failed-proof  $Proof)) True) fail))
 
 
 ;
@@ -847,7 +839,7 @@
 
  
 
-  (= (gen_depth  $D $D $Delta $Delta)  True)
+  (= (gen-depth  $D $D $Delta $Delta)  True)
  
   (= (gen-depth $D0 $D $_ $Delta)  
     (det-if-then-else 
@@ -866,22 +858,20 @@
           (det-if-then-else 
             (=< $D1 $Max) 
             (remove-all-atoms  &self 
-              (depth_exceeded  $_ $_ $_)) 
+              (depth-exceeded  $_ $_ $_)) 
             (, 
-              (add-is-symbol  &self depth_exceeded) 
-              (fail))) True) 
+              (add-atom  &self depth_exceeded) fail)) True) 
         (gen-depth $D1 $D $Delta1 $Delta)) fail))
 
 
-  (= (set-proof-depth)  
-    ( (nl) 
-      (nl) 
+  (= set-proof-depth  
+    (nl nl 
       (write 'Speficy maximum depth for theorem prover (number or n for unbound proofs): ') 
       (read $N) 
       (remove-all-atoms  &self 
-        (depth_bound  $_)) 
-      (add-is-symbol  &self 
-        (depth_bound  $N))))
+        (depth-bound  $_)) 
+      (add-atom  &self 
+        (depth-bound  $N))))
 
 
 ;
@@ -934,36 +924,36 @@
 
   (= (prove1a  () $SP $SP)  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 618 26 17908))
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 619 13 17937))
 
 
 
-  (= (ini_prove1  () ())  True)
+  (= (ini-prove1  () ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 634 20 18344))
 
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 636 16 18376))
 
 
-  (= (insert_prove1  $X $L (Cons  $X $L))  True)
+  (= (insert-prove1  $X $L ([|]  $X $L))  True)
 
 
-  (= (adapt_prove1  () $_ $_ ())  True)
+  (= (adapt-prove1  () $_ $_ ())  True)
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 643 18 18567))
 
 ;                                           (error
-;                                             (syntax_error  operator_clash)
+;                                             (syntax-error  operator_clash)
 ;                                             (file  miles/interpreter.pl 646 18 18664))
 
 
@@ -1013,9 +1003,9 @@
     (prove3 $B $ProofB))
   (= (prove3  () ())  True)
 
-  (= (prove3 (with_self  $A (n)) (with_self  $A (n)))  
+  (= (prove3 (with-self  $A n) (with-self  $A n))  
     (body $A $_ $_))
-  (= (prove3 (with_self  $A (r)) (with_self  $A (r)))  
+  (= (prove3 (with-self  $A r) (with-self  $A r))  
     (body $A $_ $_))
 
 
@@ -1072,21 +1062,21 @@
     (set-det))
   (= (prove4 Nil $_ Nil)  
     (set-det))
-  (= (prove4 (with_self  $H (n)) $_ (:: $H body))  
+  (= (prove4 (with-self  $H n) $_ (:: $H body))  
     (body $H $_ $_))
-  (= (prove4 (with_self  $H (r)) $_ (:: $H body))  
+  (= (prove4 (with-self  $H r) $_ (:: $H body))  
     (body $H $_ $_))
-  (= (prove4 (with_self  $H (p)) $_ (:: $H head))  
+  (= (prove4 (with-self  $H p) $_ (:: $H head))  
     (head $H $_ $_))
-  (= (prove4 (with_self  $H (n)) $Uncovered Nil)  
+  (= (prove4 (with-self  $H n) $Uncovered Nil)  
     (var $Uncovered)
     (= $Uncovered 
       (/ $H new-head)))
-  (= (prove4 (with_self  $H (r)) $Uncovered Nil)  
+  (= (prove4 (with-self  $H r) $Uncovered Nil)  
     (var $Uncovered)
     (= $Uncovered 
       (/ $H new-head)))
-  (= (prove4 (with_self  $H (p)) $Uncovered Nil)  
+  (= (prove4 (with-self  $H p) $Uncovered Nil)  
     (var $Uncovered)
     (= $Uncovered 
       (/ $H new-body)))

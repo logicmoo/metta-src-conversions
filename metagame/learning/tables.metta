@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  tables $_278996 metagame/learning/tables.pl metagame/learning/tables.metta)
+;                                           (convert-to-metta-file  tables $_480960 metagame/learning/tables.pl metagame/learning/tables.metta)
 ;
 ; ============================================================
 ;
@@ -56,7 +56,7 @@
     (square-tables-to-matrix $List $D))
 
 
-  (= (square_tables_to_matrix  () ())  True)
+  (= (square-tables-to-matrix  () ())  True)
   (= (square-tables-to-matrix (Cons  (- $I $A) $ARest) (Cons  (- $I $D) $DRest))  
     (square-table-to-list $A $D)
     (square-tables-to-matrix $ARest $DRest))
@@ -91,7 +91,7 @@
     (arrays-to-d $List $D))
 
 
-  (= (arrays_to_d  () ())  True)
+  (= (arrays-to-d  () ())  True)
   (= (arrays-to-d (Cons  (- $I $A) $ARest) (Cons  (- $I $D) $DRest))  
     (alist $A $D)
     (arrays-to-d $ARest $DRest))
@@ -113,7 +113,7 @@
 ;
 ; writing to the same one at once.
 
-  (= (compile-basic-tables)  
+  (= compile-basic-tables  
     (with-temp-file basic $File 
       (, 
         (compile-basic-tables-to-file $File) 
@@ -122,37 +122,34 @@
 
 
   (= (compile-basic-tables-to-file $File)  
-    (format "~nCompiling Basic Tables to file: ~w~n" 
-      (:: $File))
-    (make-basic-tables)
-    (with-output-file $File write list-basic-tables))
+    ( (format "~nCompiling Basic Tables to file: ~w~n" 
+        (:: $File)) make-basic-tables 
+      (with-output-file $File write list-basic-tables)))
 
 
-  (= (list-basic-tables)  
+  (= list-basic-tables  
     (whenever 
       (basic-table-pred $Pred) 
       (listing $Pred)))
 
 
 
-  (= (make-basic-tables)  
-    (assert-square-indices)
-    (assert-piece-indices)
-    (assert-prom-square-indices))
+  (= make-basic-tables  
+    (assert-square-indices assert-piece-indices assert-prom-square-indices))
 
 
-  (= (basic_table_pred  (/  opponent_prom_sq 1))  True)
-  (= (basic_table_pred  (/  player_prom_sq 1))  True)
-  (= (basic_table_pred  (/  prom_square_indices 2))  True)
+  (= (basic-table-pred  (/  opponent_prom_sq 1))  True)
+  (= (basic-table-pred  (/  player_prom_sq 1))  True)
+  (= (basic-table-pred  (/  prom_square_indices 2))  True)
 
-  (= (basic_table_pred  (/  piece_type_index 2))  True)
-  (= (basic_table_pred  (/  piece_type_count 1))  True)
-  (= (basic_table_pred  (/  index_to_piece 2))  True)
-  (= (basic_table_pred  (/  total_piece_count 1))  True)
+  (= (basic-table-pred  (/  piece_type_index 2))  True)
+  (= (basic-table-pred  (/  piece_type_count 1))  True)
+  (= (basic-table-pred  (/  index_to_piece 2))  True)
+  (= (basic-table-pred  (/  total_piece_count 1))  True)
 
-  (= (basic_table_pred  (/  index_to_square 2))  True)
-  (= (basic_table_pred  (/  total_square_count 1))  True)
-  (= (basic_table_pred  (/  board_dim 1))  True)
+  (= (basic-table-pred  (/  index_to_square 2))  True)
+  (= (basic-table-pred  (/  total_square_count 1))  True)
+  (= (basic-table-pred  (/  board_dim 1))  True)
 
 
 
@@ -286,7 +283,7 @@
     (map-for-squares $Indices $Pred $Args $Table))
 
 
-  (= (map_for_squares  () $_ $_ $_)  True)
+  (= (map-for-squares  () $_ $_ $_)  True)
   (= (map-for-squares (Cons  $S $Ss) $Pred $Args $Table)  
     (square-table-entry $Square $S $Table $Entry)
     (append 
@@ -319,7 +316,7 @@
     (maps-for-squares $Indices $Pred $Args $Table1 $Table2))
 
 
-  (= (maps_for_squares  () $_ $_ $_ $_)  True)
+  (= (maps-for-squares  () $_ $_ $_ $_)  True)
   (= (maps-for-squares (Cons  $S $Ss) $Pred $Args $Table1 $Table2)  
     (square-table-entry $Square $S $Table1 $Entry1)
     (square-table-entry $Square $S $Table2 $Entry2)
@@ -351,8 +348,8 @@
 
 
 
-  (= (add-portray-square-table)  
-    ( (new-square-table $T) (add-is-symbol  &self (:-  (portray  $T) (portray_square_table  $T)))))
+  (= add-portray-square-table  
+    ( (new-square-table $T) (add-atom  &self (:-  (portray  $T) (portray-square-table  $T)))))
 
 
   (= (portray-square-table $T)  
@@ -404,17 +401,16 @@
         (piece-index $P $I)) $Is))
 
 
-  (= (add-portray-piece-table)  
-    ( (new-piece-table $T) (add-is-symbol  &self (:-  (portray  $T) (portray_piece_table  $T)))))
+  (= add-portray-piece-table  
+    ( (new-piece-table $T) (add-atom  &self (:-  (portray  $T) (portray-piece-table  $T)))))
 
 
   (= (portray-piece-table $T)  
     (format "<Piece Table>" Nil))
 
 
-  (= (portray-tables)  
-    (add-portray-piece-table)
-    (add-portray-square-table))
+  (= portray-tables  
+    (add-portray-piece-table add-portray-square-table))
 
 
 
@@ -452,7 +448,7 @@
     (map-for-pieces $Indices $Pred $Args $Table))
 
 
-  (= (map_for_pieces  () $_ $_ $_)  True)
+  (= (map-for-pieces  () $_ $_ $_)  True)
   (= (map-for-pieces (Cons  $P $Ps) $Pred $Args $Table)  
     (piece-table-entry $Piece $P $Table $Entry)
     (append 
@@ -485,7 +481,7 @@
     (maps-for-pieces $Indices $Pred $Args $Table1 $Table2))
 
 
-  (= (maps_for_pieces  () $_ $_ $_ $_)  True)
+  (= (maps-for-pieces  () $_ $_ $_ $_)  True)
   (= (maps-for-pieces (Cons  $P $Ps) $Pred $Args $Table1 $Table2)  
     (piece-table-entry $Piece $P $Table1 $Entry1)
     (piece-table-entry $Piece $P $Table2 $Entry2)
@@ -539,50 +535,48 @@
 ;
 ; Makes available the pred: BOARD_DIM/1.
 
-  (= (set-board-dim)  
+  (= set-board-dim  
     ( (abolish (/ board-dim 1)) 
       (current-board-dim $Dim) 
-      (add-is-symbol  &self 
-        (board_dim  $Dim))))
+      (add-atom  &self 
+        (board-dim  $Dim))))
 	
 ;
 ; Makes available the pred: TOTAL_SQUARE_COUNT/1.
 
-  (= (set-square-count)  
-    ( (set-board-dim) 
+  (= set-square-count  
+    (set-board-dim 
       (abolish (/ total-square-count 1)) 
       (current-board-size $X $Y) 
       (is $Total 
         (* $X $Y)) 
-      (add-is-symbol  &self 
-        (total_square_count  $Total))))
+      (add-atom  &self 
+        (total-square-count  $Total))))
 
 
 ;
 ; Makes a table mapping each index into a different square struct.
 
-  (= (assert-square-indices)  
-    (abolish (/ index-to-square 2))
-    (set-square-count)
-    (whenever 
-      (square-to-index $Square $Key) 
-      (assert-square-index $Square $Key))
-    (tracing-anal index print-square-indices))
+  (= assert-square-indices  
+    ( (abolish (/ index-to-square 2)) set-square-count 
+      (whenever 
+        (square-to-index $Square $Key) 
+        (assert-square-index $Square $Key)) 
+      (tracing-anal index print-square-indices)))
 
 
   (= (assert-square-index $Square $Index)  
-    (add-is-symbol  &self 
-      (index_to_square  $Index $Square)))
+    (add-atom  &self 
+      (index-to-square  $Index $Square)))
 
 
-  (= (print-square-indices)  
+  (= print-square-indices  
     (format "Square Index Table:~n" Nil)
     (or 
       (, 
         (index-to-square $I $P) 
         (format "~p --> ~p~n" 
-          (:: $I $P)) 
-        (fail)) True))
+          (:: $I $P)) fail) True))
 
 
   (= (square-to-index (square $X $Y) $Index)  
@@ -641,69 +635,66 @@
 ;
 ; Makes a table mapping each index into a different piece struct.
 
-  (= (assert-piece-indices)  
-    (assert-piece-type-indices)
-    (abolish (/ index-to-piece 2))
-    (whenever 
-      (piece-to-index $Piece $Key) 
-      (assert-piece-index $Piece $Key))
-    (tracing-anal index print-piece-indices))
+  (= assert-piece-indices  
+    (assert-piece-type-indices 
+      (abolish (/ index-to-piece 2)) 
+      (whenever 
+        (piece-to-index $Piece $Key) 
+        (assert-piece-index $Piece $Key)) 
+      (tracing-anal index print-piece-indices)))
 
 
-  (= (assert-piece-type-indices)  
-    (abolish (/ piece-type-index 2))
-    (set-piece-type-count)
-    (whenever 
-      (nth-piece-name $N $P) 
-      (assert-piece-type-index $P $N)))
+  (= assert-piece-type-indices  
+    ( (abolish (/ piece-type-index 2)) set-piece-type-count 
+      (whenever 
+        (nth-piece-name $N $P) 
+        (assert-piece-type-index $P $N))))
 		    
 ;
 ; Makes available the pred: piece_type_count/1.
 ;
 ; Also pred: total_piece_count/1 (just double the above).
 
-  (= (set-piece-type-count)  
+  (= set-piece-type-count  
     ( (abolish (/ piece-type-count 1)) 
       (abolish (/ total-piece-count 1)) 
       (current-game-piece-count $Count) 
-      (add-is-symbol  &self 
-        (piece_type_count  $Count)) 
+      (add-atom  &self 
+        (piece-type-count  $Count)) 
       (is $Total 
         (* $Count 2)) 
-      (add-is-symbol  &self 
-        (total_piece_count  $Total))))
+      (add-atom  &self 
+        (total-piece-count  $Total))))
 
 	
 
   (= (assert-piece-type-index $Piece $Index)  
-    (add-is-symbol  &self 
-      (piece_type_index  $Piece $Index)))
+    (add-atom  &self 
+      (piece-type-index  $Piece $Index)))
 ; ; dir_key(Dir,Key),
 
 
   (= (assert-piece-index $Piece $Index)  
-    (add-is-symbol  &self 
-      (index_to_piece  $Index $Piece)))
+    (add-atom  &self 
+      (index-to-piece  $Index $Piece)))
 ; ; piece_key(Piece,Index),
 
 
-  (= (print-piece-type-indices)  
+  (= print-piece-type-indices  
     (or 
       (, 
         (piece-type-index $P $I) 
         (format "~p --> ~p~n" 
-          (:: $I $P)) 
-        (fail)) True))
+          (:: $I $P)) fail) True))
 
 
-  (= (print-piece-indices)  
+  (= print-piece-indices  
     (format "Piece Index Table:~n" Nil)
     (or 
       (, 
         (index-to-piece $I $P) 
         (format "~p --> ~p~n" 
-          (:: $I $P)) 
-        (fail)) True))
+          (:: $I $P)) fail) True))
 
 
 
@@ -716,8 +707,8 @@
         (* $Count $Mult) $Y)))
 	
 
-  (= (piece_player_mult  player 0)  True)
-  (= (piece_player_mult  opponent 1)  True)
+  (= (piece-player-mult  player 0)  True)
+  (= (piece-player-mult  opponent 1)  True)
 
 	
 
@@ -729,11 +720,11 @@
 ; ================================================================================
 
 
-  (= (total_player_count  2)  True)
+  (= (total-player-count  2)  True)
 
 
-  (= (player_index  player 1)  True)
-  (= (player_index  opponent 2)  True)
+  (= (player-index  player 1)  True)
+  (= (player-index  opponent 2)  True)
 
 
   (= (player-table $Table)  
@@ -786,7 +777,7 @@
     (map-for-players $Indices $Pred $Args $Table))
 
 
-  (= (map_for_players  () $_ $_ $_)  True)
+  (= (map-for-players  () $_ $_ $_)  True)
   (= (map-for-players (Cons  $P $Ps) $Pred $Args $Table)  
     (player-table-entry $Player $P $Table $Entry)
     (append 
@@ -819,7 +810,7 @@
     (maps-for-players $Indices $Pred $Args $Table1 $Table2))
 
 
-  (= (maps_for_players  () $_ $_ $_ $_)  True)
+  (= (maps-for-players  () $_ $_ $_ $_)  True)
   (= (maps-for-players (Cons  $P $Ps) $Pred $Args $Table1 $Table2)  
     (player-table-entry $Player $P $Table1 $Entry1)
     (player-table-entry $Player $P $Table2 $Entry2)
@@ -841,15 +832,15 @@
 ; ==============================================================================
 
 
-  (= (assert-prom-square-indices)  
+  (= assert-prom-square-indices  
     (abolish (/ prom-square-indices 2))
     (assert-prom-square-indices player)
     (assert-prom-square-indices opponent))
 	
   (= (assert-prom-square-indices $Player)  
     ( (find-prom-square-indices $Player $SqIs) 
-      (add-is-symbol  &self 
-        (prom_square_indices  $Player $SqIs)) 
+      (add-atom  &self 
+        (prom-square-indices  $Player $SqIs)) 
       (assert-player-prom-sqs $Player $SqIs)))
 
 
@@ -857,18 +848,18 @@
     (abolish (/ player-prom-sq 1))
     (whenever 
       (member $Sq $SqIs) 
-      (add-is-symbol  &self 
-        (player_prom_sq  $Sq))))
+      (add-atom  &self 
+        (player-prom-sq  $Sq))))
   (= (assert-player-prom-sqs opponent $SqIs)  
     (abolish (/ opponent-prom-sq 1))
     (whenever 
       (member $Sq $SqIs) 
-      (add-is-symbol  &self 
-        (opponent_prom_sq  $Sq))))
+      (add-atom  &self 
+        (opponent-prom-sq  $Sq))))
 
 
-  (= (player_prom_pred  player $Sq (player_prom_sq  $Sq))  True)
-  (= (player_prom_pred  opponent $Sq (opponent_prom_sq  $Sq))  True)
+  (= (player-prom-pred  player $Sq (player-prom-sq  $Sq))  True)
+  (= (player-prom-pred  opponent $Sq (opponent-prom-sq  $Sq))  True)
 	
 
 

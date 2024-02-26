@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  fast_mu $_473710 sxx_machine/bench/fast_mu.pl sxx_machine/bench/fast_mu.metta)
+;                                           (convert-to-metta-file  fast_mu $_161706 sxx_machine/bench/fast_mu.pl sxx_machine/bench/fast_mu.metta)
 ;
 ; 
 ;
@@ -48,7 +48,7 @@
 ; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  (= (top)  
+  (= top  
     (theorem (:: m u i i u)))
 
 ;
@@ -152,7 +152,7 @@
 
   (= (lower-bound $N $M 1)  
     (< $N $M))
-  (= (lower_bound  $N $N 2)  True)
+  (= (lower-bound  $N $N 2)  True)
   (= (lower-bound $N $M $B)  
     (> $N $M)
     (is $Diff 

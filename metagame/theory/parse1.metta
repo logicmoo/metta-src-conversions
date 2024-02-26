@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  parse1 $_136278 metagame/theory/parse1.pl metagame/theory/parse1.metta)
+;                                           (convert-to-metta-file  parse1 $_228740 metagame/theory/parse1.pl metagame/theory/parse1.metta)
 ;
 ; ============================================================
 ;
@@ -17,7 +17,7 @@
 ; saving games.
 
 
-  (= (generate-make-test-game)  
+  (= generate-make-test-game  
     (generate-game $G)
     (make-test-game $G))
 
@@ -68,10 +68,10 @@
 
 
   (= (parse-make-test-game $Game)  
-    (set-parsing-mode)
-    (format "~nParsing game.~n" Nil)
-    (game $G $Game Nil)
-    (make-test-game $G))
+    (set-parsing-mode 
+      (format "~nParsing game.~n" Nil) 
+      (game $G $Game Nil) 
+      (make-test-game $G)))
 	
 
   !(dynamic (, (/ player-current-game 1) (/ opponent-current-game 1)))
@@ -88,15 +88,14 @@
         (:: $Name)) 
       (abolish (/ player-current-game 1)) 
       (abolish (/ opponent-current-game 1)) 
-      (add-is-symbol  &self 
-        (player_current_game  $G)) 
+      (add-atom  &self 
+        (player-current-game  $G)) 
       (invert $G opponent $G1) 
-      (add-is-symbol  &self 
-        (opponent_current_game  $G1)) 
-      (maybe-compile-syms)))
+      (add-atom  &self 
+        (opponent-current-game  $G1)) maybe-compile-syms))
 
 
-  (= (maybe-compile-syms)  
+  (= maybe-compile-syms  
     (det-if-then-else 
       (parameter compile-symmetries on) index-sym-dirs True))
 

@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  history $_462230 metagame/play/history.pl metagame/play/history.metta)
+;                                           (convert-to-metta-file  history $_340778 metagame/play/history.pl metagame/play/history.metta)
 ;
 ; ============================================================
 ;
@@ -40,21 +40,19 @@
 ; ;; clear history: Delete *all* history entries and saved positions.
 
 
-  (= (help-history)  
-    (help-history-overview)
-    (help-history-top)
-    (help-history-com))
+  (= help-history  
+    (help-history-overview help-history-top help-history-com))
 
 
-  (= (help-history-overview)  
+  (= help-history-overview  
     (format "\nGame History Management\n-----------------------\nThese routines allow you to review the history of the current\ngame. To use them, you must set the white player to be human,\notherwise the program will begin playing from the chosen position\nand there will be no chance to review the past game.  \n\nIn addition, see the menu: EXAMINING AND MODIFYING STATE OF GAME,\nwhich allows you to save and restore important positions even when in\nthe middle of a game.  Note however that these positions will not\nnecessarily be hooked into the history mechanisms discussed here. \n" Nil))
 
 
-  (= (help-history-top)  
+  (= help-history-top  
     (format "\nFrom top menu:\nsave <F>: Save record of current game as <F>.rec\nload <F>: Load record of game <F>.rec as current history.  \nstart <PosName>:  Start game in pos checkpointed as <PosName>\n" Nil))
 
 
-  (= (help-history-com)  
+  (= help-history-com  
     (format "\nFrom move menu: \nnext <N>:  Advance <N> positions in current game history.\nprev <N>:  Regress <N> positions in current game history.\nnext: next 1.\nprev: prev 1.\nclear history: Delete *all* history entries and saved positions.\n\nNote the playing a new move erases whatever moves may have come after \nin the present game record. \n" Nil))
 
 
@@ -72,8 +70,7 @@
     (reverse-hist $N $SOut))
 
 
-  (= (clear-com $_ $_ $_ history)  
-    (clear-history))
+  (= (clear-com $_ $_ $_ history)  clear-history)
 
 ;
 ; Saving and loading games
@@ -124,7 +121,7 @@
 
 
 
-  (= (forward_name  0 $NameIn $NameIn)  True)
+  (= (forward-name  0 $NameIn $NameIn)  True)
   (= (forward-name $N $NameIn $NameOut)  
     (> $N 0)
     (is $N1 
@@ -170,17 +167,17 @@
 
   (= (set-current-pos-name $Name)  
     ( (remove-all-atoms  &self 
-        (current_pos_name  $_)) (add-is-symbol  &self (current_pos_name  $Name))))
+        (current-pos-name  $_)) (add-atom  &self (current-pos-name  $Name))))
 
 
   (= (change-current-pos-name $Name $Next)  
-    ( (remove-is-symbol  &self 
-        (current_pos_name  $Name)) (add-is-symbol  &self (current_pos_name  $Next))))
+    ( (remove-atom  &self 
+        (current-pos-name  $Name)) (add-atom  &self (current-pos-name  $Next))))
 
 
 
   (= (set-follows-history $Name $Move $Next)  
-    ( (clear-history-after $Name) (add-is-symbol  &self (follows  $Name $Move $Next))))
+    ( (clear-history-after $Name) (add-atom  &self (follows  $Name $Move $Next))))
 
 
   (= (add-state-to-history $Move $State)  
@@ -193,24 +190,23 @@
     (set-follows-history $Name $Move $Next))
 	
 
-  (= (clear-history)  
+  (= clear-history  
     ( (remove-all-atoms  &self 
         (checkpoint  $_ $_)) (remove-all-atoms  &self (follows  $_ $_ $_))))
 
 
-  (= (clear-history-visible)  
+  (= clear-history-visible  
     (or 
       (, 
-        (clear-history-after $Name) 
-        (fail)) True))
+        (clear-history-after $Name) fail) True))
 
 
   (= (clear-history-after $Name)  
     (det-if-then-else 
-      (remove-is-symbol  &self 
+      (remove-atom  &self 
         (follows  $Name $_ $Next)) 
       (, 
-        (remove-is-symbol  &self 
+        (remove-atom  &self 
           (checkpoint  $Next $_)) 
         (clear-history-after $Next)) True))
 	
@@ -252,7 +248,7 @@
   (= (checkpoint-state $Name $State)  
     ( (remove-all-atoms  &self 
         (checkpoint  $Name $_)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
         (checkpoint  $Name $State)) 
       (format "~nState checkpointed under index: <~w>~n" 
         (:: $Name))))
@@ -300,9 +296,8 @@
 
 
   (= (print-next-move $MoveString)  
-    (move-string $Move $MoveString)
-    (print-tokens $MoveString)
-    (nl))
+    ( (move-string $Move $MoveString) 
+      (print-tokens $MoveString) nl))
 
 
 
@@ -314,11 +309,10 @@
     (add-state-to-history $Move $State2))
 
 
-  (= (print-game-record)  
+  (= print-game-record  
     (or 
       (, 
-        (print-next-move $_) 
-        (fail)) True)) 
+        (print-next-move $_) fail) True)) 
 
 
   (= (get-initialize-history $In)  
@@ -327,15 +321,13 @@
 
 
 
-  (= (read-game-record)  
-    (get-initialize-history $In)
-    (read-record-moves))
+  (= read-game-record  
+    ( (get-initialize-history $In) read-record-moves))
 
 
-  (= (read-record-moves)  
-    (read-next-move $_)
-    (set-det)
-    (read-record-moves))
+  (= read-record-moves  
+    ( (read-next-move $_) 
+      (set-det) read-record-moves))
   (= read_record_moves  True)
 
 
@@ -358,12 +350,10 @@
 ; Outputs a game to file File.rec.
 
   (= (read-game-record-from-file $File)  
-    (sys-suffixed-filename $File record $GameFile)
-    (format "~nReading game record from file: ~w~n" 
-      (:: $GameFile))
-    (see $GameFile)
-    (read-game-record)
-    (seen))
+    ( (sys-suffixed-filename $File record $GameFile) 
+      (format "~nReading game record from file: ~w~n" 
+        (:: $GameFile)) 
+      (see $GameFile) read-game-record seen))
 ; ; write_old_seed,
 
 

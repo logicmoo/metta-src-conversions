@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  theoryl $_338406 metagame/misc/theoryl.pl metagame/misc/theoryl.metta)
+;                                           (convert-to-metta-file  theoryl $_120994 metagame/misc/theoryl.pl metagame/misc/theoryl.metta)
 ;
 ; ============================================================
 ;
@@ -108,7 +108,7 @@
 
   !(dynamic (/ next-clause-id 1))
 
-  (= (next_clause_id  0)  True)
+  (= (next-clause-id  0)  True)
 
 ;
 ; Default to assertz.
@@ -127,13 +127,13 @@
 
   (= (theory-assert $Clause (new $N))  
     ( (clause-parts $Clause $G $H) 
-      (remove-is-symbol  &self 
-        (next_clause_id  $N)) 
+      (remove-atom  &self 
+        (next-clause-id  $N)) 
       (is $N1 
         (+ $N 1)) 
-      (add-is-symbol  &self 
-        (next_clause_id  $N1)) 
-      (add-is-symbol  &self 
+      (add-atom  &self 
+        (next-clause-id  $N1)) 
+      (add-atom  &self 
         (::  
           (new  $N) 
           (:-  $G $H)))))
@@ -149,12 +149,12 @@
 
   (= (theory-assert-az $Clause (new $N) $AZ)  
     ( (clause-parts $Clause $G $H) 
-      (remove-is-symbol  &self 
-        (next_clause_id  $N)) 
+      (remove-atom  &self 
+        (next-clause-id  $N)) 
       (is $N1 
         (+ $N 1)) 
-      (add-is-symbol  &self 
-        (next_clause_id  $N1)) 
+      (add-atom  &self 
+        (next-clause-id  $N1)) 
       (assertaz $AZ 
         (:: 
           (new $N) 
@@ -162,9 +162,9 @@
 
 
   (= (assertaz a $C)  
-    (add-is-symbol  &self $C))
+    (add-atom  &self $C))
   (= (assertaz z $C)  
-    (add-is-symbol  &self $C))
+    (add-atom  &self $C))
 
 
 
@@ -177,7 +177,7 @@
 ; ; new_id(+Id) :- test if Id is recently asserted
 
 
-  (= (new_id  (new  $_))  True)
+  (= (new-id  (new  $_))  True)
 
 
 ;
@@ -185,19 +185,19 @@
 
 
   (= (theory-retract $Clause $Id)  
-    ( (clause-parts $Clause $G $H) (remove-is-symbol  &self (::  $Id (:-  $G $H)))))
+    ( (clause-parts $Clause $G $H) (remove-atom  &self (::  $Id (:-  $G $H)))))
 
   (= (theory-retract $Clause)  
     (theory-retract $Clause $Id))
 
 
-  (= (theory-clear)  
+  (= theory-clear  
     (remove-all-atoms  &self 
       (::  $Id $Clause)))
 
 
 
-  (= (theory-listing)  
+  (= theory-listing  
     (whenever 
       (theory-clause $C) 
       (portray-clause $C)))

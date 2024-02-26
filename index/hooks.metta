@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  hooks $_42036 index/hooks.pl index/hooks.metta)
+;                                           (convert-to-metta-file  hooks $_249090 index/hooks.pl index/hooks.metta)
 
   !(op 900 xfx :)
   !(op 800 xfx -->)
@@ -124,7 +124,7 @@
     (set-det)
     (display $R $DR)
     (ic-spec $IC $Rs))
-  (= (ic_spec  $IC ())  True)
+  (= (ic-spec  $IC ())  True)
 
 
   (= (subsumed (fd $Rel $From1 $To) (fd $Rel $From2 $To))  
@@ -165,16 +165,16 @@
   (= (dep  (mvd  $Rel $From $To) mvd $Rel $From $To)  True)
 
 
-  (= (display (fd $Rel $From $To) (with_self  $Rel (--> $From $To)))  
+  (= (display (fd $Rel $From $To) (with-self  $Rel (--> $From $To)))  
     (set-det))
 ; /* display form */
-  (= (display (mvd $Rel $From $To) (with_self  $Rel (->-> $From $To)))  
+  (= (display (mvd $Rel $From $To) (with-self  $Rel (->-> $From $To)))  
     (set-det))
   (= (display (join $Rel $R1 $R2) (>< (= $Rel $R1) $R2))  
     (set-det))
   (= (display (plus $Rel $List) (= $Rel $List))  
     (set-det))
-  (= (display (proc $Rel) (with_self  (calculated *) $Rel))  
+  (= (display (proc $Rel) (with-self  (calculated *) $Rel))  
     (set-det))
   (= (display  $X $X)  True)
 

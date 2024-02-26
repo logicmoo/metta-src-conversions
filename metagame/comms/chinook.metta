@@ -1,4 +1,4 @@
-;                                           (convert_to_metta_file  chinook $_406466 metagame/comms/chinook.pl metagame/comms/chinook.metta)
+;                                           (convert-to-metta-file  chinook $_356174 metagame/comms/chinook.pl metagame/comms/chinook.metta)
 ;
 ; ============================================================
 ;
@@ -12,7 +12,7 @@
   !(ensure-loaded (library pipes))
 
 
-  (= (create-chinook)  
+  (= create-chinook  
     (command-from-args 
       (:: nice -10 chinook) $Command)
     (interface-record-streams $Command $InStream $OutStream))
@@ -26,7 +26,7 @@
     (tell-chinook $S))
 
 
-  (= (seem)  
+  (= seem  
     (global instream $I)
     (set-input $I))
 
@@ -36,9 +36,8 @@
 ; ; pattern.pl
 
 
-  (= (chinook-quit)  
-    (tell-chinook (:: q))
-    (interface-close-streams))
+  (= chinook-quit  
+    ( (tell-chinook (:: q)) interface-close-streams))
 
 
   (= (chinook-choose $Player $Move $SIn $SOut)  
@@ -61,7 +60,7 @@
   !(add-global handicap 0)
 
 
-  (= (setup-chinook)  
+  (= setup-chinook  
     (global handicap $H)
     (tell-chinook (:: i))
     (config $H))
@@ -89,21 +88,20 @@
 
 
   (= (update-chinook $Role $SIn)  
-    (move-count $N $SIn)
-    (det-if-then-else 
-      (< $N 2) setup-chinook True)
-    (det-if-then-else 
-      (last-move $Move) 
-      (, 
-        (meta-to-ch $Move $ChMove) 
-        (format "To Chinook: I played ~w~n" 
-          (:: $ChMove)) 
-        (concat m $ChMove $TellMove) 
-        (tell-chinook (:: $TellMove))) True)
-    (tell-chinook-move))
+    ( (move-count $N $SIn) 
+      (det-if-then-else 
+        (< $N 2) setup-chinook True) 
+      (det-if-then-else 
+        (last-move $Move) 
+        (, 
+          (meta-to-ch $Move $ChMove) 
+          (format "To Chinook: I played ~w~n" 
+            (:: $ChMove)) 
+          (concat m $ChMove $TellMove) 
+          (tell-chinook (:: $TellMove))) True) tell-chinook-move))
 
 
-  (= (tell-chinook-move)  
+  (= tell-chinook-move  
     (tell-chinook (:: g)))
 
 	
@@ -140,8 +138,8 @@
 ; ; append_list(["I move ",[Num],". "],Pattern),
 
 
-  (= (player_indent  player " ")  True)
-  (= (player_indent  opponent "  ... ")  True)
+  (= (player-indent  player " ")  True)
+  (= (player-indent  opponent "  ... ")  True)
 
 
 ;
@@ -151,7 +149,7 @@
 
 
 
-  (= (ch_to_meta  () ())  True)
+  (= (ch-to-meta  () ())  True)
   (= (ch-to-meta (Cons  $X (Cons  $Y $Rest)) (Cons  $XM (Cons  $YM $RestM)))  
     (conv-square $X $Y $XM $YM)
     (ch-to-meta $Rest $RestM))
@@ -193,15 +191,15 @@
 
 
 
-  (= (-->  (ch_notation  $M) (,  (prelims  $M $Pre) (ch_main  $Pre ())))  True)
+  (= (-->  (ch-notation  $M) (,  (prelims  $M $Pre) (ch-main  $Pre ())))  True)
 
 
 ;
 ; CONSIDER_PROMOTE
-  (= (-->  (ch_consider_promote  (Cons  $T $Sel) $Rest) (,  (ch_attempt_promote  $T) (ch_select_promote  $Sel $Rest)))  True)
+  (= (-->  (ch-consider-promote  ([|]  $T $Sel) $Rest) (,  (ch-attempt-promote  $T) (ch-select-promote  $Sel $Rest)))  True)
 
-  (= (-->  (ch_select_promote  (Cons  (promote_select  $_ $_ $_) $Rest) $Rest) ())  True)
-  (= (-->  (ch_select_promote  $Rest $Rest) ())  True)
+  (= (-->  (ch-select-promote  ([|]  (promote-select  $_ $_ $_) $Rest) $Rest) ())  True)
+  (= (-->  (ch-select-promote  $Rest $Rest) ())  True)
 
 
 
@@ -213,20 +211,20 @@
 ; --> [promote,'(',5,',',1,')',white,piece3,';']
 ;
 ; Unless it promotes, it isn't mentioned in the notation.
-  (= (-->  (ch_attempt_promote  (try_promote  $Square $OldPiece ())) ())  True)
-  (= (-->  (ch_attempt_promote  (try_promote  $Square $OldPiece $NewPiece)) ())  True)
+  (= (-->  (ch-attempt-promote  (try-promote  $Square $OldPiece ())) ())  True)
+  (= (-->  (ch-attempt-promote  (try-promote  $Square $OldPiece $NewPiece)) ())  True)
 
 
 ;
 ; MAIN
 ;
 ; Repeated Transfers, followed by possible player promotion.
-  (= (-->  (ch_main  $In $Out) (,  (ch_first_transfer  $In $First) (,  (ch_continued_transfers  $First $T) (ch_consider_promote  $T $Out))))  True)
+  (= (-->  (ch-main  $In $Out) (,  (ch-first-transfer  $In $First) (,  (ch-continued-transfers  $First $T) (ch-consider-promote  $T $Out))))  True)
 
 
 ;
 ; TRANSFERS
-  (= (-->  (ch_transfers  $In $Out) (,  (ch_transfer  $In $T) (ch_continued_transfers  $T $Out)))  True)
+  (= (-->  (ch-transfers  $In $Out) (,  (ch-transfer  $In $T) (ch-continued-transfers  $T $Out)))  True)
 
 ;
 ; CONTINUED_TRANSFERS
@@ -234,9 +232,9 @@
 ; Either no more transfers, or ';' and more transfers.
 ;
 ; Could tighten this rule: can't continue unless did a movement.
-  (= (-->  (ch_continued_transfers  $In $In) ())  True)
-  (= (-->  (ch_continued_transfers  (Cons  end_continues $Rest) $Rest) ())  True)
-  (= (-->  (ch_continued_transfers  $In $Out) (ch_transfers  $In $Out))  True)
+  (= (-->  (ch-continued-transfers  $In $In) ())  True)
+  (= (-->  (ch-continued-transfers  ([|]  end_continues $Rest) $Rest) ())  True)
+  (= (-->  (ch-continued-transfers  $In $Out) (ch-transfers  $In $Out))  True)
 
 
 ;
@@ -247,9 +245,9 @@
 ; --> [white,piece6,'(',5,',',1,')',->,'(',4,',',1,')',x,'(',4,',',1,')']
 ;
 ; 
-  (= (-->  (ch_transfer  (Cons  $Move $Capture) $Rest) (,  (ch_moving  $Move) (ch_capture  $Capture $Rest)))  True)
+  (= (-->  (ch-transfer  ([|]  $Move $Capture) $Rest) (,  (ch-moving  $Move) (ch-capture  $Capture $Rest)))  True)
 
-  (= (-->  (ch_first_transfer  (Cons  $Move $Capture) $Rest) (,  (ch_first_moving  $Move) (ch_capture  $Capture $Rest)))  True)
+  (= (-->  (ch-first-transfer  ([|]  $Move $Capture) $Rest) (,  (ch-first-moving  $Move) (ch-capture  $Capture $Rest)))  True)
 
 
 ;
@@ -258,32 +256,32 @@
 ; moving(move(piece(piece1,opponent),opponent,square(1,6),square(2,4)),S,[]).
 ;
 ; S = [black,piece1,'(',1,',',6,')',->,'(',2,',',4,')']
-  (= (-->  (ch_first_moving  (move  $Piece $Player $From $To)) (,  (ch_square  $From) (ch_square  $To)))  True)
+  (= (-->  (ch-first-moving  (move  $Piece $Player $From $To)) (,  (ch-square  $From) (ch-square  $To)))  True)
 
-  (= (-->  (ch_moving  (move  $Piece $Player $From $To)) (ch_square  $To))  True)
+  (= (-->  (ch-moving  (move  $Piece $Player $From $To)) (ch-square  $To))  True)
 
 
 
-  (= (-->  (ch_capture  $In $Out) (ch_null_capture  $In $Out))  True)
-  (= (-->  (ch_capture  $In $Out) (ch_real_capture  $In $Out))  True)
+  (= (-->  (ch-capture  $In $Out) (ch-null-capture  $In $Out))  True)
+  (= (-->  (ch-capture  $In $Out) (ch-real-capture  $In $Out))  True)
 
-  (= (-->  (ch_null_capture  $X $X) ())  True)
+  (= (-->  (ch-null-capture  $X $X) ())  True)
 
-  (= (-->  (ch_real_capture  (Cons  $C $Cs) $Rest) (,  (ch_simp_capture  $C) (ch_capture  $Cs $Rest)))  True)
+  (= (-->  (ch-real-capture  ([|]  $C $Cs) $Rest) (,  (ch-simp-capture  $C) (ch-capture  $Cs $Rest)))  True)
 
-  (= (-->  (ch_simp_capture  $M) (ch_remove  $M))  True)
-  (= (-->  (ch_simp_capture  $M) (ch_possess  $M))  True)
+  (= (-->  (ch-simp-capture  $M) (ch-remove  $M))  True)
+  (= (-->  (ch-simp-capture  $M) (ch-possess  $M))  True)
 
 ;
 ; REMOVE
-  (= (-->  (ch_remove  (capture  remove $Caps)) ())  True)
+  (= (-->  (ch-remove  (capture  remove $Caps)) ())  True)
 
 ;
 ; POSSESS
-  (= (-->  (ch_possess  (capture  (possess  $Player) $Caps)) ())  True)
+  (= (-->  (ch-possess  (capture  (possess  $Player) $Caps)) ())  True)
 
 
-  (= (-->  (ch_square  $Sq) (,  {(,  (invert  $Sq $Sq1) (square  $Sq1 $X $Y)) } (,  ($Col) (,  {(nth_letter  $X $Col) } (number  $Y)))))  True)
+  (= (-->  (ch-square  $Sq) (,  {(,  (invert  $Sq $Sq1) (square  $Sq1 $X $Y)) } (,  ($Col) (,  {(nth-letter  $X $Col) } (number  $Y)))))  True)
 
 	
 
