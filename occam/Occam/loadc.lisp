@@ -1,0 +1,27 @@
+
+
+(load ":occam-lite:objects.fasl")
+(load ":occam-lite:lisp-utils.fasl")
+(load ":occam-lite:cd-utils.fasl")
+(load ":occam-lite:schemata.fasl")
+(load ":occam-lite:init-schemata.fasl")
+(load ":occam-lite:cd-match.fasl") 
+(load ":occam-lite:sbl.fasl")
+(load ":occam-lite:macro-schema.fasl") 
+(load ":occam-lite:play-doh.fasl") 
+(load ":occam-lite:tdl.fasl")
+(load ":occam-lite:genrules.fasl") 
+(load ":occam-lite:glass.fasl") 
+(load ":occam-lite:infer.fasl")
+(load ":occam-lite:ebl.fasl")
+(load ":occam-lite:rules.fasl")
+(load ":occam-lite:coerce.fasl")
+(load ":occam-lite:sanctions.fasl")
+
+(load ":occam-lite:simpparse.fasl")
+(load ":occam-lite:parser-lexicon.fasl")
+(load ":occam-lite:simpgen.fasl")
+(load ":occam-lite:gen-lexicon.fasl")
+(load ":occam-lite:qa.fasl")
+
+(load ":occam-lite:tdl-ebl-data.fasl")

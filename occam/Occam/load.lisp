@@ -1,0 +1,27 @@
+
+
+(load ":occam-lite:objects.lisp")
+(load ":occam-lite:lisp-utils.lisp")
+(load ":occam-lite:cd-utils.lisp")
+(load ":occam-lite:schemata.lisp")
+(load ":occam-lite:init-schemata.lisp")
+(load ":occam-lite:cd-match.lisp") 
+(load ":occam-lite:sbl.lisp")
+(load ":occam-lite:macro-schema.lisp") 
+(load ":occam-lite:play-doh.lisp") 
+(load ":occam-lite:tdl.lisp")
+(load ":occam-lite:genrules.lisp") 
+(load ":occam-lite:glass.lisp") 
+(load ":occam-lite:infer.lisp")
+(load ":occam-lite:ebl.lisp")
+(load ":occam-lite:rules.lisp")
+(load ":occam-lite:coerce.lisp")
+(load ":occam-lite:sanctions.lisp")
+
+(load ":occam-lite:simpparse.lisp")
+(load ":occam-lite:parser-lexicon.lisp")
+(load ":occam-lite:simpgen.lisp")
+(load ":occam-lite:gen-lexicon.lisp")
+(load ":occam-lite:qa.lisp")
+
+(load ":occam-lite:tdl-ebl-data.lisp")
