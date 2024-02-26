@@ -1,70 +1,48 @@
+;                                           (convert_to_metta_file  dynamic_load $_355230 metagame/misc/dynamic_load.pl metagame/misc/dynamic_load.metta)
 ;
-; 
-
+; ============================================================
 ;
-; 
-
+; METAGAME Game-Playing Workbench
 ;
-; 
-
+; Copyright (c) 1992 Barney D. Pell
 ;
-; 
-
+; ============================================================
 
 ;
-; 
-
+; ============================================================
 ;
-; 
-
+; METAGAME Game-Playing Workbench
 ;
-; 
-
+; Copyright (c) 1992 Barney D. Pell
 ;
-; 
-
+; ============================================================
 ;
-; 
-
+; ;; dynamic_load.pl
 ;
-; 
+; ;; Loads a theory file.
 
 
-
-  (= 
-    (dl Nil) 
+  (= (dl Nil)  
     (set-det))
-; 
-
-  (= 
-    (dl (Cons  $F $Files)) 
-    ( (set-det) 
-      (dl $F) 
-      (dl $Files)))
-; 
-
-  (= 
-    (dl $Filename) 
+  (= (dl (Cons  $F $Files))  
+    (set-det)
+    (dl $F)
+    (dl $Files))
+  (= (dl $Filename)  
     (dynamic-load $Filename))
-; 
 
 
-
-  (= 
-    (dynamic-load $Filename) 
-    ( (open $Filename read $Stream) 
-      (format "Loading theory file: ~w~n" 
-        (:: $Filename)) 
-      (dynamic-load-stream $Stream) 
-      (format "  Finished loading Theory file: ~w~n" 
-        (:: $Filename)) 
-      (close $Stream)))
-; 
+  (= (dynamic-load $Filename)  
+    (open $Filename read $Stream)
+    (format "Loading theory file: ~w~n" 
+      (:: $Filename))
+    (dynamic-load-stream $Stream)
+    (format "  Finished loading Theory file: ~w~n" 
+      (:: $Filename))
+    (close $Stream))
 
 
-
-  (= 
-    (dynamic-load-stream $Stream) 
+  (= (dynamic-load-stream $Stream)  
     (det-if-then-else 
       (, 
         (read $Stream $Term) 
@@ -72,17 +50,11 @@
       (, 
         (process-term $Term) 
         (dynamic-load-stream $Stream)) True))
-; 
-
 
 ;
-; 
+; process_term(Term) :- assert(Term).
 
-
-  (= 
-    (process-term $Term) 
+  (= (process-term $Term)  
     (theory-assert $Term))
-; 
-
 	
 

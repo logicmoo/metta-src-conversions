@@ -1,26 +1,17 @@
+;                                           (convert_to_metta_file  yap_compat $_386360 sldr_dl/yap_compat.pl sldr_dl/yap_compat.metta)
 ;
-; 
+; :- statistics( walltime, [X,Y]), XY is X+Y, srandom(X),!.
 
-
-  (= 
-    (random $X) 
+  (= (random $X)  
     (is $X random))
-; 
-
 
   !(use-module (library random))
-; 
-
   !(use-module (library lists))
-; 
 
 
-
-  (= 
-    (round $X $Y) 
+  (= (round $X $Y)  
     (= $Y 
       (round $X)))
-; 
-
+; /*flatten([], []). flatten([H|T], M) :- flatten(H, Hf), flatten(T, Tf), append(Hf, Tf, M).*/
 
 

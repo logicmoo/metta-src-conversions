@@ -1,328 +1,70 @@
-
-  (= 
-    (type_restriction  
-      (member  $A $B) 
-      ( (atomic  $A) (list  $B))) True)
-; 
-
-  (= 
-    (type_restriction  
-      (components  $A $B $C) 
-      ( (list  $A) 
-        (atomic  $B) 
-        (list  $C))) True)
-; 
-
-
-
-  (= 
-    (list  ()) True)
-; 
-
-  (= 
-    (list (Cons  $A $B)) 
-    ( (atomic $A) (list $B)))
-; 
-
-
-
-
-  (= 
-    (components  
-      (Cons  $X $Y) $X $Y) True)
-; 
-
-
-
-
-  (= 
-    (ex  
-      (member  e 
-        (e o z)) +) True)
-; 
-
-  (= 
-    (ex  
-      (member  o 
-        (o z)) +) True)
-; 
-
-  (= 
-    (ex  
-      (member  o 
-        (e o z)) +) True)
-; 
-
-  (= 
-    (ex  
-      (member  z 
-        (z)) +) True)
-; 
-
-  (= 
-    (ex  
-      (member  z 
-        (o z)) +) True)
-; 
-
-  (= 
-    (ex  
-      (member  z 
-        (e o z)) +) True)
-; 
-
-
-
-
-  (= 
-    (ex  
-      (member  e e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  e o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  e z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  e ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  e 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  e 
-        (o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  o e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  o o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  o z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  o ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  o 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  z e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  z o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  z z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  z ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () 
-        (o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  () 
-        (e o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) 
-        (o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (z) 
-        (e o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) 
-        (o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (o z) 
-        (e o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) e) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) o) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) z) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) ()) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) 
-        (z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) 
-        (o z)) -) True)
-; 
-
-  (= 
-    (ex  
-      (member  
-        (e o z) 
-        (e o z)) -) True)
-; 
-
+;                                           (convert_to_metta_file  foil_ex $_360686 miles/gencon_instances/foil_ex.pl miles/gencon_instances/foil_ex.metta)
+
+  (= (type_restriction  (member  $A $B) ((is-symbolic  $A) (list  $B)))  True)
+  (= (type_restriction  (components  $A $B $C) ((list  $A) (is-symbolic  $B) (list  $C)))  True)
+
+
+  (= (list  ())  True)
+  (= (list (Cons  $A $B))  
+    (atomic $A)
+    (list $B))
+
+
+
+  (= (components  (Cons  $X $Y) $X $Y)  True)
+
+
+
+  (= (ex  (member  e (e o z)) +)  True)
+  (= (ex  (member  o (o z)) +)  True)
+  (= (ex  (member  o (e o z)) +)  True)
+  (= (ex  (member  z (z)) +)  True)
+  (= (ex  (member  z (o z)) +)  True)
+  (= (ex  (member  z (e o z)) +)  True)
+
+
+
+  (= (ex  (member  e e) -)  True)
+  (= (ex  (member  e o) -)  True)
+  (= (ex  (member  e z) -)  True)
+  (= (ex  (member  e ()) -)  True)
+  (= (ex  (member  e (z)) -)  True)
+  (= (ex  (member  e (o z)) -)  True)
+  (= (ex  (member  o e) -)  True)
+  (= (ex  (member  o o) -)  True)
+  (= (ex  (member  o z) -)  True)
+  (= (ex  (member  o ()) -)  True)
+  (= (ex  (member  o (z)) -)  True)
+  (= (ex  (member  z e) -)  True)
+  (= (ex  (member  z o) -)  True)
+  (= (ex  (member  z z) -)  True)
+  (= (ex  (member  z ()) -)  True)
+  (= (ex  (member  () e) -)  True)
+  (= (ex  (member  () o) -)  True)
+  (= (ex  (member  () z) -)  True)
+  (= (ex  (member  () ()) -)  True)
+  (= (ex  (member  () (z)) -)  True)
+  (= (ex  (member  () (o z)) -)  True)
+  (= (ex  (member  () (e o z)) -)  True)
+  (= (ex  (member  (z) e) -)  True)
+  (= (ex  (member  (z) o) -)  True)
+  (= (ex  (member  (z) z) -)  True)
+  (= (ex  (member  (z) ()) -)  True)
+  (= (ex  (member  (z) (z)) -)  True)
+  (= (ex  (member  (z) (o z)) -)  True)
+  (= (ex  (member  (z) (e o z)) -)  True)
+  (= (ex  (member  (o z) e) -)  True)
+  (= (ex  (member  (o z) o) -)  True)
+  (= (ex  (member  (o z) z) -)  True)
+  (= (ex  (member  (o z) ()) -)  True)
+  (= (ex  (member  (o z) (z)) -)  True)
+  (= (ex  (member  (o z) (o z)) -)  True)
+  (= (ex  (member  (o z) (e o z)) -)  True)
+  (= (ex  (member  (e o z) e) -)  True)
+  (= (ex  (member  (e o z) o) -)  True)
+  (= (ex  (member  (e o z) z) -)  True)
+  (= (ex  (member  (e o z) ()) -)  True)
+  (= (ex  (member  (e o z) (z)) -)  True)
+  (= (ex  (member  (e o z) (o z)) -)  True)
+  (= (ex  (member  (e o z) (e o z)) -)  True)
 

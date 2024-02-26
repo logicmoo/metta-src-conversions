@@ -1,572 +1,305 @@
+;                                           (convert_to_metta_file  sxx_library $_430506 sxx_machine/sxx_library.pl sxx_machine/sxx_library.metta)
 
-  (= 
-    (toplevel) 
-    ( (top) (fail)))
-; 
-
-  (= 
-    (toplevel) 
+  (= (toplevel)  
+    (top)
+    (fail))
+  (= (toplevel)  
     (toplevel))
-; 
 
 
+  (= (top)  
+    (write ?- )
+    (vread $Goal $Vars)
+    !$Goal
+    (writevars $Vars)
+    (write Yes)
+    (nl)
+    (notmore)
+    (set-det)
+    (fail))
 
-  (= 
-    (top) 
-    ( (write ?- ) 
-      (vread $Goal $Vars) 
-      !$Goal 
-      (writevars $Vars) 
-      (write Yes) 
-      (nl) 
-      (notmore) 
-      (set-det) 
-      (fail)))
-; 
-
-
-  (= 
-    (top) 
+  (= (top)  
     (top))
-; 
 
 
-
-  (= 
-    (notmore) 
-    ( (write 'more? ') 
-      (get0 $X) 
-      (noteq $X 10) 
-      (set-det) 
-      (untilend $X) 
-      (fail)))
-; 
-
-  (= notmore True)
-; 
+  (= (notmore)  
+    (write 'more? ')
+    (get0 $X)
+    (noteq $X 10)
+    (set-det)
+    (untilend $X)
+    (fail))
+  (= notmore  True)
 
 
-
-  (= 
-    (noteq $X $X) 
-    ( (set-det) (fail)))
-; 
-
-  (= 
-    (noteq  $_ $_) True)
-; 
+  (= (noteq $X $X)  
+    (set-det)
+    (fail))
+  (= (noteq  $_ $_)  True)
 
 
-
-  (= 
-    (untilend 10) 
+  (= (untilend 10)  
     (set-det))
-; 
-
-  (= 
-    (untilend $_) 
-    ( (get0 $X) (untilend $X)))
-; 
+  (= (untilend $_)  
+    (get0 $X)
+    (untilend $X))
 
 
-
-  (= 
-    (writevars  ()) True)
-; 
-
-  (= 
-    (writevars (Cons  (= $Var $Name) $R)) 
-    ( (write $Name) 
-      (write  = ) 
-      (write $Var) 
-      (nl) 
-      (fail)))
-; 
-
-  (= 
-    (writevars (Cons  $_ $R)) 
+  (= (writevars  ())  True)
+  (= (writevars (Cons  (= $Var $Name) $R))  
+    (write $Name)
+    (write  = )
+    (write $Var)
+    (nl)
+    (fail))
+  (= (writevars (Cons  $_ $R))  
     (writevars $R))
-; 
 
 
 
-
-  (= 
-    (nrev Nil Nil) 
+  (= (nrev Nil Nil)  
     (set-det))
-; 
-
-  (= 
-    (nrev 
-      (Cons  $A $B) $O) 
-    ( (nrev $B $C) (append $C (:: $A) $O)))
-; 
+  (= (nrev (Cons  $A $B) $O)  
+    (nrev $B $C)
+    (append $C 
+      (:: $A) $O))
 
 
-
-  (= 
-    (append  () $L $L) True)
-; 
-
-  (= 
-    (append 
-      (Cons  $A $L1) $L2 
-      (Cons  $A $L3)) 
+  (= (append  () $L $L)  True)
+  (= (append (Cons  $A $L1) $L2 (Cons  $A $L3))  
     (append $L1 $L2 $L3))
-; 
 
 
-
-  (= 
-    (max $A $B $B) 
+  (= (max $A $B $B)  
     (smallerthan $A $B))
-; 
-
-  (= 
-    (max $A $B $A) 
+  (= (max $A $B $A)  
     (smallerthan $B $A))
-; 
-
-  (= 
-    (max  $A $A $A) True)
-; 
+  (= (max  $A $A $A)  True)
 
 
 
-
-  (= 
-    (sort Nil Nil) 
+  (= (sort Nil Nil)  
     (set-det))
-; 
-
-  (= 
-    (sort 
-      (Cons  $X $R) $Out) 
-    ( (split $X $R $S $G) 
-      (sort $S $SS) 
-      (sort $G $GS) 
-      (append $SS 
-        (Cons  $X $GS) $Out)))
-; 
+  (= (sort (Cons  $X $R) $Out)  
+    (split $X $R $S $G)
+    (sort $S $SS)
+    (sort $G $GS)
+    (append $SS 
+      (Cons  $X $GS) $Out))
 
 
-
-  (= 
-    (split $X Nil Nil Nil) 
+  (= (split $X Nil Nil Nil)  
     (set-det))
-; 
-
-  (= 
-    (split $X 
-      (Cons  $A $R) 
-      (Cons  $A $S) $G) 
-    ( (smallerthan $A $X) 
-      (set-det) 
-      (split $X $R $S $G)))
-; 
-
-  (= 
-    (split $X 
-      (Cons  $A $R) $S 
-      (Cons  $A $G)) 
+  (= (split $X (Cons  $A $R) (Cons  $A $S) $G)  
+    (smallerthan $A $X)
+    (set-det)
     (split $X $R $S $G))
-; 
+  (= (split $X (Cons  $A $R) $S (Cons  $A $G))  
+    (split $X $R $S $G))
+
+
+  (= (time $Goal)  
+    (cputime $T1)
+    !$Goal
+    (cputime $T2)
+    (is $T 
+      (- $T2 $T1))
+    (write $T)
+    (nl))
 
 
 
-  (= 
-    (time $Goal) 
-    ( (cputime $T1) 
-      !$Goal 
-      (cputime $T2) 
-      (is $T 
-        (- $T2 $T1)) 
-      (write $T) 
-      (nl)))
-; 
-
-
-
-
-  (= 
-    !$G 
-    ( (var $G) 
-      (set-det) 
-      (fail)))
-; 
-
-  (= 
-    ! (, $G $B) 
-    ( (set-det) 
-      !$G 
-      !$B))
-; 
-
-  (= 
-    ! (det-if-then $If $Then) 
-    ( (set-det) (execdisj (det-if-then $If $Then) True)))
-; 
-
-  (= 
-    ! (or $B1 $B2) 
-    ( (set-det) (execdisj $B1 $B2)))
-; 
-
-  (= 
-    !$G 
-    ( (specialgoal $G $G1) 
-      (set-det) 
-      !$G1))
-; 
-
-  (= 
-    !$G 
+  (= !$G  
+    (var $G)
+    (set-det)
+    (fail))
+  (= !(, $G $B)  
+    (set-det)
+    !$G
+    !$B)
+  (= !(det-if-then $If $Then)  
+    (set-det)
+    (execdisj 
+      (det-if-then $If $Then) True))
+  (= !(or $B1 $B2)  
+    (set-det)
+    (execdisj $B1 $B2))
+  (= !$G  
+    (specialgoal $G $G1)
+    (set-det)
+    !$G1)
+  (= !$G  
     (call $G))
-; 
 
 
-
-  (= 
-    (execdisj 
-      (det-if-then $If $Then) $Else) 
-    ( !$If 
-      (set-det) 
-      !$Then))
-; 
-
-  (= 
-    (execdisj 
-      (det-if-then $If $Then) $Else) 
-    ( (set-det) !$Else))
-; 
-
-  (= 
-    (execdisj $B1 $B2) 
+  (= (execdisj (det-if-then $If $Then) $Else)  
+    !$If
+    (set-det)
+    !$Then)
+  (= (execdisj (det-if-then $If $Then) $Else)  
+    (set-det)
+    !$Else)
+  (= (execdisj $B1 $B2)  
     !$B1)
-; 
-
-  (= 
-    (execdisj $B1 $B2) 
+  (= (execdisj $B1 $B2)  
     !$B2)
-; 
 
 
 
-
-  (= 
-    (loop 0) 
+  (= (loop 0)  
     (set-det))
-; 
-
-  (= 
-    (loop $N) 
-    ( (is $M 
-        (- $N 1)) (loop $M)))
-; 
+  (= (loop $N)  
+    (is $M 
+      (- $N 1))
+    (loop $M))
 
 
-
-  (= 
-    (or $X $_) 
+  (= (or $X $_)  
     !$X)
-; 
-
-  (= 
-    (or $_ $Y) 
+  (= (or $_ $Y)  
     !$Y)
-; 
 
 
+  (= (findall $X $Goal $L)  
+    (initfindall $Handle)
+    (findall2 $X $Goal $L $Handle))
 
-  (= 
-    (findall $X $Goal $L) 
-    ( (initfindall $Handle) (findall2 $X $Goal $L $Handle)))
-; 
-
-
-  (= 
-    (findall2 $X $Goal $L $Handle) 
-    ( !$Goal 
-      (addfindall $X $Handle) 
-      (fail)))
-; 
-
-  (= 
-    (findall2 $X $Goal $L $Handle) 
+  (= (findall2 $X $Goal $L $Handle)  
+    !$Goal
+    (addfindall $X $Handle)
+    (fail))
+  (= (findall2 $X $Goal $L $Handle)  
     (retrievefindall $L $Handle))
-; 
 
 
-
-  (= 
-    (copy-term $T1 $T2) 
+  (= (copy-term $T1 $T2)  
     (findall $X 
       (= $X $T1) 
       (:: $T2)))
-; 
 
 
-
-  (= 
-    (var $X) 
+  (= (var $X)  
     (type-of $X var))
-; 
 
 
+  (= (atomic $X)  
+    (type-of $X $A)
+    (atomic2 $A))
 
-  (= 
-    (atomic $X) 
-    ( (type-of $X $A) (atomic2 $A)))
-; 
-
-
-  (= 
-    (atomic2 is-symbol) 
+  (= (atomic2 is-symbol)  
     (set-det))
-; 
-
-  (= 
-    (atomic2  integer) True)
-; 
+  (= (atomic2  integer)  True)
 
 
-
-  (= 
-    (atom $X) 
+  (= (atom $X)  
     (type-of $X is-symbol))
-; 
 
 
-
-  (= 
-    (integer $X) 
+  (= (integer $X)  
     (type-of $X integer))
-; 
 
 
 
-
-  (= 
-    (assumeduring $G $F) 
-    ( (assume (- $F $Tag)) 
-      !$G 
-      (= $Tag 1)))
-; 
+  (= (assumeduring $G $F)  
+    (assume (- $F $Tag))
+    !$G
+    (= $Tag 1))
 
 
-
-  (= 
-    (assumed $F) 
-    ( (allassumed $L) (m1 $F $L)))
-; 
+  (= (assumed $F)  
+    (allassumed $L)
+    (m1 $F $L))
 
 
-
-  (= 
-    (m1 $X 
-      (Cons  
-        (- $X $Tag) $_)) 
+  (= (m1 $X (Cons  (- $X $Tag) $_))  
     (var $Tag))
-; 
-
-  (= 
-    (m1 $X 
-      (Cons  $_ $R)) 
+  (= (m1 $X (Cons  $_ $R))  
     (m1 $X $R))
-; 
 
 
-
-  (= 
-    (statistics runtime 
-      (:: $T $_)) 
+  (= (statistics runtime (:: $T $_))  
     (cputime $T))
-; 
-
 
 
 ;
-; 
+; the following are also needed in the compiler at the moment
 
 
-
-  (= 
-    (specialgoal 
-      (< $X $Y) 
-      (smallerthan $X $Y)) 
+  (= (specialgoal (< $X $Y) (smallerthan $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (=< $X $Y) 
-      (smallerorequal $X $Y)) 
+  (= (specialgoal (=< $X $Y) (smallerorequal $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (> $X $Y) 
-      (smallerthan $Y $X)) 
+  (= (specialgoal (> $X $Y) (smallerthan $Y $X))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (>= $X $Y) 
-      (smallerorequal $Y $X)) 
+  (= (specialgoal (>= $X $Y) (smallerorequal $Y $X))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (=:= $X $Y) 
-      (arithequal $Y $X)) 
+  (= (specialgoal (=:= $X $Y) (arithequal $Y $X))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (= $X $Y) 
-      (unify $Y $X)) 
+  (= (specialgoal (= $X $Y) (unify $Y $X))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (or $X $Y) 
-      (or $X $Y)) 
+  (= (specialgoal (or $X $Y) (or $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (@< $X $Y) 
-      (termsmallerthan $X $Y)) 
+  (= (specialgoal (@< $X $Y) (termsmallerthan $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (@> $X $Y) 
-      (termgreaterthan $X $Y)) 
+  (= (specialgoal (@> $X $Y) (termgreaterthan $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (@=< $X $Y) 
-      (termsmallerequal $X $Y)) 
+  (= (specialgoal (@=< $X $Y) (termsmallerequal $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (@>= $X $Y) 
-      (termgreaterequal $X $Y)) 
+  (= (specialgoal (@>= $X $Y) (termgreaterequal $X $Y))  
     (set-det))
-; 
-
-  (= 
-    (specialgoal 
-      (== $X $Y) 
-      (termequal $X $Y)) 
+  (= (specialgoal (== $X $Y) (termequal $X $Y))  
     (set-det))
-; 
 
 
-
-  (= 
-    (termsmallerthan $X $Y) 
+  (= (termsmallerthan $X $Y)  
     (compare < $X $Y))
-; 
 
-
-  (= 
-    (termgreaterthan $X $Y) 
+  (= (termgreaterthan $X $Y)  
     (compare > $X $Y))
-; 
 
 
+  (= (termsmallerequal $X $Y)  
+    (compare $C $X $Y)
+    (smeq $C))
 
-  (= 
-    (termsmallerequal $X $Y) 
-    ( (compare $C $X $Y) (smeq $C)))
-; 
-
-
-  (= 
-    (smeq <) 
+  (= (smeq <)  
     (set-det))
-; 
-
-  (= 
-    (smeq  =) True)
-; 
+  (= (smeq  =)  True)
 
 
+  (= (termgreaterequal $X $Y)  
+    (compare $C $X $Y)
+    (smgr $C))
 
-  (= 
-    (termgreaterequal $X $Y) 
-    ( (compare $C $X $Y) (smgr $C)))
-; 
-
-
-  (= 
-    (smgr >) 
+  (= (smgr >)  
     (set-det))
-; 
-
-  (= 
-    (smgr  =) True)
-; 
+  (= (smgr  =)  True)
 
 
-
-  (= 
-    (termequal $X $Y) 
+  (= (termequal $X $Y)  
     (compare = $X $Y))
-; 
 
 
 
-
-  (= 
-    (not $G) 
-    ( !$G 
-      (set-det) 
-      (fail)))
-; 
-
-  (= 
-    (not  $_) True)
-; 
+  (= (not $G)  
+    !$G
+    (set-det)
+    (fail))
+  (= (not  $_)  True)
 
 
 
-
-  (= 
-    (freeze $X $G) 
-    ( (var $X) 
-      (set-det) 
-      (freeze-internal $X $G)))
-; 
-
-  (= 
-    (freeze $X $G) 
+  (= (freeze $X $G)  
+    (var $X)
+    (set-det)
+    (freeze-internal $X $G))
+  (= (freeze $X $G)  
     !$G)
-; 
 
 
-
-  (= 
-    (execpendinggoals Nil) 
+  (= (execpendinggoals Nil)  
     (execcontinuation))
-; 
-
-  (= 
-    (execpendinggoals (Cons  $G $R)) 
-    ( !$G (execpendinggoals $R)))
-; 
-
+  (= (execpendinggoals (Cons  $G $R))  
+    !$G
+    (execpendinggoals $R))
 
