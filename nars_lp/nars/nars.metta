@@ -1,84 +1,46 @@
 ;
-;                           nal.pl
+; 
 
 ;
-;                            Non-Axiomatic Logic in MeTTa
+; 
 
 ;
-;                            Version: 1.1, September 2012
+; 
 
 ;
-;                            GNU Lesser General Public License
+; 
 
 ;
-;                            Author: Pei Wang/Pat Hammer/Douglas Miles
+; 
 
 
   !(module nars 
     (:: 
       (/ nars-main 1) 
       (/ nars-main 0)))
-;                             /*
-;                             User's Guide of NAL
-;                             Input/Output Language
-;                             In this demonstration, NAL implements the following formal language, Narsese. The input and output of the system are Narsese judgments.
-;                                        <judgment> ::= [<statement> [frequency-value, confidence-value]]
-;                                       <statement> ::= <relation>(<term>, <term>)
-;                                                     | <compound-statement>
-;                                                     | <term>
-;                                            <term> ::= <word>
-;                                                     | <variable>
-;                                                     | <compound-term>
-;                                                     | <statement>
-;                                        <variable> ::= <independent-variable>
-;                                                     | <dependent-variable>(<independent-variable>*)
-;                                        <relation> ::= inheritance
-;                                                     | similarity
-;                                                     | implication
-;                                                     | equivalence
-;                                                     | instance
-;                                                     | property
-;                                                     | inst_prop                                // instance-property
-;                              <compound-statement> ::= negation(<statement>)
-;                                                     | conjunction([<statement>, <statement>+])
-;                                                     | disjunction([<statement>, <statement>+])
-;                                   <compound-term> ::= ext_set([<term>+])                       // extensional set
-;                                                     | int_set([<term>+])                       // intensional set
-;                                                     | ext_intersection([<term>, <term>+])      // extensional intersection
-;                                                     | int_intersection([<term>, <term>+])      // intensional intersection
-;                                                     | ext_difference(<term>, <term>)           // extensional difference
-;                                                     | int_difference(<term>, <term>)           // intensional difference
-;                                                     | product([<term>, <term>+])
-;                                                     | ext_image(<term>, <term>)                // extensional image
-;                                                     | int_image(<term>, <term>)                // intensional image
-;                             The frequency-value is a real number in [0, 1]; the confidence-value a real number in (0, 1).
-;                             User Interface
-;                             The program can be invoked in the following ways:
-;                             revision(J1, J2, J).
-;                             Judgment J is the result of a revision between judgments J1 and J2. The three judgments all have the same statement in them.
-;                             choice(J1, J2, J).
-;                             Judgment J is the result of a choice between judgments J1 and J2.
-;                             inference(J1, J2, J).
-;                             Judgment J is the conclusion derived from judgments J1 and J2 as premises.
-;                             inference(J1, J).
-;                             Judgment J is the conclusion derived from judgment J1 as single premise.
 ; 
-;                             */
-
 
 
   !(set-module (class library))
-  !(set-module (base system))
+; 
 
-  !(use-module (library (/ nars nal-reader))) 
+  !(set-module (base system))
+; 
+
+
+  !(use-module (library (/ nars nal-reader)))
+; 
+ 
 
 ;
-;                               will change later to what we consider "enough" ground
+; 
 
 
   (= 
     (narz-ground $G) 
     (ground $G))
+; 
+
 
 
   (= 
@@ -86,6 +48,8 @@
     (or 
       (atom $Name) 
       (string $Name)))
+; 
+
 
 
 
@@ -99,6 +63,8 @@
   (= 
     (do-nars-example-tests) 
     (run-nars-example-tests))
+; 
+
 
 
   (= 
@@ -110,39 +76,34 @@
       (add-history run-nars-example-tests) 
       (forall 
         (with_self  
-          (nal-examples) 
+          (nal-examples *) 
           (nal-example-test $Goal $Results)) 
         (take-nal-example-test $Goal $Results))))
+; 
+
 
 
 
   (= 
     (with_self  
-      (baseKB) 
+      (baseKB *) 
       (sanity-test)) 
     (do-nars-example-tests))
+; 
+
 
   (= 
     (with_self  
-      (baseKB) 
+      (baseKB *) 
       (feature-test)) 
     (run-nars-example-tests))
+; 
+
 
   (= 
     (nal-into-prolog) 
     ( (make) (forall (, (nal-is-test $Type $Text) (== $Type into-prolog)) (nal-do-exec-test $Type $Text))))
-;                                    /*
-;                                    ```diff
-;                                    - text in red
-;                                    + text in green
-;                                    ! text in orange
-;                                    # text in gray
-;                                    @@ text in purple (and bold)@@
-;                                    ```
-;                                    */
-
-;                                     ;take_nal_example_test(_,_):- make, fail.
-
+; 
 
 
 
@@ -150,73 +111,105 @@
   (= 
     (nal-do-exec-test $Type $Text) 
     (nal-do-exec-test-text $Text))
+; 
+
 
 
   (= 
     (nal-do-exec-test-text $Text) 
     ( (nal-read-clauses $Text $Clauses) (nars-exec-ex in $Clauses)))
+; 
+
 
 
   (= 
     (nars-exec-ex $Clauses) 
     (nars-exec-ex in $Clauses))
+; 
+
 
   (= 
     (nars-exec-ex $_ Nil) 
     (set-det))
+; 
+
   (= 
     (nars-exec-ex $IO 
       (Cons  $C $Clauses)) 
     ( (set-det) 
       (nars-exec-ex $IO $C) 
       (nars-exec-ex $IO $Clauses)))
+; 
+
   (= 
     (nars-exec-ex $IO $C) 
     ( (nal-to-prolog $IO $C $P) 
       (set-det) 
       (nars-exec-ex1 $IO $P)))
+; 
+
   (= 
     (nars-exec-ex $IO $C) 
     (nars-exec-ex1 $IO $C))
+; 
+
 
 
 
   (= 
     (nars-exec-ex1 $_ Nil) 
     (set-det))
+; 
+
   (= 
     (nars-exec-ex1 $IO 
       (Cons  $C $Clauses)) 
     ( (set-det) 
       (nars-exec-ex1 $IO $C) 
       (nars-exec-ex1 $IO $Clauses)))
+; 
+
   (= 
     (nars-exec-ex1 $IO 
       (nop $C)) 
     ( (set-det) (nars-exec-ex1 $IO $C)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (nal-in $C $V3)) 
     ( (set-det) (nars-exec-ex1 in $C)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (nal-out $C $V3)) 
     ( (set-det) (nars-exec-ex1 out $C)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (outputMustContain $C)) 
     ( (set-det) (nars-exec-ex1 out $C)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (expected $C)) 
     ( (set-det) (nars-exec-ex1 out $C)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (write $C)) 
     ( (set-det) (nars-exec-ex1 cmt $C)))
+; 
+
   (= 
     (nars-exec-ex1 $IO $C) 
     ( (dmsg (= $IO $C)) (fail)))
+; 
+
   (= 
     (nars-exec-ex1 $_ 
       (do-steps $N)) 
@@ -225,23 +218,31 @@
         (between 1 $N $_) 
         (nop (inference-step $_))) 
       (set-det)))
+; 
+
 ;
-;                                         nars_exec_ex1(IO,task(judgement,C,_,TV,_)):- !, nars_exec_ex1(IO,C).
+; 
 
   (= 
     (nars-exec-ex1 in $C) 
-    ( (add-atom  &self 
+    ( (add-symbol  &self 
         (nars_db  $C)) 
       (nop (derive-event $C)) 
       (set-det)))
+; 
+
   (= 
     (nars_exec_ex1  $_ $_) True)
+; 
+
 
 
 
   (= 
     (nal-exec-tests) 
-    ( (make) (forall (, (with_self  (nal-reader) (nal-is-test $Type $Text)) (\== $Type read)) (nal-do-exec-test $Type $Text))))
+    ( (make) (forall (, (with_self  (nal-reader *) (nal-is-test $Type $Text)) (\== $Type read)) (nal-do-exec-test $Type $Text))))
+; 
+
 
 
 
@@ -249,10 +250,14 @@
     (nal-clauses-to-test $Clauses $Goal 
       (:: $ResultsExpected)) 
     (nal-clauses-to-test $Clauses True $Goal True $ResultsExpected))
+; 
+
 
   (= 
     (nal-clauses-to-test Nil $Goal $Goal $InOut $InOut) 
     (set-det))
+; 
+
   (= 
     (nal-clauses-to-test 
       (Cons  $C $Cs) $Goal $PGoal $In $Out) 
@@ -260,18 +265,24 @@
       (nal-clauses-to-test $C $Goal $MGoal $In $Mid) 
       (set-det) 
       (nal-clauses-to-test $Cs $MGoal $PGoal $Mid $Out)))
+; 
+
   (= 
     (nal-clauses-to-test 
       (expected $C) $Goal $Goal $In $Out) 
     ( (set-det) 
       (nal-to-prolog out $C $P) 
       (conjoin-op or $In $P $Out)))
+; 
+
   (= 
     (nal-clauses-to-test 
       (outputMustContain $C) $Goal $Goal $In $Out) 
     ( (set-det) 
       (nal-to-prolog out $C $P) 
       (conjoin-op or $In $P $Out)))
+; 
+
   (= 
     (nal-clauses-to-test 
       (nal-out $C $W) $Goal $Goal $In $Out) 
@@ -279,6 +290,8 @@
       (nal-to-prolog out 
         (nal-out $C $W) $P) 
       (conjoin $In $P $Out)))
+; 
+
   (= 
     (nal-clauses-to-test 
       (nal-in $C $W) $Goal $PGoal $InOut $InOut) 
@@ -286,6 +299,8 @@
       (nal-to-prolog in 
         (nal-in $C $W) $P) 
       (conjoin $Goal $P $PGoal)))
+; 
+
   (= 
     (nal-clauses-to-test $CMT $Goal $Goal $In $Out) 
     ( (\== $In True) 
@@ -294,31 +309,41 @@
       (set-det) 
       (nal-to-prolog out $CMT $P) 
       (conjoin $In $P $Out)))
+; 
+
   (= 
     (nal-clauses-to-test $C $Goal $PGoal $InOut $InOut) 
     ( (nal-to-prolog in $C $P) 
       (conjoin $Goal $P $PGoal) 
       (set-det)))
+; 
+
 
 ;
-;                                          nal_to_MeTTa(IO,'$COMMENT'(C,_,_),writeln(C)):- !.
+; 
 
 ;
-;                                         nal_to_MeTTa(IO,'$COMMENT'(_,_,_),true):- !.
+; 
 
 
   (= 
     (nal-to-prolog $IO 
       ($COMMENT $C $_ $_) $M) 
     ( (set-det) (nal-to-prolog $IO (write $C) $M)))
+; 
+
   (= 
     (nal-to-prolog $IO 
       (nal-in $C $_) $M) 
     ( (set-det) (nal-to-prolog $IO $C $M)))
+; 
+
   (= 
     (nal-to-prolog $IO 
       (nal-out $C $_) $M) 
     ( (set-det) (nal-to-prolog $IO $C $M)))
+; 
+
   (= 
     (nal-to-prolog $IO 
       (task $X $S $T $O $B) $M) 
@@ -329,6 +354,8 @@
       (ignore (= $F 1.0)) 
       (nal-to-prolog $IO 
         (task $X $S $T $O $B) $M)))
+; 
+
   (= 
     (nal-to-prolog $IO 
       (task $X $S $T $O $B) $M) 
@@ -336,17 +363,25 @@
       (= $T present) 
       (nal-to-prolog $IO 
         (task $X $S $T $O $B) $M)))
+; 
+
   (= 
     (nal-to-prolog $IO 
       (task judgement $S $_ $FC $_) $O) 
     ( (append-term $S $FC $M) (nal-to-prolog $IO $M $O)))
+; 
+
   (= 
     (nal_to_prolog  in $X 
       (nop  $X)) True)
+; 
+
   (= 
     (nal_to_prolog  out $X 
       (nop  
         (expected  $X))) True)
+; 
+
 
 
 
@@ -361,6 +396,8 @@
           (:: red) $S) 
         (ansifmt 
           (:: green) $S))))
+; 
+
 
 
   (= 
@@ -371,6 +408,8 @@
         (:: $Results) $Failed) 
       (take-nal-example-test-node $Goal 
         (:: $Expected) $Failed)))
+; 
+
 
   (= 
     (take-nal-example-test-node $Goal $ResultsExpected $Failed) 
@@ -383,8 +422,7 @@
           (format '~NEXPECTED: `~@`' 
             (:: (print-tree $R)))) $ResultsExpected) 
       (take-nal-example-test-result $Goal $ResultsExpected $Failed)))
-;                                         ; term_variables(Goal,Vs),
-
+; 
 
 
 
@@ -400,10 +438,12 @@
       (set-det) 
       (format '~n~n```prolog ' Nil) 
       (with_self  
-        (mu) 
+        (mu *) 
         (print-tree-nl $ResultsExpected)) 
       (format ```~n~n Nil) 
       (set-det)))
+; 
+
 
   
 
@@ -415,6 +455,8 @@
     ( (set-det) 
       (nars-call-ex $X) 
       (nars-call-ex $Y)))
+; 
+
   (= 
     (nars-call-ex (or $X $Y)) 
     (or 
@@ -422,14 +464,18 @@
         (set-det) 
         (nars-call-ex $X)) 
       (nars-call-ex $Y)))
+; 
+
 ;
-;                                         nars_call_ex(X=Y):- !, nars_close_enough(X,Y). ;-> true; (print_tree(failure(X=Y)),!,fail).
+; 
 
   (= 
     (nars-call-ex $L) 
     ( (is-list $L) 
       (set-det) 
       (maplist nars-call-ex $L)))
+; 
+
   (= 
     (nars-call-ex $X) 
     (or 
@@ -438,6 +484,8 @@
       (, 
         (nop (print-tree-nl (failed-nars-call-ex $X))) 
         (fail))))
+; 
+
 
 
 
@@ -446,6 +494,8 @@
     ( (is-list $L) 
       (set-det) 
       (maplist narz-check-results $L)))
+; 
+
   (= 
     (narz-check-results (or $R1 $R2)) 
     (or 
@@ -453,11 +503,15 @@
         (set-det) 
         (narz-check-results $R1)) 
       (narz-check-results $R2)))
+; 
+
   (= 
     (narz-check-results (, $R1 $RS)) 
     ( (set-det) 
       (narz-check-results $R1) 
       (narz-check-results $RS)))
+; 
+
   (= 
     (narz-check-results (= $R $V)) 
     (or 
@@ -466,6 +520,8 @@
           (set-det) 
           (= $R $V)) True) 
       (nars-close-enough $R $V)))
+; 
+
   (= 
     (narz-check-results $X) 
     (or 
@@ -475,11 +531,15 @@
         (fail) 
         (print-tree (test-failed $X)) 
         (fail))))
+; 
+
 
 
   (= 
     (nars-close-enough $R $V) 
     ( (=@= $R $V) (set-det)))
+; 
+
   (= 
     (nars-close-enough $R $V) 
     ( (number $R) 
@@ -488,6 +548,8 @@
       (is $RV 
         (abs (- $R $V))) 
       (< $RV 0.03)))
+; 
+
   (= 
     (nars-close-enough $R $V) 
     ( (or 
@@ -495,6 +557,8 @@
         (not (compound $V))) 
       (set-det) 
       (== $R $V)))
+; 
+
   (= 
     (nars-close-enough 
       (Cons  $R $RT) 
@@ -502,12 +566,16 @@
     ( (set-det) 
       (nars-close-enough $R $V) 
       (nars-close-enough $RT $VT)))
+; 
+
   (= 
     (nars-close-enough $R $V) 
     ( (compound-name-arguments $R $F $RA) 
       (compound-name-arguments $V $F $VA) 
       (set-det) 
       (maplist nars-close-enough $RA $VA)))
+; 
+
 
 
 
@@ -519,10 +587,10 @@
 
 
 ;
-;                                         like to distinguish "eaten by tiger" from "eating tiger" (/, eat, tiger, _) vs. (/, eat, _, tiger)
+; 
 
 ;
-;                                         now: (eat /2 tiger) vs. (eat /1 tiger)
+; 
 
 
 
@@ -531,12 +599,18 @@
     ( (is-list $List) 
       (set-det) 
       (maplist use-nars-config-info $List)))
+; 
+
   (= 
     (use-nars-config-info (element $_ Nil $List)) 
     ( (set-det) (use-nars-config-info $List)))
+; 
+
   (= 
     (use-nars-config-info (element $_ (:: (= name $Name) (= value $Value)) $_)) 
     ( (set-det) (use-nars-config-info (= $Name $Value))))
+; 
+
   (= 
     (use-nars-config-info (= $Name $Value)) 
     ( (nars-string $Name) 
@@ -544,6 +618,8 @@
       (\= $NameD $Name) 
       (set-det) 
       (use-nars-config-info (= $NameD $Value))))
+; 
+
   (= 
     (use-nars-config-info (= $Name $Value)) 
     ( (nars-string $Value) 
@@ -551,114 +627,288 @@
       (\= $ValueD $Value) 
       (set-det) 
       (use-nars-config-info (= $Name $ValueD))))
+; 
+
   (= 
     (use-nars-config-info (= $Name $Value)) 
     ( (atom $Value) 
       (atom-number $Value $Number) 
       (use-nars-config-info (= $Name $Number))))
-;
-;                                         use_nars_config_info(Ignore):- nars_string(Ignore), !.
+; 
 
 ;
-;                                         use_nars_config_info(NameValue):-  dmsg(use_nars_config_info(NameValue)), fail.
+; 
 
 ;
-;                                         use_nars_config_info(Name=Value):-  number(Value), !, nb_setval(Name, Value).
+; 
+
+;
+; 
 
   (= 
     (use-nars-config-info (= $Name $Value)) 
     (nb-setval $Name $Value))
+; 
+
   (= 
     (use_nars_config_info  $_) True)
+; 
+
 
 
 ;
-;                                          default gobals
+; 
 
 
   !(use-nars-config-info (= volume 100))
+; 
+
   !(use-nars-config-info (= novelty-horizon 100000))
+; 
+
   !(use-nars-config-info (= decision-threshold 0.51))
+; 
+
   !(use-nars-config-info (= concept-bag-size 80000))
+; 
+
   !(use-nars-config-info (= concept-bag-levels 1000))
+; 
+
   !(use-nars-config-info (= duration 5))
+; 
+
   !(use-nars-config-info (= horizon 1))
+; 
+
   !(use-nars-config-info (= truth-epsilon 0.01))
+; 
+
   !(use-nars-config-info (= budget-epsilon 0.0001))
+; 
+
   !(use-nars-config-info (= budget-threshold 0.01))
+; 
+
   !(use-nars-config-info (= default-confirmation-expectation 0.6))
+; 
+
   !(use-nars-config-info (= always-create-concept True))
+; 
+
   !(use-nars-config-info (= default-creation-expectation 0.66))
+; 
+
   !(use-nars-config-info (= default-creation-expectation-goal 0.6))
+; 
+
   !(use-nars-config-info (= default-judgment-confidence 0.9))
+; 
+
   !(use-nars-config-info (= default-judgment-priority 0.8))
+; 
+
   !(use-nars-config-info (= default-judgment-durability 0.5))
+; 
+
   !(use-nars-config-info (= default-question-priority 0.9))
+; 
+
   !(use-nars-config-info (= default-question-durability 0.9))
+; 
+
   !(use-nars-config-info (= default-goal-confidence 0.9))
+; 
+
   !(use-nars-config-info (= default-goal-priority 0.9))
+; 
+
   !(use-nars-config-info (= default-goal-durability 0.9))
+; 
+
   !(use-nars-config-info (= default-quest-priority 0.9))
+; 
+
   !(use-nars-config-info (= default-quest-durability 0.9))
+; 
+
   !(use-nars-config-info (= bag-threshold 1.0))
+; 
+
   !(use-nars-config-info (= forget-quality-relative 0.3))
+; 
+
   !(use-nars-config-info (= revision-max-occurrence-distance 10))
+; 
+
   !(use-nars-config-info (= task-link-bag-size 100))
+; 
+
   !(use-nars-config-info (= task-link-bag-levels 10))
+; 
+
   !(use-nars-config-info (= term-link-bag-size 100))
+; 
+
   !(use-nars-config-info (= term-link-bag-levels 10))
+; 
+
   !(use-nars-config-info (= term-link-max-matched 10))
+; 
+
   !(use-nars-config-info (= novel-task-bag-size 1000))
+; 
+
   !(use-nars-config-info (= novel-task-bag-levels 100))
+; 
+
   !(use-nars-config-info (= novel-task-bag-selections 100))
+; 
+
   !(use-nars-config-info (= sequence-bag-size 30))
+; 
+
   !(use-nars-config-info (= sequence-bag-levels 10))
+; 
+
   !(use-nars-config-info (= operation-bag-size 10))
+; 
+
   !(use-nars-config-info (= operation-bag-levels 10))
+; 
+
   !(use-nars-config-info (= operation-samples 6))
+; 
+
   !(use-nars-config-info (= projection-decay 0.1))
+; 
+
   !(use-nars-config-info (= maximum-evidental-base-length 20000))
+; 
+
   !(use-nars-config-info (= termlink-max-reasoned 3))
+; 
+
   !(use-nars-config-info (= term-link-record-length 10))
+; 
+
   !(use-nars-config-info (= concept-beliefs-max 28))
+; 
+
   !(use-nars-config-info (= concept-questions-max 5))
+; 
+
   !(use-nars-config-info (= concept-goals-max 7))
+; 
+
   !(use-nars-config-info (= reliance 0.9))
+; 
+
   !(use-nars-config-info (= discount-rate 0.5))
+; 
+
   !(use-nars-config-info (= immediate-eternalization True))
+; 
+
   !(use-nars-config-info (= sequence-bag-attempts 10))
+; 
+
   !(use-nars-config-info (= condition-bag-attempts 10))
+; 
+
   !(use-nars-config-info (= derivation-priority-leak 0.4))
+; 
+
   !(use-nars-config-info (= derivation-durability-leak 0.4))
+; 
+
   !(use-nars-config-info (= curiosity-desire-confidence-mul 0.1))
+; 
+
   !(use-nars-config-info (= curiosity-desire-priority-mul 0.1))
+; 
+
   !(use-nars-config-info (= curiosity-desire-durability-mul 0.3))
+; 
+
   !(use-nars-config-info (= curiosity-for-operator-only False))
+; 
+
   !(use-nars-config-info (= break-nal-hol-boundary False))
+; 
+
   !(use-nars-config-info (= question-generation-on-decision-making False))
+; 
+
   !(use-nars-config-info (= how-question-generation-on-decision-making False))
+; 
+
   !(use-nars-config-info (= anticipation-confidence 0.1))
+; 
+
   !(use-nars-config-info (= anticipation-tolerance 100.0))
+; 
+
   !(use-nars-config-info (= retrospective-anticipations False))
+; 
+
   !(use-nars-config-info (= satisfaction-treshold 0.0))
+; 
+
   !(use-nars-config-info (= complexity-unit 1.0))
+; 
+
   !(use-nars-config-info (= interval-adapt-speed 4.0))
+; 
+
   !(use-nars-config-info (= tasklink-per-content 4))
+; 
+
   !(use-nars-config-info (= default-feedback-priority 0.9))
+; 
+
   !(use-nars-config-info (= default-feedback-durability 0.5))
+; 
+
   !(use-nars-config-info (= concept-forget-durations 2.0))
+; 
+
   !(use-nars-config-info (= termlink-forget-durations 10.0))
+; 
+
   !(use-nars-config-info (= tasklink-forget-durations 4.0))
+; 
+
   !(use-nars-config-info (= event-forget-durations 4.0))
+; 
+
   !(use-nars-config-info (= variable-introduction-combinations-max 8))
+; 
+
   !(use-nars-config-info (= variable-introduction-confidence-mul 0.9))
+; 
+
   !(use-nars-config-info (= anticipations-per-concept-max 8))
+; 
+
   !(use-nars-config-info (= motor-babbling-confidence-threshold 0.8))
+; 
+
   !(use-nars-config-info (= threads-amount 1))
+; 
+
   !(use-nars-config-info (= milliseconds-per-step 0))
+; 
+
   !(use-nars-config-info (= steps-clock True))
+; 
+
   !(use-nars-config-info (= derivation-durability-leak 0.4))
+; 
+
   !(use-nars-config-info (= derivation-priority-leak 0.4))
+; 
+
 
 
   (= 
@@ -669,6 +919,8 @@
       (absolute-file-name $File $Absolute) 
       (set-det) 
       (use-nars-config $Absolute)))
+; 
+
   (= 
     (use-nars-config $Absolute) 
     ( (open $Absolute read $In) 
@@ -687,47 +939,53 @@
       (close $In) 
       (use-nars-config-info $Dom) 
       (set-det)))
+; 
+
 
  
   (= 
     (parse-config) 
     (use-nars-config (library ../config/mvpConfig.xml)))
+; 
 
 
-
-;
-;                                          This program covers the inferencerules of upto NAL-6 in
-
-;
-;                                          "Non-Axiomatic Logic: A Model of Intelligent Reasoning"
-
-;
-;                                          For the details of syntax, see the "User's Guide of NAL"
 
 
 ;
-;                                         ;; individual inferencerules
+; 
+
+;
+; 
+
+;
+; 
 
 
 ;
-;                                          There are three types of inferencerules in NAL:
+; 
+
 
 ;
-;                                          (1) "revision" merges its two premises into a conclusion;
+; 
 
 ;
-;                                          (2) "choice"nars_selects one of its two premises as a conclusion;
+; 
 
 ;
-;                                          (3) "inference" generates a conclusion from one or two premises.
+; 
+
+;
+; 
 
 
 
   (= 
     (nars_ctx  default) True)
+; 
+
 
 ;
-;                                         revision/3
+; 
 
 
   (= 
@@ -739,6 +997,8 @@
       (:: $S $T1) 
       (:: $S $T2) 
       (:: $S $T)))
+; 
+
 
 
   (= 
@@ -747,14 +1007,18 @@
       (:: $S $T2) 
       (:: $S $T)) 
     (narz-f-rev $T1 $T2 $T))
+; 
+
 
 ;
-;                                         NARS choice/3
+; 
 
 
   (= 
     (choice $X $Y $Z) 
     (nars-choice $X $Y $Z))
+; 
+
 
 
   (= 
@@ -766,6 +1030,8 @@
       (:: $S 
         (:: $F1 $C1))) 
     ( (>= $C1 $C2) (set-det)))
+; 
+
   (= 
     (nars-choice 
       (:: $S 
@@ -775,6 +1041,8 @@
       (:: $S 
         (:: $F2 $C2))) 
     ( (< $C1 $C2) (set-det)))
+; 
+
   (= 
     (nars-choice 
       (:: $S1 $T1) 
@@ -785,6 +1053,8 @@
       (narz-f-exp $T2 $E2) 
       (>= $E1 $E2) 
       (set-det)))
+; 
+
   (= 
     (nars-choice 
       (:: $S1 $T1) 
@@ -795,20 +1065,26 @@
       (narz-f-exp $T2 $E2) 
       (< $E1 $E2) 
       (set-det)))
+; 
+
 
 
 ;
-;                                         NARS infer-ence/2 (simplified version)
+; 
 
 
   (= 
     (infer $T1 $T) 
     (nars-infer $T1 $T))
+; 
+
 
 
   (= 
     (nars-infer $T1 $T) 
     ( (nars-ctx $Ctx) (nars-inference $Ctx (:: $T1 (:: 1 0.9)) $T)))
+; 
+
 
   (= 
     (nars-infer 
@@ -835,6 +1111,8 @@
     ( (narz-f-ind 
         (:: 1 0.9) 
         (:: 1 0.9) $V) (set-det)))
+; 
+
 
   (= 
     (nars-infer 
@@ -861,22 +1139,28 @@
     ( (narz-f-ind 
         (:: 1 0.9) 
         (:: 1 0.9) $V) (set-det)))
+; 
+
 
   (= 
     (nars-infer $T1 $T2 $T) 
     ( (nars-ctx $Ctx) (nars-inference $Ctx (:: $T1 (:: 1 0.9)) (:: $T2 (:: 1 0.9)) $T)))
+; 
+
 
 
 ;
-;                                         NARS inference/2
+; 
 
 
   (= 
     (inference $T1 $T) 
     ( (nars-ctx $Ctx) (nars-inference $Ctx $T1 $T)))
+; 
+
 
 ;
-;                                         ; immediate inference
+; 
 
 
 
@@ -887,6 +1171,8 @@
       (:: 
         (inheritance $P $S) $T)) 
     (narz-f-cnv $T1 $T))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -894,6 +1180,8 @@
       (:: 
         (implication $P $S) $T)) 
     (narz-f-cnv $T1 $T))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -903,6 +1191,8 @@
         (implication 
           (negation $P) $S) $T)) 
     (narz-f-cnt $T1 $T))
+; 
+
 
   (= 
     (nars-inference $Ctx 
@@ -910,6 +1200,8 @@
         (negation $S) $T1) 
       (:: $S $T)) 
     (narz-f-neg $T1 $T))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $S 
@@ -917,9 +1209,11 @@
       (:: 
         (negation $S) $T)) 
     ( (< $F1 0.5) (narz-f-neg (:: $F1 $C1) $T)))
+; 
+
 
 ;
-;                                         ; structural inference
+; 
 
 
   (= 
@@ -929,6 +1223,8 @@
     ( (narz-reduce $S1 $S) 
       (\== $S1 $S) 
       (set-det)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $S1 $T) 
@@ -936,30 +1232,38 @@
     (or 
       (nars-equivalence $Ctx $S1 $S) 
       (nars-equivalence $Ctx $S $S1)))
+; 
+
 
   (= 
     (nars-inference $Ctx $P $C) 
     ( (nars-inference $Ctx $P 
         (:: $S 
           (:: 1 1)) $C) (call $S)))
+; 
+
   (= 
     (nars-inference $Ctx $P $C) 
     ( (nars-inference $Ctx 
         (:: $S 
           (:: 1 1)) $P $C) (call $S)))
+; 
+
 
 
 ;
-;                                          inference/3
+; 
 
 
   (= 
     (inference $X $Y $Z) 
     ( (nars-ctx $Ctx) (nars-inference $Ctx $X $Y $Z)))
+; 
+
 
 
 ;
-;                                         ; inheritance-based syllogism
+; 
 
 
 
@@ -972,6 +1276,8 @@
       (:: 
         (inheritance $S $P) $T)) 
     ( (\= $S $P) (narz-f-ded $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -981,6 +1287,8 @@
       (:: 
         (inheritance $S $P) $T)) 
     ( (\= $S $P) (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -990,6 +1298,8 @@
       (:: 
         (inheritance $S $P) $T)) 
     ( (\= $S $P) (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -999,9 +1309,11 @@
       (:: 
         (inheritance $S $P) $T)) 
     ( (\= $S $P) (narz-f-exe $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; similarity from inheritance
+; 
 
 
   (= 
@@ -1013,9 +1325,11 @@
       (:: 
         (similarity $S $P) $T)) 
     (narz-f-int $T1 $T2 $T))
+; 
+
 
 ;
-;                                         ; similarity-based syllogism
+; 
 
 
   (= 
@@ -1027,6 +1341,8 @@
       (:: 
         (similarity $S $P) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1036,6 +1352,8 @@
       (:: 
         (similarity $S $P) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1045,6 +1363,8 @@
       (:: 
         (inheritance $S $P) $T)) 
     ( (\= $S $P) (narz-f-ana $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1054,6 +1374,8 @@
       (:: 
         (inheritance $P $S) $T)) 
     ( (\= $S $P) (narz-f-ana $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1063,9 +1385,11 @@
       (:: 
         (similarity $S $P) $T)) 
     ( (\= $S $P) (narz-f-res $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; inheritance-based composition
+; 
 
 
   (= 
@@ -1080,6 +1404,8 @@
       (narz-reduce 
         (int-intersection (:: $P $S)) $N) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1092,6 +1418,8 @@
       (narz-reduce 
         (ext-intersection (:: $P $S)) $N) 
       (narz-f-uni $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1104,6 +1432,8 @@
       (narz-reduce 
         (int-difference $P $S) $N) 
       (narz-f-dif $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1116,6 +1446,8 @@
       (narz-reduce 
         (ext-intersection (:: $P $S)) $N) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1128,6 +1460,8 @@
       (narz-reduce 
         (int-intersection (:: $P $S)) $N) 
       (narz-f-uni $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1140,9 +1474,11 @@
       (narz-reduce 
         (ext-difference $P $S) $N) 
       (narz-f-dif $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; inheirance-based decomposition
+; 
 
 
   (= 
@@ -1161,6 +1497,8 @@
       (narz-reduce 
         (int-intersection $N) $P) 
       (narz-f-pnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1177,6 +1515,8 @@
       (narz-reduce 
         (ext-intersection $N) $P) 
       (narz-f-npp $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1189,6 +1529,8 @@
     ( (atom $S) 
       (atom $P) 
       (narz-f-pnp $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1201,6 +1543,8 @@
     ( (atom $S) 
       (atom $P) 
       (narz-f-nnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1217,6 +1561,8 @@
       (narz-reduce 
         (ext-intersection $N) $P) 
       (narz-f-pnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1233,6 +1579,8 @@
       (narz-reduce 
         (int-intersection $N) $P) 
       (narz-f-npp $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1245,6 +1593,8 @@
     ( (atom $S) 
       (atom $P) 
       (narz-f-pnp $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1257,9 +1607,11 @@
     ( (atom $S) 
       (atom $P) 
       (narz-f-nnn $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; implication-based syllogism
+; 
 
 
   (= 
@@ -1271,6 +1623,8 @@
       (:: 
         (implication $S $P) $T)) 
     ( (\= $S $P) (narz-f-ded $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1280,6 +1634,8 @@
       (:: 
         (implication $S $P) $T)) 
     ( (\= $S $P) (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1289,6 +1645,8 @@
       (:: 
         (implication $S $P) $T)) 
     ( (\= $S $P) (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1298,9 +1656,11 @@
       (:: 
         (implication $S $P) $T)) 
     ( (\= $S $P) (narz-f-exe $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; implication to equivalence
+; 
 
 
   (= 
@@ -1312,9 +1672,11 @@
       (:: 
         (equivalence $S $P) $T)) 
     (narz-f-int $T1 $T2 $T))
+; 
+
 
 ;
-;                                         ; equivalence-based syllogism
+; 
 
 
   (= 
@@ -1326,6 +1688,8 @@
       (:: 
         (equivalence $S $P) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1335,6 +1699,8 @@
       (:: 
         (equivalence $S $P) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1344,6 +1710,8 @@
       (:: 
         (implication $S $P) $T)) 
     ( (\= $S $P) (narz-f-ana $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1353,6 +1721,8 @@
       (:: 
         (implication $P $S) $T)) 
     ( (\= $S $P) (narz-f-ana $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1362,9 +1732,11 @@
       (:: 
         (equivalence $S $P) $T)) 
     ( (\= $S $P) (narz-f-res $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; implication-based composition
+; 
 
 
   (= 
@@ -1379,6 +1751,8 @@
       (narz-reduce 
         (disjunction (:: $P $S)) $N) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1391,6 +1765,8 @@
       (narz-reduce 
         (conjunction (:: $P $S)) $N) 
       (narz-f-uni $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1403,6 +1779,8 @@
       (narz-reduce 
         (conjunction (:: $P $S)) $N) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1415,9 +1793,11 @@
       (narz-reduce 
         (disjunction (:: $P $S)) $N) 
       (narz-f-uni $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; implication-based decomposition
+; 
 
 
   (= 
@@ -1436,6 +1816,8 @@
       (narz-reduce 
         (disjunction $N) $P) 
       (narz-f-pnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1452,6 +1834,8 @@
       (narz-reduce 
         (conjunction $N) $P) 
       (narz-f-npp $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1468,6 +1852,8 @@
       (narz-reduce 
         (conjunction $N) $P) 
       (narz-f-pnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1484,9 +1870,11 @@
       (narz-reduce 
         (disjunction $N) $P) 
       (narz-f-npp $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; conditional syllogism
+; 
 
 
   (= 
@@ -1496,6 +1884,8 @@
       (:: $M $T2) 
       (:: $P $T)) 
     ( (narz-ground $P) (narz-f-ded $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1503,6 +1893,8 @@
       (:: $M $T2) 
       (:: $P $T)) 
     ( (narz-ground $P) (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $M $T1) 
@@ -1510,9 +1902,11 @@
         (equivalence $S $M) $T2) 
       (:: $S $T)) 
     ( (narz-ground $S) (narz-f-ana $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; conditional composition
+; 
 
 
   (= 
@@ -1522,6 +1916,8 @@
       (:: $C $T)) 
     ( (== $C 
         (implication $S $P)) (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $P $T1) 
@@ -1529,6 +1925,8 @@
       (:: $C $T)) 
     ( (== $C 
         (equivalence $S $P)) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $P $T1) 
@@ -1538,6 +1936,8 @@
         (conjunction (:: $P $S)) $N) 
       (== $N $C) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $P $T1) 
@@ -1547,9 +1947,11 @@
         (disjunction (:: $P $S)) $N) 
       (== $N $C) 
       (narz-f-uni $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; propositional decomposition
+; 
 
 
   (= 
@@ -1565,6 +1967,8 @@
       (narz-reduce 
         (conjunction $N) $P) 
       (narz-f-pnn $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: $S $T1) 
@@ -1578,9 +1982,11 @@
       (narz-reduce 
         (disjunction $N) $P) 
       (narz-f-npp $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; multi-conditional syllogism
+; 
 
 
   (= 
@@ -1599,6 +2005,8 @@
       (narz-reduce 
         (conjunction $A) $P) 
       (narz-f-ded $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1615,6 +2023,8 @@
       (narz-reduce 
         (conjunction $A) $P) 
       (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1625,6 +2035,8 @@
     ( (== $S 
         (implication 
           (conjunction (Cons  $M $L)) $C)) (narz-f-ind $T1 $T2 $T)))
+; 
+
 
   (= 
     (nars-inference $Ctx 
@@ -1640,6 +2052,8 @@
       (narz-reduce 
         (conjunction $La) $P) 
       (narz-f-ded $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1653,6 +2067,8 @@
     ( (nonvar $Lm) 
       (narz-replace $Lm $M $La $A) 
       (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1667,9 +2083,11 @@
       (narz-reduce 
         (conjunction $Lm) $P) 
       (narz-f-ind $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; variable introduction
+; 
 
 
   (= 
@@ -1683,6 +2101,8 @@
           (inheritance $X $S) 
           (inheritance $X $P)) $T)) 
     ( (\= $S $P) (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1694,6 +2114,8 @@
           (inheritance $P $X) 
           (inheritance $S $X)) $T)) 
     ( (\= $S $P) (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1705,6 +2127,8 @@
           (inheritance $X $S) 
           (inheritance $X $P)) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1716,6 +2140,8 @@
           (inheritance $P $X) 
           (inheritance $S $X)) $T)) 
     ( (\= $S $P) (narz-f-com $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1725,6 +2151,8 @@
       (:: 
         (conjunction (:: (inheritance (var $Y Nil) $S) (inheritance (var $Y Nil) $P))) $T)) 
     ( (\= $S $P) (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1734,9 +2162,11 @@
       (:: 
         (conjunction (:: (inheritance $S (var $Y Nil)) (inheritance $P (var $Y Nil)))) $T)) 
     ( (\= $S $P) (narz-f-int $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; 2nd variable introduction
+; 
 
 
   (= 
@@ -1755,6 +2185,8 @@
       (\= $A 
         (inheritance $M2 $S)) 
       (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1769,6 +2201,8 @@
       (\= $A 
         (inheritance $M2 $S)) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1786,6 +2220,8 @@
       (narz-dependant $P $Y $P2) 
       (narz-dependant $L2 $Y $L3) 
       (narz-f-ind $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1799,6 +2235,8 @@
       (\= $L1 $L2) 
       (\= $S $P) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
 
   (= 
     (nars-inference $Ctx 
@@ -1816,6 +2254,8 @@
       (\= $A 
         (inheritance $S $M2)) 
       (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1830,6 +2270,8 @@
       (\= $A 
         (inheritance $S $M2)) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1847,6 +2289,8 @@
       (narz-dependant $P $Y $P2) 
       (narz-dependant $L2 $Y $L3) 
       (narz-f-abd $T1 $T2 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1860,9 +2304,11 @@
       (\= $L1 $L2) 
       (\= $S $P) 
       (narz-f-int $T1 $T2 $T)))
+; 
+
 
 ;
-;                                         ; dependant variable elimination
+; 
 
 
 
@@ -1882,6 +2328,8 @@
         (conjunction $L3) $C) 
       (narz-f-cnv $T2 $T0) 
       (narz-f-ana $T1 $T0 $T)))
+; 
+
   (= 
     (nars-inference $Ctx 
       (:: 
@@ -1898,10 +2346,14 @@
         (conjunction $L3) $C) 
       (narz-f-cnv $T2 $T0) 
       (narz-f-ana $T1 $T0 $T)))
+; 
+
 
 
   (= 
     (replace_var  () $_ () $_) True)
+; 
+
   (= 
     (replace-var 
       (Cons  
@@ -1909,6 +2361,8 @@
       (Cons  
         (inheritance $S2 $P) $T2) $S2) 
     (replace-var $T1 $S1 $T2 $S2))
+; 
+
   (= 
     (replace-var 
       (Cons  
@@ -1916,26 +2370,32 @@
       (Cons  
         (inheritance $S $P2) $T2) $P2) 
     (replace-var $T1 $P1 $T2 $P2))
+; 
+
 
   (= 
     (replace-all 
       (Cons  $H $T1) $H1 
       (Cons  $H $T2) $H2) 
     (replace-var $T1 $H1 $T2 $H2))
+; 
 
 
-
-;
-;                                         ;; Theorems in IL:
 
 
 ;
-;                                         NARS inheritance/2
+; 
+
+
+;
+; 
 
 
   (= 
     (inheritance $X $Y) 
     ( (nars-ctx $Ctx) (nars-inheritance $Ctx $X $Y)))
+; 
+
 
 
   (= 
@@ -1943,40 +2403,56 @@
       (ext-intersection $Ls) $P) 
     (narz-include 
       (:: $P) $Ls))
+; 
+
   (= 
     (nars-inheritance $Ctx $S 
       (int-intersection $Lp)) 
     (narz-include 
       (:: $S) $Lp))
+; 
+
   (= 
     (nars-inheritance $Ctx 
       (ext-intersection $S) 
       (ext-intersection $P)) 
     ( (narz-include $P $S) (\= $P (:: $_))))
+; 
+
   (= 
     (nars-inheritance $Ctx 
       (int-intersection $S) 
       (int-intersection $P)) 
     ( (narz-include $S $P) (\= $S (:: $_))))
+; 
+
   (= 
     (nars-inheritance $Ctx 
       (ext-set $S) 
       (ext-set $P)) 
     (narz-include $S $P))
+; 
+
   (= 
     (nars-inheritance $Ctx 
       (int-set $S) 
       (int-set $P)) 
     (narz-include $P $S))
+; 
+
 
   (= 
     (nars-inheritance $Ctx 
       (ext-difference $S $P) $S) 
     ( (narz-ground $S) (narz-ground $P)))
+; 
+
   (= 
     (nars-inheritance $Ctx $S 
       (int-difference $S $P)) 
     ( (narz-ground $S) (narz-ground $P)))
+; 
+
 
   (= 
     (nars-inheritance $Ctx 
@@ -1986,6 +2462,8 @@
         (ext-image $R $L2) $L1) 
       (narz-replace $L1 
         (ext-image $R $L2) $L2)))
+; 
+
   (= 
     (nars-inheritance $Ctx $R 
       (product $L1)) 
@@ -1994,14 +2472,18 @@
         (int-image $R $L2) $L1) 
       (narz-replace $L1 
         (int-image $R $L2) $L2)))
+; 
+
 
 ;
-;                                         NARS similarity/2
+; 
 
 
   (= 
     (similarity $X $Y) 
     ( (nars-ctx $Ctx) (nars-similarity $Ctx $X $Y)))
+; 
+
 
 
   (= 
@@ -2010,54 +2492,74 @@
       (narz-reduce $X $Y) 
       (\== $X $Y) 
       (set-det)))
+; 
+
 
   (= 
     (nars-similarity $Ctx 
       (ext-intersection $L1) 
       (ext-intersection $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
   (= 
     (nars-similarity $Ctx 
       (int-intersection $L1) 
       (int-intersection $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
   (= 
     (nars-similarity $Ctx 
       (ext-set $L1) 
       (ext-set $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
   (= 
     (nars-similarity $Ctx 
       (int-set $L1) 
       (int-set $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
 
 ;
-;                                         NARS implication/2
+; 
 
 
   (= 
     (implication $X $Y) 
     ( (nars-ctx $Ctx) (nars-implication $Ctx $X $Y)))
+; 
+
 
 
   (= 
     (nars_implication  $Ctx 
       (similarity  $S $P) 
       (inheritance  $S $P)) True)
+; 
+
   (= 
     (nars_implication  $Ctx 
       (equivalence  $S $P) 
       (implication  $S $P)) True)
+; 
+
 
   (= 
     (nars-implication $Ctx 
       (conjunction $L) $M) 
     ( (narz-ground $L) (member $M $L)))
+; 
+
   (= 
     (nars-implication $Ctx $M 
       (disjunction $L)) 
     ( (narz-ground $L) (member $M $L)))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2066,6 +2568,8 @@
     ( (narz-ground $L1) 
       (narz-ground $L2) 
       (subset $L2 $L1)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (disjunction $L1) 
@@ -2073,6 +2577,8 @@
     ( (narz-ground $L1) 
       (narz-ground $L2) 
       (subset $L1 $L2)))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2084,6 +2590,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2094,6 +2602,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2104,6 +2614,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2114,6 +2626,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2122,6 +2636,8 @@
         (ext-difference $S $M) 
         (ext-difference $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2129,6 +2645,8 @@
         (int-difference $S $M) 
         (int-difference $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2136,6 +2654,8 @@
         (ext-difference $S $M) 
         (ext-difference $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2143,6 +2663,8 @@
         (int-difference $S $M) 
         (int-difference $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2150,6 +2672,8 @@
         (ext-difference $M $P) 
         (ext-difference $M $S))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2157,6 +2681,8 @@
         (int-difference $M $P) 
         (int-difference $M $S))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2164,6 +2690,8 @@
         (ext-difference $M $P) 
         (ext-difference $M $S))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (similarity $S $P) 
@@ -2171,29 +2699,39 @@
         (int-difference $M $P) 
         (int-difference $M $S))) 
     (narz-ground $M))
+; 
+
 
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
       (negation (inheritance $S (ext-difference $M $P)))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S 
         (ext-difference $M $P)) 
       (negation (inheritance $S $P))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
       (negation (inheritance (int-difference $M $S) $P))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance 
         (int-difference $M $S) $P) 
       (negation (inheritance $S $P))) 
     (narz-ground $M))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2202,6 +2740,8 @@
         (ext-image $S $M) 
         (ext-image $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2209,6 +2749,8 @@
         (int-image $S $M) 
         (int-image $P $M))) 
     (narz-ground $M))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2221,6 +2763,8 @@
         (Cons  $S $L2) $Ls) 
       (append $L1 
         (Cons  $P $L2) $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (inheritance $S $P) 
@@ -2233,6 +2777,8 @@
         (Cons  $S $L2) $Ls) 
       (append $L1 
         (Cons  $P $L2) $Lp)))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2240,12 +2786,16 @@
       (negation (conjunction $L))) 
     (narz-include 
       (:: $M) $L))
+; 
+
   (= 
     (nars-implication $Ctx 
       (negation (disjunction $L)) 
       (negation $M)) 
     (narz-include 
       (:: $M) $L))
+; 
+
 
   (= 
     (nars-implication $Ctx 
@@ -2257,6 +2807,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (implication $S $P) 
@@ -2267,6 +2819,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (equivalence $S $P) 
@@ -2277,6 +2831,8 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
   (= 
     (nars-implication $Ctx 
       (equivalence $S $P) 
@@ -2287,15 +2843,19 @@
       (narz-ground $Lp) 
       (narz-replace $Ls $S $L $P) 
       (narz-same $L $Lp)))
+; 
+
 
 
 ;
-;                                         NARS equivalence/2
+; 
 
 
   (= 
     (equivalence $X $Y) 
     ( (nars-ctx $Ctx) (nars-equivalence $Ctx $X $Y)))
+; 
+
 
 
   (= 
@@ -2304,11 +2864,15 @@
       (narz-reduce $X $Y) 
       (\== $X $Y) 
       (set-det)))
+; 
+
 
   (= 
     (nars_equivalence  $Ctx 
       (similarity  $S $P) 
       (similarity  $P $S)) True)
+; 
+
 
   (= 
     (nars_equivalence  $Ctx 
@@ -2318,6 +2882,8 @@
       (similarity  $S 
         (ext_set  
           ($P)))) True)
+; 
+
   (= 
     (nars_equivalence  $Ctx 
       (inheritance  
@@ -2326,6 +2892,8 @@
       (similarity  
         (int_set  
           ($S)) $P)) True)
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
@@ -2335,6 +2903,8 @@
     (findall 
       (nars-inheritance $Ctx $S $P) 
       (member $P $Lp) $L))
+; 
+
   (= 
     (nars-equivalence $Ctx 
       (inheritance 
@@ -2343,6 +2913,8 @@
     (findall 
       (nars-inheritance $Ctx $S $P) 
       (member $S $Ls) $L))
+; 
+
 
   (= 
     (nars_equivalence  $Ctx 
@@ -2350,12 +2922,16 @@
         (ext_difference  $P1 $P2)) 
       (conjunction  
         ( (inheritance  $S $P1) (negation  (inheritance  $S $P2))))) True)
+; 
+
   (= 
     (nars_equivalence  $Ctx 
       (inheritance  
         (int_difference  $S1 $S2) $P) 
       (conjunction  
         ( (inheritance  $S1 $P) (negation  (inheritance  $S2 $P))))) True)
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
@@ -2364,6 +2940,8 @@
         (product $Lp)) 
       (conjunction $L)) 
     (equ-product $Ls $Lp $L))
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
@@ -2372,6 +2950,8 @@
         (product (Cons  $P $L))) 
       (inheritance $S $P)) 
     (narz-ground $L))
+; 
+
   (= 
     (nars-equivalence $Ctx 
       (inheritance $S $P) 
@@ -2379,6 +2959,8 @@
         (product (Cons  $H $Ls)) 
         (product (Cons  $H $Lp)))) 
     ( (narz-ground $H) (nars-equivalence $Ctx (inheritance (product $Ls) (product $Lp)) (inheritance $S $P))))
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
@@ -2387,6 +2969,8 @@
       (inheritance $T 
         (ext-image $R $L1))) 
     (narz-replace $L $T $L1))
+; 
+
   (= 
     (nars-equivalence $Ctx 
       (inheritance $R 
@@ -2394,11 +2978,15 @@
       (inheritance 
         (int-image $R $L1) $T)) 
     (narz-replace $L $T $L1))
+; 
+
 
   (= 
     (nars_equivalence  $Ctx 
       (equivalence  $S $P) 
       (equivalence  $P $S)) True)
+; 
+
 
   (= 
     (nars_equivalence  $Ctx 
@@ -2406,17 +2994,23 @@
         (negation  $S) $P) 
       (equivalence  
         (negation  $P) $S)) True)
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
       (conjunction $L1) 
       (conjunction $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
   (= 
     (nars-equivalence $Ctx 
       (disjunction $L1) 
       (disjunction $L2)) 
     (narz-same-set $L1 $L2))
+; 
+
 
   (= 
     (nars-equivalence $Ctx 
@@ -2426,6 +3020,8 @@
     (findall 
       (nars-implication $Ctx $S $P) 
       (member $P $Lp) $L))
+; 
+
   (= 
     (nars-equivalence $Ctx 
       (implication 
@@ -2434,6 +3030,8 @@
     (findall 
       (nars-implication $Ctx $S $P) 
       (member $S $Ls) $L))
+; 
+
 
   (= 
     (nars-equivalence $Ctx $T1 $T2) 
@@ -2444,28 +3042,38 @@
       (=.. $T1 $L1) 
       (=.. $T2 $L2) 
       (nars-equivalence-list $Ctx $L1 $L2)))
+; 
+
 
 
   (= 
     (nars_equivalence_list  $Ctx $L $L) True)
+; 
+
   (= 
     (nars-equivalence-list $Ctx 
       (Cons  $H $L1) 
       (Cons  $H $L2)) 
     (nars-equivalence-list $Ctx $L1 $L2))
+; 
+
   (= 
     (nars-equivalence-list $Ctx 
       (Cons  $H1 $L1) 
       (Cons  $H2 $L2)) 
     ( (nars-similarity $Ctx $H1 $H2) (nars-equivalence-list $Ctx $L1 $L2)))
+; 
+
   (= 
     (nars-equivalence-list $Ctx 
       (Cons  $H1 $L1) 
       (Cons  $H2 $L2)) 
     ( (nars-equivalence $Ctx $H1 $H2) (nars-equivalence-list $Ctx $L1 $L2)))
+; 
+
 
 ;
-;                                          compound termnars_structurereduction
+; 
 
 
 
@@ -2476,6 +3084,8 @@
         (ext-set (:: $P))) 
       (similarity $S $P)) 
     (set-det))
+; 
+
   (= 
     (narz-reduce 
       (similarity 
@@ -2483,6 +3093,8 @@
         (int-set (:: $P))) 
       (similarity $S $P)) 
     (set-det))
+; 
+
 
   (= 
     (narz-reduce 
@@ -2490,12 +3102,16 @@
       (inheritance 
         (ext-set (:: $S)) $P)) 
     (set-det))
+; 
+
   (= 
     (narz-reduce 
       (property $S $P) 
       (inheritance $S 
         (int-set (:: $P)))) 
     (set-det))
+; 
+
   (= 
     (narz-reduce 
       (inst-prop $S $P) 
@@ -2503,71 +3119,97 @@
         (ext-set (:: $S)) 
         (int-set (:: $P)))) 
     (set-det))
+; 
+
 
   (= 
     (narz-reduce 
       (ext-intersection (:: $T)) $T) 
     (set-det))
+; 
+
   (= 
     (narz-reduce 
       (int-intersection (:: $T)) $T) 
     (set-det))
+; 
+
 
   (= 
     (narz-reduce 
       (ext-intersection (:: (ext-intersection $L1) (ext-intersection $L2))) 
       (ext-intersection $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (ext-intersection (:: (ext-intersection $L1) $L2)) 
       (ext-intersection $L)) 
     ( (nars-union $L1 
         (:: $L2) $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (ext-intersection (:: $L1 (ext-intersection $L2))) 
       (ext-intersection $L)) 
     ( (nars-union 
         (:: $L1) $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (ext-intersection (:: (ext-set $L1) (ext-set $L2))) 
       (ext-set $L)) 
     ( (intersection $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (ext-intersection (:: (int-set $L1) (int-set $L2))) 
       (int-set $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
       (int-intersection (:: (int-intersection $L1) (int-intersection $L2))) 
       (int-intersection $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-intersection (:: (int-intersection $L1) $L2)) 
       (int-intersection $L)) 
     ( (nars-union $L1 
         (:: $L2) $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-intersection (:: $L1 (int-intersection $L2))) 
       (int-intersection $L)) 
     ( (nars-union 
         (:: $L1) $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-intersection (:: (int-set $L1) (int-set $L2))) 
       (int-set $L)) 
     ( (intersection $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-intersection (:: (ext-set $L1) (ext-set $L2))) 
       (ext-set $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
@@ -2576,6 +3218,8 @@
         (ext-set $L2)) 
       (ext-set $L)) 
     ( (nars-subtract $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-difference 
@@ -2583,6 +3227,8 @@
         (int-set $L2)) 
       (int-set $L)) 
     ( (nars-subtract $L1 $L2 $L) (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
@@ -2591,6 +3237,8 @@
       (product $L1)) 
     ( (append $L 
         (:: $T) $L1) (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
@@ -2599,6 +3247,8 @@
     ( (member $T1 $L1) 
       (narz-replace $L1 $T1 $L2) 
       (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (int-image 
@@ -2606,38 +3256,52 @@
     ( (member $T1 $L1) 
       (narz-replace $L1 $T1 $L2) 
       (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
       (negation (negation $S)) $S) 
     (set-det))
+; 
+
 
   (= 
     (narz-reduce 
       (conjunction (:: $T)) $T) 
     (set-det))
+; 
+
   (= 
     (narz-reduce 
       (disjunction (:: $T)) $T) 
     (set-det))
+; 
+
 
   (= 
     (narz-reduce 
       (conjunction (:: (conjunction $L1) (conjunction $L2))) 
       (conjunction $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (conjunction (:: (conjunction $L1) $L2)) 
       (conjunction $L)) 
     ( (nars-union $L1 
         (:: $L2) $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (conjunction (:: $L1 (conjunction $L2))) 
       (conjunction $L)) 
     ( (nars-union 
         (:: $L1) $L2 $L) (set-det)))
+; 
+
 
   (= 
     (narz-reduce 
@@ -2646,6 +3310,8 @@
         (disjunction $L2)) 
       (disjunction $L)) 
     ( (nars-union $L1 $L2 $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (disjunction 
@@ -2653,6 +3319,8 @@
       (disjunction $L)) 
     ( (nars-union $L1 
         (:: $L2) $L) (set-det)))
+; 
+
   (= 
     (narz-reduce 
       (disjunction $L1 
@@ -2660,40 +3328,52 @@
       (disjunction $L)) 
     ( (nars-union 
         (:: $L1) $L2 $L) (set-det)))
+; 
+
 
   (= 
     (narz_reduce  $X $X) True)
+; 
+
 
 
 ;
-;                                         nars_union(X,Y,Z):- (nonvar(X);nonvar(Z)), catch(union(X,Y,Z),_,fail).
+; 
 
 
   (= 
     (nars-union $X $Y $Z) 
     (catch 
       (union $X $Y $Z) $_ fail))
+; 
+
 ;
-;                                         nars_subtract(X,Y,Z):- (nonvar(X);nonvar(Z)), catch(subtract(X,Y,Z),_,fail).
+; 
 
 
   (= 
     (nars-subtract $X $Y $Z) 
     (catch 
       (subtract $X $Y $Z) $_ fail))
+; 
+
 
 ;
-;                                         ;; Argument processing
+; 
 
 
 
   (= 
     (equ_product  () () ()) True)
+; 
+
   (= 
     (equ-product 
       (Cons  $T $Ls) 
       (Cons  $T $Lp) $L) 
     ( (equ-product $Ls $Lp $L) (set-det)))
+; 
+
   (= 
     (equ-product 
       (Cons  $S $Ls) 
@@ -2701,6 +3381,8 @@
       (Cons  
         (inheritance $S $P) $L)) 
     (equ-product $Ls $Lp $L))
+; 
+
 
 
   (= 
@@ -2710,10 +3392,14 @@
         (:: $_)) 
       (narz-same $L1 $L2) 
       (\== $L1 $L2)))
+; 
+
 
 
   (= 
     (narz_same  () ()) True)
+; 
+
   (= 
     (narz-same $L 
       (Cons  $H $T)) 
@@ -2721,6 +3407,8 @@
       (nars-subtract $L 
         (:: $H) $L1) 
       (narz-same $L1 $T)))
+; 
+
 
 
   (= 
@@ -2729,28 +3417,40 @@
       (include1 $L1 $L2) 
       (\== $L1 Nil) 
       (\== $L1 $L2)))
+; 
+
 
  
   (= 
     (include1  () $_) True)
+; 
+
   (= 
     (include1 
       (Cons  $H $T1) 
       (Cons  $H $T2)) 
     (include1 $T1 $T2))
+; 
+
   (= 
     (include1 
       (Cons  $H1 $T1) 
       (Cons  $H2 $T2)) 
     ( (\== $H2 $H1) (include1 (Cons  $H1 $T1) $T2)))
+; 
+
 
 
   (= 
     (narz_not_member  $_ ()) True)
+; 
+
   (= 
     (narz-not-member $C 
       (Cons  $C $_)) 
     ( (set-det) (fail)))
+; 
+
   (= 
     (narz-not-member 
       (:: $S $T) 
@@ -2759,31 +3459,43 @@
     ( (nars-equivalence $Ctx $S $S1) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (narz-not-member $C 
       (Cons  $_ $L)) 
     (narz-not-member $C $L))
+; 
+
 
 
   (= 
     (narz_replace  
       (Cons  $T $L) $T 
       (Cons  nil $L)) True)
+; 
+
   (= 
     (narz-replace 
       (Cons  $H $L) $T 
       (Cons  $H $L1)) 
     (narz-replace $L $T $L1))
+; 
+
 
   (= 
     (narz_replace  
       (Cons  $H1 $T) $H1 
       (Cons  $H2 $T) $H2) True)
+; 
+
   (= 
     (narz-replace 
       (Cons  $H $T1) $H1 
       (Cons  $H $T2) $H2) 
     (narz-replace $T1 $H1 $T2 $H2))
+; 
+
 
 
   (= 
@@ -2792,6 +3504,8 @@
       (var $V 
         (Cons  $Y $L))) 
     (set-det))
+; 
+
   (= 
     (narz-dependant 
       (Cons  $H $T) $Y 
@@ -2799,6 +3513,8 @@
     ( (narz-dependant $H $Y $H1) 
       (narz-dependant $T $Y $T1) 
       (set-det)))
+; 
+
   (= 
     (narz-dependant 
       (inheritance $S $P) $Y 
@@ -2806,22 +3522,30 @@
     ( (narz-dependant $S $Y $S1) 
       (narz-dependant $P $Y $P1) 
       (set-det)))
+; 
+
   (= 
     (narz-dependant 
       (ext-image $R $A) $Y 
       (ext-image $R $A1)) 
     ( (narz-dependant $A $Y $A1) (set-det)))
+; 
+
   (= 
     (narz-dependant 
       (int-image $R $A) $Y 
       (int-image $R $A1)) 
     ( (narz-dependant $A $Y $A1) (set-det)))
+; 
+
   (= 
     (narz_dependant  $X $_ $X) True)
+; 
+
 
 
 ;
-;                                         ;; Truth-value functions
+; 
 
 
 
@@ -2849,6 +3573,8 @@
           (+ $M1 $M2) 
           (+ 
             (+ $M1 $M2) 1)))))
+; 
+
 
 
   (= 
@@ -2858,6 +3584,8 @@
       (+ 
         (* $C 
           (- $F 0.5)) 0.5)))
+; 
+
 
 
   (= 
@@ -2865,6 +3593,8 @@
       (:: $F1 $C1) 
       (:: $F $C1)) 
     (u-not $F1 $F))
+; 
+
 
 
   (= 
@@ -2873,6 +3603,8 @@
       (:: 1 $C)) 
     ( (u-and 
         (:: $F1 $C1) $W) (u-w2c $W $C)))
+; 
+
 
 
   (= 
@@ -2883,6 +3615,8 @@
       (u-and 
         (:: $F0 $C1) $W) 
       (u-w2c $W $C)))
+; 
+
 
 
   (= 
@@ -2892,6 +3626,8 @@
       (:: $F $C)) 
     ( (u-and 
         (:: $F1 $F2) $F) (u-and (:: $C1 $C2 $F) $C)))
+; 
+
 
 
   (= 
@@ -2901,6 +3637,8 @@
       (:: $F $C)) 
     ( (u-and 
         (:: $F1 $F2) $F) (u-and (:: $C1 $C2 $F2) $C)))
+; 
+
 
 
   (= 
@@ -2914,6 +3652,8 @@
         (:: $F1 $F2) $F0) 
       (u-and 
         (:: $C1 $C2 $F0) $C)))
+; 
+
 
 
   (= 
@@ -2923,11 +3663,15 @@
       (:: $F2 $C)) 
     ( (u-and 
         (:: $F1 $C1 $C2) $W) (u-w2c $W $C)))
+; 
+
 
 
   (= 
     (narz-f-ind $T1 $T2 $T) 
     (narz-f-abd $T2 $T1 $T))
+; 
+
 
 
   (= 
@@ -2937,6 +3681,8 @@
       (:: 1 $C)) 
     ( (u-and 
         (:: $F1 $C1 $F2 $C2) $W) (u-w2c $W $C)))
+; 
+
 
 
   (= 
@@ -2944,6 +3690,8 @@
       (0 $C1) 
       (0 $C2) 
       (0 0)) True)
+; 
+
   (= 
     (narz-f-com 
       (:: $F1 $C1) 
@@ -2958,6 +3706,8 @@
       (u-and 
         (:: $F0 $C1 $C2) $W) 
       (u-w2c $W $C)))
+; 
+
 
 
   (= 
@@ -2967,6 +3717,8 @@
       (:: $F $C)) 
     ( (u-and 
         (:: $F1 $F2) $F) (u-and (:: $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -2976,6 +3728,8 @@
       (:: $F $C)) 
     ( (u-or 
         (:: $F1 $F2) $F) (u-and (:: $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -2988,6 +3742,8 @@
         (:: $F1 $F0) $F) 
       (u-and 
         (:: $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -3001,6 +3757,8 @@
       (u-not $Fn $F) 
       (u-and 
         (:: $Fn $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -3013,6 +3771,8 @@
         (:: $F1n $F2) $F) 
       (u-and 
         (:: $F $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -3025,6 +3785,8 @@
         (:: $F1 $F2n) $F) 
       (u-and 
         (:: $F $C1 $C2) $C)))
+; 
+
 
 
   (= 
@@ -3039,9 +3801,11 @@
       (u-not $Fn $F) 
       (u-and 
         (:: $Fn $C1 $C2) $C)))
+; 
+
 
 ;
-;                                          Utility functions
+; 
 
 
 
@@ -3049,11 +3813,15 @@
     (u-not $N0 $N) 
     ( (is $N 
         (- 1 $N0)) (set-det)))
+; 
+
 
 
   (= 
     (u_and  
       ($N) $N) True)
+; 
+
   (= 
     (u-and 
       (Cons  $N0 $Nt) $N) 
@@ -3061,11 +3829,15 @@
       (is $N 
         (* $N0 $N1)) 
       (set-det)))
+; 
+
 
 
   (= 
     (u_or  
       ($N) $N) True)
+; 
+
   (= 
     (u-or 
       (Cons  $N0 $Nt) $N) 
@@ -3075,6 +3847,8 @@
           (+ $N0 $N1) 
           (* $N0 $N1))) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -3084,28 +3858,34 @@
         (/ $W 
           (+ $W $K))) 
       (set-det)))
+; 
 
 
 
 
-
-;
-;                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;
-;                                         memory.pl
 
 
 ;
-;                                         11.1.2 State accumulation using engines - https://www.swi-MeTTa.org/pldoc/man?section=engine-state
+; 
+
+;
+; 
+
+
+;
+; 
 
 
   !(use-module (library heaps))
+; 
+
 
 
   (= 
     (create-heap $E) 
     ( (empty-heap $H) (engine-create $_ (update-heap $H) $E)))
+; 
+
 
   (= 
     (update-heap $H) 
@@ -3117,22 +3897,30 @@
           (= $Reply False))) 
       (engine-yield $Reply) 
       (update-heap $H1)))
+; 
+
 
   (= 
     (update-heap 
       (add $Priority $Key) True $H0 $H) 
     (add-to-heap $H0 $Priority $Key $H))
+; 
+
   (= 
     (update-heap 
       (get $Priority $Key) 
       (- $Priority $Key) $H0 $H) 
     (get-from-heap $H0 $Priority $Key $H))
+; 
+
 
 
   (= 
     (heap-add $Priority $Key $E) 
     (engine-post $E 
       (add $Priority $Key) True))
+; 
+
 
 
   (= 
@@ -3140,12 +3928,14 @@
     (engine-post $E 
       (get $Priority $Key) 
       (- $Priority $Key)))
+; 
+
 
 ;
-;                                         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 
 
 ;
-;                                         control.pl
+; 
 
 
 
@@ -3155,16 +3945,22 @@
         (:: $F $C)) $P) 
     ( (narz-f-exp 
         (:: $F $C) $E) (is $P $E)))
+; 
+
 
 
   (= 
     (input-event $Event) 
     (heap-add 1.0 $Event belief-events-queue))
+; 
+
 
 
   (= 
     (derive-event $Event) 
     ( (priority $Event $P) (heap-add $P $Event belief-events-queue)))
+; 
+
 
 
   (= 
@@ -3178,60 +3974,73 @@
         (derive-event $Conclusion) 
         (write $Conclusion) 
         (nl)) True))
-;                                         ;undo removal of the second premise (TODO)
-
+; 
 
 
 
   (= 
     (nars-main) 
     ( (create-heap belief-events-queue) (nars-main 1)))
+; 
+
   (= 
     (nars-main $T) 
     ( (read-nal $X) (or (, (= $X 1) (write "performing 1 inference steps:") (nl) (inference-step $T) (write "done with 1 additional inference steps.") (nl) (nars-main (+ $T 1))) (, (\= $X 1) (write "Input: ") (write $X) (nl) (input-event $X) (nars-main (+ $T 1))))))
+; 
+
 
 ;
-;                                          read_nal(X):- read(X).
+; 
 
 
   (= 
     (read-nal $X) 
     (nal-read-clause current-input $X))
+; 
+
 
 
   !(if (prolog-load-context reload False))
+; 
+
   !(create-heap belief-events-queue)
-  !(endif)
+; 
+
+  !(endif *)
+; 
+
 
 ;
-;                                         test:
+; 
 
 ;
-;                                         nars_main.
+; 
 
 ;
-;                                         [inheritance(cat,animal), [1.0, 0.9]].
+; 
 
 ;
-;                                         [inheritance(animal,being), [1.0, 0.9]].
+; 
 
 ;
-;                                         1.
+; 
 
 ;
-;                                         output:
+; 
 
 ;
-;                                         performing 1 inference steps:
+; 
 
 ;
-;                                         [inheritance(cat,being),[1.0,0.81]]
+; 
 
 ;
-;                                         done with 1 additional inference steps.
+; 
 
 
 
-  !(fixup-exports)
+  !(fixup-exports *)
+; 
+
 
 

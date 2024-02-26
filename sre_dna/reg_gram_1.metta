@@ -3,51 +3,53 @@
     (?-  
       (dynamic  
         (/  testset 2))) True)
+; 
 
-;
-;                                 Experiment: evolve a SRE to conform with this stoch. regular grammar
-
-;
-;                                 (from Carrasco & Forcado 96)
 
 ;
 ; 
 
 ;
-;                                   S -> a S  (0.2)
-
-;
-;                                    S -> b A  (0.8)
-
-;
-;                                    A -> a B  (0.7)
-
-;
-;                                    A -> b S  (0.3)
-
-;
-;                                    B -> a A  (0.4)
-
-;
-;                                    B -> b B  (0.1)
-
-;
-;                                     B -> []   (0.5)
+; 
 
 ;
 ; 
 
 ;
-;                                   Fitness:
+; 
 
 ;
-;                                   - Mine expression K times, and compare distribution with test set.
+; 
 
 ;
-;                                   - maximum string length enforced
+; 
 
 ;
-;                                    - chi-square 2-bin test to compare distributions
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -60,16 +62,15 @@
       (tabulate-set $MineSet 0 $_ $MineSet2) 
       (chisquare-b $MineSet2 $TestSet $Size 0.0 $Fitness) 
       (set-det)))
-;                                    ;sre_mintestcnt_P(MC), ; new
-
-;                                     ; chisquare_2bins(MineSet2, TestSet, 0.0, Fitness),
-
+; 
 
 
 
   (= 
     (mine $_ 0 Nil) 
     (set-det))
+; 
+
   (= 
     (mine $Expr $K 
       (Cons  $String $Rest)) 
@@ -79,11 +80,15 @@
         (- $K 1)) 
       (mine $Expr $K2 $Rest) 
       (set-det)))
+; 
+
 
 
   (= 
     (normalize $_ Nil Nil) 
     (set-det))
+; 
+
   (= 
     (normalize $Size 
       (Cons  
@@ -94,11 +99,15 @@
         (/ $C $Size)) 
       (normalize $Size $R $R2) 
       (set-det)))
+; 
+
 
 
   (= 
     (chisquare-b $_ Nil $_ $Fit $Fit) 
     (set-det))
+; 
+
   (= 
     (chisquare-b $MineSet 
       (Cons  
@@ -115,6 +124,8 @@
             (* $T $T) $X))) 
       (chisquare-b $MineSet2 $Rest $Sum $Fit2 $Fitness) 
       (set-det)))
+; 
+
   (= 
     (chisquare-b $MineSet 
       (Cons  
@@ -124,22 +135,30 @@
           (* $Prob $Sum))) 
       (chisquare-b $MineSet $Rest $Sum $Fit2 $Fitness) 
       (set-det)))
+; 
+
 
 
   (= 
     (member-remove $X 
       (Cons  $X $Y) $Y) 
     (set-det))
+; 
+
   (= 
     (member-remove $X 
       (Cons  $Y $Z) 
       (Cons  $Y $W)) 
     (member-remove $X $Z $W))
+; 
+
 
 
   (= 
     (count-and-remove $_ Nil Nil 0) 
     (set-det))
+; 
+
   (= 
     (count-and-remove $A 
       (Cons  $A $R) $S $Count) 
@@ -147,37 +166,42 @@
       (count-and-remove $A $R $S $Count2) 
       (is $Count 
         (+ $Count2 1))))
+; 
+
   (= 
     (count-and-remove $A 
       (Cons  $B $R) 
       (Cons  $B $S) $Count) 
     ( (set-det) (count-and-remove $A $R $S $Count)))
+; 
+
 
 ;
-;                                          This should be called once per GP generation.
+; 
 
 
 
   (= 
     (generate-testset) 
     ( (or 
-        (remove-atom  &self 
+        (remove-symbol  &self 
           (testset  $_ $_)) True) 
       (gen-set-size-P $Size) 
       (gen-set $Size $S) 
       (sre-mintestcnt-P $MC) 
       (tabulate-set $S $MC $Sum $T) 
       (normalize $Sum $T $T2) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (testset  $Sum $T2)) 
       (set-det)))
-;                                         ; was 250
-
+; 
 
 
 
   (= 
     (gen_set  0 ()) True)
+; 
+
   (= 
     (gen-set $K 
       (Cons  $S $R)) 
@@ -189,48 +213,66 @@
         (- $K 1)) 
       (set-det) 
       (gen-set $K2 $R)))
+; 
+
 
 
   (= 
     (gen-string $NonTerm $Len $Max $String) 
     ( (=< $Len $Max) (det-if-then-else (production $NonTerm $Out $NextNonTerm) (, (is $Len2 (+ $Len 1)) (gen-string $NextNonTerm $Len2 $Max $R) (= $String (Cons  $Out $R))) (= $String Nil))))
+; 
+
 
 
 ;
-;                                          production(NonTerm, Output, NextNonTerm).
+; 
 
 
 
   (= 
     (production s a s) 
     (maybe 0.2))
+; 
+
   (= 
     (production  s b a) True)
+; 
+
   (= 
     (production a a b) 
     (maybe 0.7))
+; 
+
   (= 
     (production  a b s) True)
+; 
+
   (= 
     (production b a a) 
     (maybe 0.4))
+; 
+
   (= 
     (production b b b) 
     (maybe 0.167))
+; 
+
 
 ;
-;                                          pre-filter and count test set, rather than repeatedly process
+; 
 
 ;
-;                                          it during fitness evaluation of population. User can specify minimum
+; 
 
 ;
-;                                          count for processing.
+; 
 
 
 
   (= 
     (tabulate_set  () $_ 0 ()) True)
+; 
+
   (= 
     (tabulate-set 
       (Cons  $A $R) $Min $Sum 
@@ -244,14 +286,22 @@
       (tabulate-set $R2 $Min $Sum2 $S) 
       (is $Sum 
         (+ $Sum2 $C2))))
+; 
+
   (= 
     (tabulate-set 
       (Cons  $_ $R) $Min $Sum $S) 
     ( (set-det) (tabulate-set $R $Min $Sum $S)))
+; 
+
 
 
   !(multifile (/ chisquare 4))
+; 
+
   !(dynamic (/ chisquare 4))
+; 
+
 
   (= 
     (temp-test $Fitness) 
@@ -275,20 +325,14 @@
       (sre-pp $Expr1) 
       (write 'Expr 2:') 
       (sre-pp $Expr2)))
+; 
+
 
 
   (= 
     (chisquare-2bins Nil Nil $Fit $Fit) 
     (set-det))
-;                                         /*
-;                                         test_chi(F) :-
-;                                         	generate_testset,
-;                                         	testset(_,A),
-;                                         	generate_testset,
-;                                         	testset(_,B),
-;                                         	chisquare(A,B,0,F).
-;                                         */
-
+; 
 
   (= 
     (chisquare-2bins 
@@ -298,6 +342,8 @@
         (+ $FitSoFar $Count)) 
       (chisquare-2bins $Rest Nil $Fit2 $Fit) 
       (set-det)))
+; 
+
   (= 
     (chisquare-2bins $MineSet 
       (Cons  
@@ -313,6 +359,8 @@
             (+ $Count $Count2)))) 
       (chisquare-2bins $MineSet2 $Rest $Fit2 $Fitness) 
       (set-det)))
+; 
+
   (= 
     (chisquare-2bins $MineSet 
       (Cons  
@@ -321,5 +369,7 @@
         (+ $FitSoFar $Count)) 
       (chisquare-2bins $MineSet $Rest $Fit2 $Fitness) 
       (set-det)))
+; 
+
 
 

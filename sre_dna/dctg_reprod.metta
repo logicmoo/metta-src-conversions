@@ -1,64 +1,64 @@
 
 ;
-;                              DCTG based GP reproduction operators: crossover & mutation
+; 
 
 ;
-;                              Brian Ross
+; 
 
 ;
-;                              January 25, 1999
+; 
 
 
 ;
-;                               crossover(Parent1, Parent2, Child1, Child2):
+; 
 
 ;
-;                              	Parent1, Parent2 - parent trees to reproduce
+; 
 
 ;
-;                              	Child1, Child2 - resulting children
+; 
 
 ;
-;                               Performs grammar tree expression crossover on two parents.
+; 
 
 ;
-;                                If internal crossover probability set, then nodes of the specified type
+; 
 
 ;
-;                                are selected; else all nodes initially counted.
+; 
 
 ;
-;                                The rules for crossover are:
+; 
 
 ;
-;                               	- only nodes of same rule name from each parent are crossed
+; 
 
 ;
-;                               	- crossover is attempted a max N number of times until successful
+; 
 
 ;
-;                                	  (user-specified parameter)
+; 
 
 ;
-;                                 	- an attempt fails if the offspring exceed max depth parameter
+; 
 
 ;
-;                                 	- if no internal/leaf counting, then counts on all node names done.
+; 
 
 ;
-;                                 	- if internal/leaf counting to be done (case 1), then it is done only
+; 
 
 ;
-;                                	  for one parent. (If it fails, then 2nd parent tried; if that fails,
+; 
 
 ;
-;                                 	  then all nodes counted from first parent). Other parent just uses
+; 
 
 ;
-;                                 	  terminal name count (increases odds that a crossover will be
+; 
 
 ;
-;                                 	  possible).
+; 
 
 
 
@@ -84,8 +84,7 @@
             (, $P2 $P1)))) 
       (do-crossover $Tries $Parent1 $N1 $Parent2 $C1 $C2) 
       (set-det)))
-;                                   ; case 2
-
+; 
  
   (= 
     (crossover $P1 $P2 $C1 $C2) 
@@ -93,14 +92,15 @@
       (once (count-nodes $P1 all $N1)) 
       (do-crossover $Tries $P1 $N1 $P2 $C1 $C2) 
       (set-det)))
-;                                   ; case 1
-
+; 
  
 
 
   (= 
     (do-crossover 0 $_ $_ $_ $_ $_) 
     ( (set-det) (fail)))
+; 
+
   (= 
     (do-crossover $_ $Parent1 $N1 $Parent2 $Child1 $Child2) 
     ( (my-random $N1 $K1) 
@@ -111,10 +111,7 @@
       (tree-verification $Child1) 
       (tree-verification $Child2) 
       (set-det)))
-;                                    ;writel(['A:rand pick ', K1, ' from ', N1, '.', nl]),
-
-;                                     ;writel(['B:rand pick ', K2, ' from ', N2, ' ', NodeName, ' nodes.', nl]),
-
+; 
 
   (= 
     (do-crossover $Tries $Parent1 $N1 $Parent2 $Child1 $Child2) 
@@ -122,15 +119,14 @@
         (- $Tries 1)) 
       (do-crossover $Tries2 $Parent1 $N1 $Parent2 $Child1 $Child2) 
       (set-det)))
-;                                     ;writel(['Try ', Tries2, nl]),
-
+; 
 
 
 ;
-;                                     check that a new Tree doesn't fail due to
+; 
 
 ;
-;                                     failed embedded code in DCTG rules.
+; 
 
 
 
@@ -141,31 +137,26 @@
         (, 
           (user-args-P $Args) 
           (verification $Child $Args $_)) True) (set-det)))
-;                                      ;writel(['tree_verif: testing child:',nl]),
-
-;                                      ;prettyprint(Child),
-
-;                                      ;writel(['tree_verif: verification succeeded.',nl])
-
+; 
 
 
 ;
-;                                      count_nodes(Tree, NodeName, NumNodes):
+; 
 
 ;
-;                                      	Tree - DCTG expression structure
+; 
 
 ;
-;                                      	NodeName - name of node to count (otherwise: all nodes = 'all';
+; 
 
 ;
-;                                      			all internal = 'internal'; all leaf = 'leaf')
+; 
 
 ;
-;                                      	NumNodes - number of nodes in Tree
+; 
 
 ;
-;                                       Scans Tree and counts number of nodes.
+; 
 
 
 
@@ -176,48 +167,62 @@
       (count-children-nodes $Children all $NumNodes2) 
       (is $NumNodes 
         (+ $NumNodes2 1))))
+; 
+
   (= 
     (count-nodes 
       (node $_ $Children $ID) $Type $NumNodes) 
     ( (== $Type internal) 
       (with_self  
-        (fast) 
+        (fast *) 
         (dctg-rule-info $_ $ID $_ $_ nonterminal)) 
       (set-det) 
       (count-children-nodes $Children $Type $NumNodes2) 
       (is $NumNodes 
         (+ $NumNodes2 1))))
+; 
+
   (= 
     (count-nodes 
       (node $_ $Children $ID) $Type $NumNodes) 
     ( (== $Type leaf) 
       (with_self  
-        (fast) 
+        (fast *) 
         (dctg-rule-info $_ $ID $_ $_ terminal)) 
       (set-det) 
       (count-children-nodes $Children $Type $NumNodes2) 
       (is $NumNodes 
         (+ $NumNodes2 1))))
+; 
+
   (= 
     (count-nodes 
       (node $_ $Children $ID) $NodeName $NumNodes) 
     ( (with_self  
-        (fast) 
+        (fast *) 
         (dctg-rule-info $NodeName $ID $_ $_ $_)) 
       (set-det) 
       (count-children-nodes $Children $NodeName $NumNodes2) 
       (is $NumNodes 
         (+ $NumNodes2 1))))
+; 
+
   (= 
     (count-nodes 
       (node $_ $Children $_) $NodeName $NumNodes) 
     ( (set-det) (count-children-nodes $Children $NodeName $NumNodes)))
+; 
+
   (= 
     (count_nodes  $_ $_ 0) True)
+; 
+
 
 
   (= 
     (count_children_nodes  () $_ 0) True)
+; 
+
   (= 
     (count-children-nodes 
       (Cons  $Node $Rest) $NodeName $NumNodes) 
@@ -226,66 +231,68 @@
       (is $NumNodes 
         (+ $NumNodes2 $NumNodes3)) 
       (set-det)))
+; 
+
 
 ;
-;                                          select_subtree(Parent, K, K2, NewParent, SubTree, Hole, NodeName):
+; 
 
 ;
-;                                         	Parent - parent tree structure
+; 
 
 ;
-;                                         	K - Kth node to select in Parent; must be < number nodes in Parent.
+; 
 
 ;
-;                                         	K2 - final K during structure traversal
+; 
 
 ;
-;                                         	NewParent - Parent structure with variable Hole in place of removed
+; 
 
 ;
-;                                         		subtree Subtree
+; 
 
 ;
-;                                         	Subtree - subtree to swap
+; 
 
 ;
-;                                         	Hole - location of hole in ParentWithHole (variable)
+; 
 
 ;
-;                                         	NodeName - node name of Subtree to select from; if variable, then
+; 
 
 ;
-;                                         		select from all nodes
+; 
 
 ;
-;                                          Selects a Kth node in tree for crossover of type NodeName (or all, if
+; 
 
 ;
-;                                          NodeName not set). Sets up the new tree with Hole placeholder for selected
+; 
 
 ;
-;                                          subtree. Hole may be already unified with other parent's subtree.
+; 
 
 ;
-;                                          Cases:
+; 
 
 ;
-;                                         	1. Count = 0, var name --> use that node
+; 
 
 ;
-;                                         	2. Count = 0, name matches given --> use that node
+; 
 
 ;
-;                                          	3. Count > 0, var name or name match -> count and continue
+; 
 
 ;
-;                                         	4. name doesn't match given --> skip and continue
+; 
 
 ;
-;                                         	5. else stop at given count (we've exhausted tree, and we're at
+; 
 
 ;
-;                                         	   non-node component)
+; 
 
 
 
@@ -296,14 +303,13 @@
     ( (or 
         (var $NodeName) 
         (with_self  
-          (fast) 
+          (fast *) 
           (dctg-rule-info $NodeName $ID $_ $_ $_))) 
       (set-det) 
       (with_self  
-        (fast) 
+        (fast *) 
         (dctg-rule-info $NodeName $ID $_ $_ $_))))
-;                                         ; cases 1, 2
-
+; 
 
   (= 
     (select-subtree 
@@ -312,41 +318,45 @@
     ( (or 
         (var $NodeName) 
         (with_self  
-          (fast) 
+          (fast *) 
           (dctg-rule-info $NodeName $ID $_ $_ $_))) 
       (set-det) 
       (is $K3 
         (- $K 1)) 
       (select-subtree-children $Kids $K3 $K2 $Kids2 $Subtree $Hole $NodeName)))
-;                                         ; case 3
-
+; 
 
   (= 
     (select-subtree 
       (node $Name $Kids $ID) $K $K2 
       (node $Name $Kids2 $ID) $Subtree $Hole $NodeName) 
     ( (set-det) (select-subtree-children $Kids $K $K2 $Kids2 $Subtree $Hole $NodeName)))
-;                                         ; case 4
-
+; 
 
   (= 
-    (select_subtree  $Node $K $K $Node $_ $_ $_) True) ;
-;                                          case 5
+    (select_subtree  $Node $K $K $Node $_ $_ $_) True)
+; 
+ ;
+; 
 
 
 ;
-;                                          select_subtree_children applies select_subtree to list of nodes.
+; 
 
 
 
   (= 
     (select-subtree-children Nil $K $K Nil $_ $_ $_) 
     (set-det))
+; 
+
   (= 
     (select-subtree-children 
       (Cons  $Node $T) $K $K2 
       (Cons  $Node2 $T2) $Subtree $Hole $Name) 
     ( (select-subtree $Node $K $K3 $Node2 $Subtree $Hole $Name) (det-if-then-else (== $K3 0) (, (= $T $T2) (= $K3 $K2)) (select-subtree-children $T $K3 $K2 $T2 $Subtree $Hole $Name))))
+; 
+
 
 
   (= 
@@ -366,6 +376,8 @@
       (prettyprint $C1) 
       (writel (:: Child2... nl)) 
       (prettyprint $C2)))
+; 
+
 
 
   (= 
@@ -381,40 +393,42 @@
       (prettyprint $C1) 
       (writel (:: Child2... nl)) 
       (prettyprint $C2)))
-
-;
-;                                          ---------------------------
+; 
 
 
 ;
-;                                          mutation(Parent, Child):
+; 
+
 
 ;
-;                                         	Parent - tree to mutate
+; 
 
 ;
-;                                          	Child - mutated result
+; 
 
 ;
-;                                          Performs mutation on a tree. A subtree is randomly selected. Then a
+; 
 
 ;
-;                                          new subtree of the same type as selected one is generated using grow
+; 
 
 ;
-;                                          generation, and it replaces the selected subtree. If the resulting tree
+; 
 
 ;
-;                                          is too deep, then it is repeated a maximum number of user-specified times.
+; 
 
 ;
-;                                          If the user is using terminal mutation probability (Case 1) then all nodes
+; 
 
 ;
-;                                          of that type (if it succeeds statisticall) are counted. If none exist, then
+; 
 
 ;
-;                                          all nodes counted (case 2).
+; 
+
+;
+; 
 
 
 
@@ -423,11 +437,15 @@
     ( (reprod-P $Tries) 
       (do-mutation $Tries $Parent $Child) 
       (set-det)))
+; 
+
 
 
   (= 
     (do-mutation 0 $_ $_) 
     ( (set-det) (fail)))
+; 
+
   (= 
     (do-mutation $_ $Parent $Child) 
     ( (prob-terminal-mutation-P $PT) 
@@ -445,12 +463,7 @@
       (generate-tree $NodeName grow $NewDepth $_ $NewTree $_) 
       (tree-verification $Child) 
       (set-det)))
-;                                         ; case 1
-
-;                                         ;writel(['rand pick ', K, ' from ', N, '.', nl]),
-
-;                                         ; a subtree with a node type has depth > 1
-
+; 
 
   (= 
     (do-mutation $_ $Parent $Child) 
@@ -463,12 +476,7 @@
       (generate-tree $NodeName grow $NewDepth $_ $NewTree $_) 
       (tree-verification $Child) 
       (set-det)))
-;                                         ; case 2
-
-;                                         ;writel(['rand pick ', K, ' from ', N, '.', nl]),
-
-;                                         ; a subtree with a node type has depth > 1
-
+; 
 
   (= 
     (do-mutation $Tries $Parent $Child) 
@@ -476,8 +484,7 @@
         (- $Tries 1)) 
       (do-mutation $Tries2 $Parent $Child) 
       (set-det)))
-;                                         ;writel(['Try countdown... ', Tries2, nl]),
-
+; 
 
 
 
@@ -490,47 +497,49 @@
       (prettyprint $Parent) 
       (writel (:: Child... nl)) 
       (prettyprint $Child)))
-
-;
-;                                          ---------------------------
+; 
 
 
 ;
-;                                          verification(Tree, UserArgs, Expr):
-
-;
-;                                         	Tree - DCTG tree to verify
-
-;
-;                                         	UserArgs - Argument list to pass to DCTG rules
-
-;
-;                                         	Expr - list expression for Tree
-
-;
-;                                          The DCTG tree is verified by interpreting the MeTTa DCTG rules
-
-;
-;                                          in concert with the Tree structure. The purpose of this is to
-
-;
-;                                          execute any embedded MeTTa in the rules, which are
-
-;
-;                                          not retained in the tree data structure itself. User args as set by user_args
-
-;
-;                                          parameter are also used (those embedded in MeTTa structure are irrelevant).
-
-;
-;                                          This routine may cause a tree to fail, in that embedded MeTTa goals or
-
-;
-;                                          user args fail.
+; 
 
 
 ;
-;                                          verification embeds user args into initial call of tree.
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+
+;
+; 
 
 
 
@@ -538,7 +547,7 @@
     (verification 
       (node $Name $Kids $ID) $UserArgs $Expr) 
     ( (with_self  
-        (fast) 
+        (fast *) 
         (dctg-rule-info $_ $ID $Call $_ $_)) 
       (=.. $Call 
         (Cons  $Name $Args)) 
@@ -553,29 +562,24 @@
       (set-det) 
       (verify-tree $RuleHead2 
         (node $Name $Kids $ID))))
-;                                         ; embed user args, empty diff list
-
+; 
 
 
 
   (= 
     (verify-tree $Call 
       (node $_ $Kids $ID)) 
-    ( (get-atoms  &self 
+    ( (get-symbols  &self 
         (= $Call $Body)) 
       (same-id $Call $ID) 
       (set-det) 
       (verify-kids $Body $Kids $_)))
-;                                         ;writel(['verify_tree: Call=', Call, 'node = ', N, ID, nl]),
-
-;                                         ;writel(['verify_tree: Body= ', Body, 'Kids=', Kids,nl]),
-
+; 
 
   (= 
     (verify-tree $_ $_) 
     ( (set-det) (fail)))
-;                                         ;writel(['verify_tree: failed', nl]),
-
+; 
 
 	
 
@@ -585,6 +589,8 @@
     ( (set-det) 
       (verify-kids $A $Kids $Kids2) 
       (verify-kids $B $Kids2 $Kids3)))
+; 
+
   (= 
     (verify-kids $A 
       (Cons  
@@ -593,8 +599,7 @@
       (set-det) 
       (verify-tree $A 
         (node $_ $Kids $ID))))
-;                                         ;writel(['v_k 2: Call=', A, 'Node name = ', N, ID, nl]),
-
+; 
 
   (= 
     (verify-kids 
@@ -604,12 +609,7 @@
     ( (set-det) 
       (= $X $H) 
       (c $A $X $B)))
-;                                         ; single constant
-
-;                                         ; X == H,
-
-;                                         ;writel(['v_k 3: Call=', c(A,X,B), 'List=', [[H]|T], nl]),
-
+; 
 
   (= 
     (verify-kids 
@@ -620,22 +620,16 @@
     ( (set-det) 
       (= $X $H) 
       (c $A $X $B)))
-;                                         ; multiple constants
-
-;                                         ; X == H,
-
-;                                         ;writel(['v_k 4: Call=', c(A,X,B), 'List=', [[H|T2]|T], nl]),
-
+; 
 
   (= 
     (verify-kids $A $Kids $Kids) 
     ( (set-det) (call $A)))
-;                                         ;writel(['v_k 5: Call=', A, 'Kids=', Kids, nl]),
-
+; 
 
 
 ;
-;                                          Warning: user cannot use node/3 structure in their user arg fields!
+; 
 
 
 
@@ -647,8 +641,7 @@
         (node $_ $_ $ID2) $Args) 
       (set-det) 
       (== $ID $ID2)))
-;                                         ; append(_, [node(_, _, ID)|_], Args),
-
+; 
 
 
 

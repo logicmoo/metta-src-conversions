@@ -1,6 +1,8 @@
 
 
   !(module agent Nil)
+; 
+
 
 
 
@@ -8,11 +10,15 @@
   (= 
     (rule-set $RuleSet $MaxRuleID) 
     ( (= $MaxRuleID 7) (= $RuleSet (:: (:: 1 def-father-1 (:: (- (:: child $Y $X)) (- (:: male $X)) (+ (:: father $X $Y)))) (:: 2 def-mother-1 (:: (- (:: child $Y $X)) (- (:: female $X)) (+ (:: mother $X $Y)))) (:: 3 def-parent-1 (:: (- (:: father $X $Y)) (+ (:: parent $X $Y)))) (:: 4 def-parent-2 (:: (- (:: mother $X $Y)) (+ (:: parent $X $Y)))) (:: 5 fact-lucy-1 (:: (+ (:: female lucy)))) (:: 6 fact-alice-1 (:: (+ (:: child alice bob)))) (:: 7 fact-bob-1 (:: (+ (:: child bob lucy))))))))
+; 
+
 
 
   (= 
     (symbol-set $SymbolSet $MaxSymbolID) 
     ( (= $MaxSymbolID 10) (= $SymbolSet (:: (:: 1 vble) (:: 2 father) (:: 3 child) (:: 4 male) (:: 5 female) (:: 6 parent) (:: 7 lucy) (:: 8 alice) (:: 9 bob) (:: 10 mother)))))
+; 
+
 
 
 
@@ -35,6 +41,8 @@
         (:: -0.2 0.2)) 
       (= $NNet 
         (:: layer1 layer2 layer3 layer4 layer5 layer6))))
+; 
+
 
 
   (= 
@@ -77,6 +85,8 @@
       (nl) 
       (print-by-line $Path4) 
       (nl)))
+; 
+
 
 
 

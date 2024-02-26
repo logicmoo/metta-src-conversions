@@ -96,9 +96,13 @@
 ; 
 
 
-;                                           (error
-;                                             (syntax_error  operator_clash)
-;                                             (file  tests/features/convertor/sxx_machine/bench/prover.pl 33 24 500))
+  (= 
+    (problem  3 
+      (-  a) 
+      (#  
+        (+  to_be) 
+        (-  to_be))) True)
+; 
 
 
   (= 
@@ -110,9 +114,13 @@
 ; 
 
 
-;                                           (error
-;                                             (syntax_error  operator_clash)
-;                                             (file  tests/features/convertor/sxx_machine/bench/prover.pl 37 20 558))
+  (= 
+    (problem  5 
+      (-  a) 
+      (#  
+        (+  b) 
+        (-  a))) True)
+; 
 
 
   (= 
@@ -137,19 +145,51 @@
 ; 
 
 
-;                                           (error
-;                                             (syntax_error  operator_clash)
-;                                             (file  tests/features/convertor/sxx_machine/bench/prover.pl 43 22 653))
+  (= 
+    (problem  8 
+      (#  
+        (-  a) 
+        (#  
+          (-  b) 
+          (+  c))) 
+      (#  
+        (-  b) 
+        (#  
+          (-  a) 
+          (+  c)))) True)
+; 
 
 
-;                                           (error
-;                                             (syntax_error  operator_clash)
-;                                             (file  tests/features/convertor/sxx_machine/bench/prover.pl 45 16 693))
+  (= 
+    (problem  9 
+      (#  
+        (-  a) 
+        (+  b)) 
+      (#  
+        (&  
+          (+  b) 
+          (-  c)) 
+        (#  
+          (-  a) 
+          (+  c)))) True)
+; 
 
 
-;                                           (error
-;                                             (syntax_error  operator_clash)
-;                                             (file  tests/features/convertor/sxx_machine/bench/prover.pl 47 18 741))
+  (= 
+    (problem  10 
+      (&  
+        (#  
+          (-  a) 
+          (+  c)) 
+        (#  
+          (-  b) 
+          (+  c))) 
+      (#  
+        (&  
+          (-  a) 
+          (-  b)) 
+        (+  c))) True)
+; 
 
 
 ;

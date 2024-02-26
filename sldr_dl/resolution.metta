@@ -1,5 +1,7 @@
 
-  !(:: (nnet))
+  !(:: (nnet *))
+; 
+
 
 
 
@@ -15,6 +17,8 @@
       (sort $OVL $OVLS) 
       (reverse $OVLS $Res) 
       (set-det)))
+; 
+
 
 
 
@@ -26,6 +30,8 @@
       (is $Dim 
         (* $P $NumWord)) 
       (set-det)))
+; 
+
 
 
 
@@ -39,11 +45,15 @@
       (symlist-to-numlist $PTF $SList $NL) 
       (numlist-to-vec $NL $MaxN $Vec) 
       (set-det)))
+; 
+
 
 
   (= 
     (label-vec Nil $_ Nil) 
     (set-det))
+; 
+
   (= 
     (label-vec 
       (Cons  $Elem $L) $Num 
@@ -53,6 +63,8 @@
         (+ $Num 1)) 
       (label-vec $L $N1 $LT) 
       (set-det)))
+; 
+
   
 
 
@@ -68,6 +80,8 @@
         (:: $InVec) 
         (:: $TgtVec) $NumEpoch $LRate) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -77,6 +91,8 @@
       (nl) 
       (copy-n-times 0 $Dim $Vec) 
       (set-det)))
+; 
+
 
   (= 
     (axnum-to-vec $AxNum $Dim $Vec) 
@@ -89,34 +105,46 @@
       (append $Vec1 
         (Cons  1 $Vec2) $Vec) 
       (set-det)))
+; 
+
 
 
 
   !(dynamic (/ search-time 1))
+; 
+
 
   (= 
     (init-search-time) 
-    ( (remove-all-atoms  &self 
-        (search_time  $_)) (add-atom  &self (search_time  0))))
+    ( (remove-all-symbols  &self 
+        (search_time  $_)) (add-symbol  &self (search_time  0))))
+; 
+
 
   (= 
     (add-search-time) 
     ( (search-time $N) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (search_time  $_)) 
       (is $N1 
         (+ $N 1)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (search_time  $N1)) 
       (set-det)))
+; 
+
 
 
   (= 
     (dnn-sl-resolution $A $B $C $D $E $F $G) 
     (dnn-sl-resolution $A $B $C standard $D $E $F $G))
+; 
+
 
   (= 
     (dnn_sl_resolution  () $_ $_ $_ $_ $_ $_ ()) True)
+; 
+
   (= 
     (dnn-sl-resolution $GList 
       (:: $AList $NumA) $SList $StatModName $Nnet $Mtd $Depth $Path) 
@@ -152,50 +180,63 @@
           (dnn-train $Nnet $GTemp $SList $AxNum $Mtd)) 
         (= $Mtd 
           (method reasoning $_ $_)))))
-;                                     ;SAL = AList,
-
-;                                      ;Ax = [+G|GN],
-
+; 
 
 
 
   (= 
     (print_by_line  ()) True)
+; 
+
   (= 
     (print-by-line (Cons  $X $L)) 
     ( (print $X) 
       (nl) 
       (print-by-line $L)))
+; 
+
 
 
 
 
   !(dynamic (/ num-vble 1))
-  ! (remove-all-atoms  &self 
+; 
+
+  ! (remove-all-symbols  &self 
       (num_vble  $_))
-  ! (add-atom  &self 
+; 
+
+  ! (add-symbol  &self 
       (num_vble  0))
+; 
+
 
 
   (= 
     (vble-fill $X $X) 
     ( (ground $X) (set-det)))
+; 
+
   (= 
     (vble-fill $X $X) 
     ( (var $X) 
       (num-vble $N1) 
       (is $N 
         (+ $N1 1)) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (num_vble  $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (num_vble  $N)) 
       (= $X 
         (vble $N)) 
       (set-det)))
+; 
+
   (= 
     (vble-fill Nil Nil) 
     (set-det))
+; 
+
   (= 
     (vble-fill 
       (Cons  $X $L) 
@@ -203,12 +244,16 @@
     ( (vble-fill $X $XT) 
       (vble-fill $L $LT) 
       (set-det)))
+; 
+
  
 
 
   (= 
     (copy-n-times $_ 0 Nil) 
     (set-det))
+; 
+
   (= 
     (copy-n-times $X $N 
       (Cons  $X $L)) 
@@ -217,11 +262,15 @@
         (- $N 1)) 
       (copy-n-times $X $N1 $L) 
       (set-det)))
+; 
+
 
 
   (= 
     (produce-empty-tree $_ 0 novalue) 
     (set-det))
+; 
+
   (= 
     (produce-empty-tree $B $D 
       (Cons  novalue $L)) 
@@ -231,15 +280,21 @@
       (produce-empty-tree $B $D1 $Res1) 
       (copy-n-times $Res1 $B $L) 
       (set-det)))
+; 
+
 
 
   (= 
     (get-partial-tree 
       (Cons  $X $_) $_ 0 $X) 
     (set-det))
+; 
+
   (= 
     (get-partial-tree $X $_ 0 $X) 
     ( (not (is-list $X)) (set-det)))
+; 
+
   (= 
     (get-partial-tree 
       (Cons  $X $L) $Breadth $Depth 
@@ -249,6 +304,8 @@
         (- $Depth 1)) 
       (get-partial-tree2 $L $Breadth $D1 $LT) 
       (set-det)))
+; 
+
   (= 
     (get-partial-tree $X $Breadth $Depth 
       (Cons  $X $LT)) 
@@ -258,6 +315,8 @@
         (- $Depth 1)) 
       (get-partial-tree2 Nil $Breadth $D1 $LT) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -280,13 +339,14 @@
           (< $N1 0) 
           (get-first-element $Res1 $Breadth $Res))) 
       (set-det)))
-;                                         ; Check if the lengths agree.
-
+; 
 
 
 
   (= 
     (get_first_element  $_ 0 ()) True)
+; 
+
   (= 
     (get-first-element Nil $N 
       (Cons  norule $Res1)) 
@@ -294,6 +354,8 @@
       (is $N1 
         (- $N 1)) 
       (get-first-element Nil $N1 $Res1)))
+; 
+
   (= 
     (get-first-element 
       (Cons  $X $L) $N 
@@ -302,11 +364,15 @@
       (is $N1 
         (- $N 1)) 
       (get-first-element $L $N1 $Res1)))
+; 
+
 
 
   (= 
     (symlist-to-numlist Nil $_ Nil) 
     (set-det))
+; 
+
   (= 
     (symlist-to-numlist 
       (Cons  $X $L) $SList 
@@ -324,11 +390,15 @@
             (:: $XT $X) $SList))) 
       (symlist-to-numlist $L $SList $LT) 
       (set-det)))
+; 
+
 
 
   (= 
     (num-to-vec -1 $Dim $Vec) 
     ( (copy-n-times 0 $Dim $Vec) (set-det)))
+; 
+
   (= 
     (num-to-vec $Num $Dim $Vec) 
     ( (> $Num $Dim) 
@@ -336,6 +406,8 @@
       (nl) 
       (copy-n-times 0 $Dim $Vec) 
       (set-det)))
+; 
+
 
   (= 
     (num-to-vec $Num $Dim $Vec) 
@@ -348,6 +420,8 @@
       (append $Vec1 
         (Cons  1 $Vec2) $Vec) 
       (set-det)))
+; 
+
 
 
 
@@ -355,6 +429,8 @@
   (= 
     (numlist-to-vec Nil $_ Nil) 
     (set-det))
+; 
+
   (= 
     (numlist-to-vec 
       (Cons  $X $L) $Dim $Res) 
@@ -362,21 +438,29 @@
       (numlist-to-vec $L $Dim $LT) 
       (append $XT $LT $Res) 
       (set-det)))
+; 
+
 
 
   (= 
     (for $K $P $Q) 
     ( (=< $P $Q) (= $K $P)))
+; 
+
   (= 
     (for $K $P $Q) 
     ( (< $P $Q) 
       (is $P1 
         (+ $P 1)) 
       (for $K $P1 $Q)))
+; 
+
 
 
   (= 
     (static_module  standard $G $G) True)
+; 
+
 
 
 

@@ -2,14 +2,26 @@
     (?-  
       (use_module  
         (library  lists))) True)
+; 
+
 
 
 
   !(op 650 yfx ^^)
+; 
+
   !(op 601 xfy :)
+; 
+
   !(op 1150 xfx ::=)
+; 
+
   !(op 1175 xfx <:>)
+; 
+
   !(op 1150 xfx ::-)
+; 
+
 
 
 
@@ -18,12 +30,16 @@
       (node guardedexpr-a 
         (:: (:: a)) 8) $A $B) 
     (c $A a $B))
+; 
+
   (= 
     (guardedexpr-a 
       (node guardedexpr-a 
         (:: 
           (:: a) $A) 9) $B $C) 
     ( (c $B a $D) (expr $A $D $C)))
+; 
+
 
 
   (= 
@@ -33,78 +49,114 @@
       (set-det) 
       (name $B 
         (:: $A))))
+; 
+
 
 
   (= 
     (c  
       (Cons  $A $B) $A $B) True)
+; 
+
 
 
   (= 
     (dctg_rule_info  guardedexpr_b 11 
       (guardedexpr_b  
         (node  $_ $_ 11) $_ $_) 3 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  guardedexpr_a 9 
       (guardedexpr_a  
         (node  $_ $_ 9) $_ $_) 3 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  noniter_expr 5 
       (noniter_expr  
         (node  $_ $_ 5) $_ $_) 3 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  expr 0 
       (expr  
         (node  $_ $_ 0) $_ $_) 3 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  expr 1 
       (expr  
         (node  $_ $_ 1) $_ $_) 2 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  noniter_expr 4 
       (noniter_expr  
         (node  $_ $_ 4) $_ $_) 2 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  iter_expr 6 
       (iter_expr  
         (node  $_ $_ 6) $_ $_) 2 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  iter_expr 7 
       (iter_expr  
         (node  $_ $_ 7) $_ $_) 2 nonterminal) True)
+; 
+
   (= 
     (dctg_rule_info  probval 13 
       (probval  
         (node  $_ $_ 13) $_ $_) 1 terminal) True)
+; 
+
   (= 
     (dctg_rule_info  intval 12 
       (intval  
         (node  $_ $_ 12) $_ $_) 1 terminal) True)
+; 
+
   (= 
     (dctg_rule_info  guardedexpr_b 10 
       (guardedexpr_b  
         (node  $_ $_ 10) $_ $_) 1 terminal) True)
+; 
+
   (= 
     (dctg_rule_info  guardedexpr_a 8 
       (guardedexpr_a  
         (node  $_ $_ 8) $_ $_) 1 terminal) True)
+; 
+
   (= 
     (dctg_rule_info  noniter_expr 3 
       (noniter_expr  
         (node  $_ $_ 3) $_ $_) 1 terminal) True)
+; 
+
   (= 
     (dctg_rule_info  noniter_expr 2 
       (noniter_expr  
         (node  $_ $_ 2) $_ $_) 1 terminal) True)
+; 
+
 
 
   (= 
     (library_directory  'c:/program files/sicstus prolog/library') True)
+; 
+
 
 
   (= 
     (sre-pp-l (:: $A)) 
     ( (sre-pp $A) (set-det)))
+; 
+
   (= 
     (sre-pp-l (Cons  $A $B)) 
     ( (write [) 
@@ -113,6 +165,8 @@
       (sre-pp-l $B) 
       (write ]) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -131,6 +185,8 @@
       (write 'Leftover = ') 
       (write $D) 
       (nl)))
+; 
+
 
 
   (= 
@@ -154,6 +210,8 @@
       (nl) 
       (writelist $F) 
       (nl)))
+; 
+
 
 
   (= 
@@ -178,6 +236,8 @@
       (nl) 
       (writelist $G) 
       (nl)))
+; 
+
 
 
   (= 
@@ -187,6 +247,8 @@
       (write )*) 
       (write $B) 
       (set-det)))
+; 
+
   (= 
     (sre-pp (+ $A $B)) 
     ( (write () 
@@ -194,15 +256,21 @@
       (write )+) 
       (write $B) 
       (set-det)))
+; 
+
   (= 
     (sre-pp (with_self  $A $B)) 
     ( (sre-pp $A) 
       (write :) 
       (sre-pp $B) 
       (set-det)))
+; 
+
   (= 
     (sre-pp (Cons  $A $B)) 
     ( (sre-pp-l (Cons  $A $B)) (set-det)))
+; 
+
   (= 
     (sre-pp (, $A $B)) 
     ( (write () 
@@ -211,56 +279,80 @@
       (write $B) 
       (write )) 
       (set-det)))
+; 
+
   (= 
     (sre-pp $A) 
     (write $A))
+; 
+
 
 
   (= 
     (select-kth-term 
       (:: $A) $_ $B $B $A) 
     (set-det))
+; 
+
   (= 
     (select-kth-term 
       (Cons  $A $_) $B $C $C $A) 
     ( (>= $A $B) (set-det)))
+; 
+
   (= 
     (select-kth-term 
       (Cons  $_ $A) $B $C $D $E) 
     ( (is $F 
         (+ $C 1)) (select-kth-term $A $B $F $D $E)))
+; 
+
 
 
   (= 
     (sumlist  () () $A $A) True)
+; 
+
   (= 
     (sumlist 
       (Cons  $A $B) 
       (Cons  $C $D) $E $F) 
     ( (is $C 
         (+ $E $A)) (sumlist $B $D $C $F)))
+; 
+
 
 
   (= 
     (int_range  0 1000) True)
+; 
+
 
 
   (= 
     (is-a-probability $A) 
     ( (float $A) (set-det)))
+; 
+
   (= 
     (is-a-probability $A) 
     ( (with_self  
-        (random) 
+        (random *) 
         (random $B)) (is $A (/ (truncate (* $B 100)) 100))))
+; 
+
 
 
   (= 
     (is-an-integer $A) 
     ( (integer $A) (set-det)))
+; 
+
   (= 
     (is-an-integer $A) 
-    ( (int-range $B $C) (with_self  (random) (random $B $C $A))))
+    ( (int-range $B $C) (with_self  (random *) (random $B $C $A))))
+; 
+
 
 
   (= 
@@ -270,11 +362,15 @@
         (* $B 
           (- 1.0 $A))) 
       (check-prob $C)))
+; 
+
   (= 
     (recognize-loop $_ $A $B $B $C $D) 
     ( (is $D 
         (* $C 
           (- 1.0 $A))) (check-prob $D)))
+; 
+
   (= 
     (recognize-loop $A $B $C $D $E $F) 
     ( (is $G 
@@ -285,6 +381,8 @@
       (not (= $C $H)) 
       (check-prob $I) 
       (recognize-loop $A $B $H $D $I $F)))
+; 
+
 
 
   (= 
@@ -295,12 +393,16 @@
         (raw-generate $G $E $H)) 
       (raw-gen-loop $A $B $C $I $H $F) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $G $I $D)) 
       (set-det)))
+; 
+
   (= 
     (raw-gen-loop $_ $_ $_ Nil $A $A) 
     (set-det))
+; 
+
 
 
   (= 
@@ -308,16 +410,20 @@
       (node probval 
         (:: (:: $A)) 13) $B $C) 
     ( (c $B $A $C) (is-a-probability $A)))
+; 
+
 
 
   (= 
     (raw-select-term $A $B) 
     ( (sumlist $A $C 0 $D) 
       (with_self  
-        (random) 
+        (random *) 
         (random 0 $D $E)) 
       (select-kth-term $C $E 1 $B $_) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -325,12 +431,16 @@
       (node guardedexpr-b 
         (:: (:: b)) 10) $A $B) 
     (c $A b $B))
+; 
+
   (= 
     (guardedexpr-b 
       (node guardedexpr-b 
         (:: 
           (:: b) $A) 11) $B $C) 
     ( (c $B b $D) (expr $A $D $C)))
+; 
+
 
 
   (= 
@@ -338,6 +448,8 @@
       (node intval 
         (:: (:: $A)) 12) $B $C) 
     ( (c $B $A $C) (is-an-integer $A)))
+; 
+
 
 
   (= 
@@ -345,11 +457,15 @@
       (node noniter-expr 
         (:: (:: a)) 2) $A $B) 
     (c $A a $B))
+; 
+
   (= 
     (noniter-expr 
       (node noniter-expr 
         (:: (:: b)) 3) $A $B) 
     (c $A b $B))
+; 
+
   (= 
     (noniter-expr 
       (node noniter-expr 
@@ -358,11 +474,15 @@
       (intval $B $G $H) 
       (guardedexpr-b $C $H $I) 
       (intval $D $I $F)))
+; 
+
   (= 
     (noniter-expr 
       (node noniter-expr 
         (:: $A $B) 5) $C $D) 
     ( (expr $A $C $E) (expr $B $E $D)))
+; 
+
 
 
   (= 
@@ -370,6 +490,8 @@
     ( (min-grammar-prob-P $B) 
       (> $A $B) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -377,15 +499,21 @@
       (node iter-expr 
         (:: $A $B) 6) $C $D) 
     ( (noniter-expr $A $C $E) (probval $B $E $D)))
+; 
+
   (= 
     (iter-expr 
       (node iter-expr 
         (:: $A $B) 7) $C $D) 
     ( (noniter-expr $A $C $E) (probval $B $E $D)))
+; 
+
 
 
   (= 
     (identify_type  () () ()) True)
+; 
+
   (= 
     (identify-type 
       (Cons  $A $B) 
@@ -393,35 +521,47 @@
     ( (dctg-rule-info $_ $A $_ $_ terminal) 
       (set-det) 
       (identify-type $B $C $D)))
+; 
+
   (= 
     (identify-type 
       (Cons  $A $B) $C 
       (Cons  $A $D)) 
     (identify-type $B $C $D))
+; 
+
 
 
   (= 
     (get-rule-stuff $A $B) 
-    ( (get-atoms  &self 
+    ( (get-symbols  &self 
         (= 
           (semantic_rule  $B $_ $C $_) $_)) (=.. $C (Cons  $A $_))))
+; 
+
 
 
   (= 
     (make-id-entries Nil) 
     (set-det))
+; 
+
   (= 
     (make-id-entries (Cons  (, $A $B) $C)) 
-    ( (add-atom  &self 
+    ( (add-symbol  &self 
         (dctg_id_table  $A $B $_ $_)) 
       (make-id-entries $C) 
       (set-det)))
+; 
+
 
 
   (= 
     (make-rule-id-list2 $A $B) 
     ( (bagof $C 
         (get-rule-stuff $A $C) $D) (rem-dups $D $B)))
+; 
+
 
 
   (= 
@@ -431,16 +571,22 @@
       (=.. $B 
         (Cons  $C $_)) 
       (set-det)))
+; 
+
 
 
   (= 
     (abstract-member2 $A 
       (Cons  $B $_)) 
     (same-goal $A $B))
+; 
+
   (= 
     (abstract-member2 $A 
       (Cons  $_ $B)) 
     (abstract-member2 $A $B))
+; 
+
 
 
   (= 
@@ -454,6 +600,8 @@
         (abstract-member2 $F $E) 
         (same-goal $A $F)) 
       (set-det)))
+; 
+
   (= 
     (goal-type $A $B $C $D $E $F 
       (Cons  $A $D) $E $F) 
@@ -465,13 +613,19 @@
         (abstract-member2 $G $D) 
         (abstract-member2 $G $C)) 
       (set-det)))
+; 
+
   (= 
     (goal-type $A 
       (, $_ $B) $C $D $E $F $G $H $I) 
     ( (set-det) (goal-type $A $B $C $D $E $F $G $H $I)))
+; 
+
   (= 
     (goal_type  $A $_ $_ $B $C $D $B 
       (Cons  $A $C) $D) True)
+; 
+
 
 
   (= 
@@ -481,9 +635,11 @@
         (Cons  $D $_)) 
       (dctg-override-P $E $_) 
       (with_self  
-        (lists) 
+        (lists *) 
         (member $D $E)) 
       (set-det)))
+; 
+
   (= 
     (user-override $A $B $C $B 
       (Cons  $A $C)) 
@@ -491,30 +647,40 @@
         (Cons  $D $_)) 
       (dctg-override-P $_ $E) 
       (with_self  
-        (lists) 
+        (lists *) 
         (member $D $E)) 
       (set-det)))
+; 
+
 
 
   (= 
     (grammar-type-loop Nil $A $B $C $A $B $C) 
     (set-det))
+; 
+
   (= 
     (grammar-type-loop 
       (Cons  $A $B) $C $D $E $F $G $H) 
     ( (user-override $A $D $E $I $J) (grammar-type-loop $B $C $I $J $F $G $H)))
+; 
+
   (= 
     (grammar-type-loop 
       (Cons  $A $B) $C $D $E $F $G $H) 
     ( (copy-term $A $I) 
-      (get-atoms  &self 
+      (get-symbols  &self 
         (= $I $J)) 
       (goal-type $A $J $B $C $D $E $K $L $M) 
       (grammar-type-loop $B $K $L $M $F $G $H)))
+; 
+
 
 
   (= 
     (find_minimum_depth  $_ () $A $A) True)
+; 
+
   (= 
     (find-minimum-depth $A 
       (Cons  
@@ -525,10 +691,14 @@
         (min $C $E)) 
       (find-minimum-depth $A $D $G $F) 
       (set-det)))
+; 
+
   (= 
     (find-minimum-depth $A 
       (Cons  $_ $B) $C $D) 
     ( (find-minimum-depth $A $B $C $D) (set-det)))
+; 
+
 
 
   (= 
@@ -537,10 +707,14 @@
         (, $B $_) $_)) 
     (=.. $B 
       (Cons  $A $_)))
+; 
+
   (= 
     (abstract-member $A 
       (Cons  $_ $B)) 
     (abstract-member $A $B))
+; 
+
 
 
   (= 
@@ -549,10 +723,14 @@
         (, $B $C) $_) $C) 
     ( (=.. $A 
         (Cons  $B $_)) (set-det)))
+; 
+
   (= 
     (find-min-depth $A 
       (Cons  $_ $B) $C) 
     ( (find-min-depth $A $B $C) (set-det)))
+; 
+
 
 
   (= 
@@ -561,6 +739,8 @@
         (Cons  $B $_)) 
       (dctg-id-table $B $_ $_ $_) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -572,10 +752,14 @@
       (is $G 
         (max $F $D)) 
       (find-min-depth-body $B $C $G $E)))
+; 
+
   (= 
     (find-min-depth-body 
       (, $_ $A) $B $C $D) 
     ( (set-det) (find-min-depth-body $A $B $C $D)))
+; 
+
   (= 
     (find-min-depth-body $A $B $C $D) 
     ( (is-a-rule-call $A) 
@@ -583,14 +767,20 @@
       (find-min-depth $A $B $E) 
       (is $D 
         (max $E $C))))
+; 
+
   (= 
     (find-min-depth-body $_ $_ $A $A) 
     (set-det))
+; 
+
 
 
   (= 
     (find-rule-mins Nil $A $A) 
     (set-det))
+; 
+
   (= 
     (find-rule-mins 
       (Cons  
@@ -602,20 +792,26 @@
       (find-rule-mins $C 
         (Cons  
           (, $F $B) $D) $E)))
+; 
+
   (= 
     (find-rule-mins 
       (Cons  $_ $A) $B $C) 
     (find-rule-mins $A $B $C))
+; 
+
 
 
   (= 
     (process-rules Nil $A $_ $B $A $B) 
     (set-det))
+; 
+
   (= 
     (process-rules 
       (Cons  $A $B) $C $D $E $F $G) 
     ( (copy-term $A $H) 
-      (get-atoms  &self 
+      (get-symbols  &self 
         (= $H $I)) 
       (find-min-depth-body $I $D 0 $J) 
       (set-det) 
@@ -624,15 +820,21 @@
       (process-rules $B 
         (Cons  
           (, $A $K) $C) $D $E $F $G)))
+; 
+
   (= 
     (process-rules 
       (Cons  $A $B) $C $D $E $F $G) 
     ( (set-det) (process-rules $B $C $D (Cons  $A $E) $F $G)))
+; 
+
 
 
   (= 
     (set-rule-data Nil $_) 
     (set-det))
+; 
+
   (= 
     (set-rule-data 
       (Cons  
@@ -640,20 +842,22 @@
     ( (=.. $A 
         (Cons  $E $F)) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $_ 
           (:: 
             (node $_ $_ $G) $_ $_) $F)) 
       (det-if-then-else 
         (with_self  
-          (lists) 
+          (lists *) 
           (member $A $D)) 
         (= $H terminal) 
         (= $H nonterminal)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (dctg_rule_info  $E $G $A $B $H)) 
       (set-rule-data $C $D) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -666,11 +870,15 @@
         (= $F $D) 
         (grammar-type-top-loop $E $F $G $D)) 
       (set-det)))
+; 
+
 
 
   (= 
     (grammar-depth-top-loop Nil $A $_ $A) 
     (set-det))
+; 
+
   (= 
     (grammar-depth-top-loop $A $B $C $D) 
     ( (process-rules $A $B $C Nil $E $F) 
@@ -697,77 +905,103 @@
           (fail)) 
         (grammar-depth-top-loop $F $E $G $D)) 
       (set-det)))
+; 
+
 
 
   (= 
     (clone-list Nil Nil) 
     (set-det))
+; 
+
   (= 
     (clone-list 
       (Cons  $_ $A) 
       (Cons  $_ $B)) 
     ( (clone-list $A $B) (set-det)))
+; 
+
 
 
   (= 
     (get-rule-name $A) 
-    ( (get-atoms  &self 
+    ( (get-symbols  &self 
         (= 
           (semantic_rule  $B $_ $C $_) $_)) 
       (=.. $C 
         (Cons  $D $E)) 
       (clone-list $E $F) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $F 
           (:: 
             (node $_ $_ $B) $_ $_) $G)) 
       (=.. $A 
         (Cons  $D $G))))
+; 
+
 
 
   (= 
     (dctg_id_table  expr 
       (0 1) () 
       (0 1)) True)
+; 
+
   (= 
     (dctg_id_table  guardedexpr_a 
       (8 9) 
       (8) 
       (9)) True)
+; 
+
   (= 
     (dctg_id_table  guardedexpr_b 
       (10 11) 
       (10) 
       (11)) True)
+; 
+
   (= 
     (dctg_id_table  intval 
       (12) 
       (12) ()) True)
+; 
+
   (= 
     (dctg_id_table  iter_expr 
       (6 7) () 
       (6 7)) True)
+; 
+
   (= 
     (dctg_id_table  noniter_expr 
       (2 3 4 5) 
       (2 3) 
       (4 5)) True)
+; 
+
   (= 
     (dctg_id_table  probval 
       (13) 
       (13) ()) True)
+; 
+
 
 
   (= 
     (enhance-rule-id-list) 
-    ( (remove-atom  &self 
+    ( (remove-symbol  &self 
         (dctg_id_table  $A $B $_ $_)) 
       (identify-type $B $C $D) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (dctg_id_table  $A $B $C $D)) 
       (fail)))
+; 
+
   (= enhance_rule_id_list True)
+; 
+
 
 
   (= 
@@ -779,6 +1013,8 @@
       (grammar-type-top-loop $C Nil Nil $E) 
       (set-rule-data $D $E) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -788,15 +1024,19 @@
         (make-rule-id-list2 $A $B) $C) 
       (make-id-entries $C) 
       (set-det)))
+; 
+
 
 
   (= 
     (cleanup-grammar-data) 
-    ( (remove-all-atoms  &self 
+    ( (remove-all-symbols  &self 
         (dctg_rule_info  $_ $_ $_ $_)) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (dctg_id_table  $_ $_ $_ $_)) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -806,54 +1046,80 @@
       (generate-rule-data) 
       (enhance-rule-id-list) 
       (set-det)))
+; 
+
 
 
   (= 
     (file-search-path library $A) 
     (library-directory $A))
+; 
+
   (= 
     (file-search-path system $A) 
     (prolog-flag host-type $A))
+; 
+
 
 
   (= 
     (eval_with_ID_P  no) True)
+; 
+
 
 
   (= 
     (negsetsize_P  30) True)
+; 
+
 
 
   (= 
     (elite_migrate_P  0 no) True)
+; 
+
 
 
   (= 
     (unique_guards_P  no) True)
+; 
+
 
 
   (= 
     (min_skip_prob_P  0.0001) True)
+; 
+
 
 
   (= 
     (min_grammar_prob_P  0.0001) True)
+; 
+
 
 
   (= 
     (gen_set_size_P  1000) True)
+; 
+
 
 
   (= 
     (sre_mintestcnt_P  2) True)
+; 
+
 
 
   (= 
     (mutation_range_P  0.1) True)
+; 
+
 
 
   (= 
     (dctg_override_P  () ()) True)
+; 
+
 
 
   (= 
@@ -861,121 +1127,179 @@
       (node expr 
         (:: $A) 0) $B $C) 
     (iter-expr $A $B $C))
+; 
+
   (= 
     (expr 
       (node expr 
         (:: $A) 1) $B $C) 
     (noniter-expr $A $B $C))
+; 
+
 
 
   (= 
     (dctg_root_P  expr) True)
+; 
+
 
 
   (= 
     (user_args_P  ()) True)
+; 
+
 
 
   (= 
     (reprod_verif_P  no) True)
+; 
+
 
 
   (= 
     (evaluator_reset_P  generate_testset 100) True)
+; 
+
 
 
   (= 
     (gen_type_P  steadystate) True)
+; 
+
 
 
   (= 
     (popn_dump_P  no) True)
+; 
+
 
 
   (= 
     (max_string_length_P  20) True)
+; 
+
 
 
   (= 
     (rep_limit_P  2) True)
+; 
+
 
 
   (= 
     (trace_limit_P  0 0) True)
+; 
+
 
 
   (= 
     (unique_population_P  yes) True)
+; 
+
 
 
   (= 
     (lamarckian_P  0.0 10 best 0.1) True)
+; 
+
 
 
   (= 
     (tournament_size_P  4 4) True)
+; 
+
 
 
   (= 
     (error_tolerance_P  0) True)
+; 
+
 
 
   (= 
     (max_depth_P  10 17) True)
+; 
+
 
 
   (= 
     (prob_terminal_mutation_P  0.75) True)
+; 
+
 
 
   (= 
     (prob_internal_crossover_P  0.9) True)
+; 
+
 
 
   (= 
     (reprod_P  3) True)
+; 
+
 
 
   (= 
     (prob_crossover_P  0.9) True)
+; 
+
 
 
   (= 
     (prob_grow_P  0.5) True)
+; 
+
 
 
   (= 
     (max_runs_P  1 solution 3) True)
+; 
+
 
 
   (= 
     (cull_method_P  elite) True)
+; 
+
 
 
   (= 
     (population_size_P  75 50) True)
+; 
+
 
 
   (= 
     (dctg_file_P  sre3.pl) True)
+; 
+
 
 
   (= 
     (fitness_func_P  reg_gram_1) True)
+; 
+
 
 
   (= 
     (wd_P  c:/research/sre_dna_fastX) True)
+; 
+
 
 
   (= 
     (seed_P  random 
       (,  $_ 
         (,  $_ $_))) True)
+; 
+
 
 
   (= 
     (rule_number  14) True)
+; 
+
 
 
   (= 
@@ -983,11 +1307,15 @@
       (construct $A) expr 
       (:: $B)) 
     ( (set-det) (^^ $B (construct $A))))
+; 
+
   (= 
     (semantic-rule 0 
       (raw-generate $A $B $C) expr 
       (:: $D)) 
     ( (set-det) (^^ $D (raw-generate $A $B $C))))
+; 
+
   (= 
     (semantic-rule 0 
       (recognize $A $B $C $D) expr 
@@ -996,16 +1324,22 @@
       (check-prob $C) 
       (^^ $E 
         (recognize $A $B $C $D))))
+; 
+
   (= 
     (semantic-rule 1 
       (construct $A) expr 
       (:: $B)) 
     ( (set-det) (^^ $B (construct $A))))
+; 
+
   (= 
     (semantic-rule 1 
       (raw-generate $A $B $C) expr 
       (:: $D)) 
     ( (set-det) (^^ $D (raw-generate $A $B $C))))
+; 
+
   (= 
     (semantic-rule 1 
       (recognize $A $B $C $D) expr 
@@ -1014,40 +1348,54 @@
       (check-prob $C) 
       (^^ $E 
         (recognize $A $B $C $D))))
+; 
+
   (= 
     (semantic-rule 2 
       (construct a) noniter-expr 
       (:: (:: a))) 
     (set-det))
+; 
+
   (= 
     (semantic-rule 2 
       (raw-generate 
         (:: a) $A $B) noniter-expr 
       (:: (:: a))) 
     ( (set-det) (is $B (+ $A 1))))
+; 
+
   (= 
     (semantic-rule 2 
       (recognize 
         (Cons  a $A) $A $B $B) noniter-expr 
       (:: (:: a))) 
     ( (set-det) (check-prob $B)))
+; 
+
   (= 
     (semantic-rule 3 
       (construct b) noniter-expr 
       (:: (:: b))) 
     (set-det))
+; 
+
   (= 
     (semantic-rule 3 
       (raw-generate 
         (:: b) $A $B) noniter-expr 
       (:: (:: b))) 
     ( (set-det) (is $B (+ $A 1))))
+; 
+
   (= 
     (semantic-rule 3 
       (recognize 
         (Cons  b $A) $A $B $B) noniter-expr 
       (:: (:: b))) 
     ( (set-det) (check-prob $B)))
+; 
+
   (= 
     (semantic-rule 4 
       (construct (:: (, $A $B) (, $C $D))) noniter-expr 
@@ -1061,6 +1409,8 @@
         (construct $C)) 
       (^^ $H 
         (construct $D))))
+; 
+
   (= 
     (semantic-rule 4 
       (raw-generate $A $B $C) noniter-expr 
@@ -1077,6 +1427,8 @@
           (raw-generate $A $B $C)) 
         (^^ $F 
           (raw-generate $A $B $C)))))
+; 
+
   (= 
     (semantic-rule 4 
       (recognize $A $B $C $D) noniter-expr 
@@ -1093,6 +1445,8 @@
       (check-prob $J) 
       (^^ $E 
         (recognize $A $B $J $D))))
+; 
+
   (= 
     (semantic-rule 4 
       (recognize $A $B $C $D) noniter-expr 
@@ -1109,6 +1463,8 @@
       (check-prob $J) 
       (^^ $F 
         (recognize $A $B $J $D))))
+; 
+
   (= 
     (semantic-rule 5 
       (construct (with_self  $A $B)) noniter-expr 
@@ -1118,6 +1474,8 @@
         (construct $A)) 
       (^^ $D 
         (construct $B))))
+; 
+
   (= 
     (semantic-rule 5 
       (raw-generate $A $B $C) noniter-expr 
@@ -1128,8 +1486,10 @@
       (^^ $E 
         (raw-generate $H $G $C)) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $F $H $A))))
+; 
+
   (= 
     (semantic-rule 5 
       (recognize $A $B $C $D) noniter-expr 
@@ -1141,6 +1501,8 @@
       (check-prob $H) 
       (^^ $F 
         (recognize $G $B $H $D))))
+; 
+
   (= 
     (semantic-rule 6 
       (construct (* $A $B)) iter-expr 
@@ -1150,6 +1512,8 @@
         (construct $A)) 
       (^^ $D 
         (construct $B))))
+; 
+
   (= 
     (semantic-rule 6 
       (raw-generate $A $B $C) iter-expr 
@@ -1159,6 +1523,8 @@
         (construct $F)) 
       (max-string-length-P $G) 
       (raw-gen-loop $D $F $G $A $B $C)))
+; 
+
   (= 
     (semantic-rule 6 
       (recognize $A $B $C $D) iter-expr 
@@ -1168,6 +1534,8 @@
       (^^ $F 
         (construct $G)) 
       (recognize-loop $E $G $A $B $C $D)))
+; 
+
   (= 
     (semantic-rule 7 
       (construct (+ $A $B)) iter-expr 
@@ -1177,6 +1545,8 @@
         (construct $A)) 
       (^^ $D 
         (construct $B))))
+; 
+
   (= 
     (semantic-rule 7 
       (raw-generate $A $B $C) iter-expr 
@@ -1189,9 +1559,11 @@
       (max-string-length-P $I) 
       (raw-gen-loop $D $H $I $J $G $C) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $F $J $A)) 
       (set-det)))
+; 
+
   (= 
     (semantic-rule 7 
       (recognize $A $B $C $D) iter-expr 
@@ -1205,29 +1577,39 @@
       (^^ $F 
         (construct $I)) 
       (recognize-loop $E $I $G $B $H $D)))
+; 
+
   (= 
     (semantic-rule 8 
       (construct a) guardedexpr-a 
       (:: (:: a))) 
     (set-det))
+; 
+
   (= 
     (semantic-rule 8 
       (raw-generate 
         (:: a) $A $B) guardedexpr-a 
       (:: (:: a))) 
     ( (set-det) (is $B (+ $A 1))))
+; 
+
   (= 
     (semantic-rule 8 
       (recognize 
         (Cons  a $A) $A $B $B) guardedexpr-a 
       (:: (:: a))) 
     ( (set-det) (check-prob $B)))
+; 
+
   (= 
     (semantic-rule 9 
-      (construct (with_self  (a) $A)) guardedexpr-a 
+      (construct (with_self  (a *) $A)) guardedexpr-a 
       (:: 
         (:: a) $B)) 
     ( (set-det) (^^ $B (construct $A))))
+; 
+
   (= 
     (semantic-rule 9 
       (raw-generate 
@@ -1239,6 +1621,8 @@
         (raw-generate $A $B $E)) 
       (is $C 
         (+ $E 1))))
+; 
+
   (= 
     (semantic-rule 9 
       (recognize 
@@ -1249,29 +1633,39 @@
       (check-prob $C) 
       (^^ $E 
         (recognize $A $B $C $D))))
+; 
+
   (= 
     (semantic-rule 10 
       (construct b) guardedexpr-b 
       (:: (:: b))) 
     (set-det))
+; 
+
   (= 
     (semantic-rule 10 
       (raw-generate 
         (:: b) $A $B) guardedexpr-b 
       (:: (:: b))) 
     ( (set-det) (is $B (+ $A 1))))
+; 
+
   (= 
     (semantic-rule 10 
       (recognize 
         (Cons  b $A) $A $B $B) guardedexpr-b 
       (:: (:: b))) 
     ( (set-det) (check-prob $B)))
+; 
+
   (= 
     (semantic-rule 11 
-      (construct (with_self  (b) $A)) guardedexpr-b 
+      (construct (with_self  (b *) $A)) guardedexpr-b 
       (:: 
         (:: b) $B)) 
     ( (set-det) (^^ $B (construct $A))))
+; 
+
   (= 
     (semantic-rule 11 
       (raw-generate 
@@ -1283,6 +1677,8 @@
         (raw-generate $A $B $E)) 
       (is $C 
         (+ $E 1))))
+; 
+
   (= 
     (semantic-rule 11 
       (recognize 
@@ -1293,16 +1689,22 @@
       (check-prob $C) 
       (^^ $E 
         (recognize $A $B $C $D))))
+; 
+
   (= 
     (semantic-rule 12 
       (construct $A) intval 
       (:: (:: $A))) 
     (set-det))
+; 
+
   (= 
     (semantic-rule 13 
       (construct $A) probval 
       (:: (:: $A))) 
     (set-det))
+; 
+
 
 
   (= 
@@ -1314,25 +1716,37 @@
           (::= $B $C))) 
       (set-det) 
       (translate-rule $A $D) 
-      (add-atom  &self $D) 
+      (add-symbol  &self $D) 
       (set-det)))
+; 
+
   (= 
     (process !$A) 
     ( (set-det) (call $A)))
+; 
+
   (= 
     (process (= $A $B)) 
-    ( (set-det) (add-atom  &self (:-  $A $B))))
+    ( (set-det) (add-symbol  &self (:-  $A $B))))
+; 
+
   (= 
     (process $A) 
-    (add-atom  &self $A))
+    (add-symbol  &self $A))
+; 
+
 
 
   (= 
     (check-it $A) 
     ( (= $A end-of-file) (set-det)))
+; 
+
   (= 
     (check-it $A) 
     ( (process $A) (fail)))
+; 
+
 
 
   (= 
@@ -1340,6 +1754,8 @@
     ( (repeat) 
       (read $A) 
       (check-it $A)))
+; 
+
 
 
   (= 
@@ -1349,15 +1765,19 @@
       (consume) 
       (seen) 
       (see $B)))
+; 
+
 
 
   (= 
     (add-extra-args $A $B $C) 
     ( (=.. $B $D) 
       (with_self  
-        (lists) 
+        (lists *) 
         (append $D $A $E)) 
       (=.. $C $E)))
+; 
+
 
 
   (= 
@@ -1370,11 +1790,13 @@
         (, 
           (= $F $D) 
           (= $G True))) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (:-  
           (semantic_rule  $A $F $B $C) 
           (,  ! $G))) 
       (assert-semantic-rule $A $B $C $E)))
+; 
+
   (= 
     (assert-semantic-rule $A $B $C $D) 
     ( (or 
@@ -1382,17 +1804,21 @@
           (::- $E $F)) 
         (, 
           (= $E $D) 
-          (= $F True))) (add-atom  &self (:-  (semantic_rule  $A $E $B $C) (,  ! $F)))))
+          (= $F True))) (add-symbol  &self (:-  (semantic_rule  $A $E $B $C) (,  ! $F)))))
+; 
+
 
 
   (= 
     (prod-number $A) 
-    ( (remove-atom  &self 
+    ( (remove-symbol  &self 
         (rule_number  $A)) 
       (is $B 
         (+ $A 1)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (rule_number  $B))))
+; 
+
 
 
   (= 
@@ -1400,6 +1826,8 @@
       (, $A $B $C) $D) 
     (tidy 
       (, $A $B $C) $D))
+; 
+
   (= 
     (tidy 
       (, $A $B) 
@@ -1407,9 +1835,13 @@
     ( (set-det) 
       (tidy $A $C) 
       (tidy $B $D)))
+; 
+
   (= 
     (tidy $A $A) 
     (set-det))
+; 
+
 
 
   (= 
@@ -1417,11 +1849,15 @@
       (set-det) $A $A $B $B 
       (set-det)) 
     (set-det))
+; 
+
   (= 
     (t-rp Nil $A 
       (Cons  Nil $A) $B $C 
       (= $B $C)) 
     (set-det))
+; 
+
   (= 
     (t-rp 
       (:: $A) $B 
@@ -1429,6 +1865,8 @@
         (:: $C) $B) $D $E 
       (c $D $A $E)) 
     (char $A $C))
+; 
+
   (= 
     (t-rp 
       (:: $A) $B 
@@ -1436,6 +1874,8 @@
         (:: $A) $B) $C $D 
       (c $C $A $D)) 
     (set-det))
+; 
+
   (= 
     (t-rp 
       (Cons  $A $B) $C 
@@ -1444,6 +1884,8 @@
       (, 
         (c $F $A $H) $I)) 
     ( (char $A $D) (t-rp $B $C (Cons  $E $C) $H $G $I)))
+; 
+
   (= 
     (t-rp 
       (Cons  $A $B) $C 
@@ -1452,10 +1894,14 @@
       (, 
         (c $D $A $F) $G)) 
     ( (set-det) (t-rp $B $C (Cons  $B $C) $F $E $G)))
+; 
+
   (= 
     (t-rp 
       {$A } $B $B $C $C $A) 
     (set-det))
+; 
+
   (= 
     (t-rp 
       (, $A $B) $C $D $E $F 
@@ -1463,30 +1909,38 @@
     ( (set-det) 
       (t-rp $A $C $I $E $J $G) 
       (t-rp $B $I $D $J $F $H)))
+; 
+
   (= 
     (t-rp 
       (^^ $A $B) $C 
       (Cons  $B $C) $D $E $F) 
     (add-extra-args 
       (:: $B $D $E) $A $F))
+; 
+
   (= 
     (t-rp $A $B 
       (Cons  $C $B) $D $E $F) 
     (add-extra-args 
       (:: $C $D $E) $A $F))
+; 
+
 
 
   (= 
     (t-lp 
       (, $A $B) $C $D $E $F $G) 
     ( (with_self  
-        (lists) 
+        (lists *) 
         (append $B $E $H)) 
       (prod-number $I) 
       (assert-semantic-rule $I $A $C $F) 
       (add-extra-args 
         (:: 
           (node $A $C $I) $D $H) $A $G)))
+; 
+
   (= 
     (t-lp $A $B $C $D $E $F) 
     ( (prod-number $G) 
@@ -1494,6 +1948,8 @@
       (add-extra-args 
         (:: 
           (node $A $B $G) $C $D) $A $F)))
+; 
+
 
 
   (= 
@@ -1501,10 +1957,14 @@
       (<:> 
         (::= $A Nil) $B) $C) 
     ( (set-det) (t-lp $A Nil $D $D $B $C)))
+; 
+
   (= 
     (translate-rule 
       (::= $A Nil) $B) 
     ( (set-det) (t-lp $A Nil $C $C Nil $B)))
+; 
+
   (= 
     (translate-rule 
       (<:> 
@@ -1513,10 +1973,12 @@
     ( (set-det) 
       (t-rp $B Nil $F $G $H $I) 
       (with_self  
-        (lists) 
+        (lists *) 
         (reverse $F $J)) 
       (t-lp $A $J $G $H $C $D) 
       (tidy $I $E)))
+; 
+
   (= 
     (translate-rule 
       (::= $A $B) 
@@ -1525,12 +1987,16 @@
       (<:> 
         (::= $A $B) Nil) 
       (= $C $D)))
+; 
+
 
 
   (= 
     (^^ 
       (node $A $B $C) $D) 
     (semantic-rule $C $D $A $B))
+; 
+
 
 
   (= 
@@ -1554,5 +2020,7 @@
       (write 'Depth = ') 
       (write $F) 
       (nl)))
+; 
+
 
 

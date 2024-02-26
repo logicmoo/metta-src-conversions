@@ -1,23 +1,29 @@
 
-  !(:: (matrix))
+  !(:: (matrix *))
+; 
 
-
-;
-;                             Randomise.
 
 
 ;
-;                             Seed.
+; 
+
+
+;
+; 
 
   !(set-random (seed 777))
+; 
+
 
 ;
-;                              Vector.
+; 
 
 
   (= 
     (rand-vector 0 $_ Nil) 
     (set-det))
+; 
+
   (= 
     (rand-vector $D 
       (:: $A $B) 
@@ -32,14 +38,18 @@
       (rand-vector $D1 
         (:: $A $B) $R) 
       (set-det)))
+; 
+
 
 ;
-;                               Matrix.
+; 
 
 
   (= 
     (rand-matrix 0 $_ $_ Nil) 
     (set-det))
+; 
+
   (= 
     (rand-matrix $P $Q 
       (:: $A $B) 
@@ -51,108 +61,154 @@
       (rand-matrix $P1 $Q 
         (:: $A $B) $R) 
       (set-det)))
+; 
+
 
 ;
-;                                Nnet constructor.
+; 
 
 
 
   !(dynamic (/ weight-matrix 2))
+; 
+
   !(dynamic (/ bias-vector 2))
+; 
+
   !(dynamic (/ activation 2))
+; 
+
   !(dynamic (/ layer-input 2))
+; 
+
   !(dynamic (/ layer-output 2))
+; 
+
   !(dynamic (/ layer-out-diff 2))
+; 
+
   !(dynamic (/ layer-in-diff 2))
+; 
+
   !(dynamic (/ layer-bias-grad 2))
+; 
+
   !(dynamic (/ layer-weight-grad 2))
+; 
+
 
 
 
   (= 
     (layer-init $Name $InDim $OutDim $Act 
       (:: $S1 $S2)) 
-    ( (remove-all-atoms  &self 
+    ( (remove-all-symbols  &self 
         (weight_matrix  $Name $_)) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (bias_vector  $Name $_)) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (activation  $Name $_)) 
       (rand-matrix $OutDim $InDim 
         (:: $S1 $S2) $W) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (weight_matrix  $Name $W)) 
       (rand-vector $OutDim 
         (:: $S1 $S2) $B) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (bias_vector  $Name $B)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (activation  $Name $Act)) 
       (print (:: layer $Name has been initialised)) 
       (nl) 
       (set-det)))
+; 
+
 
   
 ;
-;                                      Activation Function.
+; 
 
 
 ;
-;                                      ReLU.
+; 
 
 
 
   (= 
     (relu $X 0) 
     ( (< $X 0) (set-det)))
+; 
+
   (= 
     (relu $X 30) 
     ( (> $X 30) (set-det)))
+; 
+
   (= 
     (relu $X $X) 
     (set-det))
+; 
+
 
 
 
   (= 
     (relu-diff $X 0) 
     ( (< $X 0) (set-det)))
+; 
+
   (= 
     (relu-diff $X 0) 
     ( (> $X 30) (set-det)))
+; 
+
   (= 
     (relu-diff $_ 1) 
     (set-det))
+; 
+
 
 
 
   !(discontiguous (/ vec-act 3))
+; 
+
   !(discontiguous (/ vec-act-diff 3))
+; 
+
 
 
   (= 
     (vec-act relu $V $R) 
     ( (maplist relu $V $R) (set-det)))
+; 
+
 
   (= 
     (vec-act-diff relu $V $R) 
     ( (maplist relu-diff $V $R) (set-det)))
+; 
+
 
 
 
 ;
-;                                          Softmax.
+; 
 
 
   (= 
     (exp $X $Y) 
     ( (is $Y 
         (exp $X)) (set-det)))
+; 
+
 
   (= 
     (softmax-sub1 $A $X $Y) 
     ( (is $Y 
         (/ $X $A)) (set-det)))
+; 
+
 
   (= 
     (softmax $V $R) 
@@ -161,33 +217,45 @@
       (maplist 
         (softmax-sub1 $S) $P $R) 
       (set-det)))
+; 
+
 
 
   (= 
     (softmax-diff-sub $_ 1) 
     (set-det))
+; 
+
 
   (= 
     (softmax-diff $V $R) 
     ( (maplist softmax-diff-sub $V $R) (set-det)))
+; 
+
 
 
   (= 
     (vec-act softmax $V $R) 
     ( (softmax $V $R) (set-det)))
+; 
+
 
   (= 
     (vec-act-diff softmax $V $R) 
     ( (softmax-diff $V $R) (set-det)))
+; 
+
 
 ;
-;                                          Cross-Entropy Loss.
+; 
 
 
   (= 
     (ce-sub1 $A $B $S) 
     ( (is $S 
         (- $A $B)) (set-det)))
+; 
+
 
   (= 
     (neg-t-ln-y $Y $T $R) 
@@ -195,34 +263,42 @@
         (* 
           (* -1 $T) 
           (log $Y))) (set-det)))
+; 
+
 
   (= 
     (ce-error $Y $T $E) 
     ( (maplist neg-t-ln-y $Y $T $P) 
       (sumlist $P $E) 
       (set-det)))
+; 
+
 
   (= 
     (ce-diff $Y $T $D) 
     ( (maplist ce-sub1 $T $Y $D) (set-det)))
+; 
+
 
 ;
-;                                          Forward Computation.
+; 
 
 
 
   (= 
     (nnet-forward Nil $In $In) 
     (set-det))
+; 
+
   (= 
     (nnet-forward 
       (Cons  $Name $LayerList) $In $Out) 
     ( (weight-matrix $Name $W) 
       (bias-vector $Name $B) 
       (activation $Name $Act) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (layer_input  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (layer_input  $Name $In)) 
       (transpose $In $InT) 
       (mat-mult-mat $W $InT $X) 
@@ -231,26 +307,17 @@
         (vec-add-vec $B) $XT $ZT) 
       (maplist 
         (vec-act $Act) $ZT $Y) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (layer_output  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (layer_output  $Name $Y)) 
       (nnet-forward $LayerList $Y $Out) 
       (set-det)))
-;                                         ; Y = Act(W * In + B)
-
-;                                         ;print(X),nl,
-
-;                                         ;print(ZT),nl,
-
-;                                         ;print(Y),nl,
-
-;                                         ; Go to the next layer
-
+; 
 
 
 ;
-;                                          Error Computation.
+; 
 
 
   (= 
@@ -265,19 +332,18 @@
         (/ $ErrTot $NumData)) 
       (maplist ce-diff $Y $Tgt $Diff) 
       (set-det)))
-;                                         ;retractall(layer_out_diff(Name,_)),
-
-;                                         ;assert(layer_out_diff(Name,Diff)),
-
+; 
 
 
 ;
-;                                          Backward Computation.
+; 
 
 
   (= 
     (nnet-backward Nil $_ $_) 
     (set-det))
+; 
+
   (= 
     (nnet-backward $LayerList $Diff $LRate) 
     ( (append $L1 
@@ -291,41 +357,40 @@
       (maplist vec-mult-vec $Diff $ActDiff $BDiff) 
       (transpose $BDiff $BDT) 
       (maplist sumlist $BDT $BGrad) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (layer_bias_grad  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (layer_bias_grad  $Name $BGrad)) 
       (layer-input $Name $In) 
       (mat-mult-mat $BDT $In $WGrad) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (layer_weight_grad  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (layer_weight_grad  $Name $WGrad)) 
       (mat-mult-mat $BDiff $W $InDiff) 
       (nnet-backward $L1 $InDiff $LRate) 
       (mat-mult-const $WGrad $LRate $DW) 
       (mat-add-mat $W $DW $WNew) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (weight_matrix  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (weight_matrix  $Name $WNew)) 
       (vec-mult-const $BGrad $LRate $DB) 
       (vec-add-vec $B $DB $BNew) 
-      (remove-all-atoms  &self 
+      (remove-all-symbols  &self 
         (bias_vector  $Name $_)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (bias_vector  $Name $BNew)) 
       (set-det)))
-;                                         ; Next Layer.
-
-;                                         ; Update.
-
+; 
 
 
 
   (= 
     (nnet-train $_ $_ $_ 0 $_) 
     (set-det))
+; 
+
   (= 
     (nnet-train $Nnet $In $Tgt $Iter $LRate) 
     ( (is $I1 
@@ -335,6 +400,8 @@
       (printerr $Err) 
       (nnet-backward $Nnet $Diff $LRate) 
       (nnet-train $Nnet $In $Tgt $I1 $LRate)))
+; 
+
 
 
   (= 
@@ -347,6 +414,8 @@
       (print $R) 
       (nl) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -374,5 +443,7 @@
           (:: 0 0 0 1 0))) 
       (= $Nnet 
         (:: try1 try2 try3 try4 try5 try6)) 
-      (nnet-train $Nnet $In $Tgt 100 0.01))) 
+      (nnet-train $Nnet $In $Tgt 100 0.01)))
+; 
+ 
 

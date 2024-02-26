@@ -1,126 +1,146 @@
 ;
-;                         FILE xm.pl
+; 
 
 
 
 
   !(ensure-loaded dmiles)
+; 
+
 
 ;
-;                          IMPORTS
+; 
 
   !(use-module-if-exists (library proxt))
+; 
+
   !(use-module-if-exists (library ctypes))
+; 
+
   !(use-module-if-exists (library strings))
+; 
+
   !(use-module-if-exists (library basics))
+; 
+
   !(consult miles)
+; 
+
 ;
-;                            ;;:- use_module(show_utils).
+; 
 
   !(consult xmiles-functions)
+; 
 
 
 
-;
-;                             ***********************************************************************
-
-;
-;                             *
 
 ;
-;                             * file: xm.pl
+; 
 
 ;
-;                             *
+; 
 
 ;
-;                              * author: T. Volz
+; 
 
 ;
-;                              *
+; 
 
 ;
-;                              * changed:
+; 
 
 ;
-;                              *
+; 
 
 ;
-;                              * description:	X interface for MILES. Load this directly into MeTTa
+; 
 
 ;
-;                               *        (NOT qui!!), and call `xm.' to create the interface and start
+; 
 
 ;
-;                               *        the event loop. Use the `Quit XMILES'-button to suspend the
+; 
 
 ;
-;                               *        event loop, if you want to access the MeTTa-prompt directly.
+; 
 
 ;
-;                               *        Calling `xm' again restarts the event loop.
+; 
 
 ;
-;                               *
+; 
 
 ;
-;                                * see also:
+; 
 
 ;
-;                                *
+; 
 
 ;
-;                                ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (runtime-entry start) 
     (xm))
+; 
+
 
 
   !(dynamic (, (/ listItems 1) (/ my-exit-loop 1) (/ toplevel 1)))
+; 
+
 
 
   (= 
     (my_exit_loop  no) True)
+; 
 
 
 
 
 
-;
-;                                   ************************************************************************
-
-;
-;                                   *
 
 ;
-;                                   * predicate: xm		main predicate
+; 
 
 ;
-;                                    *
+; 
 
 ;
-;                                    * syntax: -
+; 
 
 ;
-;                                    *
+; 
 
 ;
-;                                    * args: -
+; 
 
 ;
-;                                    *
+; 
 
 ;
-;                                     * description: Creates the whole xmiles interface.
+; 
 
 ;
-;                                     *
+; 
 
 ;
-;                                     ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -140,7 +160,7 @@
         (, 
           (xtToolkitInitialize) 
           (xtInitialize X-MILES xMILES $XMiles) 
-          (add-atom  &self 
+          (add-symbol  &self 
             (toplevel  $XMiles)) 
           (clear-kb) 
           (xmCreateRowColumn $XMiles xMilesRow 
@@ -168,6 +188,8 @@
           (createEditorArea $XMilesColumn2) 
           (createKnowledgeBaseArea $XMilesColumn2) 
           (xtRealizeWidget $XMiles))) (my-main-loop $XMiles)))
+; 
+
 
 
   (= 
@@ -175,57 +197,59 @@
     (det-if-then-else 
       (my-exit-loop yes) 
       (, 
-        (remove-atom  &self 
+        (remove-symbol  &self 
           (my_exit_loop  yes)) 
-        (add-atom  &self 
+        (add-symbol  &self 
           (my_exit_loop  no))) 
       (, 
         (xtNextEvent $Event) 
         (xtDispatchEvent $Event) 
         (my-main-loop $Shell))))
+; 
 
 
-;
-;                                       ************************************************************************
-
-;
-;                                       *
 
 ;
-;                                       * predicate: createKnowledgeBaseArea/1
+; 
 
 ;
-;                                        *
+; 
 
 ;
-;                                        * syntax: createKnowledgeBaseArea(+Parent)
+; 
 
 ;
-;                                        *
+; 
 
 ;
-;                                        * args: Parent... specifies the parentwidget of KbRowColumn
+; 
 
 ;
-;                                        *
+; 
 
 ;
-;                                         * description: Creates the knowledge base area of the X user interface
+; 
 
 ;
-;                                         *		This area consists of two scrolled windows. One window
+; 
 
 ;
-;                                         *		is used to browse the rules of the knowledge base, the
+; 
 
 ;
-;                                         *		other window browses the examples. Used by xm/0.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -270,49 +294,51 @@
       (createRuleArea $KnowledgeBaseRow) 
       (createExampleArea $KnowledgeBaseRow) 
       (createKbButtons $KnowledgeBaseColumn)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createRuleArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createRuleArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: Parent... specifies the parent widget of RuleFrame
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the rule browser of the knowledge base. The rule
+; 
 
 ;
-;                                         *	        browser consists of a label, a scrolled rule list and
+; 
 
 ;
-;                                         *		a refresh button, which looks up for changes of the
+; 
 
 ;
-;                                         *		knowledge base. Used by createKbRowColumn/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -347,51 +373,53 @@
       (createExamineRulesPopup $Examine) 
       (createKnowledgeList $RuleColumn rules) 
       (createKbSubButtons $RuleColumn rules)))
+; 
 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createExampleArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createExampleArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +Parent		Widget
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the example browser of the knowledge base. The
+; 
 
 ;
-;                                         *		example browser consists of a label, a scrolled rule list
+; 
 
 ;
-;                                         *		and a refresh button, which looks up for changes of the
+; 
 
 ;
-;                                         *		knowledge base.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -417,46 +445,48 @@
       (xtManageChild $ExampleLabel) 
       (createKnowledgeList $ExampleRowColumn examples) 
       (createKbSubButtons $ExampleRowColumn examples)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createKnowledgeList/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createKnowledgeList(+Parent,-KnowledgeRC,+KindOfKnowledge)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent			Widget
+; 
 
 ;
-;                                         *	       -KnowledgeRC		Widget
+; 
 
 ;
-;                                         *	       +KindOfKnowledge		'rules' or 'examples'
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a List either containing all rules or all examples
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -486,46 +516,48 @@
         (:: (xmNbackground $B))) 
       (addKnowledgeListItems $KindOfKnowledge) 
       (xtManageChild $KnowledgeRC)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: addKnowledgeListItems/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: addKnowledgeListItems(+KindOfKnowledge)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  Adds a label for each Rule or Example existing in the kb
+; 
 
 ;
-;                                         *		 to the parent widget stored in
+; 
 
 ;
-;                                         *			 KindOfKnowledge, knowledgeList(X)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -535,49 +567,55 @@
       (get-clause $Id $H $B $S $O) 
       (addRuleItem $Id $H $B $S $O) 
       (fail)))
+; 
+
   (= 
     (addKnowledgeListItems examples) 
     ( (getNextId $Id) 
       (get-example $Id $F $C) 
       (addExampleItem $Id $F $C) 
       (fail)))
+; 
+
   (= 
     (addKnowledgeListItems $_) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: getNextId/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: getNextId(+Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +Id			Integer <= id_count(X)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Counts from zero to id_count
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -606,43 +644,45 @@
           (erase $Ref2) 
           (set-det) 
           (fail)) otherwise)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: deleteKnowledgeListItems/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: deleteKnowledgeListItems(+KindOfKnowledge)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Deletes all Labels representing rules or examples
+; 
 
 ;
-;                                         *		of the knowledgelist. Leaves the knowledgebase unchanged
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -654,6 +694,8 @@
       (erase $Ref) 
       (set-det) 
       (deleteKnowledgeListItems rules)))
+; 
+
   (= 
     (deleteKnowledgeListItems examples) 
     ( (recorded current 
@@ -662,61 +704,65 @@
       (erase $Ref) 
       (set-det) 
       (deleteKnowledgeListItems examples)))
+; 
+
   (= 
     (deleteKnowledgeListItems $_) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: addRuleItem/4
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: addRuleItem(+I,+H,+B,+O)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +I		Integer, spezifies the ID of the rule
+; 
 
 ;
-;                                         *	       +H		Head of the rule
+; 
 
 ;
-;                                         *	       +B		Body of the rule
+; 
 
 ;
-;                                         *	       +O		Label
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a label to show the rule spezified by the
+; 
 
 ;
-;                                         *		arguments. The Label widget is recorded:
+; 
 
 ;
-;                                         *	            recordz(current,clause(I,Label,notselected),_Ref)
+; 
 
 ;
-;                                         *		If the Label allready exists, then only the text changes.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -779,57 +825,61 @@
           (xtAddEventHandler $Label 
             (:: buttonPressMask) False firstClauseClick rules))) 
       (set-det)))
+; 
+
 
   (= 
     (addRuleItem $_ $_ $_ $_ $_) 
     (set-det))
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: addExampleItem/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: addExampleItem(+I,+F,+C)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +I		Integer, spezifies the ID of the example
+; 
 
 ;
-;                                         *	       +F		Example predicate
+; 
 
 ;
-;                                         *	       +C		+ or -, classification of the example
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a label to show the example spezified by the
+; 
 
 ;
-;                                         *		arguments. The Label widget is recorded:
+; 
 
 ;
-;                                         *		    recordz(current,example(I,Label,notselected),_Ref)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -898,49 +948,51 @@
           (recordz current 
             (example $I $Label notselected) $Ref))) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: refreshKnowledgeList/3		CallbackProcedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: refreshKnowledgeList(_Widget,+KindOfKnowledge,_Calldata)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling Widget
+; 
 
 ;
-;                                         *             +KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _Calldata		Event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Ensures that the knowledge displayed is the same than
+; 
 
 ;
-;                                         *		the knowledge in the knowledge base.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -949,52 +1001,54 @@
     ( (deleteKnowledgeListItems $KindOfKnowledge) 
       (addKnowledgeListItems $KindOfKnowledge) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: selectClause/3			CallbackProcedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: selectClause(+Widget,+KindOfKnowledge,_Calldata)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			calling Widget
+; 
 
 ;
-;                                         *	       +KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _Calldata		Event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Toggles selection state of the knowledge item specified
+; 
 
 ;
-;                                         *		by Widget. Visual effect is the exchange of foreground
+; 
 
 ;
-;                                         *		and background color.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1020,6 +1074,8 @@
       (det-if-then-else 
         (= $GetState True) 
         (copyId $I 1) otherwise)))
+; 
+
 
   (= 
     (selectClause $Widget rules $CallData) 
@@ -1043,6 +1099,8 @@
       (det-if-then-else 
         (= $GetState True) 
         (copyId $I 1) otherwise)))
+; 
+
 
   (= 
     (selectClause $Widget examples $CallData) 
@@ -1066,6 +1124,8 @@
       (det-if-then-else 
         (= $GetState True) 
         (copyId $I 1) otherwise)))
+; 
+
 
   (= 
     (selectClause $Widget examples $CallData) 
@@ -1089,55 +1149,57 @@
       (det-if-then-else 
         (= $GetState True) 
         (copyId $I 1) otherwise)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: firstClauseClick/3			CallbackProcedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: firstClauseClick(+Widget,_ClientData,_Calldata)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			calling Widget
+; 
 
 ;
-;                                         *	       _ClientData
+; 
 
 ;
-;                                         *	       _Calldata		Event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: If another click occures in the next two seconds, the
+; 
 
 ;
-;                                         *		knowledgebase item specified by Widget is copied into
+; 
 
 ;
-;                                         *		the editor.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1145,49 +1207,51 @@
     (firstClauseClick $Widget $ClientData $CallData) 
     ( (xtAddEventHandler $Widget 
         (:: buttonPressMask) False copyClause $_) (xtAddTimeOut 1000 noDoubleClick $Widget $ID)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: copyClause/3			CallbackProcedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: copyClause(+Widget,_ClientData,_Calldata)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			calling Widget
+; 
 
 ;
-;                                         *             _ClientData		rules or examples
+; 
 
 ;
-;                                         *	       _Calldata		Event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Copies a knowledge base item spezified by Widget to the
+; 
 
 ;
-;                                         *	        editor text.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1245,49 +1309,51 @@
             (xmStringCreate $LblCP $DCharset $LblS) 
             (xtSetValues $Label 
               (:: (xmNlabelString $LblS))))))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: noDoubleClick/2			TimeOutProcedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: noDoubleClick(+Widget,_IntervallID)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			knowledge label
+; 
 
 ;
-;                                         *	       _IntervallId		calling Intervall
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Removes event handler for copying a knowledge base item
+; 
 
 ;
-;                                         *		into the editor. This predicate is avoked if no second
+; 
 
 ;
-;                                         *		button press has occured within two seconds.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1295,52 +1361,54 @@
     (noDoubleClick $Widget $IntervallId) 
     (xtRemoveEventHandler $Widget 
       (:: buttonPressMask) False copyClause $_))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: selectAll/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: selectAll(_Widget,+KindOfKnowledge,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Selects all rules or examples of the knowledge	base. The
+; 
 
 ;
-;                                         *		rules or examples have to satisfy the current display
+; 
 
 ;
-;                                         *	        restricion.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1361,6 +1429,8 @@
       (recordz current 
         (clause $I $Widget selected) $Ref) 
       (selectAll $Widget rules $CallData)))
+; 
+
 
   (= 
     (selectAll $Widget examples $CallData) 
@@ -1379,55 +1449,59 @@
       (recordz current 
         (example $I $Widget selected) $Ref) 
       (selectAll $Widget examples $CallData)))
+; 
+
 
   (= 
     (selectAll  $_ $_ $_) True)
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: unselectAll/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: unselectAll(_Widget,+KindOfKnowledge,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Unselects all rules or examples of the knowledge base. The
+; 
 
 ;
-;                                         *      	rules or examples have to satisfy the current display
+; 
 
 ;
-;                                         *		 restricion.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1448,6 +1522,8 @@
       (recordz current 
         (clause $I $Widget notselected) $Ref) 
       (unselectAll $Widget rules $CallData)))
+; 
+
 
   (= 
     (unselectAll $Widget examples $CallData) 
@@ -1466,49 +1542,53 @@
       (recordz current 
         (example $I $Widget notselected) $Ref) 
       (unselectAll $Widget examples $CallData)))
+; 
+
 
   (= 
     (unselectAll  $_ $_ $_) True)
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: deleteKnowledge/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: deleteKnowledge(_Widget,+KindOfKnowledge,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Deletes all selected rules or examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1537,6 +1617,8 @@
       (writeMessage $I) 
       (writelnMessage ).) 
       (deleteKnowledge $Widget rules $CallData)))
+; 
+
 	
   (= 
     (deleteKnowledge $Widget examples $CallData) 
@@ -1563,6 +1645,8 @@
       (writeMessage $I) 
       (writelnMessage ).) 
       (deleteKnowledge $Widget examples $CallData)))
+; 
+
 
   (= 
     (deleteKnowledge $_ $KindOfKnowledge $_) 
@@ -1570,49 +1654,51 @@
       (writeMessage $KindOfKnowledge) 
       (writelnMessage ' deleted.') 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: deleteAllKnowledge/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: deleteKnowledge(_Widget,+KindOfKnowledge,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       KindOfKnowledge		rules or examples
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Deletes all rules or examples within the current display
+; 
 
 ;
-;                                         *	        restriction.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1641,6 +1727,8 @@
       (writeMessage $I) 
       (writelnMessage ).) 
       (deleteAllKnowledge $Widget rules $CallData)))
+; 
+
 	
   (= 
     (deleteAllKnowledge $Widget examples $CallData) 
@@ -1667,52 +1755,56 @@
       (writeMessage $I) 
       (writelnMessage ).) 
       (deleteAllKnowledge $Widget examples $CallData)))
+; 
+
 
   (= 
     (deleteAllKnowledge $_ $KindOfKnowledge $_) 
     ( (writeMessage '% all ') 
       (writeMessage $KindOfKnowledge) 
       (writelnMessage ' deleted.')))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: saveKnowledgeBegin/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: saveKnowledgeBegin(_Widget,+FileSelectionDialog,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +FileSelectionDialog	FileSelectionDialogWidget
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Pops up a fileselection dialog.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1721,47 +1813,49 @@
     ( (xtManageChild $FileSelectionDialog) 
       (xtAddCallback $FileSelectionDialog xmNokCallback saveKnowledgeEnd $FileSelectionDialog) 
       (xtAddCallback $FileSelectionDialog xmNcancelCallback cancelSaveFileSelect $FileSelectionDialog)))
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: saveKnowledgeEnd/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: saveKnowledgeEnd(_Widget,+FileSelectionDialog,+CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +FileSelectionDialog	FileSelectionDialogWidget
+; 
 
 ;
-;                                         *	       +CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Saves the selected file.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1792,46 +1886,48 @@
       (writeMessage '% file "') 
       (writeMessage $FileName) 
       (writelnMessage " saved.)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: loadKnowledgeBegin/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: loadKnowledgeBegin(_Widget,+FileSelectionDialog,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +FileSelectionDialog	FileSelectionDialogWidget
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Pops up a fileselection dialog.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1840,46 +1936,48 @@
     ( (xtManageChild $FileSelectionDialog) 
       (xtAddCallback $FileSelectionDialog xmNokCallback loadKnowledgeEnd $FileSelectionDialog) 
       (xtAddCallback $FileSelectionDialog xmNcancelCallback cancelLoadFileSelect $FileSelectionDialog)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: loadKnowledgeEnd/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: loadKnowledgeEnd(_Widget,+FileSelectionDialog,+CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +FileSelectionDialog	FileSelectionDialogWidget
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Loads the selected file.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1913,46 +2011,48 @@
       (refreshKnowledgeList $Widget rules $Calldata) 
       (refreshKnowledgeList $Widget examples $Calldata) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: clearAllKnowledge/3 	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: clearAllKnowledge(_Widget,_ClientData,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       _ClientData		no client data
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  deletes all rules and examples
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -1965,48 +2065,50 @@
       (writelnMessage '% knowledgebase cleared.') 
       (clear-kb) 
       (updateEvaluationLabel)))
+; 
+
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: cancelLoadFileSelect/3 	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: cancelLoadFileSelect(_Widget,_ClientData,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       _ClientData		no client data
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Pops down the file selection dialog without loading any
+; 
 
 ;
-;                                         *		file.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -2015,49 +2117,51 @@
     ( (xtRemoveCallback $FileSelectionDialog xmNokCallback loadKnowledgeEnd $FileSelectionDialog) 
       (xtRemoveCallback $FileSelectionDialog xmNcancelCallback cancelLoadFileSelect $FileSelectionDialog) 
       (xtUnmanageChild $FileSelectionDialog)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: cancelSaveFileSelect/3 	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: cancelSaveFileSelect(_Widget,_ClientData,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       _ClientData		no client data
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Pops down the file selection dialog without saving any
+; 
 
 ;
-;                                         *		file.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2066,46 +2170,48 @@
     ( (xtRemoveCallback $FileSelectionDialog xmNokCallback saveKnowledgeEnd $FileSelectionDialog) 
       (xtRemoveCallback $FileSelectionDialog xmNcancelCallback cancelSaveFileSelect $FileSelectionDialog) 
       (xtUnmanageChild $FileSelectionDialog)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createKbButtons/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createKbButtons(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: Parent			Widget
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the push buttons 'Save', 'Load', 'Clear'. These
+; 
 
 ;
-;                                         *		buttons are effecting the whole knowledge base (rules and
+; 
 
 ;
-;                                         *	        examples).
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2129,52 +2235,54 @@
       (xmCreatePushButton $ButtonRowColumn Clear Nil $Clear) 
       (xtManageChild $Clear) 
       (createYesNoPopup $Clear $YesNoPopup clearAllKnowledge $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createKbSubButtons/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createKbSubButtons(+Parent,+KindOfKnowledge)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:        +Parent			Widget
+; 
 
 ;
-;                                         *		+KindOfKnowledge	examples or rules
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the push buttons 'SelectAll', 'Unselect All',
+; 
 
 ;
-;                                         * 	         'Refresh', 'Delete', 'Delete All' and 'Label' or '+', '-'
+; 
 
 ;
-;                                         * 	         '?'. These buttons are efecting the KindOfKnowledge
+; 
 
 ;
-;                                         *		 (rules and examples).
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2213,43 +2321,45 @@
           (, 
             (createViewExamplesPopup $View) 
             (createClassChangeButtons $ButtonRowColumn))))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createLabelChangeButton/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createLabelChangeButton(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a push button and a editing Dialog for changing
+; 
 
 ;
-;                                         *		 the label of the selected rules.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2299,43 +2409,45 @@
       (xmCreatePushButton $ButtonRow Cancel Nil $Cancel) 
       (xtManageChild $Cancel) 
       (xtAddCallback $Cancel xmNactivateCallback cancelLabelChange $LabelChangeDialog)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createSelectRulesPopup/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createSelectRulesPopup(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  Creates a push button and a editing Dialog for changing
+; 
 
 ;
-;                                         *		 the label of the selected rules.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2386,43 +2498,45 @@
       (xmCreatePushButton $ButtonRow Cancel Nil $Cancel) 
       (xtManageChild $Cancel) 
       (xtAddCallback $Cancel xmNactivateCallback yesNoPopdown $SelectRulesDialog)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createExamineRulesPopup/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createExamineRulesPopup(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a push button and a Dialog for examining
+; 
 
 ;
-;                                         *		the selected rules.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -2490,37 +2604,39 @@
       (showExaminedRule $_ $_ $_) 
       (xmCreatePushButton $ButtonRow Cancel Nil $Cancel) 
       (xtManageChild $Cancel) 
-      (xtAddCallback $Cancel xmNactivateCallback cancelExamineRules $_)))	
+      (xtAddCallback $Cancel xmNactivateCallback cancelExamineRules $_)))
+; 
+	
 
 
 
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: showExaminedRule/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: showExaminedRule(_Widget,_RuleNoText,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Displays Info on the (first) selected rule
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -2600,37 +2716,36 @@
       (recordz rules 
         (examineText $Label) $_) 
       (set-det)))
-;                                         ;;;;Irene
-
+; 
 
 
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: createViewRulesPopup/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createViewRulesPopup(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: creates Dialog for Viewing Rules
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -2904,39 +3019,41 @@
       (xmCreatePushButton $ButtonRow Cancel Nil $Cancel) 
       (xtManageChild $Cancel) 
       (xtAddCallback $Cancel xmNactivateCallback cancelViewRules $_)))
+; 
 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createViewExamplesPopup/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createViewExamplesPopup(+parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates creates facilities for selecting the viewed
+; 
 
 ;
-;                                         *		examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3129,49 +3246,51 @@
       (xmCreatePushButton $ButtonRow Cancel Nil $Cancel) 
       (xtManageChild $Cancel) 
       (xtAddCallback $Cancel xmNactivateCallback cancelViewExamples $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: changeSelectedLabels/1 		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: changeSelectedLabels(_Widget,+[LabelChangeDialog,LabelText],_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget				calling widget
+; 
 
 ;
-;                                         *	       +[LabelChangeDialog,LabelText]	widgets
+; 
 
 ;
-;                                         *	       _CallData			event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Removes the LabelChange Dialog from the display, and
+; 
 
 ;
-;                                         *		 changes the Label of all selected rules.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3182,40 +3301,42 @@
       (xmTextGetString $LabelText $LabelCP) 
       (proxtCharPtrToString $LabelCP $LabelAS) 
       (setSelectedLabels $LabelAS)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: setSelectedLabels/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: setSelectedLabels(+Label)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +Label			new labelname
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Sets the label of all selected rules to Label.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3232,86 +3353,92 @@
         (clause $Id $Widget selected) $_) 
       (addRuleItem $Id $H $B $CL $Label) 
       (updateEvaluationLabel)))
+; 
+
   (= 
     (setSelectedLabels $_) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: cancelLabelChange/3	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: cancelLabelChange(_Widget,+LabelChangeDialog)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +LabelChangeDialog	widget
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Removes the LabelChangeDialog from the display.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (cancelLabelChange $Widget $LabelChangeDialog $CallData) 
     (xtUnmanageChild $LabelChangeDialog))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createClassChangeButtons/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createClassChangeButtons(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates three buttons '+', '-', '?' for changing the
+; 
 
 ;
-;                                         *		class of the selected examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3334,49 +3461,51 @@
       (xmCreatePushButton $ClassChangeRow ? Nil $Quest) 
       (xtManageChild $Quest) 
       (xtAddCallback $Quest xmNactivateCallback classChangeSelected ?)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: classChangeSelected/3		Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: classChangeSelected(_Widget,+Classification,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +Classification		'+' or '-' or '?'
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Sets the classification of the selected examples to
+; 
 
 ;
-;                                         *		 Classification.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3393,46 +3522,50 @@
         (example $Id $Label selected) $_) 
       (addExampleItem $Id $Fact $Classification) 
       (updateEvaluationLabel)))
+; 
+
   (= 
     (classChangeSelected $_ $_ $_) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createArgumentArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createArgumentArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the argument area with five fields for arguments,
+; 
 
 ;
-;                                         *		one toggle button for copying rule ids into argument
+; 
 
 ;
-;                                         *		fields when selecting or deselecting rules or examples,
+; 
 
 ;
-;                                         *		and a clear push button.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3508,49 +3641,53 @@
       (xmCreatePushButton $DepthRow > Nil $Raise) 
       (xtManageChild $Raise) 
       (xtAddCallback $Raise xmNactivateCallback raiseDepth $DText)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createArguments/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createArguments(+Parent,+Count)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent		parent widget
+; 
 
 ;
-;                                         *	       +Count		number of argument fields to create
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates Count text widgets for the arguments.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (createArguments $_ 0) 
     (set-det))
+; 
+
   (= 
     (createArguments $Parent $Count) 
     ( (is $C1 
@@ -3565,51 +3702,55 @@
       (xtManageChild $ArgumentText) 
       (recordz state 
         (argumentWidget $Count $ArgumentText) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: clearArguments/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: clearArguments(_Widget,+Count,_CallData)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       Count		Number of arguments to clear (5)
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Clears Count argument text widgets
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (clearArguments  $Widget 0 $CallData) True)
+; 
+
   (= 
     (clearArguments $Widget $Count $CallData) 
     ( (is $C1 
@@ -3619,52 +3760,54 @@
         (argumentWidget $Count $Text) $_) 
       (proxtStringToCharPtr '' $EmptyChrPtr) 
       (xmTextSetString $Text $EmptyChrPtr)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: lowerDepth/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 decrements xmDepth.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also: raiseDepth
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3685,52 +3828,54 @@
       (atom-chars $NewDepthStr $NewDepthC) 
       (proxtStringToCharPtr $NewDepthStr $NewDepthCP) 
       (xmTextSetString $DepthText $NewDepthCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: lowerID/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget containing ID
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  1 decrements ID.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:  raiseID
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3751,46 +3896,48 @@
       (atom-chars $NewIDStr $NewIDC) 
       (proxtStringToCharPtr $NewIDStr $NewIDCP) 
       (xmTextSetString $IDText $NewIDCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: lowerMin/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 decrements MinId of viewed rules or examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3824,46 +3971,48 @@
       (atom-chars $NewMinStr $NewMinC) 
       (proxtStringToCharPtr $NewMinStr $NewMinCP) 
       (xmTextSetString $MinText $NewMinCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: lowerMax/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 decrements MaxId of viewed rules or examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3897,46 +4046,48 @@
       (atom-chars $NewMaxStr $NewMaxC) 
       (proxtStringToCharPtr $NewMaxStr $NewMaxCP) 
       (xmTextSetString $MaxText $NewMaxCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: raiseDepth/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 inrements xmDepth.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -3957,46 +4108,48 @@
       (atom-chars $NewDepthStr $NewDepthC) 
       (proxtStringToCharPtr $NewDepthStr $NewDepthCP) 
       (xmTextSetString $DepthText $NewDepthCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: raiseID/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget containing ID
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 increments ID.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -4017,45 +4170,47 @@
       (atom-chars $NewIDStr $NewIDC) 
       (proxtStringToCharPtr $NewIDStr $NewIDCP) 
       (xmTextSetString $IDText $NewIDCP)))
+; 
+
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: raiseMin/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 increments MinId of viewed rules or examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -4089,47 +4244,49 @@
       (atom-chars $NewMinStr $NewMinC) 
       (proxtStringToCharPtr $NewMinStr $NewMinCP) 
       (xmTextSetString $MinText $NewMinCP)))
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: raiseMax/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +DepthText	TextWidget of Depth
+; 
 
 ;
-;                                         *	       _CallData
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: 1 increments MaxId of viewed rules or examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -4163,55 +4320,59 @@
       (atom-chars $NewMaxStr $NewMaxC) 
       (proxtStringToCharPtr $NewMaxStr $NewMaxCP) 
       (xmTextSetString $MaxText $NewMaxCP)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: copyId/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: copyId(+Id,+Count)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Id		Id of rule or example to copy
+; 
 
 ;
-;                                         *	       +Count		First argument to proove if empty
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Copies the specified rule or example to the textwidget
+; 
 
 ;
-;                                         *		of the count argument.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (copyId $_ 13) 
     (set-det))
+; 
+
   (= 
     (copyId $Id $Count) 
     ( (recorded state 
@@ -4223,38 +4384,42 @@
       (atom-chars $IdStr $IdChars) 
       (proxtStringToCharPtr $IdStr $IdCharPtr) 
       (xmTextSetString $Text $IdCharPtr)))
+; 
+
   (= 
     (copyId $Id $Count) 
     ( (is $C1 
         (+ $Count 1)) (copyId $Id $C1)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createCommandArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createCommandArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the area for direct command input.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -4320,43 +4485,45 @@
       (xtAddCallback $OK xmNactivateCallback doKommando 
         (:: $Ktext $KStatus)) 
       (xtAddCallback $Clear xmNactivateCallback doEmptyKommando $Ktext)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createFunctionArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createFunctionArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the area for the pulldown menus for calling the
+; 
 
 ;
-;                                         *		learning functions of miles.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also: file: 'xmiles_functions.pl'
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -4390,51 +4557,55 @@
       (xtManageChild $FunctionRowColumn) 
       (groups $ListOfGroups) 
       (createFunctionGroups $FunctionRowColumn $ListOfGroups)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createFunctionGroups/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createFunctionGroups(+Parent,+[Groupname|ListOfGroups])
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent				parent widget
+; 
 
 ;
-;                                         *	       +[Groupname|ListOfGroups]	list of groupnames
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates one pull down menu for every group of learning
+; 
 
 ;
-;                                         *		functions.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (createFunctionGroups  $_ ()) True)
+; 
+
   (= 
     (createFunctionGroups $Parent 
       (Cons  $Groupname $ListOfGroups)) 
@@ -4452,51 +4623,55 @@
       (groupdef $Groupname $ListOfButtons) 
       (createFunctionButtons $LearningFunctions $ListOfButtons) 
       (createFunctionGroups $Parent $ListOfGroups)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createFunctionButtons/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createFunctionButtons(+Parent,+[Button|ListOfButtons])
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent			parent widget
+; 
 
 ;
-;                                         *	       +[Button|ListOfButtons]	list of buttonnames
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates one pushbutton for every button name in the second
+; 
 
 ;
-;                                         *		argument.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (createFunctionButtons  $_ ()) True)
+; 
+
   (= 
     (createFunctionButtons $Parent 
       (Cons  $Button $ListOfButtons)) 
@@ -4504,49 +4679,51 @@
       (xtManageChild $ButtonWidget) 
       (xtAddCallback $ButtonWidget xmNactivateCallback callFunction $Button) 
       (createFunctionButtons $Parent $ListOfButtons)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: callFunction/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       +Buttonname	determines the function
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: calls the function defined for the specified button
+; 
 
 ;
-;                                         *		in the file xmiles_functions.pl
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -4589,58 +4766,62 @@
         (det-if-then otherwise 
           (writelnMessage '% Error occured, function not executed!'))) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: replaceXmVars/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:      +[Pat|InOutPattern]	List of argument patterns
+; 
 
 ;
-;                                         *	       +InChecks		List of checking functions
+; 
 
 ;
-;                                         *	       -Args			arguments the learning function is
+; 
 
 ;
-;                                         *					to be called with
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: replaces the InOutPattern through constant values for
+; 
 
 ;
-;                                         *		input arguments and unbound variables for output arguments
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (replaceXmVars Nil $_ Nil Nil) 
     ( (set-det) (writelnMessage ).)))
+; 
+
   (= 
     (replaceXmVars 
       (Cons  $Pat $InOutPattern) $InChecks $Args $Fails) 
@@ -4881,54 +5062,58 @@
           (det-if-then otherwise 
             (= $Args 
               (Cons  $Value $Values)))))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: outVars/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +[Arg1|Args]		arguments returned by a learnin f.
+; 
 
 ;
-;                                         *	       +[Pat|InOutPattern]	list of InOutPatterns
+; 
 
 ;
-;                                         *	       +XOuts			list of output functions
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Calls the spezified output functions with the values
+; 
 
 ;
-;                                         *		returned by a learning function.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (outVars  $_ $_ ()) True)
+; 
+
   (= 
     (outVars 
       (Cons  $Arg1 $Args) 
@@ -4949,99 +5134,105 @@
           (= $XOuts $XOs))) 
       (set-det) 
       (outVars $Args $InOutPattern $XOs)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: refresh/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +[KindOfKnowledge|R]
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Refreshes the visual part of the knowledge base of the
+; 
 
 ;
-;                                         *		specified kinds of knowledge.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (refresh  ()) True)
+; 
+
   (= 
     (refresh (Cons  $KindOfKnowledge $R)) 
     ( (refreshKnowledgeList $_ $KindOfKnowledge $_) (refresh $R)))
+; 
+
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: createYesNoPopup/4
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent		parent widget, which is a push button
+; 
 
 ;
-;                                         *	       -YesNoPopup	created widget, popupMenu
+; 
 
 ;
-;                                         *	       +YesPred		callback procedure for Yes button
+; 
 
 ;
-;                                         *	       +YesArg		argument for callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates a popupMenu which is poped up, whenever the
+; 
 
 ;
-;                                         *		parent button is pressed. This popupMenu consists of two
+; 
 
 ;
-;                                         *		push buttons 'Yes' and 'No'.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -5061,46 +5252,48 @@
       (xtAddEventHandler $YesNoPopup 
         (:: buttonReleaseMask) False yesNoPopdown $YesNoPopup) 
       (xtManageChildren (:: $Yes $No))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: popupDialog/3	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget		calling widget
+; 
 
 ;
-;                                         *	       +PopupShell	widget, to manage
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Manages the specified widget beneath the calling widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5114,46 +5307,48 @@
           (xmNx $X) 
           (xmNy $Y))) 
       (xtManageChild $PopupShell)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: popupViewRules/3  	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Manages the specified widget beneath the calling widget
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5173,48 +5368,50 @@
       (fillViewedLabels) 
       (fillExistingClauseHeads) 
       (fillViewedClauseHeads)))
+; 
 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: popupExamineRules/3  	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Manages the specified widget beneath the calling widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5231,47 +5428,49 @@
           (xmNy $Y))) 
       (showExaminedRule $_ $_ $_) 
       (xtManageChild $ERDialog)))
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: popupViewExamples/3  	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Manages the specified widget beneath the calling widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5289,40 +5488,42 @@
       (xtManageChild $VRDialog) 
       (fillExistingExampleCHs) 
       (fillViewedExampleCHs)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillExistingLabels/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Finds all existing Labels.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5332,40 +5533,42 @@
         (view exLabRC $ExLabRC) $_) 
       (listLabels $LabelList) 
       (createLabelWidgets $ExLabRC $LabelList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillViewedLabels/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Finds all viewed Labels.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5376,40 +5579,42 @@
       (recorded rules 
         (view labels $LabelList) $_) 
       (createLabelWidgets $ViewLabRC $LabelList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillExistingClauseHeads/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5419,40 +5624,42 @@
         (view exCHRC $ExCHRC) $_) 
       (listClauseHeads $LabelList) 
       (createLabelWidgets $ExCHRC $LabelList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillViewedClauseHeads/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Finds all existing Labels
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5463,40 +5670,42 @@
       (recorded rules 
         (view clause-heads $CHList) $_) 
       (createLabelWidgets $ViewCHRC $CHList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillExistingExampleCHs/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  Finds all existing Labels.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5506,40 +5715,42 @@
         (view exCHRC $ExCHRC) $_) 
       (listExampleCHs $LabelList) 
       (createLabelWidgets $ExCHRC $LabelList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: fillViewedExampleCs/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: -
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Finds all existing Clause Heads of examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5550,43 +5761,45 @@
       (recorded examples 
         (view clause-heads $CHList) $_) 
       (createLabelWidgets $ViewCHRC $CHList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createLabelWidgets/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Parent		widget
+; 
 
 ;
-;                                         *	       +NameList		atomList
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: creates a label for each name in NameList.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5608,37 +5821,41 @@
         (:: buttonReleaseMask) False selectLabel $_) 
       (set-det) 
       (createLabelWidgets $Parent $NameList)))
+; 
+
   (= 
     (createLabelWidgets $_ Nil) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: destroyLabelWidgets/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: destroyLabelWidgets(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: destroys each sublabel of Parent.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5651,6 +5868,8 @@
       (erase $Ref) 
       (xtDestroyWidget $L) 
       (destroyLabelWidgets $_)))
+; 
+
   (= 
     (destroyLabelWidgets $Parent) 
     ( (recorded labels 
@@ -5659,43 +5878,47 @@
       (erase $Ref) 
       (xtDestroyWidget $L) 
       (destroyLabelWidgets $Parent)))
+; 
+
   (= 
     (destroyLabelWidgets $_) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: listLabel/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: LabelList	atomList
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: lists each label of rules of knowledgebase.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5706,6 +5929,8 @@
       (listLabels $ViewedLabels $LL1) 
       (append $LabelList $ViewedLabels $LL1) 
       (set-det)))
+; 
+
   (= 
     (listLabels $LLin $LLout) 
     ( (get-clause $_ $_ $_ $_ $Label) 
@@ -5714,43 +5939,47 @@
       (= $LLin2 
         (Cons  $Label $LLin)) 
       (listLabels $LLin2 $LLout)))
+; 
+
   (= 
     (listLabels $A $A) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: listClauseHeads/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: LabelList	atomList
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: lists each clausehead of rules of knowledgebase.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5761,6 +5990,8 @@
       (listClauseHeads $ViewedCHs $LL1) 
       (append $LabelList $ViewedCHs $LL1) 
       (set-det)))
+; 
+
   (= 
     (listClauseHeads $LLin $LLout) 
     ( (get-clause $_ $C $_ $_ $_) 
@@ -5770,43 +6001,47 @@
       (= $LLin2 
         (Cons  $CH $LLin)) 
       (listClauseHeads $LLin2 $LLout)))
+; 
+
   (= 
     (listClauseHeads $A $A) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: listExampleCHs/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: LabelList	atomList
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: lists each clausehead of examples of knowledgebase.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5817,6 +6052,8 @@
       (listExampleCHs $ViewedCHs $LL1) 
       (append $LabelList $ViewedCHs $LL1) 
       (set-det)))
+; 
+
   (= 
     (listExampleCHs $LLin $LLout) 
     ( (get-example $_ $C $_) 
@@ -5826,49 +6063,53 @@
       (= $LLin2 
         (Cons  $CH $LLin)) 
       (listExampleCHs $LLin2 $LLout)))
+; 
+
   (= 
     (listExampleCHs $A $A) 
     (set-det))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: selectLabel/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			calling widget
+; 
 
 ;
-;                                         *	       _ClientData		client data
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Toggles the parent of the calling widget. (exist./view.)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -5937,6 +6178,8 @@
       (xtAddEventHandler $NameLabel 
         (:: buttonReleaseMask) False selectLabel $_) 
       (set-det)))
+; 
+
 
 
 
@@ -5968,6 +6211,8 @@
       (recorded rules 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
   (= 
     (viewRules $P $List) 
     ( (recorded labels 
@@ -5980,9 +6225,13 @@
       (viewRules $P $L2) 
       (= $List 
         (Cons  $Name $L2))))
+; 
+
   (= 
     (viewRules $_ Nil) 
     (set-det))
+; 
+
 
 
 
@@ -5998,6 +6247,8 @@
       (recorded rules 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
 
 
 
@@ -6007,6 +6258,8 @@
       (recorded rules 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
 
 
 
@@ -6016,6 +6269,8 @@
       (recorded rules 
         (examine dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
 
 
 
@@ -6039,6 +6294,8 @@
       (recorded examples 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
   (= 
     (viewExamples $P $List) 
     ( (recorded labels 
@@ -6051,9 +6308,13 @@
       (viewExamples $P $L2) 
       (= $List 
         (Cons  $Name $L2))))
+; 
+
   (= 
     (viewExamples $_ Nil) 
     (set-det))
+; 
+
 
 
 
@@ -6069,6 +6330,8 @@
       (recorded examples 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
+
 
 
 
@@ -6078,46 +6341,48 @@
       (recorded examples 
         (view dialog $X) $_) 
       (xtUnmanageChild $X)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: popupFunctions/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +Widget			calling widget
+; 
 
 ;
-;                                         *	       +PopupShell		widget, to manage
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Manages the specified child of the calling widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6133,92 +6398,96 @@
       (xtManageChild $PopupShell) 
       (recordz learnfuncs 
         (popedup $PopupShell) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: yesNoPopdown/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +JaNeinPopup		widget, to unmanage
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Unmanages a popup widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (yesNoPopdown $Widget $JaNeinPopup $CallData) 
     (xtUnmanageChild $JaNeinPopup))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: functionsPopdown/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       _ClientData		client data
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Unmanages a popup widget.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6228,46 +6497,48 @@
         (popedup $PopupShell) $Ref) 
       (erase $Ref) 
       (xtUnmanageChild $PopupShell)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: doKommando/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling procedure
+; 
 
 ;
-;                                         *	       +[KommandoText,KStatus]	widgets
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Executes the command given by the user.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6301,46 +6572,48 @@
               (:: (xmNlabelString $NoXmS))) 
             (writelnMessage '% no')))) 
       (doEmptyKommando $_ $KommandoText $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: doEmptyKommando/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget			calling widget
+; 
 
 ;
-;                                         *	       +KommandoText		widget
+; 
 
 ;
-;                                         *	       _CallData		event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Sets the command text to an empty string.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6351,46 +6624,48 @@
       (refreshKnowledgeList $Widget rules $Calldata) 
       (refreshKnowledgeList $Widget examples $Calldata) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: beenden/3		callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Quits XMILES,	returns to MeTTa toplevel.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6402,44 +6677,46 @@
       (close $F) 
       (write 'X-MILES korrekt beendet!') 
       (nl) 
-      (remove-atom  &self 
+      (remove-symbol  &self 
         (my_exit_loop  no)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (my_exit_loop  yes))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createMessageArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createMessageArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Creates the area for the messages from XMILES to the user.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6491,46 +6768,48 @@
       (open xmProtocol.tmp write $F) 
       (recordz messages 
         (file $F) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: saveMessages/3    	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Saves the scrolled text widet holding the XMILES messages
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6549,46 +6828,48 @@
       (recordz messages 
         (file $Fnew) $_) 
       (writelnMessage '% wrote "xmProtocol.sav"')))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: clearMessages/3	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Clears the scrolled text widet holding the XMILES messages
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6605,40 +6886,42 @@
       (open xmProtocol.tmp write $Fnew) 
       (recordz messages 
         (file $Fnew) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: writeError/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: writeError(+Message)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Appends the Message to the ErrorText buffer.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6663,40 +6946,42 @@
           (= $NewEText $MsgStr))) 
       (recordz error 
         (errorText $NewEText) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: writelnError/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: writelnError(+Message)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Appends the Message to the ErrorText buffer.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6727,40 +7012,42 @@
           (= $NewEText $MsgStr))) 
       (recordz error 
         (errorText $NewEText) $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: flushErrorBuffer/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: flushErrorBuffer(+Message)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Appends the ErrorText buffer to the MessageText.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6773,40 +7060,42 @@
         (, 
           (erase $Ref) 
           (writeMessage $EText))) otherwise))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: writeMessage/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: writeMessage(+Message)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Appends the Message to the MessageText.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6833,40 +7122,42 @@
       (recorded messages 
         (file $F) $_) 
       (write $F $Message)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: writelnMessage/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: writelnMessage(+Message)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Appends the Message to the MessageText.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -6904,43 +7195,45 @@
         (file $F) $_) 
       (write $F $Message) 
       (nl $F)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createEditorArea/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: createEditorArea(+Parent)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:  Creates the area for the editior for editing rules and
+; 
 
 ;
-;                                         *		 examples.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7000,46 +7293,48 @@
       (xtAddCallback $Clear xmNactivateCallback clearEditor $_) 
       (xtAddCallback $AddRule xmNactivateCallback addRule $_) 
       (xtAddCallback $AddExample xmNactivateCallback addExample $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: clearEditor/3	callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget		calling widget
+; 
 
 ;
-;                                         *	       _ClientData	client data
+; 
 
 ;
-;                                         *	       _CallData	event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Clears the scrolled text widget holding the edited object
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7061,47 +7356,49 @@
             (xtSetValues $Label 
               (:: (xmNlabelString $LblS))))) otherwise) 
       (proxtStringToCharPtr '' $EmptyChrPtr) 
-      (xmTextSetString $EditorText $EmptyChrPtr)))	
+      (xmTextSetString $EditorText $EmptyChrPtr)))
+; 
+	
 
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: addRule/3				Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget				calling widget
+; 
 
 ;
-;                                         *	       _ClientData
+; 
 
 ;
-;                                         *	       _CallData			event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Adds the rule in the editor to the rule list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -7124,40 +7421,42 @@
       (updateEvaluationLabel) 
       (get-clause $ID $H $B $S $L) 
       (addRuleItem $ID $H $B $S $L)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:  resultAddRule/1			result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: resultAddRule(Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Adds the rule specified by Id to the rule list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7170,43 +7469,45 @@
       (atom-chars $IdString $IdChars) 
       (writeMessage $IdString) 
       (writelnMessage ' created.')))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:  resultAddNewpreds/1			result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: resultAddNewpreds(Reflist)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Displays a window with alternative specialisations
+; 
 
 ;
-;                                         *       through new predicates, and allows to choose one to add to the kb
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7273,12 +7574,16 @@
       (xtAddCallback $AddRule xmNactivateCallback addselectedRule $_) 
       (xmCreatePushButton $ButtonRow None Nil $None) 
       (xtManageChild $None) 
-      (xtAddCallback $None xmNactivateCallback addnorule $_)))	
+      (xtAddCallback $None xmNactivateCallback addnorule $_)))
+; 
+	
 
 
 
   (= 
     (addnewpredclauses  () $_) True)
+; 
+
   (= 
     (addnewpredclauses 
       (Cons  
@@ -7297,6 +7602,8 @@
       (xtAddEventHandler $Label 
         (:: buttonReleaseMask) False selectnpclause $_) 
       (addnewpredclauses $R $Widget)))
+; 
+
 
 
 
@@ -7316,6 +7623,8 @@
       (erase $Ref) 
       (recordz newpred 
         (np $Widget $NC $Pos $Neg $TR selected) $_)))
+; 
+
 
   (= 
     (selectnpclause $Widget rules $CallData) 
@@ -7332,6 +7641,8 @@
       (erase $Ref) 
       (recordz newpred 
         (np $Widget $NC $Pos $Neg $TR notselected) $_)))
+; 
+
 
 
   (= 
@@ -7358,6 +7669,8 @@
                         (:: 
                           (xmNbackground $F) 
                           (xmNforeground $B))))))))))) $_))
+; 
+
 
     
 
@@ -7372,6 +7685,8 @@
             (recorded newpred $X $Ref1) 
             (erase $Ref1))) $_) 
       (xtDestroyWidget $Widget)))
+; 
+
 
 
   (= 
@@ -7394,7 +7709,7 @@
             (, 
               (member $N $Neg) 
               (store-ex $N - $NID))) $_) 
-        (add-atom  &self 
+        (add-symbol  &self 
           (:  kb $TR)) 
         (erase $Ref0) 
         (mysetof $Ref1 
@@ -7403,45 +7718,47 @@
               (recorded newpred $X $Ref1) 
               (erase $Ref1))) $_) 
         (xtDestroyWidget $Widget) 
-        (refresh (:: rules examples))) True))            
+        (refresh (:: rules examples))) True))
+; 
+            
 
 
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate:  resultAddSpec/1			result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: resultAddNewpreds(Reflist)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Displays a window with alternative specialisations
+; 
 
 ;
-;                                         *       through new predicates, and allows to choose one to add to the kb
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
@@ -7508,12 +7825,16 @@
       (xtAddCallback $AddRule xmNactivateCallback addselectedSpec $_) 
       (xmCreatePushButton $ButtonRow None Nil $None) 
       (xtManageChild $None) 
-      (xtAddCallback $None xmNactivateCallback addnospec $_)))	
+      (xtAddCallback $None xmNactivateCallback addnospec $_)))
+; 
+	
 
 
 
   (= 
     (addspecclauses  () $_) True)
+; 
+
   (= 
     (addspecclauses 
       (Cons  $NC $R) $Widget) 
@@ -7531,6 +7852,8 @@
       (xtAddEventHandler $Label 
         (:: buttonReleaseMask) False selectspecclause $_) 
       (addspecclauses $R $Widget)))
+; 
+
 
 
 
@@ -7550,6 +7873,8 @@
       (erase $Ref) 
       (recordz spec 
         (np $Widget $NC selected) $_)))
+; 
+
 
   (= 
     (selectspecclause $Widget rules $CallData) 
@@ -7566,6 +7891,8 @@
       (erase $Ref) 
       (recordz spec 
         (np $Widget $NC notselected) $_)))
+; 
+
 
 
   (= 
@@ -7589,6 +7916,8 @@
                   (:: 
                     (xmNbackground $F) 
                     (xmNforeground $B)))))))) $_))
+; 
+
 
     
 
@@ -7603,6 +7932,8 @@
             (recorded spec $X $Ref1) 
             (erase $Ref1))) $_) 
       (xtDestroyWidget $Widget)))
+; 
+
 
 
   (= 
@@ -7622,83 +7953,89 @@
               (recorded spec $X $Ref1) 
               (erase $Ref1))) $_) 
         (xtDestroyWidget $Widget) 
-        (refresh (:: rules))) True))            
+        (refresh (:: rules))) True))
+; 
+            
 
 ;
-;                                         ************************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate: resultAddRuleList/1		result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +IdList				rule ids to add
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Adds the rules specified by IdList to the rule list
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
 
 
 
   (= 
     (resultAddRuleList Nil) 
     (set-det))
+; 
+
   (= 
     (resultAddRuleList (Cons  $Id $IdList)) 
     ( (resultAddRule $Id) (resultAddRuleList $IdList)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: resultSelectRules/1		result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +IdList				rule ids to select
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Selects the rules specified by IdList in the rule list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7707,46 +8044,50 @@
     ( (unselectAll $_ rules $_) 
       (set-det) 
       (writelnMessage '% resulting rules selected')))
+; 
+
   (= 
     (resultSelectRules (Cons  (with_self  $Id $_) $IdList)) 
     ( (resultSelectRules $IdList) 
       (recorded current 
         (clause $Id $Widget notselected) $_) 
       (selectClause $Widget rules $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: resultSelectExamples/1		result procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: +IdList				rule ids to select
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Selects the examples specified by IdList in the rule list
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7755,52 +8096,56 @@
     ( (unselectAll $_ examples $_) 
       (set-det) 
       (writelnMessage '% resulting examples selected')))
+; 
+
   (= 
     (resultSelectExamples (Cons  $Id $IdList)) 
     ( (resultSelectExamples $IdList) 
       (recorded current 
         (example $Id $Widget notselected) $_) 
       (selectClause $Widget examples $_)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: changeRule/3			Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget				calling widget
+; 
 
 ;
-;                                         *	       _ClientData
+; 
 
 ;
-;                                         *	       _CallData			event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Changes the rule in the editor to the rule list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7829,49 +8174,51 @@
       (get-clause $ID $H $B $S $L) 
       (addRuleItem $ID $H $B $S $L) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: addExample/3			Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget				calling widget
+; 
 
 ;
-;                                         *	       _ClientData
+; 
 
 ;
-;                                         *	       _CallData			event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Adds the example in the editor to the example list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7894,46 +8241,48 @@
       (get-example $ID $F $C) 
       (addExampleItem $ID $F $C) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: changeExample/3			Callback procedure
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       _Widget				calling widget
+; 
 
 ;
-;                                         *	       _ClientData
+; 
 
 ;
-;                                         *	       _CallData			event
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Changes the example in the editor to the example list.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -7963,46 +8312,48 @@
       (get-example $ID $F $C) 
       (addExampleItem $ID $F $C) 
       (updateEvaluationLabel)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:  xxmStringToTerm/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +S		xmCharPtr
+; 
 
 ;
-;                                         *	       Charset		xmCharset
+; 
 
 ;
-;                                         *	       +T		Term
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Conversion of xmCharPtrs and MeTTa Terms.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8019,6 +8370,8 @@
       (read $T) 
       (seen) 
       (set-det)))
+; 
+
 
   (= 
     (xxmStringToTerm $XmS $Charset $T) 
@@ -8031,46 +8384,48 @@
       (xxmStringRead $XmS $Charset) 
       (seen) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: xxmStringRead/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +S		xmString
+; 
 
 ;
-;                                         *	       +Charset		xmCharset
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Reads a string from current input.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8087,49 +8442,51 @@
         (det-if-then otherwise 
           (= $S $XmS))) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: xxmStringAppendRead/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +S1		xmString, prefix
+; 
 
 ;
-;                                         *	       +S		xmString
+; 
 
 ;
-;                                         *	       Charset		xmCharset
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Reads an xmString from the current input and appends it
+; 
 
 ;
-;                                         *		to S1.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8147,82 +8504,88 @@
         (det-if-then otherwise 
           (= $S $XmS1))) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: stringRead/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: stringRead(+N,+S)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Reads N characters from the current input.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (stringRead  0 ()) True)
+; 
+
   (= 
     (stringRead $N $S) 
     ( (get0 $Char) (| (det-if-then (=:= $Char -1) (= $S Nil)) (det-if-then otherwise (, (is $M (- $N 1)) (stringRead $M $S1) (= $S (Cons  $Char $S1)))))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: xxmWriteToString/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +W		writing procedure
+; 
 
 ;
-;                                         *	       +Charset		xmCharset
+; 
 
 ;
-;                                         *	       -XmS		xmString
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Uses the writing procedure W to generate XmS.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8235,46 +8598,48 @@
       (xxmStringRead $XmS $Charset) 
       (seen) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: xxmWriteToCharPtr/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       +W		writing procedure
+; 
 
 ;
-;                                         *	       +Charset		xmCharset
+; 
 
 ;
-;                                         *	       -CP		xmCharPtr
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Uses the writing procedure W to generate CP.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8289,40 +8654,42 @@
       (atom-chars $AS $S) 
       (proxtStringToCharPtr $AS $CP) 
       (set-det)))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: isDepth/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: isDepth(+D)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: Checks if D is within the range of 1-100.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8347,40 +8714,42 @@
         (writelnError $Message) 
         (set-det) 
         (fail))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: isExample/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: isExample(+Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: checks whether Id specifies an example
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8402,40 +8771,42 @@
         (writelnError $Message) 
         (set-det) 
         (fail))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: isRule
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: isRule(+Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: checks whether Id specifies a rule
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8457,40 +8828,42 @@
         (writelnError $Message) 
         (set-det) 
         (fail))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: isExOrRule/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: isExOrRule(+Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: checks whether Id specifies a rule or an example
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8513,98 +8886,110 @@
           (atom-chars $Message $M3) 
           (writelnError $Message) 
           (fail)))))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: sucheInListe/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:        +Element	term
+; 
 
 ;
-;                                         *		+List		list of terms
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: searches Element in List
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (sucheInListe  $A 
       (Cons  $A $_)) True)
+; 
+
   (= 
     (sucheInListe  $_ ()) True)
+; 
+
   (= 
     (sucheInListe $A 
       (Cons  $_ $Rest)) 
     (sucheInListe $A $Rest))
+; 
+
 
 
   (= 
     (writeFullstop $X) 
     ( (write $X) (write .)))
+; 
+
 
   (= 
     (true  $_) True)
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: createEvaluationString/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:       -String		list of terms
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8614,43 +8999,45 @@
       (evaluated no) 
       (= $S '(not evaluated)') 
       (= $S '    (evaluated)')))
+; 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: updateEvaluationLabel/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: updates the label that indicates whether the kb is
+; 
 
 ;
-;                                         *              evaluated
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -8663,4 +9050,6 @@
       (xmStringCreate $ACP $DCharset $AXmS) 
       (xtSetValues $Widget 
         (:: (xmNlabelString $AXmS)))))
+; 
+
   

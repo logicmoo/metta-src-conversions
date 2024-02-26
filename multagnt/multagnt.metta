@@ -1,80 +1,24 @@
 
   !(dynamic (/ parent 2))
-;                           /******************************************************************/
-
-;                           /* MULTAGNT.PRO                                                   */
-
-;                           /* Brazdil's Simulation of a tutoring setting between two agents  */
-
-;                           /******************************************************************/
-
-;                           /* impl. by     : Yiu Cheung HO                                   */
-
-;                            /*                Department of Computing                         */
-
-;                            /*                King's College London                           */
-
-;                            /*                1989                                            */
-
-;                            /*                                                                */
-
-;                            /*                Thomas Hoppe                                    */
-
-;                             /*                Mommsenstr. 50                                  */
-
-;                             /*                1000 Berlin 12                                  */
-
-;                             /*                F.R.G.                                          */
-
-;                             /*                E-Mail: hoppet@db0tui11.pro                     */
-
-;                             /*                1990                                            */
-
-;                              /*                                                                */
-
-;                              /* reference    : Transfer of Knowledge between Systems,      */
-
-;                              /*        Brazdil, P., Associacao Portuguesa para a Intel-*/
-
-;                              /*        igencia Artificial, Working Paper 87-1, Uni-    */
-
-;                              /*        versity of Porto, 1987.                 */
-
-;                               /*                                                                */
-
-;                               /*        Diagnosis of Misunderstanding, Yiu Cheung HO,   */
-
-;                               /*        Project Report, Final Year One Unit Project     */
-
-;                               /*        88/89, Department of Computing, King's College  */
-
-;                               /*        London, 1989.                   */
-
-;                                /*                                                                */
-
-;                                /*  call        : diagnosis                                       */
-
-;                                /*                                                                */
-
-;                                /******************************************************************/
-
+; 
 
 
   !(dynamic (/ db-entry 3))
-;                           /******************************************************************/
-
-;                           /* YAP-, C- and M-MeTTa specific declaration of dynamical        */
-
-;                            /* clauses.                                                       */
-
-;                            /******************************************************************/
-
+; 
 
   !(dynamic (/ def-theory 2))
+; 
+
   !(dynamic (/ digits-of-next-sym 1))
+; 
+
  
   !(op 999 xfx :)
+; 
+
   !(op 998 xfx <-)
+; 
+
 
 
   (= 
@@ -85,12 +29,7 @@
       (nl) 
       (get-learner) 
       (locate-error)))
-;                              /******************************************************************/
-
-;                              /* User Interface                         */
-
-;                              /******************************************************************/
-
+; 
 
  
 
@@ -102,13 +41,21 @@
       (multifile (/ def-theory 2)) 
       (dynamic (/ db-entry 3)) 
       (dynamic (/ def-theory 2))))
+; 
 
 
-  !(init)
 
-  !(:: (teacher))
+  !(init *)
+; 
 
-  !(:: (learner1))
+
+  !(:: (teacher *))
+; 
+
+
+  !(:: (learner1 *))
+; 
+
 
 
   (= 
@@ -116,6 +63,8 @@
     ( (repeat) 
       (mode $Mode) 
       (generate-error $Mode)))
+; 
+
  
 
   (= 
@@ -126,6 +75,8 @@
       (exit-manual) 
       (set-det) 
       (exit)))
+; 
+
   (= 
     (generate-error auto) 
     ( (select-question $Question) 
@@ -133,9 +84,13 @@
       (exit-auto) 
       (set-det) 
       (exit)))
+; 
+
   (= 
     (generate-error $_) 
     (exit))
+; 
+
  
 
   (= 
@@ -145,11 +100,15 @@
       (output-error $Ls $Ts 
         (<- $Question $Answer) $FaultyStep) 
       (set-det)))
+; 
+
   (= 
     (process-question $Question) 
     ( (write ' *** The teacher cannot answer the question: ') 
       (write $Question) 
       (nl)))
+; 
+
  
 
   (= 
@@ -177,44 +136,62 @@
       (out-faulty $FaultyStep) 
       (nl) 
       (set-det)))
+; 
+
 
 
   (= 
     (out-faulty Nil) 
     ( (write 'no faulty step') (nl)))
+; 
+
   (= 
     (out-faulty $Steps) 
     ( (out-step $Steps) (nl)))
+; 
+
  
 
   (= 
     (out-step Nil) 
     (nl))
+; 
+
   (= 
     (out-step (Cons  $Step $Steps)) 
     ( (write                      ) 
       (write $Step) 
       (nl) 
       (write $Steps)))
+; 
+
  
 
   (= 
     (out-answer Nil) 
     ( (write True) (nl)))
+; 
+
   (= 
     (out-answer $Ans) 
     (out-ans $Ans))
+; 
+
  
 
   (= 
     (out-ans Nil) 
     (nl))
+; 
+
   (= 
     (out-ans (Cons  (val $Var $Val) $T)) 
     ( (write (= $Var $Val)) 
       (nl) 
       (write                      ) 
       (out-ans $T)))
+; 
+
  
 
   (= 
@@ -222,29 +199,37 @@
     ( (generate-question $Question) 
       (yes-no yes confirm $Reply) 
       (= $Reply yes)))
+; 
+
   (= 
     (select-question $_) 
     ( (write ' no more questions') 
       (nl) 
       (set-det) 
       (fail)))
+; 
+
  
 
   (= 
     (generate-question $Question) 
     ( (db-entry 
         (with_self  
-          (teacher) $_) $Question $_) 
+          (teacher *) $_) $Question $_) 
       (make-ground-term $Question) 
       (nl) 
       (write ' Question generated: ') 
       (write $Question) 
       (nl)))
+; 
+
  
 
   (= 
     (get-question $Question) 
     ( (write ' Input question: ') (read $Question)))
+; 
+
  
 
   (= 
@@ -255,23 +240,33 @@
       (nl) 
       (= $Reply yes) 
       (set-det)))
+; 
+
   (= 
     (mode  manual) True)
+; 
+
  
 
   (= 
     (exit-manual) 
     ( (yes-no no ' Exit manual mode ? ' $Reply) (= $Reply yes)))
+; 
+
  
 
   (= 
     (exit-auto) 
     ( (yes-no no ' Exit auto mode ? ' $Reply) (= $Reply yes)))
+; 
+
  
 
   (= 
     (exit) 
     ( (yes-no no ' Quit ? ' $Reply) (= $Reply yes)))
+; 
+
  
 
   (= 
@@ -281,26 +276,36 @@
       (knowledge-base-list $Reply Nil $Teacher $FileList) 
       (yes-no no ' Do you want to load another teacher KB ? ' $Reply2) 
       (more-knowledge $Reply2 $FileList)))
+; 
+
  
 
   (= 
     (load_knowledge_base  no $_) True)
+; 
+
   (= 
     (load-knowledge-base yes $File) 
     ( (nl) 
       (consult $File) 
       (nl) 
       (set-det)))
+; 
+
  
 
   (= 
     (more_knowledge  no 
       (Cons  $_ $_)) True)
+; 
+
   (= 
     (more-knowledge no Nil) 
     ( (write ' *** You have not load any knowledge base yet !') 
       (nl) 
       (more-knowledge yes Nil)))
+; 
+
   (= 
     (more-knowledge yes $FileList) 
     ( (repeat) 
@@ -310,19 +315,25 @@
       (knowledge-base-list $Load $FileList $File $NewList) 
       (yes-no no ' Do you want to consult more KBs ? ' $Reply) 
       (more-knowledge $Reply $NewList)))
+; 
+
  
 
   (= 
     (not-loaded $File $List no) 
     ( (member $File $List) (set-det)))
+; 
+
   (= 
     (not_loaded  $_ $_ yes) True)
+; 
+
 
 ;
-;                                         yesno(Question):- yesno(Question,no).
+; 
 
 ;
-;                                         yesno(Question, Default):- format('~N~w? (~w): ',[Question,Default]),get_single_char(YN), (YN = 13 -> Default==yes; member(YN, `yY`)).
+; 
 
 
 
@@ -355,16 +366,22 @@
             (= $Reply $Default) 
             (reply $In $Reply)))) 
       (set-det)))
+; 
+
  
 
   (= 
     (reply $Reply yes) 
     (member $Reply 
       (:: yes y yes. y. 89 121)))
+; 
+
   (= 
     (reply $Reply no) 
     (member $Reply 
       (:: no n no. n. 78 110)))
+; 
+
  
 
   (= 
@@ -374,18 +391,26 @@
       (write $Message) 
       (read-in $File) 
       (set-det)))
+; 
+
  
 
   (= 
     (knowledge_base_list  yes $List $File 
       (Cons  $File $List)) True)
+; 
+
   (= 
     (knowledge_base_list  no $List $_ $List) True)
+; 
+
  
 
   (= 
     (no-knowledge Nil) 
     ( (write ' *** You have not load any knowledge base yet !') (nl)))
+; 
+
  
 
   (= 
@@ -395,25 +420,20 @@
       (knowledge-base-list yes Nil $File $List) 
       (yes-no no ' Do you want to load another KB for the learner ? ' $Reply) 
       (more-knowledge $Reply $List)))
+; 
+
  
 
   (= 
     (can-do 
       (with_self  
-        (learner) $Tl) 
+        (learner *) $Tl) 
       (with_self  
-        (teacher) $Tt) $Question $TeachersAnswer) 
+        (teacher *) $Tt) $Question $TeachersAnswer) 
     ( (demo 
         (with_self  
-          (learner) $Tl) $Question $LearnersAnswer) (can-do-1 (with_self  (teacher) $Tt) $Question $TeachersAnswer $LearnersAnswer)))
-;                                         /******************************************************************/
-
-;                                         /* Brazdil's predicates for evaluating the behavior of "LEARNER"  */
-
-;                                         /* and "TEACHER".                         */
-
-;                                         /******************************************************************/
-
+          (learner *) $Tl) $Question $LearnersAnswer) (can-do-1 (with_self  (teacher *) $Tt) $Question $TeachersAnswer $LearnersAnswer)))
+; 
 
  
 
@@ -422,31 +442,36 @@
     ( (demo $Teacher $Question $TeachersAnswer) 
       (demo $Teacher $LearnersAnswer $TeachersAnswer) 
       (demo $Teacher $TeachersAnswer $LearnersAnswer)))
+; 
+
  
 
   (= 
     (cannot-do 
       (with_self  
-        (learner) $Tl) 
+        (learner *) $Tl) 
       (with_self  
-        (teacher) $Tt) $Question $TeachersAnswer) 
-    ( (not (demo (with_self  (learner) $Tl) $Question $LearnersAnswer)) (demo (with_self  (teacher) $Tt) $Question $TeachersAnswer)))
+        (teacher *) $Tt) $Question $TeachersAnswer) 
+    ( (not (demo (with_self  (learner *) $Tl) $Question $LearnersAnswer)) (demo (with_self  (teacher *) $Tt) $Question $TeachersAnswer)))
+; 
+
   (= 
     (cannot-do $Learner $Teacher $Question $_) 
     ( (can-do $Learner $Teacher $Question $_) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (cannot-do 
       (with_self  
-        (learner) $Tl) 
+        (learner *) $Tl) 
       (with_self  
-        (teacher) $Tt) $Question $TeachersAnswer) 
+        (teacher *) $Tt) $Question $TeachersAnswer) 
     ( (demo 
         (with_self  
-          (learner) $Tl) $Question $_) (demo (with_self  (teacher) $Tt) $Question $TeachersAnswer)))
-;                                         ; It seems that the condition LearnersAnswer <> TeachersAnswer is missing !
-
+          (learner *) $Tl) $Question $_) (demo (with_self  (teacher *) $Tt) $Question $TeachersAnswer)))
+; 
 
  
 
@@ -459,16 +484,22 @@
       (nl) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (what-cannot-do $Ls $Ts 
       (<- $Q $A) $FaultyStep $FaultyStep) 
     (can-do $Ls $Ts $Q $A))
+; 
+
   (= 
     (what-cannot-do $Ls $Ts 
       (<- $Q $A) $F1 
       (Cons  
         (<- $Q $A) $F1)) 
     (is-faulty-step $Ls $Ts $Q $A))
+; 
+
   (= 
     (what-cannot-do $Ls $Ts 
       (<- $Q $A) $F1 $F2) 
@@ -476,6 +507,8 @@
       (demo-trace2 $Ls $Ts $Q $A $SubSteps) 
       (what-cannot-do-list $Ls $Ts $SubSteps $F1 $F3) 
       (faulty-step $Q $A $F1 $F3 $F2)))
+; 
+
  
 
   (= 
@@ -483,22 +516,32 @@
     ( (cannot-do $Ls $Ts $Q $A) 
       (set-det) 
       (not (demo-trace2 $Ls $Ts $Q $A $_))))
+; 
+
  
 
   (= 
     (faulty_step  $Q $A $F1 $F1 
       (Cons  
         (<-  $Q $A) $F1)) True)
+; 
+
   (= 
     (faulty_step  $Q $A $F1 $F3 $F3) True)
+; 
+
  
 
   (= 
     (what_cannot_do_list  $_ $_ () $F $F) True)
+; 
+
   (= 
     (what-cannot-do-list $Ls $Ts 
       (Cons  $Step1 $RestSteps) $F1 $F3) 
     ( (what-cannot-do $Ls $Ts $Step1 $F1 $F2) (what-cannot-do-list $Ls $Ts $RestSteps $F2 $F3)))
+; 
+
  
 
   (= 
@@ -511,64 +554,7 @@
       (show $Theory $Goal2) 
       (link-vals $LVars $LVars2 $Conditions) 
       (make-ground-term $Conditions)))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : demo(+Theory,+Goal,Conditions)          */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : Theory     = ground term denoting a theory      */
-
-;                                         /*                Goal       = ground term or list of ground terms*/
-
-;                                         /*                Conditions = substitutions                      */
-
-;                                         /*                                                                */
-
-;                                         /*  property    : backtrackable                   */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'demo' is used to prove the Goal in the background of a Theory */
-
-;                                         /* delivering a substitution in Conditions.                       */
-
-;                                         /* Bindings of variables and values are explicitly maintained by  */
-
-;                                         /* this implementation, thus any subterm of the form "variable(S)"*/
-
-;                                         /* must actually be of the form "variabl(<atom>)" where <atom> is */
-
-;                                         /* the name of a variable in the Goal.                            */
-
-;                                         /* The substitutions in Condition may be either a variable  or a  */
-
-;                                         /* list of terms which all have the form val(variable(X),Y) where */
-
-;                                         /* X is the name of a variable (an atom) and Y is any term.       */
-
-;                                         /* In the case Condition is uninstantiated, demo succeeds iff     */
-
-;                                         /* Goal can be proven within the Theory. Condition is then instan-*/
-
-;                                         /* tiated with the corresponding substitutions in the form        */
-
-;                                         /* described above. On backtracking it will deliver the next      */
-
-;                                         /* possible proof with the corresponding substitution, if it      */
-
-;                                         /* exists.                            */
-
-;                                         /* If Condition is instantiated in the form described above, demo */
-
-;                                         /* succeeds, if Goal can be proven with the given substitution.   */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (demo $Theory $Goal $Conditions) 
@@ -582,6 +568,8 @@
       (no-new-values $LVars3) 
       (not (identified-vars $LVars3)) 
       (set-det)))
+; 
+
  
 
   (= 
@@ -599,98 +587,88 @@
       (show $Ts $Body3) 
       (make-ground-term $Body3) 
       (trace-list $Body3 $Steps)))
-;                                         /******************************************************************/
-
-;                                         /* Brazdil's predicate for locating erroneous LEARNER's knowledge */
-
-;                                         /******************************************************************/
-
+; 
 
  
 
   (= 
     (trace_list  () ()) True)
+; 
+
   (= 
     (trace-list 
       (Cons  $SubGoal $Rest) 
       (Cons  
         (<- $SubGoal $_) $Steps)) 
     (trace-list $Rest $Steps))
+; 
+
  
 
   (= 
     (show $_ Nil) 
     (set-det))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : show(+Theory,+Goal)                 */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : Theory     = ground term denoting a theory      */
-
-;                                         /*                Goal       = ground term or list of ground terms*/
-
-;                                         /*                                                                */
-
-;                                         /*  property    : backtrackable                   */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'show' is nothing else than an MeTTa meta-interpreter working */
-
-;                                         /* in the traditional way, except that substitutions are explicit-*/
-
-;                                         /* ly represented through terms in the form 'val(<var>,<term>)'.  */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (show $Th 
       (not $G)) 
     ( (set-det) (not (show $Th $G))))
+; 
+
   (= 
     (show $Th 
       (not $G)) 
     ( (set-det) (not (show $Th $G))))
+; 
+
   (= 
     (show $Th 
       (val $X $Y)) 
     ( (set-det) (is-value $X $Y)))
+; 
+
   (= 
     (show $Th 
       (Cons  $G $Gs)) 
     ( (set-det) 
       (show $Th $G) 
       (show $Th $Gs)))
+; 
+
   (= 
     (show $Th $G) 
     ( (db-entry $Th $G $B) (show $Th $B)))
+; 
+
   (= 
     (show $Th $G) 
     ( (def-theory $Th $ThList) 
       (member $SubTh $ThList) 
       (show $SubTh $G)))
+; 
+
   (= 
     (show $_ $G) 
     ( (predicate-property $G built-in) 
       (set-det) 
       (call $G)))
+; 
+
   (= 
     (show $_ $G) 
     ( (predicate-property $G unknown) 
       (dynamic $G) 
       (fail)))
+; 
+
   (= 
     (show $_ $G) 
-    ( (not (get-atoms  &self (= $G $_))) 
+    ( (not (get-symbols  &self (= $G $_))) 
       (call $G) 
       (set-det)))
+; 
+
  
 
   (= 
@@ -698,19 +676,27 @@
     ( (var $X) 
       (var $Y) 
       (set-det)))
+; 
+
   (= 
     (is-value $X $_) 
     ( (var $X) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (is-value $_ $Y) 
     ( (var $Y) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (is-value $X $X) 
     ( (atomic $X) (set-det)))
+; 
+
   (= 
     (is-value 
       (Cons  $Head1 $Tail1) 
@@ -718,6 +704,8 @@
     ( (set-det) 
       (is-value $Head1 $Head2) 
       (is-value $Tail1 $Tail2)))
+; 
+
   (= 
     (is-value $X $Y) 
     ( (not (atomic $X)) 
@@ -728,6 +716,8 @@
         (Cons  $F $ArgsY)) 
       (set-det) 
       (is-value $ArgsX $ArgsY)))
+; 
+
  
 
   (= 
@@ -735,42 +725,13 @@
       (variable  $G) 
       ($G) $G2 
       ($G2)) True)
-;                                         /******************************************************************/
-
-;                                         /* Variable handling procedures                   */
-
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : copy_vars(+G,+LVars,-G2,-LVars2)        */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : G      = ground term                */
-
-;                                         /*                LVars  = list of variables in G         */
-
-;                                         /*                G2     = variablelized term             */
-
-;                                         /*                LVars2 = list of variables in G2        */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'copy_vars' sets G2 to a copy of G with all variables of the   */
-
-;                                         /* form 'variable(<name>)' replaced with uninstantiated MeTTa    */
-
-;                                         /* variables.                                                     */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (copy-vars $G Nil $G Nil) 
     (atomic $G))
+; 
+
   (= 
     (copy-vars $G $LVars $G2 $LVars2) 
     ( (=.. $G 
@@ -778,10 +739,14 @@
       (copy-vars-list $Args Nil $LVars $Args2 Nil $LVars2) 
       (=.. $G2 
         (Cons  $F $Args2))))
+; 
+
  
 
   (= 
     (copy_vars_list  () $LVars $LVars () $LVars2 $LVars2) True)
+; 
+
   (= 
     (copy-vars-list 
       (Cons  $A $As) $PV $LV 
@@ -789,15 +754,21 @@
     ( (copy-vars $A $AVL $A2 $AVL2) 
       (join-vars $AVL $PV $PVplus $AVL2 $PV2 $PV2plus) 
       (copy-vars-list $As $PVplus $LV $A2s $PV2plus $LV2)))
+; 
+
  
 
   (= 
     (join_vars  () $PV $PV () $PV2 $PV2) True)
+; 
+
   (= 
     (join-vars 
       (Cons  $X $AVL) $PVin $PVout 
       (Cons  $X2 $AVL2) $PV2in $PV2out) 
     ( (twin-member $X $PVin $X2 $PV2in) (join-vars $AVL $PVin $PVout $AVL2 $PV2in $PV2out)))
+; 
+
   (= 
     (join-vars 
       (Cons  $X $AVL) $PVin $PVout 
@@ -805,17 +776,23 @@
     (join-vars $AVL 
       (Cons  $X $PVin) $PVout $AVL2 
       (Cons  $X2 $PV2in) $PV2out))
+; 
+
  
 
   (= 
     (twin_member  $Var 
       (Cons  $Var $_) $Val 
       (Cons  $Val $_)) True)
+; 
+
   (= 
     (twin-member $Var 
       (Cons  $_ $Tail1) $Val 
       (Cons  $_ $Tail2)) 
     (twin-member $Var $Tail1 $Val $Tail2))
+; 
+
  
 
   (= 
@@ -826,65 +803,17 @@
         (val 
           (variable $X) $X2) $Conditions)) 
     (link-vals $LV $LV2 $Conditions))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : link_vals(+LVars1,+LVars2,-Cond)        */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : LVars1 = list of atomic ground terms        */
-
-;                                         /*                LVars2 = list of terms (can be MeTTa variables)*/
-
-;                                         /*                Cond   = combined substitution          */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'link_vals' combines each corresponding varible name in LVars1 */
-
-;                                         /* with its value in LVars2, to form a list of substituitions of  */
-
-;                                         /* the form val(<var>,<term>).                                    */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (link_vals  () () ()) True)
+; 
+
  
 
   (= 
     (set_vars  $Goal () $Goal) True)
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : set_vars(+Goal1,+Cond,-Goal2)           */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : Goal1 = a ground goal               */
-
-;                                         /*                Cond  = a substitution              */
-
-;                                         /*                Goal2 = Goal1 with substituted variables        */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'set_vars' substitutes variables depicted by 'variable(<name>)'*/
-
-;                                         /* in Goal1 by its value in Goal2, according to the substitution  */
-
-;                                         /* Cond.                                                  */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (set-vars $Goal 
@@ -896,13 +825,19 @@
         (variable $Var) $Val $Goal2) 
       (set-det) 
       (set-vars $Goal2 $Rest $ResultGoal)))
+; 
+
  
 
   (= 
     (substitute  $Var $Var $Val $Val) True)
+; 
+
   (= 
     (substitute $Goal $_ $_ $Goal) 
     ( (atomic $Goal) (set-det)))
+; 
+
   (= 
     (substitute 
       (Cons  $Arg $Tail) $Var $Val 
@@ -910,6 +845,8 @@
     ( (set-det) 
       (substitute $Arg $Var $Val $NewArg) 
       (substitute $Tail $Var $Val $NewTail)))
+; 
+
   (= 
     (substitute $Goal $Var $Val $FinalGoal) 
     ( (=.. $Goal 
@@ -917,6 +854,8 @@
       (substitute $Args $Var $Val $NewArgs) 
       (=.. $FinalGoal 
         (Cons  $F $NewArgs))))
+; 
+
  
 
   (= 
@@ -924,47 +863,26 @@
     ( (var $Variable) 
       (set-det) 
       (fail)))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : all_ground_term(+Term)              */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : Term = a MeTTa term                */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'all_ground_term' succeeds if Term is ground, i.e. all vari-   */
-
-;                                         /* ables are instantiated. Modification note: In YAP-MeTTa       */
-
-;                                         /*  all_ground_term(Term) :- ground(Term).            */
-
-;                                         /* and in any other DEC10-MeTTa dialects             */
-
-;                                         /*  all_ground_term(Term) :- numbervars(Term,0,0).        */
-
-;                                         /* can be used to speed up the system                 */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (all-ground-term $Atomic) 
     ( (atomic $Atomic) (set-det)))
+; 
+
   (= 
     (all-ground-term (Cons  $Head $Tail)) 
     ( (set-det) 
       (all-ground-term $Head) 
       (all-ground-term $Tail)))
+; 
+
   (= 
     (all-ground-term $Structure) 
     ( (=.. $Structure 
         (Cons  $_ $Args)) (all-ground-term $Args)))
+; 
+
  
 
   (= 
@@ -973,19 +891,27 @@
       (write ' *** Only ground terms in goal allowed !') 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (check-goal $Goal) 
     ( (not (proper-variable $Goal)) 
       (write ' *** <name> of any variable(<name>) should be symbolic ground !') 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (check_goal  $_) True)
+; 
+
  
 
   (= 
     (proper-variable $Atom) 
     ( (atomic $Atom) (set-det)))
+; 
+
   (= 
     (proper-variable (variable $Name)) 
     ( (not (atomic $Name)) 
@@ -995,15 +921,21 @@
       (nl) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (proper-variable (Cons  $Head $Tail)) 
     ( (set-det) 
       (proper-variable $Head) 
       (proper-variable $Tail)))
+; 
+
   (= 
     (proper-variable $Structure) 
     ( (=.. $Structure 
         (Cons  $_ $Args)) (proper-variable $Args)))
+; 
+
  
 
   (= 
@@ -1012,6 +944,8 @@
       (write ' *** Only ground terms in conditions allowed !') 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (check-conditions $Cond) 
     ( (not (proper-format $Cond)) 
@@ -1020,20 +954,30 @@
       (write '     or a list of structures, val(variable(<name>),<value>) !') 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (check_conditions  $_) True)
+; 
+
  
 
   (= 
     (proper_format  ()) True)
+; 
+
   (= 
     (proper-format (Cons  (val (variable $Atom) $_) $Tail)) 
     ( (atomic $Atom) (proper-format $Tail)))
+; 
+
 
 
   (= 
     (make-ground-term $Body3) 
     (make-ground-term 10 $Body3))
+; 
+
 
   (= 
     (make-ground-term $D $Variable) 
@@ -1042,9 +986,13 @@
       (= $Variable 
         (variable $X)) 
       (set-det)))
+; 
+
   (= 
     (make-ground-term $D $Atom) 
     ( (atomic $Atom) (set-det)))
+; 
+
   (= 
     (make-ground-term $D $_) 
     ( (== $D 0) 
@@ -1052,6 +1000,8 @@
         (:: (make-ground-term $D $_))) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (make-ground-term $D 
       (Cons  $Head $Tail)) 
@@ -1061,8 +1011,7 @@
       (make-ground-term $D2 $Head) 
       (set-det) 
       (make-ground-term $D2 $Tail)))
-;                                         ; \+ is_list(Head),
-
+; 
 
   (= 
     (make-ground-term $D $Structure) 
@@ -1073,65 +1022,31 @@
       (=.. $Structure 
         (Cons  $_ $Args)) 
       (make-ground-term $D2 $Args)))
+; 
+
  
 
   (= 
     (no_new_values  ()) True)
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : no_new_values(+List)                */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : List = a MeTTa list                */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'no_new_values' succeeds if List is a list of uninstantiated   */
-
-;                                         /* variables.                                                 */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (no-new-values (Cons  $X $Xs)) 
     ( (var $X) (no-new-values $Xs)))
+; 
+
  
 
   (= 
     (identified-vars (Cons  $X $Xs)) 
     ( (member $Y $Xs) (same-var $X $Y)))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : identified_vars(+List)              */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : List = a list of variables              */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'identified_vars' succeeds if there exists at least one vari-  */
-
-;                                         /* able in the List, which has been 'unified' with another vari-  */
-
-;                                         /* able in the list.                                              */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (identified-vars (Cons  $_ $T)) 
     (identified-vars $T))
+; 
+
  
 
   (= 
@@ -1139,42 +1054,18 @@
     ( (var $Y) 
       (set-det) 
       (fail)))
-;                                         /******************************************************************/
-
-;                                         /*                                                                */
-
-;                                         /*  call        : same_var(+Var1,+Var2)               */
-
-;                                         /*                                                                */
-
-;                                         /*  arguments   : Var1 = a MeTTa variable                */
-
-;                                         /*                Var2 = a MeTTa variable                */
-
-;                                         /*                                                                */
-
-;                                         /******************************************************************/
-
-;                                         /* 'same_var' succeeds if Var1 and Var2 are unified, but uninstan-*/
-
-;                                         /* tiated.                                                */
-
-;                                         /******************************************************************/
-
+; 
 
   (= 
     (same-var $X $Y) 
     ( (var $X) (var $Y)))
+; 
+
  
 
   (= 
     (digits_of_next_sym  "1") True)
-;                                         /******************************************************************/
-
-;                                         /* Miscelenous predicates                     */
-
-;                                         /******************************************************************/
-
+; 
 
  
 
@@ -1185,10 +1076,12 @@
       (append "sym" $RLN $LS) 
       (name $X $LS) 
       (inc-digits $LN $LN2) 
-      (remove-atom  &self 
+      (remove-symbol  &self 
         (digits_of_next_sym  $LN)) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (digits_of_next_sym  $LN2))))
+; 
+
  
 
   (= 
@@ -1196,14 +1089,20 @@
       (Cons  $D1 $LDT) 
       (Cons  $D2 $LDT)) 
     ( (< $D1 57) (is $D2 (+ $D1 1))))
+; 
+
   (= 
     (inc-digits 
       (Cons  $_ $LDT) 
       (Cons  48 $LDT2)) 
     (inc-digits $LDT $LDT2))
+; 
+
   (= 
     (inc_digits  () 
       (49)) True)
+; 
+
  
 
   (= 
@@ -1211,8 +1110,12 @@
       (Cons  $H $T) $V $R) 
     (revzap $T 
       (Cons  $H $V) $R))
+; 
+
   (= 
     (revzap  () $R $R) True)
+; 
+
  
 
   (= 
@@ -1221,6 +1124,8 @@
       (rcl $C $L) 
       (extract-space $L $L1) 
       (convert $W $L1)))
+; 
+
  
 
   (= 
@@ -1228,34 +1133,48 @@
     ( (repeat) 
       (get0 $C) 
       (non-space $C)))
+; 
+
  
 
   (= 
     (rcl  10 ()) True)
+; 
+
   (= 
     (rcl $C1 
       (Cons  $C1 $P)) 
     ( (proper-char $C1) 
       (get0 $C2) 
       (rcl $C2 $P)))
+; 
+
   (= 
     (rcl $C1 
       (Cons  $C1 $P)) 
     ( (space $C1) 
       (get0 $C2) 
       (rcl $C2 $P)))
+; 
+
   (= 
     (rcl $C1 $L) 
     ( (put 7) 
       (get0 $C2) 
       (rcl $C2 $L)))
+; 
+
  
 
   (= 
     (convert  () ()) True)
+; 
+
   (= 
     (convert $W $L) 
     (name $W $L))
+; 
+
  
 
   (= 
@@ -1263,28 +1182,42 @@
     ( (space $C) 
       (set-det) 
       (fail)))
+; 
+
   (= 
     (non-space 10) 
     ( (set-det) (fail)))
+; 
+
   (= 
     (non-space $C) 
     (proper-char $C))
+; 
+
   (= 
     (non-space $_) 
     ( (put 7) 
       (set-det) 
       (fail)))
+; 
+
  
 
   (= 
     (space  32) True)
+; 
+
   (= 
     (space  9) True)
+; 
+
  
 
   (= 
     (proper-char $C) 
     ( (> $C 32) (< $C 128)))
+; 
+
  
 
   (= 
@@ -1292,21 +1225,31 @@
     ( (reverse $L $R) 
       (delete-space $R $R2) 
       (reverse $R2 $L2)))
+; 
+
  
 
   (= 
     (delete-space 
       (Cons  $S $T) $L) 
     ( (space $S) (delete-space $T $L)))
+; 
+
   (= 
     (delete_space  $L $L) True)
+; 
+
 
 
   (= 
     (reverse  () ()) True)
+; 
+
   (= 
     (reverse 
       (Cons  $X $Y) $Z) 
     ( (reverse $Y $Y1) (append $Y1 (:: $X) $Z)))
+; 
+
 
 

@@ -1,25 +1,29 @@
 ;
-;                               ------------------------------------------------
-
-;
-;                               Jan 1999
-
-;
-;                               Author: Brian Ross
-
-;
-;                               Dept. of Computer Science, Brock University
+; 
 
 ;
 ; 
 
 ;
-;                                Statistics and I/O
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   !(expects-dialect sicstus)
+; 
+
   !(use-module (library (/ (/ dialect sicstus) system)))
+; 
+
 
 
   (= 
@@ -35,18 +39,17 @@
         (popn-dump-P yes) 
         (dump-population $Gen) True) 
       (set-det)))
-;                                 ; should replace with param passing
-
+; 
 
 
 ;
-;                                  collect_stats computes some statistics. gp_stats might already be
+; 
 
 ;
-;                                  asserted for generation by Lamarckian evol routine, if used. Retract it,
+; 
 
 ;
-;                                  but retain it's stat.
+; 
 
 
 
@@ -82,9 +85,9 @@
       (since-last-datime total call $HourT $MinuteT $SecT) 
       (since-last-datime generation retract $Hour $Minute $Sec) 
       (or 
-        (remove-atom  &self 
+        (remove-symbol  &self 
           (gp_stats  $Gen $_ $_ $_ $_ $_ $_ $Lamarck)) True) 
-      (add-atom  &self 
+      (add-symbol  &self 
         (gp_stats  $Gen 
           (:  $Hour 
             (:  $Minute 
@@ -95,10 +98,7 @@
           (worst  $Max $SizeW) 
           (avg  $Avg) $AvgDepth $Lamarck)) 
       (set-det)))
-;                                   ;time_stamp(';h:;02i:;02s;a',T),
-
-;                                   ; datime(datime(_,_,_,Hour,Minute,Sec)),
-
+; 
 
 
 
@@ -110,22 +110,28 @@
         (- $Now $Was)) 
       (det-if-then-else 
         (== $SetReset retract) 
-        (add-atom  &self 
+        (add-symbol  &self 
           (got_time  $For $Now)) True) 
       (stamp-date-time $DiffTime 
         (date $Year $Month $Day $Hour $Minute $Sec $_ $_ $_) UTC) 
       (set-det)))
+; 
+
 
 
   !(dynamic (/ got-time 2))
+; 
+
   !((get-time $Now) 
-    (add-atom  &self 
+    (add-symbol  &self 
       (got_time  total $Now)) 
-    (add-atom  &self 
+    (add-symbol  &self 
       (got_time  total $Now)))
+; 
+
 
 ;
-;                                     print run statistics
+; 
 
 
   (= 
@@ -144,16 +150,9 @@
           (lamarck 0 0 0)) True) 
       (print-stat $Gen $Time $Best $Worst $Avg $AvgDepth $Lamarck) 
       (fail)))
-;                                     ; Windows
-
-;                                     ; Windows
-
-;                                      ;once(time_stamp('Date: ;W, ;d ;M ;y    Time: ;c:;02i;a', DateTime)),
-
-;                                      ; loops for all
-
+; 
 				   ;
-;                                       loop driver
+; 
 
   (= 
     (dump-stats $Run) 
@@ -206,48 +205,12 @@
       (told) 
       (tell user) 
       (write-soln "soln" $Run $Expr)))
-;                                       ; from gp_parameters file...
-
-;                                       ;crossover_P(PIC, PTC),
-
-;                                       ;rep_limit_P(Rep),
-
-;                                        ; some other stats...
-
-;                                        ;sre_mutation_P(SREmut),
-
-;                                        ;mutation_range_P(Mutrange),
-
-;                                        ; if last generation never reached (soln found before)
-
-;                                        ;'SRE numeric mutation rate =', SREmut, nl,
-
-;                                         ;'SRE mutation range = +/-',Mutrange,nl,
-
-;                                         ;write('Best...'), nl, dna_summary(Expr),   ; for DNA only
-
-;                                         ;write('Best optimized...'), nl,
-
-;                                         ;mask_optimize(Expr, Fitness, ExprOpt),
-
-;                                         ;dna_summary(ExprOpt),   ; for DNA only
-
-;                                         /*
-;                                         	(gp_stats(MaxGen,_, best(MinLast, _, BexprLast), _, _, _, _) ->
-;                                         		write('Last...'), nl,
-;                                         		dna_summary(BexprLast),
-;                                         		mask_optimize(BexprLast, MinLast, LastOpt),   ; for DNA only
-;                                         		write('Last optimized...'), nl,
-;                                         		dna_summary(LastOpt)
-;                                         		;
-;                                         		true),
-;                                         	*/
-
+; 
   ;
-;                                       <-- new.
+; 
 
 	;
-;                                       write_soln("solnopt", Run, ExprOpt).  ; <-- new.
+; 
 
 	
   (= 
@@ -272,20 +235,7 @@
       (append $File4 ".txt" $File5) 
       (name $File $File5) 
       (set-det)))
-;                                        /*
-;                                        	(gp_stats(MaxGen,_, best(MinLast, _, BexprLast), _, _, _, _) ->
-;                                        		write_soln("last", Run, BexprLast), ; <-- new
-;                                        		write_soln("lastopt", Run, LastOpt)
-;                                        		;
-;                                        		true).
-;                                        	*/
-
-;                                         ; dump_population(Run).
-
-;                                         ;once(time_stamp('.;d;02n;02y-;02c;02i', Name3)),
-
-;                                         ;name(Name3, File3),
-
+; 
 
 
 
@@ -298,6 +248,8 @@
       (set-det) 
       (writel (:: nl nl '---> Generation ' $Gen ( $Time ) nl 'Average fitness:' $Avg nl 'Best count: ' $Bcount nl 'Best example:' $Bexpr nl 'Best fitness = ' $Bfit nl 'Worst count: ' $Wcount nl 'Worst fitness = ' $Wfit nl 'Average Depth:' $AvgD nl 'Lamarckian evolution: off ' nl nl)) 
       (set-det)))
+; 
+
   (= 
     (print-stat $Gen $Time 
       (best $Bfit $Bcount $Bexpr) 
@@ -315,9 +267,11 @@
         (= $AvgLam 0)) 
       (writel (:: nl nl '---> Generation ' $Gen ( $Time ) nl 'Average fitness:' $Avg nl 'Best count: ' $Bcount nl 'Best example:' $Bexpr nl 'Best fitness = ' $Bfit nl 'Worst count: ' $Wcount nl 'Worst fitness = ' $Wfit nl 'Average Depth:' $AvgD nl 'Lamarckian evolution: ' nl      $NumGain ' gains out of ' $N ' tries' nl '    Total gain:' $FitImpr nl '    Max single gain:' $MaxImpr nl '    Avg gain:' $AvgLam nl nl)) 
       (set-det)))
+; 
+
 
 ;
-;                                          print existing population
+; 
 
 
 
@@ -328,9 +282,13 @@
       (individual $ID $V $Expr) 
       (write-individual $ID $V $Expr) 
       (fail)))
+; 
+
   (= 
     (dump-population $_) 
     ( (told) (tell user)))
+; 
+
 
 
   (= 
@@ -341,18 +299,20 @@
       (sre-pp $E) 
       (nl) 
       (set-det)))
+; 
+
 
 ;
-;                                          ------------------------------------
+; 
 
 ;
-;                                          solution dump: writes soln expression to a file, for input later.
+; 
 
 ;
-;                                          Grammatical expression is written in multiple lines, since the full
+; 
 
 ;
-;                                          expression is often larger than MeTTa's builtin "write" can handle.
+; 
 
 
 
@@ -367,6 +327,8 @@
       (told) 
       (tell user) 
       (set-det)))
+; 
+
 
 
   (= 
@@ -379,14 +341,20 @@
       (write ],) 
       (write $Y) 
       (write ))))
+; 
+
   (= 
     (write-term $X) 
     (write $X))
+; 
+
 
 
   (= 
     (write-tlist Nil) 
     (set-det))
+; 
+
   (= 
     (write-tlist (Cons  $X (Cons  $Y $Z))) 
     ( (set-det) 
@@ -394,8 +362,12 @@
       (write ,) 
       (nl) 
       (write-tlist (Cons  $Y $Z))))
+; 
+
   (= 
     (write-tlist (:: $X)) 
     (write-term $X))
+; 
+
 
 

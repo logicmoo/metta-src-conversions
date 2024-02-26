@@ -1,5 +1,5 @@
 ;
-;                      MODULE environment EXPORTS
+; 
 
 
 
@@ -13,10 +13,12 @@
       (/ ask-for-ex 1) 
       (/ confirm 2) 
       (/ get-ci 2)))
+; 
+
 
 
 ;
-;                       IMPORTS
+; 
 
   !(use-module 
     (home kb) 
@@ -29,216 +31,232 @@
       (/ store-ex 3) 
       (/ rename 3) 
       (/ delete-all 1)))
+; 
+
   !(use-module 
     (home show-utils) 
     (:: 
       (/ show-clauses 1) 
       (/ show-names 0)))
+; 
+
   !(use-module-if-exists 
     (library prompt) 
     (:: (/ prompt 1)))
+; 
+
   !(use-module-if-exists 
     (library ask) 
     (:: 
       (/ yesno 1) 
       (/ yesno 2) 
       (/ ask-chars 4)))
+; 
+
   !(use-module-if-exists 
     (library sets) 
     (:: (/ union 3)))
+; 
+
   !(use-module-if-exists 
     (library subsumes) 
     (:: (/ subsumes-chk 2)))
-
-;
-;                          METAPREDICATES
-
-;
-;                          none
-
+; 
 
 
 ;
-;                          ***********************************************************************
+; 
 
 ;
-;                          *
+; 
 
-;
-;                          * module: envirnonment.pl
-
-;
-;                          *
-
-;
-;                           * author: B.Jung, M.Mueller, I.Stahl, B.Tausend              date:12/92
-
-;
-;                           *
-
-;
-;                           * changed:
-
-;
-;                           *
-
-;
-;                           *
-
-;
-;                            * description: procedures for oracle interaction
-
-;
-;                            *      1. membership queries - oracle/1
-
-;
-;                            *	2. existential queries - oracle/2
-
-;
-;                            *	3. subset queries - oracle/2
-
-;
-;                            *	4. name queries - oracle/2
-
-;
-;                             *	5. general questions with default answers - oracle/3
-
-;
-;                             *
-
-;
-;                             * see also:
-
-;
-;                             *
-
-;
-;                             *
-
-;
-;                              ***********************************************************************
 
 
 ;
-;                              ***********************************************************************
+; 
 
 ;
-;                              *
+; 
 
 ;
-;                              * predicate:	satisfiable/1
+; 
 
 ;
-;                               *
+; 
 
 ;
-;                               * syntax: satisfiable(+SG_list)
+; 
 
 ;
-;                               *
+; 
 
 ;
-;                               * args: SG_list ... list of subgoals [...,[ID,Subgoal,Proof],...]
+; 
 
 ;
-;                               *
+; 
 
 ;
-;                                * description:	each Subgoal in SG_list	is tested on satisfiability.
+; 
 
 ;
-;                                *     The oracle is used if the satisfiability of Subgoal can not be
+; 
 
 ;
-;                                *     decided on the available knowledge
+; 
 
 ;
-;                                *
+; 
 
 ;
-;                                * example:
+; 
 
 ;
-;                                 *
+; 
 
 ;
-;                                 * peculiarities:	none
+; 
 
 ;
-;                                 *
+; 
 
 ;
-;                                 * see also:
+; 
 
 ;
-;                                 *
+; 
 
 ;
-;                                  ***********************************************************************
+; 
+
+;
+; 
+
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
+
+;
+; 
 
 
 
   (= 
     (satisfiable  ()) True)
+; 
+
   (= 
     (satisfiable (Cons  (:: $_ $H $_) $R)) 
     ( (ask-for $H) (satisfiable $R)))
+; 
 
 
 
-;
-;                                   ***********************************************************************
-
-;
-;                                    *
 
 ;
-;                                    * predicate:	ask_for/1
+; 
 
 ;
-;                                    *
+; 
 
 ;
-;                                    * syntax: ask_for(+Goal)
+; 
 
 ;
-;                                    *
+; 
 
 ;
-;                                     * args: Goal is a ground atom
+; 
 
 ;
-;                                     *
+; 
 
 ;
-;                                     * description: succeds if Goal is valid in the kb, or declared to be
+; 
 
 ;
-;                                     *      valid by the oracle
+; 
 
 ;
-;                                     *
+; 
 
 ;
-;                                      * example:
+; 
 
 ;
-;                                      *
+; 
 
 ;
-;                                      * peculiarities:	none
+; 
 
 ;
-;                                      *
+; 
 
 ;
-;                                      * see also:
+; 
 
 ;
-;                                       *
+; 
 
 ;
-;                                       ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -260,62 +278,64 @@
               (, 
                 (store-ex $Lit - $_) 
                 (fail))) fail))) $Lit))
+; 
 
 
 
-;
-;                                        ***********************************************************************
-
-;
-;                                        *
 
 ;
-;                                         * predicate:	ask_for_ex/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: ask_for(+Goal)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: Goal is an atom
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: succeds if Goal is valid in the kb, or declared to be
+; 
 
 ;
-;                                         *      valid by the oracle
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:	none
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -332,58 +352,60 @@
           (det-if-then-else 
             (oracle $Lit $Lit) 
             (store-ex $Lit + $_) fail))) $Lit))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:	term_help/0
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	prompts a help line
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -391,64 +413,66 @@
   (= 
     (term-help) 
     (prompt 'Please enter a proper PROLOG-term followed by a full-stop and RETURN'))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:	 oracle/1
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:	 oracle( + Literal)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: membership queries:
+; 
 
 ;
-;                                         *    "Is the following literal always true?" -> succeeds iff oracle answers yes
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
 
 ;
-;                                         ;;oracle(mappend(A,B,C)):- !,append(A,B,C).
+; 
+
+;
+; 
+
+;
+; 
 
 
   (= 
@@ -461,67 +485,69 @@
       (nl) 
       (set-det) 
       (yesno '> (y/n) ')))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: oracle/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: oracle( + List_of_Clause_Ids, - Example_Id)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	subset queries
+; 
 
 ;
-;                                         *    "Are the following clauses always true?"
+; 
 
 ;
-;                                         *    If not, the user might supply a counter example.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities: fails only if the oracle answers "no" AND does not
+; 
 
 ;
-;                                         *      supply a counter example
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
   (= 
@@ -548,73 +574,75 @@
               (, 
                 (store-ex $Ex - $NegexId) 
                 (set-det))))))))
+; 
+
            
 
 ;
-;                                         ***********************************************************************
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * predicate:	oracle/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:	oracle( + PnameAtom, - NewNameAtom)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	name queries
+; 
 
 ;
-;                                         *    "How would you like to call predicate pXYZ", where pXYZ is a new predicate.
+; 
 
 ;
-;                                         *    The oracle may use every atom as answer. However, the atom "list"
+; 
 
 ;
-;                                         *    causes the system to show every known predicate symbol within the knowledge base
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities: the predicate returns the new predicate name, but does not
+; 
 
 ;
-;                                         *         replace the old name by the new one within the kb.
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
 
 
   (= 
@@ -638,67 +666,69 @@
         (, 
           (= $Newname $A2) 
           (set-det)))))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:	oracle/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:	oracle(+Lit, -InstLit)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	existential queries
+; 
 
 ;
-;                                         *    "Is there a correct instance of the following literal?"
+; 
 
 ;
-;                                         *    If yes, the oracle supplies an instance -> InstLit
+; 
 
 ;
-;                                         *    Else, the predicate fails
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
   (= 
@@ -725,61 +755,63 @@
           (, 
             (prompt 'This is no instantiation of the literal!') 
             (fail))))))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate:	oracle/3
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax:	oracle( + QuestionAtom, ? DefaultAtom, - AnswerAtom)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	general questions with default answers
+; 
 
 ;
-;                                         *      If no default is necessary, use '_' as second argument
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
   (= 
@@ -806,67 +838,69 @@
           (nonvar $Default)) 
         (= $Answer $Default) 
         (atom-chars $Answer $Alist))))
+; 
 
 
-;
-;                                         ***********************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: confirm/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: confirm(+Clause_IDs,+Oldterm)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: Clause_IDs .. list of clauseIDs,
+; 
 
 ;
-;                                         *       Oldterm.. term of the predicate to be replaced
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description:	confirm new clauses and rename the new predicate (using the oracle)
+; 
 
 ;
-;                                         *              if oracle refuses the new clauses, delete 'em.
+; 
 
 ;
-;                                         *              if they are accepted, delete the old ones (see g2_op).
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ***********************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -878,6 +912,8 @@
       (oracle $Oldname $Newname) 
       (rename $Clause_ids $Oldname $Newname) 
       (set-det)))
+; 
+
 
   (= 
     (confirm $Clause_ids $_) 
@@ -885,62 +921,64 @@
       (nl) 
       (write 'New clauses deleted.') 
       (fail)))
+; 
 
 
 
-;
-;                                         ************************************************************************
-
-;
-;                                         *
 
 ;
-;                                         * predicate: get_ci/2
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * syntax: get_ci(+L,-L)
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * args: L ... list of clauseIDs
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * description: reads the IDs of the Ci used for the g2-operator one
+; 
 
 ;
-;                                         *              by one
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * example:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * peculiarities:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         * see also:
+; 
 
 ;
-;                                         *
+; 
 
 ;
-;                                         ************************************************************************
+; 
+
+;
+; 
+
+;
+; 
 
 
 
@@ -957,7 +995,11 @@
         (= $Sofarnew $Sofar)) 
       (set-det) 
       (get-ci $Sofarnew $CC)))
+; 
+
   (= 
     (get-ci $CC $CC) 
-    (set-det))	
+    (set-det))
+; 
+	
 
